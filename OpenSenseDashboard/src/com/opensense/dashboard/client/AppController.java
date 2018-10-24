@@ -6,10 +6,13 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.presenter.IPresenter;
+import com.opensense.dashboard.client.services.GeneralStartService;
+import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
@@ -41,6 +44,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		this.eventBus = eventBus;
 		bindHandler();
 		go(RootPanel.get());
+		GeneralStartService.Util.getInstance().getData("Das ist der String", new DefaultAsyncCallback<Integer>(result -> GWT.log(result+"")));
 	}
 	
 	private void bindHandler() {

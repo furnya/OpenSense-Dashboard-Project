@@ -1,8 +1,11 @@
 package com.opensense.dashboard.client.services;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+@RemoteServiceRelativePath("../generalstart")
 public interface GeneralStartService extends RemoteService {
 	
 	/**
@@ -10,17 +13,19 @@ public interface GeneralStartService extends RemoteService {
 	 */
 	public static class Util {
 	    
-		private static GeneralStartService instance;
+		private static GeneralStartServiceAsync instance;
 
 		private Util() {
 		    // Hides the implicit public constructor when no other constructor is present.
 		}
 		
-		public static GeneralStartService getInstance() {
+		public static GeneralStartServiceAsync getInstance() {
 			if (instance == null) {
 				instance = GWT.create(GeneralStartService.class);
 			}
 			return instance;
 		}
 	}
+	
+	public Integer getData(String string);
 }

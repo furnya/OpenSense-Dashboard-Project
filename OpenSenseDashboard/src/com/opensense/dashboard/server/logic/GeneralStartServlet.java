@@ -6,4 +6,9 @@ import com.opensense.dashboard.client.services.GeneralStartService;
 @SuppressWarnings("serial")
 public class GeneralStartServlet extends RemoteServiceServlet implements GeneralStartService{
 
+	@Override
+	public Integer getData(String string) {
+		return 1;
+	}
+
 }
