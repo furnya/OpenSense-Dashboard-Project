@@ -6,13 +6,13 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.presenter.IPresenter;
-import com.opensense.dashboard.client.services.GeneralStartService;
-import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
+import com.opensense.dashboard.client.presenter.TestPresenter;
+import com.opensense.dashboard.client.view.TestView;
+import com.opensense.dashboard.client.view.TestViewImpl;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
@@ -36,6 +36,16 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 protected GUIImageBundle gui = GWT.create(GUIImageBundle.class);
 	 
 	 /**
+	  *  Presenter
+	  */
+	 private TestPresenter testPresenter = null;
+	 
+	 /**
+	  * Views
+	  */
+	 private TestView testView;
+	 
+	 /**
 	 * Constructs the application controller (main presenter).
 	 * 
 	 * @param eventBus
@@ -44,7 +54,6 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		this.eventBus = eventBus;
 		bindHandler();
 		go(RootPanel.get());
-		GeneralStartService.Util.getInstance().getData("Das ist der String", new DefaultAsyncCallback<Integer>(result -> GWT.log(result+"")));
 	}
 	
 	private void bindHandler() {
@@ -53,7 +62,13 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
 	@Override
 	public void go(HasWidgets container) {
-		// TODO Auto-generated method stub
+		HasWidgets controlPanel = RootPanel.get("control-panel");
+		controlPanel.clear();
+		if (testView == null) {
+			testView = new TestViewImpl();
+		}
+		testPresenter = new TestPresenter(eventBus, this, testView);
+		testPresenter.go(controlPanel);
 	}
 
 	@Override
