@@ -17,8 +17,10 @@
 <bh:Div ui:field="test">
 	<bh:Div addStyleNames="{style.container}">
 		<bh:Text text="{lang.text}"></bh:Text>
+		<b:Tooltip text="Das macht er">
+			<b:Button ui:field="button1" text="lang"/>
+		</b:Tooltip>
 	</bh:Div>
-	<b:Button ui:field="button1" text="lang" title="Das macht der klicken"/>
 </bh:Div>
 
 </ui:UiBinder>

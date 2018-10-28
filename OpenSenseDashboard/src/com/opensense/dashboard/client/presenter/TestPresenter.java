@@ -1,8 +1,11 @@
 package com.opensense.dashboard.client.presenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.services.GeneralStartService;
+import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.view.TestView;
 
 public class TestPresenter implements IPresenter, TestView.Presenter{
@@ -26,5 +29,11 @@ public class TestPresenter implements IPresenter, TestView.Presenter{
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
+	}
+
+	@Override
+	public String getData() {
+		GeneralStartService.Util.getInstance().getData("", new DefaultAsyncCallback<Integer>(result -> GWT.log(result+"")));
+		return "";
 	}
 }

@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client.utils;
 
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -15,6 +16,15 @@ public class DefaultAsyncCallback<T> implements AsyncCallback<T> {
 
     private static final Logger LOGGER = Logger.getLogger(DefaultAsyncCallback.class.getName());
     
+    /**
+     * The default behavior for a failed asynchronous call. {@link InvalidGisLicenseException}
+     * leads to a license message, other causes just display a generic error message to the user.
+     */
+    private static final Consumer<Throwable> DEFAULT_FAILURE = caught -> {
+//        AppController.showError(ServerLanguages.unexpectedErrorOccurred());
+        LOGGER.log(Level.WARNING, "Unexpected error during a server call", caught);
+    };
+
     /**
      * Specifies what happens when the asynchronous call succeeds.
      * 
@@ -40,7 +50,7 @@ public class DefaultAsyncCallback<T> implements AsyncCallback<T> {
      */
     public DefaultAsyncCallback(Consumer<T> onSuccess) {
         this.onSuccess = onSuccess;
-        this.onFailure = null;
+        this.onFailure = DEFAULT_FAILURE;
     }
     
     /**
@@ -62,7 +72,7 @@ public class DefaultAsyncCallback<T> implements AsyncCallback<T> {
      */
     public DefaultAsyncCallback(Consumer<T> onSuccess, Consumer<Throwable> onFailure, boolean defaultFailure) {
         this.onSuccess = onSuccess;
-        this.onFailure = onFailure;
+        this.onFailure = defaultFailure ? DEFAULT_FAILURE.andThen(onFailure) : onFailure;
     }
     
     @Override

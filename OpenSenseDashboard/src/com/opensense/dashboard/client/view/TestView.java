@@ -5,6 +5,8 @@ import com.opensense.dashboard.client.presenter.TestPresenter;
 
 public interface TestView {
 	public interface Presenter {
+
+		String getData();
 	}
 	
 	public void setPresenter(TestPresenter testPresenter);

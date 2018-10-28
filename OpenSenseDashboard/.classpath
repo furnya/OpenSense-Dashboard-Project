@@ -7,6 +7,6 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="com.gwtplugins.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/gwtbootstrap3-0.9.3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwtbootstrap3-0.9.3.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

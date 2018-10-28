@@ -37,7 +37,7 @@ public class TestViewImpl extends Composite implements TestView {
 	
 	@UiHandler("button1")
 	public void onTestClick(ClickEvent e) {
-		GWT.log("Click");
+		GWT.log(presenter.getData());
 	}
 
 	@Override
