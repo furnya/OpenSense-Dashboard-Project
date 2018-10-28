@@ -30,7 +30,7 @@
           <target>1.8</target>
           <runTarget>OpenSenseDashboard.html</runTarget>
 		  <hostedWebapp>${basedir}/war</hostedWebapp>
-		  <webappDirectory>${basedir}/war/</webappDirectory>
+		  <webappDirectory>${basedir}/war/WEB-INF/classes</webappDirectory>
         </configuration>
       </plugin>
     </plugins>
@@ -99,6 +99,26 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
-		
+		<!-- Material design -->
+		<dependency>
+			<groupId>com.github.gwtmaterialdesign</groupId>
+			<artifactId>gwt-material</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.gwtmaterialdesign</groupId>
+			<artifactId>gwt-material-addins</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.gwtmaterialdesign</groupId>
+			<artifactId>gwt-material-themes</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.gwtmaterialdesign</groupId>
+			<artifactId>gwt-material-jquery</artifactId>
+			<version>2.1.1</version>
+		</dependency>
   </dependencies>
 </project>
