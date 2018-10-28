@@ -7,13 +7,13 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>GeneralStartService</servlet-name>
-    <servlet-class>com.opensense.dashboard.server.logic.GeneralStartServlet</servlet-class>
+    <servlet-name>generalServlet</servlet-name>
+    <servlet-class>com.opensense.dashboard.server.logic.GeneralServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>GeneralStartService</servlet-name>
-    <url-pattern>/GeneralStartService</url-pattern>
+    <servlet-name>generalServlet</servlet-name>
+    <url-pattern>/general</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

@@ -1,0 +1,104 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>OpenSenseDashboard</groupId>
+  <artifactId>OpenSenseDashboard</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+      	<groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>2.8.1</version>
+		<executions>
+			<execution>
+				<goals>
+					<goal>compile</goal>
+				</goals>
+			</execution>
+		</executions>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <runTarget>OpenSenseDashboard.html</runTarget>
+		  <hostedWebapp>${basedir}/war</hostedWebapp>
+		  <webappDirectory>${basedir}/war/</webappDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+	</properties>
+  <dependencies>
+ 		<!-- GWT -->
+		<!-- https://mvnrepository.com/artifact/com.google.gwt/gwt-user -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>2.8.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.gwt/gwt-servlet -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<version>2.8.2</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.gwt/gwt-dev -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-dev</artifactId>
+			<version>2.8.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- GWTBOOTSTRAP3 -->
+		<!-- https://mvnrepository.com/artifact/org.gwtbootstrap3/gwtbootstrap3 -->
+		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3</artifactId>
+			<version>0.9.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.gwtbootstrap3/gwtbootstrap3 -->
+		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3-extras</artifactId>
+			<version>0.9.3</version>
+		</dependency>
+				<!-- JSON -->
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20180130</version>
+		</dependency>
+				<!-- WEBSOCKET -->
+		<!-- https://mvnrepository.com/artifact/javax.websocket/javax.websocket-api -->
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Testing jars -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+		</dependency>
+		
+  </dependencies>
+</project>
