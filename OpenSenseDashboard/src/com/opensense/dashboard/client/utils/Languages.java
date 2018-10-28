@@ -29,4 +29,12 @@ public class Languages {
 		de = false;
 		en = true;
 	}
+	
+	public static String text() {
+		if(de) {
+			return "Das ist der text";
+		}else {
+			return "";
+		}
+	}
 }
