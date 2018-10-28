@@ -1,1 +1,11 @@
 /test-classes/
+.settings/
+/bin/
+gwt-unitCache/
+.sonar/
+war/*.log
+war/WEB-INF/classes/
+war/WEB-INF/deploy/
+war/war.rar
+*.orig
+war/log.log
