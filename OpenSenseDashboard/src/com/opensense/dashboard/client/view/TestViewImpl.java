@@ -40,12 +40,12 @@ public class TestViewImpl extends Composite implements TestView {
 		GWT.log(presenter.getData());
 	}
 
-	@Override
-	public void setPresenter(TestPresenter testPresenter) {
-		this.presenter = testPresenter;
-	}
-
 	public void showThisTest() {
 		test.add(new Span("addasd"));
+	}
+
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
 	}
 }

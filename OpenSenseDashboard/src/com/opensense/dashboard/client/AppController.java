@@ -9,8 +9,13 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
+import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
+import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
 import com.opensense.dashboard.client.presenter.TestPresenter;
+import com.opensense.dashboard.client.view.DataPanelViewImpl;
+import com.opensense.dashboard.client.view.NavigationPanelView;
+import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
 import com.opensense.dashboard.client.view.TestView;
 import com.opensense.dashboard.client.view.TestViewImpl;
 
@@ -39,11 +44,15 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	  *  Presenter
 	  */
 	 private TestPresenter testPresenter = null;
+	 private DataPanelPresenter dataPanelPresenter = null;
+	 private NavigationPanelPresenter navigationPanelPresenter = null;
 	 
 	 /**
 	  * Views
 	  */
-	 private TestView testView;
+	 private TestView testView = null;
+	 private DataPanelViewImpl dataPanelView = null;
+	 private NavigationPanelViewImpl navigationPanelView = null;
 	 
 	 /**
 	 * Constructs the application controller (main presenter).
@@ -64,11 +73,18 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	public void go(HasWidgets container) {
 		HasWidgets controlPanel = RootPanel.get("control-panel");
 		controlPanel.clear();
-		if (testView == null) {
-			testView = new TestViewImpl();
+		if (navigationPanelView == null) {
+			navigationPanelView = new NavigationPanelViewImpl();
 		}
-		testPresenter = new TestPresenter(eventBus, this, testView);
-		testPresenter.go(controlPanel);
+		navigationPanelPresenter = new NavigationPanelPresenter(eventBus, this, navigationPanelView);
+		navigationPanelPresenter.go(controlPanel);
+		
+		HasWidgets dataPanelContainer = RootPanel.get("data-panel");
+		dataPanelContainer.clear();
+		if (dataPanelView == null)
+			dataPanelView = new DataPanelViewImpl();
+		dataPanelPresenter = new DataPanelPresenter(eventBus, this, dataPanelView);
+		dataPanelPresenter.go(dataPanelContainer);
 	}
 
 	@Override
