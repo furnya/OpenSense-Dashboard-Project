@@ -3,7 +3,12 @@ package com.opensense.dashboard.server.logic;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import com.opensense.dashboard.server.util.Location;
 
@@ -23,9 +28,11 @@ public class Sensor {
 	private final Location location;
 	private final int unitId;
 	private final double accuracy;
+	private HashMap<Date, Double> values;
 	
 	public Sensor(JSONObject sensor) throws MalformedURLException {
 		this.rawJSON = sensor;
+		values = new HashMap<Date, Double>();
 		this.userId = sensor.getInt("userId");
 		this.directionHorizontal = sensor.getDouble("directionHorizontal");
 		this.directionVertical = sensor.getDouble("directionVertical");
@@ -144,4 +151,25 @@ public class Sensor {
 	public String toString() {
 		return this.rawJSON.toString();
 	}
+
+	/**
+	 * @return the values
+	 */
+	public HashMap<Date, Double> getValues() {
+		return values;
+	}
+
+	/**
+	 * @param values the values to set
+	 * @throws ParseException 
+	 */
+	public void setValues(JSONArray values) throws ParseException {
+		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
+		for(Object value : values) {
+			JSONObject valueJSON = (JSONObject) value;
+			this.values.put(inputFormat.parse(valueJSON.getString("timestamp")), valueJSON.getDouble("numberValue"));
+		}
+	}
+	
+	
 }
