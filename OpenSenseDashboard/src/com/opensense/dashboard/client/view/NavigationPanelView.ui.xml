@@ -13,8 +13,8 @@
     width: 100%;
 	background-color: #606060;
 }
-.nav-button:hover{
-	background-color:#42DCA3 ;
+.nav-button:hover, .nav-button:active, .nav-button:focus, .nav-button:visited{
+	background-color: #42DCA3;
 }
 .bottom-con{
 	position: absolute;
@@ -23,11 +23,11 @@
 }
 </ui:style>
 
-<bh:Div addStyleNames="nav-container vertical">
+<bh:Div addStyleNames="nav-container vertical user-select-none">
 	<b:ButtonGroup>
 		<b:Button ui:field="homeButton" addStyleNames="{style.nav-button} nav-btn-img" />
-		<b:Button ui:field="mapButton" addStyleNames="{style.nav-button} nav-btn-img" />
 		<b:Button ui:field="searchButton" addStyleNames="{style.nav-button} nav-btn-img" />
+		<b:Button ui:field="mapButton" addStyleNames="{style.nav-button} nav-btn-img" />
 		<b:Button ui:field="visualisationsButton" addStyleNames="{style.nav-button} nav-btn-img" />
 		<b:Button ui:field="listButton" addStyleNames="{style.nav-button} nav-btn-img" />
 	</b:ButtonGroup>
