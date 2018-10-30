@@ -13,4 +13,7 @@
 	<ui:style>
 	</ui:style>
 	
+	<bh:Div>
+	</bh:Div>
+	
 </ui:UiBinder>

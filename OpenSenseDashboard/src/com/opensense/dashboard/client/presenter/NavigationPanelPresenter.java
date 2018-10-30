@@ -22,8 +22,9 @@ public class NavigationPanelPresenter implements IPresenter, NavigationPanelView
 		return view;
 	}
 	
-	public void go(HasWidgets controlPanel) {
-		
+	public void go(HasWidgets container) {
+		container.clear();
+		container.add(view.asWidget());
 	}
 
 }

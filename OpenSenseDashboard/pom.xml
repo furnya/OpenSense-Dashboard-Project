@@ -99,6 +99,12 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.vectomatic/lib-gwt-svg -->
+		<dependency>
+		    <groupId>org.vectomatic</groupId>
+		    <artifactId>lib-gwt-svg</artifactId>
+		    <version>0.5.15</version>
+		</dependency>
 		<!-- Material design -->
 		<!-- <dependency>
 			<groupId>com.github.gwtmaterialdesign</groupId>
