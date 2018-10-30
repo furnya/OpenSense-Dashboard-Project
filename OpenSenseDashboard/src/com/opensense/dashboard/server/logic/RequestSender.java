@@ -22,17 +22,17 @@ import java.util.Map;
 import org.json.*;
 
 public class RequestSender {
-	private static HashMap<String, String> parameters;
+	private HashMap<String, String> parameters;
 	
-	public static void addParameter(String key, String value) {
+	public void addParameter(String key, String value) {
 		parameters.put(key, value);
 	}
 	
-	public static HashMap<String,String> getParameters(){
+	public HashMap<String,String> getParameters(){
 		return parameters;
 	}
 	
-	public static String buildURL(String url) {
+	public String buildURL(String url) {
 		if(parameters.size()==0) {
 			return url;
 		}
@@ -47,7 +47,7 @@ public class RequestSender {
 		return endURL;
 	}
 	
-	public static JSONObject sendGETRequest(String urlString) throws IOException {
+	public JSONObject sendGETRequest(String urlString) throws IOException {
 		urlString = buildURL(urlString);
 		System.out.println(urlString);
 		URL url = new URL(urlString);
