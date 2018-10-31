@@ -12,12 +12,9 @@ import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
-import com.opensense.dashboard.client.presenter.TestPresenter;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
 import com.opensense.dashboard.client.view.NavigationPanelView;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
-import com.opensense.dashboard.client.view.TestView;
-import com.opensense.dashboard.client.view.TestViewImpl;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
@@ -43,14 +40,12 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 /**
 	  *  Presenter
 	  */
-	 private TestPresenter testPresenter = null;
 	 private DataPanelPresenter dataPanelPresenter = null;
 	 private NavigationPanelPresenter navigationPanelPresenter = null;
 	 
 	 /**
 	  * Views
 	  */
-	 private TestView testView = null;
 	 private DataPanelViewImpl dataPanelView = null;
 	 private NavigationPanelViewImpl navigationPanelView = null;
 	 
