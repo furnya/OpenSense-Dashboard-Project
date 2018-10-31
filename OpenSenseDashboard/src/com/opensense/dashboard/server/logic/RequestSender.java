@@ -3,25 +3,14 @@ package com.opensense.dashboard.server.logic;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import org.json.*;
+import org.json.JSONObject;
 
-public class RequestSender {
+public class RequestSender implements Serializable{
 	private HashMap<String, String> parameters;
 	
 	public void addParameter(String key, String value) {
