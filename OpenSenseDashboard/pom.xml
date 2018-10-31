@@ -129,6 +129,11 @@
 			<artifactId>gwt-material-jquery</artifactId>
 			<version>2.1.1</version>
 		</dependency> 
+		<dependency>
+    		<groupId>com.github.gwtmaterialdesign</groupId>
+   			<artifactId>gwt-material</artifactId>
+   			 <version>2.0-rc5</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.gwt.google-apis/gwt-maps -->
 		<!-- https://mvnrepository.com/artifact/com.github.branflake2267/gwt-maps-api -->
 		<!-- GWT Maps API V3 -->
