@@ -1,6 +1,6 @@
 /test-classes/
 /.settings/
-//bin/
+/bin/
 /gwt-unitCache/
 /.sonar/
 /war/*.log
@@ -11,3 +11,4 @@
 /war/log.log
 /target/
 /OpenSenseDashboard/
+/war/WEB-INF/gwt-unitCache 

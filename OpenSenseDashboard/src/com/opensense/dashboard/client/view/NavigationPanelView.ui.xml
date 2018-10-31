@@ -4,7 +4,6 @@
 	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html" xmlns:m="urn:import:gwt.material.design.client.ui">
 	
 	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
-		
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>

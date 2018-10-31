@@ -4,23 +4,21 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.view.ListsView;
-import com.opensense.dashboard.client.view.LoginView;
-import com.opensense.dashboard.client.view.MapView;
 
-public class LoginPresenter implements IPresenter, LoginView.Presenter{
+public class ListsPresenter implements IPresenter, ListsView.Presenter{
 	
-	private final LoginView view;
+	private final ListsView view;
 	private HandlerManager eventBus;
 	private AppController appController;
 	
-	public LoginPresenter(HandlerManager eventBus, AppController appController, LoginView view) {
+	public ListsPresenter(HandlerManager eventBus, AppController appController, ListsView view) {
 		this.eventBus = eventBus;
 		this.appController = appController;
 		this.view = view;
 		view.setPresenter(this);
 	}
 	
-	public LoginView getView() {
+	public ListsView getView() {
 		return view;
 	}
 	
@@ -29,4 +27,5 @@ public class LoginPresenter implements IPresenter, LoginView.Presenter{
 		container.clear();
 		container.add(view.asWidget());
 	}
+	
 }

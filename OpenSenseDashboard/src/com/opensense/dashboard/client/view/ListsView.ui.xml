@@ -3,24 +3,13 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui" 
 	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html" xmlns:m="urn:import:gwt.material.design.client.ui">
 	
-	<ui:with type="com.opensense.dashboard.client.utils.Languages"
-		field="lang" />
+	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
+	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
-.container{
-	position: absolute;
-	left: 100px;
-	top: 200px;
-}
 </ui:style>
 
-<bh:Div ui:field="test">
-	<bh:Div addStyleNames="{style.container}">
-		<bh:Text text="{lang.text}"></bh:Text>
-		<b:Tooltip text="Das macht er">
-			<b:Button ui:field="button1" text="lang"/>
-		</b:Tooltip>
-	</bh:Div>
+<bh:Div>
 </bh:Div>
 
 </ui:UiBinder>

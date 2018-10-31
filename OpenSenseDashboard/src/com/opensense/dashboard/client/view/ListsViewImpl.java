@@ -6,17 +6,17 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class LoginViewImpl extends Composite implements LoginView {
+public class ListsViewImpl extends Composite implements ListsView {
 	
-	@UiTemplate("LoginView.ui.xml")
-	interface LoginViewUiBinder extends UiBinder<Widget, LoginViewImpl> {
+	@UiTemplate("ListsView.ui.xml")
+	interface ListsViewUiBinder extends UiBinder<Widget, ListsViewImpl> {
 	}
 	
-	private static LoginViewUiBinder uiBinder = GWT.create(LoginViewUiBinder.class);
+	private static ListsViewUiBinder uiBinder = GWT.create(ListsViewUiBinder.class);
 
 	protected Presenter presenter;
 	
-	public LoginViewImpl() {
+	public ListsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	
@@ -24,4 +24,5 @@ public class LoginViewImpl extends Composite implements LoginView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+
 }
