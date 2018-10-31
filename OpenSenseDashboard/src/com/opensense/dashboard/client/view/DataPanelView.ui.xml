@@ -10,11 +10,14 @@
 	.padding{
 	    padding: 0 40px 40px 40px;
 	}
+	.heading{
+		color: #FFF;
+	}
 	</ui:style>
 	
 	<bh:Div addStyleNames="vertical {style.padding}">
 		<bh:Div>
-			<b:Heading size="H2">
+			<b:Heading size="H2" addStyleNames="{style.heading}">
 				<bh:Text ui:field="heading" text="DATA PANEL PAGE" />
 			</b:Heading>
 		</bh:Div>

@@ -8,14 +8,6 @@
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
-.nav-button{
-	height: 80px;
-    width: 100%;
-	background-color: #606060;
-}
-.nav-button:hover, .nav-button:active, .nav-button:focus, .nav-button:visited{
-	background-color: #42DCA3;
-}
 .bottom-con{
 	position: absolute;
 	width: 90px;
@@ -24,15 +16,15 @@
 </ui:style>
 
 <bh:Div addStyleNames="nav-container vertical user-select-none">
-	<b:ButtonGroup>
-		<b:Button ui:field="homeButton" addStyleNames="{style.nav-button} nav-btn-img" />
-		<b:Button ui:field="searchButton" addStyleNames="{style.nav-button} nav-btn-img" />
-		<b:Button ui:field="mapButton" addStyleNames="{style.nav-button} nav-btn-img" />
-		<b:Button ui:field="visualisationsButton" addStyleNames="{style.nav-button} nav-btn-img" />
-		<b:Button ui:field="listButton" addStyleNames="{style.nav-button} nav-btn-img" />
+	<b:ButtonGroup ui:field="buttonGroup">
+		<b:Button ui:field="homeButton" addStyleNames="nav-button" />
+		<b:Button ui:field="searchButton" addStyleNames="nav-button" />
+		<b:Button ui:field="mapButton" addStyleNames="nav-button" />
+		<b:Button ui:field="visualisationsButton" addStyleNames="nav-button" />
+		<b:Button ui:field="listButton" addStyleNames="nav-button" />
 	</b:ButtonGroup>
-	<bh:Div addStyleNames="{style.bottom-con}">
-		<b:Button ui:field="userButton" addStyleNames="{style.nav-button} nav-btn-img" />
+	<bh:Div ui:field="lastButtonCon" addStyleNames="{style.bottom-con}">
+		<b:Button ui:field="userButton" addStyleNames="nav-button" />
 	</bh:Div>
 </bh:Div>
 

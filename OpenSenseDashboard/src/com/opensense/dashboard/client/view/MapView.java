@@ -1,5 +1,11 @@
 package com.opensense.dashboard.client.view;
 
-public interface MapView {
+import com.google.gwt.user.client.ui.Widget;
 
+public interface MapView {
+	public interface Presenter{
+	}
+	
+	public void setPresenter(Presenter presenter);
+	public Widget asWidget();
 }

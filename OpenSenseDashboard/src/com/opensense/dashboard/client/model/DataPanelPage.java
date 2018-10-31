@@ -3,59 +3,67 @@ package com.opensense.dashboard.client.model;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.presenter.DataPanelPagePresenter;
 import com.opensense.dashboard.client.presenter.IDataPanelPagePresenter;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelPageView;
 import com.opensense.dashboard.client.view.IDataPanelPageView;
 
 public enum DataPanelPage {
 	HOME {
-		@Override public String displayName() {return null;}
+		@Override public String displayName() {return Languages.home();}
 		@Override public Class<? extends IDataPanelPageView> getViewClass() {return null;}
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return null;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return null;}
 		@Override public DataPanelPageView createViewInstance() {return null;}
-		@Override public SafeUri iconImagePath() {return null;}
+		@Override public boolean hasBottomButton() {return false;}
+		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.homeIcon().getSafeUri();}
 	},
 	SEARCH{
-		@Override public String displayName() {return null;}
+		@Override public String displayName() {return Languages.seach();}
 		@Override public Class<? extends IDataPanelPageView> getViewClass() {return null;}
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return null;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return null;}
 		@Override public DataPanelPageView createViewInstance() {return null;}
-		@Override public SafeUri iconImagePath() {return null;}
+		@Override public boolean hasBottomButton() {return false;}
+		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.searchIcon().getSafeUri();}
 	},
 	MAP{
-		@Override public String displayName() {return null;}
+		@Override public String displayName() {return Languages.map();}
 		@Override public Class<? extends IDataPanelPageView> getViewClass() {return null;}
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return null;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return null;}
 		@Override public DataPanelPageView createViewInstance() {return null;}
-		@Override public SafeUri iconImagePath() {return null;}
+		@Override public boolean hasBottomButton() {return false;}
+		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.mapIcon().getSafeUri();}
 	},
 	VISUALISATIONS{
-		@Override public String displayName() {return null;}
+		@Override public String displayName() {return Languages.graphics();}
 		@Override public Class<? extends IDataPanelPageView> getViewClass() {return null;}
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return null;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return null;}
 		@Override public DataPanelPageView createViewInstance() {return null;}
-		@Override public SafeUri iconImagePath() {return null;}
+		@Override public boolean hasBottomButton() {return false;}
+		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.diagramIcon().getSafeUri();}
 	},
-	PREFERENCES{
-		@Override public String displayName() {return null;}
+	LISTS{
+		@Override public String displayName() {return Languages.list();}
 		@Override public Class<? extends IDataPanelPageView> getViewClass() {return null;}
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return null;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return null;}
 		@Override public DataPanelPageView createViewInstance() {return null;}
-		@Override public SafeUri iconImagePath() {return null;}
+		@Override public boolean hasBottomButton() {return false;}
+		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.listIcon().getSafeUri();}
 	},
-	LOGIN{
-		@Override public String displayName() {return null;}
+	USER{
+		@Override public String displayName() {return Languages.user();}
 		@Override public Class<? extends IDataPanelPageView> getViewClass() {return null;}
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return null;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return null;}
 		@Override public DataPanelPageView createViewInstance() {return null;}
-		@Override public SafeUri iconImagePath() {return null;}
+		@Override public boolean hasBottomButton() {return true;}
+		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.userIcon().getSafeUri();}
 	};
 	
 	/**
@@ -87,6 +95,12 @@ public enum DataPanelPage {
 	 * @return DataPanelPageView
 	 */
 	public abstract DataPanelPageView createViewInstance();
+	
+	/**
+	 * If the page button is in the navigation at the bottom this should be true
+	 * @return
+	 */
+	public abstract boolean hasBottomButton();
 	
 	/**
 	 * @return the icon imagePath

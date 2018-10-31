@@ -37,4 +37,52 @@ public class Languages {
 			return "";
 		}
 	}
+
+	public static String home() {
+		if(de) {
+			return "Zuhause";
+		}else {
+			return "Home";
+		}
+	}
+	
+	public static String seach() {
+		if(de) {
+			return "Suche";
+		}else {
+			return "Search";
+		}
+	}
+	
+	public static String map() {
+		if(de) {
+			return "Karte";
+		}else {
+			return "Map";
+		}
+	}
+	
+	public static String graphics() {
+		if(de) {
+			return "Grafiken";
+		}else {
+			return "Visualisations";
+		}
+	}
+	
+	public static String list() {
+		if(de) {
+			return "Listen";
+		}else {
+			return "Lists";
+		}
+	}
+	
+	public static String user() {
+		if(de) {
+			return "Benutzer";
+		}else {
+			return "User";
+		}
+	}
 }
