@@ -3,17 +3,22 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui" 
 	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html">
 
-
-	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle"
-		field="gui" />
-
-	<ui:with type="com.opensense.dashboard.client.utils.Languages"
-		field="lang" />
+	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
+	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
 	
 	<ui:style>
+	.padding{
+	    padding: 0 40px 40px 40px;
+	}
 	</ui:style>
 	
-	<bh:Div>
+	<bh:Div addStyleNames="vertical {style.padding}">
+		<bh:Div>
+			<b:Heading size="H2">
+				<bh:Text ui:field="heading" text="DATA PANEL PAGE" />
+			</b:Heading>
+		</bh:Div>
+		<bh:Div ui:field="content"/>
 	</bh:Div>
 	
 </ui:UiBinder>

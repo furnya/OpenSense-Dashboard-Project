@@ -4,11 +4,12 @@ import java.util.Iterator;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 
 public class DataPanelViewImpl extends Composite implements DataPanelView, HasWidgets {
 	
@@ -19,37 +20,48 @@ public class DataPanelViewImpl extends Composite implements DataPanelView, HasWi
 	private static DataPanelViewUiBinder uiBinder = GWT.create(DataPanelViewUiBinder.class);
 	private Presenter presenter;
 	
+	@UiField
+	HasText heading;
+
+	@UiField
+	HasWidgets content;
+	
 	public DataPanelViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
 	@Override
 	public void add(Widget w) {
-		// TODO Auto-generated method stub
-		
+		content.add(w);
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		content.clear();
 	}
 
 	@Override
 	public Iterator<Widget> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return content.iterator();
 	}
 
 	@Override
 	public boolean remove(Widget w) {
-		// TODO Auto-generated method stub
-		return false;
+		return content.remove(w);
 	}
-
+	
 	@Override
-	public void setPresenter(DataPanelPresenter dataPanelPresenter) {
-		// TODO Auto-generated method stub
-		
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
+	}
+	
+	@Override
+	public HasWidgets getContentContainer() {
+		return content;
+	}
+	
+	@Override
+	public void setHeading(String heading) {
+		this.heading.setText(heading);
 	}
 }

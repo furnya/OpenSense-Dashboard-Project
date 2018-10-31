@@ -45,12 +45,12 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 	}
 
 	private void bindImages() {
-		homeButton.add(new Image(GUIImageBundle.INSTANCE.homeIcon()));
-		searchButton.add(new Image(GUIImageBundle.INSTANCE.searchIcon()));
-		mapButton.add(new Image(GUIImageBundle.INSTANCE.mapIcon()));
-		listButton.add(new Image(GUIImageBundle.INSTANCE.listIcon()));
-		visualisationsButton.add(new Image(GUIImageBundle.INSTANCE.diagramIcon()));
-		userButton.add(new Image(GUIImageBundle.INSTANCE.userIcon()));
+		homeButton.add(new Image(GUIImageBundle.INSTANCE.homeIcon().getSafeUri()));
+		searchButton.add(new Image(GUIImageBundle.INSTANCE.searchIcon().getSafeUri()));
+		mapButton.add(new Image(GUIImageBundle.INSTANCE.mapIcon().getSafeUri()));
+		listButton.add(new Image(GUIImageBundle.INSTANCE.listIcon().getSafeUri()));
+		visualisationsButton.add(new Image(GUIImageBundle.INSTANCE.diagramIcon().getSafeUri()));
+		userButton.add(new Image(GUIImageBundle.INSTANCE.userIcon().getSafeUri()));
 	}
 
 	@Override
