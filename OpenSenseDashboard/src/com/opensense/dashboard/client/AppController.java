@@ -6,18 +6,16 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
+import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
-import com.opensense.dashboard.client.presenter.TestPresenter;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
-import com.opensense.dashboard.client.view.NavigationPanelView;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
-import com.opensense.dashboard.client.view.TestView;
-import com.opensense.dashboard.client.view.TestViewImpl;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
@@ -43,14 +41,12 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 /**
 	  *  Presenter
 	  */
-	 private TestPresenter testPresenter = null;
 	 private DataPanelPresenter dataPanelPresenter = null;
 	 private NavigationPanelPresenter navigationPanelPresenter = null;
 	 
 	 /**
 	  * Views
 	  */
-	 private TestView testView = null;
 	 private DataPanelViewImpl dataPanelView = null;
 	 private NavigationPanelViewImpl navigationPanelView = null;
 	 
@@ -66,7 +62,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	}
 	
 	private void bindHandler() {
-		// TODO Auto-generated method stub
+		History.addValueChangeHandler(this);
 	}
 	
 	@Override
@@ -89,6 +85,10 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
-		// TODO Auto-generated method stub
+		if (dataPanelPresenter == null) {
+			GWT.log("NAVIGATION: The dataPanelPresenter is null.");
+			return;
+		}
+	  dataPanelPresenter.navigateTo(DataPanelPage.valueOf(event.getValue()));
 	}
 }

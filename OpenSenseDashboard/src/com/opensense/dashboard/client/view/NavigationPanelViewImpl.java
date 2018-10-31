@@ -61,17 +61,17 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 
 	private void buildButtons() {
 		homeButton.add(new Image(GUIImageBundle.INSTANCE.homeIcon().getSafeUri().asString()));
-		homeButton.addClickHandler(event -> setActivePage("HOME"));
+		homeButton.addClickHandler(event -> History.newItem("HOME", true));
 		searchButton.add(new Image(GUIImageBundle.INSTANCE.searchIcon().getSafeUri().asString()));
-		searchButton.addClickHandler(event -> setActivePage("SEARCH"));
+		searchButton.addClickHandler(event -> History.newItem("SEARCH", true));
 		mapButton.add(new Image(GUIImageBundle.INSTANCE.mapIcon().getSafeUri().asString()));
-		mapButton.addClickHandler(event -> setActivePage("MAP"));
+		mapButton.addClickHandler(event -> History.newItem("MAP", true));
 		listButton.add(new Image(GUIImageBundle.INSTANCE.listIcon().getSafeUri().asString()));
-		listButton.addClickHandler(event -> setActivePage("LISTS"));
+		listButton.addClickHandler(event -> History.newItem("LISTS", true));
 		visualisationsButton.add(new Image(GUIImageBundle.INSTANCE.diagramIcon().getSafeUri().asString()));
-		visualisationsButton.addClickHandler(event -> setActivePage("VISUALISATIONS"));
+		visualisationsButton.addClickHandler(event -> History.newItem("VISUALISATIONS", true));
 		userButton.add(new Image(GUIImageBundle.INSTANCE.userIcon().getSafeUri().asString()));
-		userButton.addClickHandler(event -> setActivePage("USER"));
+		userButton.addClickHandler(event -> History.newItem("USER", true));
 //		for(final DataPanelPage page : DataPanelPage.values()) {
 //			Button navButton = new Button();
 //			navButton.addStyleName("nav-button");
@@ -91,7 +91,7 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 	private void setActivePage(String page) {
 		navElements.entrySet().forEach(entry -> {
 			entry.getValue().setActive(entry.getKey().equals(page));
-			History.replaceItem(page, true);
+			History.newItem(page, true);
 		});
 	}
 

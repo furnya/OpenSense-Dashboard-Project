@@ -45,5 +45,18 @@ public abstract class DataPanelPagePresenter implements IDataPanelPagePresenter{
 		return activeDataPanelPagePresenter;
 	}
 	
+	@Override
+	public final void initIfNeeded() {
+		if(view.isNotInitialized()) {
+			initView();
+			view.setInitializedToTrue();
+		}
+	}
+
+	public void onPageLeave() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
 

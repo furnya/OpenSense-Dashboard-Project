@@ -85,4 +85,12 @@ public class Languages {
 			return "User";
 		}
 	}
+
+	public static String errorDataPanelPageLoading() {
+		if(de) {
+			return "Fehler beim laden der Seite";
+		}else {
+			return "Erroe while loading the page";
+		}
+	}
 }

@@ -2,12 +2,13 @@ package com.opensense.dashboard.client.presenter;
 
 import java.util.EnumMap;
 
-import com.google.gwt.dom.client.Element;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.client.view.DataPanelPageView;
 import com.opensense.dashboard.client.view.DataPanelView;
 
 public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
@@ -18,7 +19,7 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 
 	private DataPanelPagePresenter activeDataPanelPagePresenter = null;
 
-//	private final EnumMap<DataPanelPage, DataPanelPageView> pageViews = new EnumMap<>(DataPanelPage.class);
+	private final EnumMap<DataPanelPage, DataPanelPageView> pageViews = new EnumMap<>(DataPanelPage.class);
 
 	public DataPanelPresenter(HandlerManager eventBus, AppController appController, DataPanelView view) {
 		this.eventBus = eventBus;
@@ -31,6 +32,37 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
+	}
+
+	public void navigateTo(DataPanelPage page) {
+		if (activeDataPanelPagePresenter != null)
+			activeDataPanelPagePresenter.onPageLeave();
+		else {
+//			activeDataPanelPagePresenter = DataPanelPage.HOME;
+		}
+		try {
+			// Creating the view of the new page if the user hasn't used this
+			// page yet.
+			if (pageViews.get(page) == null)
+				pageViews.put(page, page.createViewInstance());
+
+			// Creating the presenter of the new page and assigning the view.
+			activeDataPanelPagePresenter = page.createPresenterInstance(eventBus, appController, pageViews.get(page));
+
+			// Initializing the new page if needed. This will happen only when
+			// using the page for the first time.
+			activeDataPanelPagePresenter.initIfNeeded();
+
+			view.setHeading(page.displayName());
+
+			// Firing the presenter of the new page.
+			activeDataPanelPagePresenter.go(view.getContentContainer());
+			
+		} catch (Exception e) {
+			GWT.log("Error while navigating to page " + page + ".", e);
+			view.getContentContainer().clear();
+			view.setHeading(Languages.errorDataPanelPageLoading());
+		}
 	}
 
 }

@@ -8,4 +8,6 @@ public interface IDataPanelPageView {
 	 * Returns this view as a Widget.
 	 */
 	Widget asWidget();
+	boolean isNotInitialized();
+	void setInitializedToTrue();
 }
