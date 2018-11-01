@@ -2,13 +2,14 @@
 /.settings/
 /bin/
 /gwt-unitCache/
-/.sonar/
+.sonar/
 /war/*.log
 /war/WEB-INF/classes/
 /war/WEB-INF/deploy/
 /war/war.rar
-/*.orig
+*.orig
 /war/log.log
 /target/
 /OpenSenseDashboard/
 /war/WEB-INF/gwt-unitCache 
+*.DS_Store

@@ -15,16 +15,8 @@
 </ui:style>
 
 <bh:Div addStyleNames="nav-container vertical user-select-none">
-	<b:ButtonGroup ui:field="buttonGroup">
-		<b:Button ui:field="homeButton" addStyleNames="nav-button" />
-		<b:Button ui:field="searchButton" addStyleNames="nav-button" />
-		<b:Button ui:field="mapButton" addStyleNames="nav-button" />
-		<b:Button ui:field="visualisationsButton" addStyleNames="nav-button" />
-		<b:Button ui:field="listButton" addStyleNames="nav-button" />
-	</b:ButtonGroup>
-	<bh:Div ui:field="lastButtonCon" addStyleNames="{style.bottom-con}">
-		<b:Button ui:field="userButton" addStyleNames="nav-button" />
-	</bh:Div>
+	<b:ButtonGroup ui:field="buttonGroup"/>
+	<bh:Div ui:field="lastButtonCon" addStyleNames="{style.bottom-con}"/>
 </bh:Div>
 
 </ui:UiBinder>

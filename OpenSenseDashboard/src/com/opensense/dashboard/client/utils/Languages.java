@@ -1,5 +1,9 @@
 package com.opensense.dashboard.client.utils;
 
+/**
+ * The languages are set to german by default to change it use the setter
+ * @author Roeber
+ */
 public class Languages {
 	
 	/**

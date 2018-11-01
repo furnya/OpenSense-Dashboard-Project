@@ -54,8 +54,7 @@ public abstract class DataPanelPagePresenter implements IDataPanelPagePresenter{
 	}
 
 	public void onPageLeave() {
-		// TODO Auto-generated method stub
-		
+		//THE END OF THE CALLERS
 	}
 	
 }

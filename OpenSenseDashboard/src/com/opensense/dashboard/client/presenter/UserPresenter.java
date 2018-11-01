@@ -3,19 +3,21 @@ package com.opensense.dashboard.client.presenter;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
-import com.opensense.dashboard.client.view.SearchView;
+import com.opensense.dashboard.client.view.ListsView;
+import com.opensense.dashboard.client.view.UserView;
+import com.opensense.dashboard.client.view.MapView;
 
-public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
+public class UserPresenter extends DataPanelPagePresenter implements IPresenter, UserView.Presenter{
 	
-	private final SearchView view;
+	private final UserView view;
 	
-	public SearchPresenter(HandlerManager eventBus, AppController appController, SearchView view) {
+	public UserPresenter(HandlerManager eventBus, AppController appController, UserView view) {
 		super(view, eventBus, appController);
 		this.view = view;
 		this.view.setPresenter(this);
 	}
 	
-	public SearchView getView() {
+	public UserView getView() {
 		return view;
 	}
 	

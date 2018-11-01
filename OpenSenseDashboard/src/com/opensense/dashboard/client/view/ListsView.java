@@ -2,7 +2,7 @@ package com.opensense.dashboard.client.view;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public interface ListsView {
+public interface ListsView extends IDataPanelPageView{
 	public interface Presenter{
 	}
 	

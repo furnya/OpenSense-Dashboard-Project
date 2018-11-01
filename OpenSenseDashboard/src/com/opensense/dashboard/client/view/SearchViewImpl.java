@@ -3,10 +3,9 @@ package com.opensense.dashboard.client.view;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SearchViewImpl extends Composite implements SearchView {
+public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@UiTemplate("SearchView.ui.xml")
 	interface SearchViewUiBinder extends UiBinder<Widget, SearchViewImpl> {

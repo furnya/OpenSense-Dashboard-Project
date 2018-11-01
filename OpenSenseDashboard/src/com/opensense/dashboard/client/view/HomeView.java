@@ -8,4 +8,5 @@ public interface HomeView  extends IDataPanelPageView {
 	
 	public void setPresenter(Presenter presenter);
 	public Widget asWidget();
+	public void printTest();
 }

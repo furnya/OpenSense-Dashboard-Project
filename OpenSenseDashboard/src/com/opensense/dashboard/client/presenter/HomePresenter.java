@@ -29,7 +29,6 @@ public class HomePresenter extends DataPanelPagePresenter implements HomeView.Pr
 
 	@Override
 	public void initView() {
-		// TODO Auto-generated method stub
-		
+		view.printTest();
 	}
 }

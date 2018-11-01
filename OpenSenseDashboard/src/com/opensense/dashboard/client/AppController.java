@@ -9,6 +9,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.presenter.DataPanelPresenter;
@@ -63,6 +64,13 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
 	private void bindHandler() {
 		History.addValueChangeHandler(this);
+		
+		eventBus.addHandler(OpenDataPanelPageEvent.TYPE, event -> {
+			GWT.log("eventBus: " + event.getDataPanelPage());
+			History.newItem(event.getDataPanelPage().name(), event.getIssueHistoryEvent());
+			dataPanelPresenter.navigateTo(event.getDataPanelPage());
+			navigationPanelPresenter.setActiveDataPanelPage(event.getDataPanelPage());
+		});
 	}
 	
 	@Override
@@ -89,6 +97,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			GWT.log("NAVIGATION: The dataPanelPresenter is null.");
 			return;
 		}
-	  dataPanelPresenter.navigateTo(DataPanelPage.valueOf(event.getValue()));
+		GWT.log("HISTORY: " + event.getValue());
+		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(event.getValue()), false));
 	}
 }
