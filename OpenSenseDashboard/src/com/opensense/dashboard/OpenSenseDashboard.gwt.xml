@@ -21,7 +21,8 @@
   <inherits name="org.gwtbootstrap3.GwtBootstrap3NoTheme" />
   <inherits name='com.google.gwt.maps.Maps' />
   <inherits name='org.vectomatic.libgwtsvg'/>
-  <inherits name="gwt.material.design.GwtMaterialDesign" />    
+  <inherits name="gwt.material.design.GwtMaterialDesign" />
+      
     
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.opensense.dashboard.client.Dashboard'/>

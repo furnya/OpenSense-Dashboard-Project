@@ -39,7 +39,7 @@ public enum DataPanelPage {
 		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.homeIconSvg().getSafeUri();}
 	},
 	SEARCH{
-		@Override public String displayName() {return Languages.seach();}
+		@Override public String displayName() {return Languages.search();}
 		@Override public Class<? extends IDataPanelPageView> getViewClass() {return SearchView.class;}
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return SearchPresenter.class;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new SearchPresenter(eventBus, appController, (SearchView) view);}
