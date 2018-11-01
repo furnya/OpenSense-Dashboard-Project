@@ -5,17 +5,14 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.view.VisualisationsView;
 
-public class VisualisationsPresenter implements IPresenter, VisualisationsView.Presenter{
+public class VisualisationsPresenter extends DataPanelPagePresenter implements IPresenter, VisualisationsView.Presenter{
 
 	private final VisualisationsView view;
-	private HandlerManager eventBus;
-	private AppController appController;
 	
 	public VisualisationsPresenter(HandlerManager eventBus, AppController appController, VisualisationsView view) {
-		this.eventBus = eventBus;
-		this.appController = appController;
+		super(view, eventBus, appController);
 		this.view = view;
-		view.setPresenter(this);
+		this.view.setPresenter(this);
 	}
 	
 	public VisualisationsView getView() {
@@ -26,6 +23,21 @@ public class VisualisationsPresenter implements IPresenter, VisualisationsView.P
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
+	}
+
+	@Override
+	public void onPageReturn() {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void onPageLeave() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void initView() {
+		view.initView();
 	}
 
 }

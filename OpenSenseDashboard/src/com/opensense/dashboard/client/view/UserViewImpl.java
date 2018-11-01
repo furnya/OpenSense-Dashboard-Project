@@ -3,25 +3,29 @@ package com.opensense.dashboard.client.view;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class LoginViewImpl extends Composite implements LoginView {
+public class UserViewImpl extends DataPanelPageView implements UserView {
 	
-	@UiTemplate("LoginView.ui.xml")
-	interface LoginViewUiBinder extends UiBinder<Widget, LoginViewImpl> {
+	@UiTemplate("UserView.ui.xml")
+	interface UserViewUiBinder extends UiBinder<Widget, UserViewImpl> {
 	}
 	
-	private static LoginViewUiBinder uiBinder = GWT.create(LoginViewUiBinder.class);
+	private static UserViewUiBinder uiBinder = GWT.create(UserViewUiBinder.class);
 
 	protected Presenter presenter;
 	
-	public LoginViewImpl() {
+	public UserViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+	}
+	
+	@Override
+	public void initView() {
+		// init UI Elements if needed
 	}
 }

@@ -1,5 +1,9 @@
 package com.opensense.dashboard.client.utils;
 
+/**
+ * The languages are set to german by default to change it use the setter
+ * @author Roeber
+ */
 public class Languages {
 	
 	/**
@@ -83,6 +87,14 @@ public class Languages {
 			return "Benutzer";
 		}else {
 			return "User";
+		}
+	}
+
+	public static String errorDataPanelPageLoading() {
+		if(de) {
+			return "Fehler beim laden der Seite";
+		}else {
+			return "Erroe while loading the page";
 		}
 	}
 }

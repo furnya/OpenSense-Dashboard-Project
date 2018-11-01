@@ -8,7 +8,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public Integer getData(String string) {
-		System.out.println("hier");
 		return 1;
 	}
 

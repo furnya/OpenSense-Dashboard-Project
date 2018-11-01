@@ -36,8 +36,8 @@ public interface GUIImageBundle extends ClientBundle {
  	
 	@Source("icons/user.png")
 	ImageResource userIcon();
-	@Source("icons/user.svg")
 	
+	@Source("icons/user.svg")
 	SVGResource userIconSvg();
  	
 	@Source("icons/map.png")

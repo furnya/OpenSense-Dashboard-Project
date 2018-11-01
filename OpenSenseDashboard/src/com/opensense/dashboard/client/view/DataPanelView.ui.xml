@@ -7,21 +7,27 @@
 	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
 	
 	<ui:style>
-	.padding{
-	    padding: 0 40px 40px 40px;
+	.main-page{
+        padding: 0 40px 40px 40px;
+	    width: 100%;
+	    height: 100%;
+	}
+	.content{
+	    width: 100%;
+	    height: 100%;
 	}
 	.heading{
 		color: #FFF;
 	}
 	</ui:style>
 	
-	<bh:Div addStyleNames="vertical {style.padding}">
+	<bh:Div addStyleNames="vertical {style.main-page}">
 		<bh:Div>
 			<b:Heading size="H2" addStyleNames="{style.heading}">
 				<bh:Text ui:field="heading" text="DATA PANEL PAGE" />
 			</b:Heading>
 		</bh:Div>
-		<bh:Div ui:field="content"/>
+		<bh:Div ui:field="content" addStyleNames="{style.content}" />
 	</bh:Div>
 	
 </ui:UiBinder>

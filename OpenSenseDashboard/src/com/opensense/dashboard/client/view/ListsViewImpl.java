@@ -3,10 +3,9 @@ package com.opensense.dashboard.client.view;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ListsViewImpl extends Composite implements ListsView {
+public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	
 	@UiTemplate("ListsView.ui.xml")
 	interface ListsViewUiBinder extends UiBinder<Widget, ListsViewImpl> {
@@ -24,5 +23,9 @@ public class ListsViewImpl extends Composite implements ListsView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
-
+	
+	@Override
+	public void initView() {
+		// init UI Elements if needed
+	}
 }

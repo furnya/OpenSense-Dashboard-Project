@@ -3,19 +3,19 @@ package com.opensense.dashboard.client.presenter;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
-import com.opensense.dashboard.client.view.MapView;
+import com.opensense.dashboard.client.view.UserView;
 
-public class MapPresenter extends DataPanelPagePresenter implements IPresenter, MapView.Presenter{
+public class UserPresenter extends DataPanelPagePresenter implements IPresenter, UserView.Presenter{
 	
-	private final MapView view;
+	private final UserView view;
 	
-	public MapPresenter(HandlerManager eventBus, AppController appController, MapView view) {
+	public UserPresenter(HandlerManager eventBus, AppController appController, UserView view) {
 		super(view, eventBus, appController);
 		this.view = view;
 		this.view.setPresenter(this);
 	}
-
-	public MapView getView() {
+	
+	public UserView getView() {
 		return view;
 	}
 	
@@ -29,7 +29,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	public void onPageReturn() {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public void onPageLeave() {
 		// TODO Auto-generated method stub

@@ -1,19 +1,22 @@
 package com.opensense.dashboard.client;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
+import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
-import com.opensense.dashboard.client.view.NavigationPanelView;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
@@ -24,7 +27,8 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 * Final reference to this object so the appController's functions can be
 	 * used in event handlers.
 	 */
-	 private final AppController instance = this;
+	@SuppressWarnings("unused")
+	private final AppController instance = this;
 	 
 	 /**
 	  * Handler manager mechanism for passing events and registering to be
@@ -58,10 +62,25 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		this.eventBus = eventBus;
 		bindHandler();
 		go(RootPanel.get());
+		handleStart();
 	}
 	
+	private void handleStart() {
+		if(History.getToken() != null && !History.getToken().isEmpty()) {
+			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(History.getToken().toUpperCase())));
+		}else {
+			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME));
+		}
+	}
+
 	private void bindHandler() {
-		// TODO Auto-generated method stub
+		History.addValueChangeHandler(this);
+		
+		eventBus.addHandler(OpenDataPanelPageEvent.TYPE, event -> {
+			History.newItem(event.getDataPanelPage().name(), false);
+			dataPanelPresenter.navigateTo(event.getDataPanelPage());
+			navigationPanelPresenter.setActiveDataPanelPage(event.getDataPanelPage());
+		});
 	}
 	
 	@Override
@@ -84,6 +103,10 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
-		// TODO Auto-generated method stub
+		if (dataPanelPresenter == null) {
+			LOGGER.log(Level.WARNING, "NAVIGATION: The dataPanelPresenter is null.");
+			return;
+		}
+		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(event.getValue().toUpperCase())));
 	}
 }
