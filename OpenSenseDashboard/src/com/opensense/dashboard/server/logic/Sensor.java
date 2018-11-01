@@ -33,7 +33,7 @@ public class Sensor implements Serializable{
 	private final double accuracy;
 	private LinkedList<Value> values;
 	
-	public Sensor(JSONObject sensor) throws MalformedURLException {
+	public Sensor(JSONObject sensor){
 		this.rawJSON = sensor;
 		values = new LinkedList<Value>();
 		this.userId = sensor.getInt("userId");
@@ -45,7 +45,14 @@ public class Sensor implements Serializable{
 		this.altitudeAboveGround = sensor.getDouble("altitudeAboveGround");
 		this.id = sensor.getInt("id");
 		this.attributionURLString = sensor.getString("attributionURL");
-		this.attributionURL = new URL(this.getAttributionURLString());
+		URL tryURL;
+		try {
+			tryURL = new URL(this.getAttributionURLString());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			tryURL = null;
+		}
+		this.attributionURL = tryURL;
 		this.sensorModel = sensor.getString("sensorModel");
 		JSONObject locationJSON = sensor.getJSONObject("location");
 		this.location = new Location(String.valueOf(this.getId()), locationJSON.getDouble("lat"), locationJSON.getDouble("lng"));
@@ -170,7 +177,7 @@ public class Sensor implements Serializable{
 		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
 		for(Object value : values) {
 			JSONObject valueJSON = (JSONObject) value;
-			this.values.add(new Value(inputFormat.parse(valueJSON.getString("timestamp")),valueJSON.getDouble("numberValue")));
+			this.values.add(new Value(inputFormat.parse(valueJSON.getString("timestamp")),valueJSON.getDouble("numberValue"),this));
 		}
 	}
 	

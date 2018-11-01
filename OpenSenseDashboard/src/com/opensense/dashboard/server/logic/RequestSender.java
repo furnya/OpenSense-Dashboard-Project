@@ -8,7 +8,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.google.gwt.json.client.JSONException;
 
 public class RequestSender implements Serializable{
 	private HashMap<String, String> parameters;
@@ -36,29 +39,56 @@ public class RequestSender implements Serializable{
 		return endURL;
 	}
 	
-	public JSONObject sendGETRequest(String urlString) throws IOException {
+	public String sendGETRequest(String urlString){
 		urlString = buildURL(urlString);
 		System.out.println(urlString);
-		URL url = new URL(urlString);
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("GET");
-		
-		con.setRequestProperty("Accept", "application/json");
-		con.setDoOutput(true);
-		int status = con.getResponseCode();
-		
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer content = new StringBuffer();
-		while ((inputLine = in.readLine()) != null) {
-		    content.append(inputLine);
+		URL url;
+		HttpURLConnection con;
+		StringBuffer content;
+		try {
+			url = new URL(urlString);
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			
+			con.setRequestProperty("Accept", "application/json");
+			con.setDoOutput(true);
+			int status = con.getResponseCode();
+			
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			content = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+			    content.append(inputLine);
+			}
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
-		in.close();
 		con.disconnect();
-		System.out.println(content.toString());
-		JSONObject response = new JSONObject(content.toString());
-		System.out.println(response.toString());
-		return response;
+		return content.toString();
+	}
+	
+	public JSONObject objectRequest(String urlString) {
+		String response = sendGETRequest(urlString);
+		try {
+			JSONObject o = new JSONObject(response);
+			return o;
+		}catch(JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public JSONArray arrayRequest(String urlString) {
+		String response = sendGETRequest(urlString);
+		try {
+			JSONArray a = new JSONArray(response);
+			return a;
+		}catch(JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public RequestSender(){
