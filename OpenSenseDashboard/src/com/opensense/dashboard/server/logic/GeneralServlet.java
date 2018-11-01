@@ -13,14 +13,14 @@ import com.opensense.dashboard.client.services.GeneralService;
 @SuppressWarnings("serial")
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
 
-	private RequestSender requestSender;
+	private static RequestSender requestSender;
 	
 	@Override
 	public List<Sensor> getSensorDataFromString(String searchQuery) {
-		this.requestSender = new RequestSender();
-		this.requestSender.addParameter("maxSensors", "100");
-		JSONArray sensorArray = this.requestSender.arrayRequest("https://www.opensense.network/beta/api/v1.0/sensors");
-		LinkedList<Sensor> sensorList = new LinkedList<Sensor>();
+		requestSender = new RequestSender();
+		requestSender.addParameter("maxSensors", "100");
+		JSONArray sensorArray = requestSender.arrayRequest("https://www.opensense.network/beta/api/v1.0/sensors");
+		LinkedList<Sensor> sensorList = new LinkedList<>();
 		for(Object o : sensorArray) {
 			JSONObject sensorJSON = (JSONObject) o;
 			sensorList.add(new Sensor(sensorJSON));
