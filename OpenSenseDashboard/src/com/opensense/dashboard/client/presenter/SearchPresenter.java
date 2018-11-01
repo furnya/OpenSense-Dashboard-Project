@@ -28,12 +28,15 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	@Override
 	public void onPageReturn() {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	@Override
+	public void onPageLeave() {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void initView() {
-		// TODO Auto-generated method stub
-		
+		view.initView();
 	}
 }

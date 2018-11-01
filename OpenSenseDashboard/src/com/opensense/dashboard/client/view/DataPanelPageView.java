@@ -12,7 +12,7 @@ public abstract class DataPanelPageView extends Composite implements IDataPanelP
 	}
 	
 	@Override
-	public final boolean isNotInitialized() {
-		return !isInitialized;
+	public final boolean isInitialized() {
+		return isInitialized;
 	}
 }

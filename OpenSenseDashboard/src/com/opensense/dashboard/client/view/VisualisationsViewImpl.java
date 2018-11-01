@@ -23,4 +23,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	
+	@Override
+	public void initView() {
+		// init UI Elements if needed
+	}
 }

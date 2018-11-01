@@ -4,7 +4,6 @@ import java.util.EnumMap;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.model.DataPanelPage;
@@ -52,17 +51,16 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			activeDataPanelPagePresenter.initIfNeeded();
 			
 			view.setHeading(page.displayName());
-
+			
+			activeDataPanelPagePresenter.onPageReturn();
+			
 			// Firing the presenter of the new page.
 			activeDataPanelPagePresenter.go(view.getContentContainer());
 			
 		} catch (Exception e) {
 			GWT.log("Error while navigating to page " + page + ".", e);
-			History.back();
-			if(view != null) {
-				view.getContentContainer().clear();
-				view.setHeading(Languages.errorDataPanelPageLoading());
-			}
+			view.getContentContainer().clear();
+			view.setHeading(Languages.errorDataPanelPageLoading());
 		}
 	}
 

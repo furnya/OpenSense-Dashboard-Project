@@ -20,15 +20,20 @@ public class HomePresenter extends DataPanelPagePresenter implements HomeView.Pr
 		container.clear();
 		container.add(view.asWidget());
 	}
+	
+	@Override
+	public void onPageLeave() {
+		// TODO Auto-generated method stub
+	}
 
 	@Override
 	public void onPageReturn() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void initView() {
-		view.printTest();
+		view.initView();
 	}
+
 }

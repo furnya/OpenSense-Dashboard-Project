@@ -8,12 +8,10 @@ public class OpenDataPanelPageEvent extends GwtEvent<OpenDataPanelPageEventHandl
 	public static final Type<OpenDataPanelPageEventHandler> TYPE = new Type<>();
 	
 	private DataPanelPage dataPanelPage;
-	private boolean issueHistoryEvent;
 	
-	public OpenDataPanelPageEvent(DataPanelPage dataPanelPage, boolean issueHistoryEvent) {
+	public OpenDataPanelPageEvent(DataPanelPage dataPanelPage) {
 		super();
 		this.dataPanelPage = dataPanelPage;
-		this.setIssueHistoryEvent(issueHistoryEvent);
 	}
 	
 	@Override
@@ -33,13 +31,4 @@ public class OpenDataPanelPageEvent extends GwtEvent<OpenDataPanelPageEventHandl
 	public void setDataPanelPage(DataPanelPage dataPanelPage) {
 		this.dataPanelPage = dataPanelPage;
 	}
-
-	public boolean getIssueHistoryEvent() {
-		return issueHistoryEvent;
-	}
-
-	public void setIssueHistoryEvent(boolean issueHistoryEvent) {
-		this.issueHistoryEvent = issueHistoryEvent;
-	}
-
 }

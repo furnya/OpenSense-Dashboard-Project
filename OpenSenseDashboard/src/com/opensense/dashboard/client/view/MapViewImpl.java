@@ -31,6 +31,11 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.presenter = presenter;
 	}
 	
+	@Override
+	public void initView() {
+		// init UI Elements if needed
+	}
+	
 	private void showThisMap() {
 //		MapOptions mapOptions = MapOptions.newInstance();
 //		mapOptions.setZoom(20);

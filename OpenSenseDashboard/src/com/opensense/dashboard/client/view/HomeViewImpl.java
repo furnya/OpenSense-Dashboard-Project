@@ -23,9 +23,9 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
-
+	
 	@Override
-	public void printTest() {
-		GWT.log("Hier");
+	public void initView() {
+		// init UI Elements if needed
 	}
 }

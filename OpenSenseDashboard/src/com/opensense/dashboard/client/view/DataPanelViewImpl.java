@@ -18,6 +18,8 @@ public class DataPanelViewImpl extends Composite implements DataPanelView, HasWi
 	}
 
 	private static DataPanelViewUiBinder uiBinder = GWT.create(DataPanelViewUiBinder.class);
+	
+	@SuppressWarnings("unused")
 	private Presenter presenter;
 	
 	@UiField

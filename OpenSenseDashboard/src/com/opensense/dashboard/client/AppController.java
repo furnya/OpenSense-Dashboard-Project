@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.shared.GWT;
@@ -26,7 +27,8 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 * Final reference to this object so the appController's functions can be
 	 * used in event handlers.
 	 */
-	 private final AppController instance = this;
+	@SuppressWarnings("unused")
+	private final AppController instance = this;
 	 
 	 /**
 	  * Handler manager mechanism for passing events and registering to be
@@ -60,14 +62,22 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		this.eventBus = eventBus;
 		bindHandler();
 		go(RootPanel.get());
+		handleStart();
 	}
 	
+	private void handleStart() {
+		if(History.getToken() != null && !History.getToken().isEmpty()) {
+			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(History.getToken().toUpperCase())));
+		}else {
+			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME));
+		}
+	}
+
 	private void bindHandler() {
 		History.addValueChangeHandler(this);
 		
 		eventBus.addHandler(OpenDataPanelPageEvent.TYPE, event -> {
-			GWT.log("eventBus: " + event.getDataPanelPage());
-			History.newItem(event.getDataPanelPage().name(), event.getIssueHistoryEvent());
+			History.newItem(event.getDataPanelPage().name(), false);
 			dataPanelPresenter.navigateTo(event.getDataPanelPage());
 			navigationPanelPresenter.setActiveDataPanelPage(event.getDataPanelPage());
 		});
@@ -94,10 +104,9 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		if (dataPanelPresenter == null) {
-			GWT.log("NAVIGATION: The dataPanelPresenter is null.");
+			LOGGER.log(Level.WARNING, "NAVIGATION: The dataPanelPresenter is null.");
 			return;
 		}
-		GWT.log("HISTORY: " + event.getValue());
-		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(event.getValue()), false));
+		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(event.getValue().toUpperCase())));
 	}
 }

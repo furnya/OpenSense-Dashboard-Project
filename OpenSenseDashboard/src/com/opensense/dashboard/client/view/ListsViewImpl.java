@@ -23,5 +23,9 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
-
+	
+	@Override
+	public void initView() {
+		// init UI Elements if needed
+	}
 }

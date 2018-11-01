@@ -23,4 +23,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	
+	@Override
+	public void initView() {
+		// init UI Elements if needed
+	}
 }

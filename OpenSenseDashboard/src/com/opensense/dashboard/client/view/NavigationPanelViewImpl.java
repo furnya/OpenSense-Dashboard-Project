@@ -49,7 +49,7 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 			Button navButton = new Button();
 			navButton.addStyleName("nav-button");
 			navButton.add(new Image(page.iconImagePath()));
-			navButton.addClickHandler(event -> presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(page, false)));
+			navButton.addClickHandler(event -> presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(page)));
 			if(!page.hasBottomButton()) {
 				buttonGroup.add(navButton);
 			}else {
