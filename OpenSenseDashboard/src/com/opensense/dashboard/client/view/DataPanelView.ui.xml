@@ -9,7 +9,7 @@
 	<ui:style>
 	.main-page{
         padding: 0 40px 40px 40px;
-	    width: 100%;
+	    width: 90%;
 	    height: 100%;
 	}
 	.content{

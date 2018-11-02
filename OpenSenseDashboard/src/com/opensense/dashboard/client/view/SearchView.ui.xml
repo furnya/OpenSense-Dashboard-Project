@@ -10,6 +10,9 @@
 </ui:style>
 
 <bh:Div>
+	<m:MaterialNavBar ui:field="navBarSearch" >
+ 		<m:MaterialSearch ui:field="searchBar" placeholder="{lang.search}" backgroundColor="WHITE" iconColor="BLACK" active="true"/>
+ 	</m:MaterialNavBar>
 </bh:Div>
 
 </ui:UiBinder>

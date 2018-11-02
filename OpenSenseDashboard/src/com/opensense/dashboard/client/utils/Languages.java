@@ -50,7 +50,7 @@ public class Languages {
 		}
 	}
 	
-	public static String seach() {
+	public static String search() {
 		if(de) {
 			return "Suche";
 		}else {

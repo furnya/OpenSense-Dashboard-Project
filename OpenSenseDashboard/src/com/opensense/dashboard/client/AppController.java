@@ -24,8 +24,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	private static final Logger LOGGER = Logger.getLogger(AppController.class.getName());
 	 
 	/**
-	 * Final reference to this object so the appController's functions can be
-	 * used in event handlers.
+	 * Final reference to this object so the appController's functions can be used in event handlers
 	 */
 	@SuppressWarnings("unused")
 	private final AppController instance = this;

@@ -1,14 +1,9 @@
 package com.opensense.dashboard.client.presenter;
 
-import java.util.List;
-
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
-import com.opensense.dashboard.client.services.GeneralService;
-import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.view.SearchView;
-import com.opensense.dashboard.server.logic.Sensor;
 
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 	
@@ -47,8 +42,8 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 	
 	private void getSensorDataAndDisplay() {
-		GeneralService.Util.getInstance().getSensorDataFromString("GIVE ME AS MUCH AS YOU CAN", new DefaultAsyncCallback<List<Sensor>>(result ->  {
-			view.showSensorData(result);
-		}));
+//		GeneralService.Util.getInstance().getSensorDataFromString("GIVE ME AS MUCH AS YOU CAN", new DefaultAsyncCallback<List<Sensor>>(result ->  {
+//			view.showSensorData(result);
+//		}));
 	}
 }
