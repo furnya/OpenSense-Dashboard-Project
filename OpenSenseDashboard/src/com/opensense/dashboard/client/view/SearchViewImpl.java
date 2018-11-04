@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client.view;
 
+import java.util.List;
+
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
 
@@ -48,8 +50,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		// init UI Elements if needed
 	}
 
-//	@Override
-//	public void showSensorData(List<String> result) {
-//		result.forEach(sensor -> GWT.log("YEAAH, ich habe den Sensor mit der Id "+sensor + " bekommen"));
-//	}
+	@Override
+	public void showSensorData(List<String> result) {
+		result.forEach(sensor -> GWT.log("YEAAH, ich habe den Sensor mit der Id "+sensor + " bekommen"));
+	}
 }

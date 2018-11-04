@@ -8,6 +8,10 @@ public class TestClass implements IsSerializable{
 	
 	private List<String> s;
 	
+	public TestClass() {
+		//empty constructor for serialization
+	}
+	
 	public TestClass(List<String> s) {
 		this.s = s;
 	}
