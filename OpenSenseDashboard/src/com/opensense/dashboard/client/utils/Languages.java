@@ -97,4 +97,12 @@ public class Languages {
 			return "Erroe while loading the page";
 		}
 	}
+	
+	public static String searchPlace() {
+		if(de) {
+			return "Sensoren Ortsabhängig suchen";
+		}else {
+			return "Sensors ..";
+		}
+	}
 }

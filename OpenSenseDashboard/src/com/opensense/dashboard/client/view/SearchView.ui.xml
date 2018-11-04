@@ -10,16 +10,23 @@
 .input{
 	color: #FFF;
 	margin-left: 15px !important;
-    width: 97% !important;
+    width: 92% !important;
+}
+.input:focus{
+	border-bottom: 1px solid #42DCA3 !important;
 }
 .nav-bar{
+	width: 40%; 
 	background-color: #606060;	
+}
+.nav-bar a {
+	display: none;	
 }
 </ui:style>
 
 <bh:Div ui:field="container">
 	 <m:MaterialNavBar ui:field="navBarSearch" addStyleNames="{style.nav-bar} round-corners"> 
- 		 <b:Input ui:field="searchInput" type="TEXT" placeholder="{lang.search}" addStyleNames="{style.input}"/>
+ 		 <b:Input ui:field="searchInput" type="TEXT" placeholder="{lang.searchPlace}" addStyleNames="{style.input}"/>
  	</m:MaterialNavBar>  
 </bh:Div>
 

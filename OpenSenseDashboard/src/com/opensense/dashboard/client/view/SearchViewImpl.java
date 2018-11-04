@@ -36,8 +36,6 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		initWidget(uiBinder.createAndBindUi(this));
 		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
 		Autocomplete auto = Autocomplete.newInstance(searchInput.getElement(), autoOptions);
-//		MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-//		searchTextBox = new SuggestBox(oracle);
 	}
 	
 	@Override
