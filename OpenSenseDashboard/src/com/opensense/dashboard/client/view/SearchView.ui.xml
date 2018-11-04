@@ -7,12 +7,20 @@
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
+.input{
+	color: #FFF;
+	margin-left: 15px !important;
+    width: 97% !important;
+}
+.nav-bar{
+	background-color: #606060;	
+}
 </ui:style>
 
-<bh:Div>
-	<m:MaterialNavBar ui:field="navBarSearch" >
- 		<m:MaterialSearch ui:field="searchBar" placeholder="{lang.search}" backgroundColor="WHITE" iconColor="BLACK" active="true"/>
- 	</m:MaterialNavBar>
+<bh:Div ui:field="container">
+	 <m:MaterialNavBar ui:field="navBarSearch" addStyleNames="{style.nav-bar} round-corners"> 
+ 		 <b:Input ui:field="searchInput" type="TEXT" placeholder="{lang.search}" addStyleNames="{style.input}"/>
+ 	</m:MaterialNavBar>  
 </bh:Div>
 
 </ui:UiBinder>

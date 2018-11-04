@@ -1,13 +1,15 @@
 package com.opensense.dashboard.client.view;
 
+import org.gwtbootstrap3.client.ui.Input;
+import org.gwtbootstrap3.client.ui.html.Div;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.maps.client.placeslib.Autocomplete;
+import com.google.gwt.maps.client.placeslib.AutocompleteOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
-
-import gwt.material.design.client.ui.MaterialNavBar;
-import gwt.material.design.client.ui.MaterialSearch;
 
 public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
@@ -16,10 +18,13 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 	
 	@UiField
-	MaterialNavBar navBarSearch;
+	Div container;
+	
+//	@UiField
+//	MaterialNavBar navBarSearch;
 	
 	@UiField
-	MaterialSearch searchBar;
+	Input searchInput;
 	
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
@@ -27,6 +32,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	public SearchViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
+		Autocomplete auto = Autocomplete.newInstance(searchInput.getElement(), autoOptions);
+//		MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+//		searchTextBox = new SuggestBox(oracle);
 	}
 	
 	@Override
