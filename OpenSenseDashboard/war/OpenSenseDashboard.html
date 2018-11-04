@@ -1,21 +1,24 @@
 <!doctype html>
 <html lang="de">
-  <head>
-  
-  <meta charset="utf-8">
-	<title>open-sensor-dashboard</title>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<link rel="canonical" href="https://open-sense.de/dashboard/" />
-	<!-- <link rel="stylesheet" href="/css/ifaceplate.min.css"> -->
-	<link rel="stylesheet" href="/css/ifaceplate--no-bootstrap.min.css">
-  	<link type="text/css" rel="stylesheet" href="/css/dashboard.css">
-  
-	<script defer type="text/javascript" language="javascript" src="/opensensedashboard/opensensedashboard.nocache.js"></script>
-  </head>
+<head>
+<meta charset="utf-8">
+<title>open-sensor-dashboard</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="canonical" href="https://open-sense.de/dashboard/" />
+<!-- <link rel="stylesheet" href="/css/ifaceplate.min.css"> -->
+<link rel="stylesheet" href="/css/ifaceplate--no-bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="/css/dashboard.css">
+<!-- Google Maps api key -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuabkuAhzmQLXu4RPql7x1TvT3_nZfHSs&callback=initMap" async defer>
+</script>
+<script defer type="text/javascript" language="javascript"
+	src="/opensensedashboard/opensensedashboard.nocache.js">
+	</script>
+</head>
 
-  <body style="background-color: #404040; overflow: hidden;">
+<body style="background-color: #404040; overflow: hidden;">
 
-    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+	<!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
 	<noscript>
 		<div fit horizontal layout center-center
 			style="background-color: black; color: white;">
@@ -25,8 +28,20 @@
 				application to display correctly. </span>
 		</div>
 	</noscript>
-	<div id="control-panel"> </div>
+	<div id="control-panel"></div>
 	<div id="data-panel"></div>
-	
-  </body>
+	<!-- Hier sollte die Map initialisiert werden aber es passiert nichts es sei denn ich definiere
+	hier die initMap Funktion. Ich würde aber gerne die initMap funktion aus der MapViewImpl benutzen ? How?  -->
+	<div id="map"></div>
+	<script>
+		      var map;
+		      function initMap() {
+		        map = new google.maps.Map(document.getElementById('map'), {
+		          center: {lat: 52.521918, lng: 13.413215},
+		          zoom: 8
+		        });
+		      }
+	    </script>
+	</body>
+
 </html>

@@ -136,6 +136,7 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.gwt.google-apis/gwt-maps -->
 		<!-- https://mvnrepository.com/artifact/com.github.branflake2267/gwt-maps-api -->
+		
 		<!-- GWT Maps API V3 -->
 		<dependency>
 			<groupId>com.github.branflake2267</groupId>

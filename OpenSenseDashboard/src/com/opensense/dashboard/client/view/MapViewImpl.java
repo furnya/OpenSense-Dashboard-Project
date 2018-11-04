@@ -1,15 +1,13 @@
 package com.opensense.dashboard.client.view;
 
 import org.gwtbootstrap3.client.ui.html.Div;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapTypeId;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
-import com.google.gwt.maps.client.events.click.ClickMapEvent;
-import com.google.gwt.maps.client.events.click.ClickMapHandler;
+import com.google.gwt.maps.client.*;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -29,24 +27,27 @@ public class MapViewImpl extends Composite implements MapView {
 	
 	protected Presenter presenter;
 	
+	
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
-		showThisMap();
+		initMap();
 		
 	}
-
-	private void showThisMap() {
+	private void initMap() {
 		MapOptions mapOptions = MapOptions.newInstance();
-		mapOptions.setCenter(LatLng.newInstance(39.509, -98.434));
-		mapOptions.setZoom(20);
+		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
+		MapWidget mapWidget = MapWidget.newInstance(mapImpl);
+		
+		//Berlin Alexanderplatz coordinates (breitengrad /laengengrad)
+		mapOptions.setCenter(LatLng.newInstance(52.521918,13.413215));
+		mapOptions.setZoom(10);
 		mapOptions.setMapTypeId(MapTypeId.ROADMAP);
 		mapOptions.setDraggable(true);
 		mapOptions.setScaleControl(true);
 		mapOptions.setScrollWheel(true);
 		
-		mapOptions.setCenter(LatLng.newInstance(52.0, 52.0));
-		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
-		MapWidget mapWidget = MapWidget.newInstance(mapImpl);
+		mapWidget.setVisible(true);
+		map.add(mapWidget);
 	}
 
 	@Override

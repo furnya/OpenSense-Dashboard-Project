@@ -3,6 +3,8 @@ package com.opensense.dashboard.client.presenter;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.view.ListsView;
+import com.opensense.dashboard.client.view.LoginView;
 import com.opensense.dashboard.client.view.MapView;
 
 public class MapPresenter implements IPresenter, MapView.Presenter{

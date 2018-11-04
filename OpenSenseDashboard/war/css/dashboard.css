@@ -153,6 +153,13 @@
 	width: 90px;
 }
 
+#map {
+     height: 455px;
+     width: 800px;
+     margin: 0;
+     padding: 0;
+}
+
 .nav-container{
 	background-color: #606060;
 	width: 100%;
