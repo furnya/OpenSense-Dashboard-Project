@@ -40,7 +40,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 
 //	@Override
-//	public void showSensorData(List<Sensor> result) {
-//		result.forEach(sensor -> GWT.log("YEAAH, ich habe den Sensor mit der Id "+sensor.getId() + " bekommen"));
+//	public void showSensorData(List<String> result) {
+//		result.forEach(sensor -> GWT.log("YEAAH, ich habe den Sensor mit der Id "+sensor + " bekommen"));
 //	}
 }

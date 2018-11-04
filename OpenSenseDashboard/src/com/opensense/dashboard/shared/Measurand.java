@@ -1,4 +1,4 @@
-package com.opensense.dashboard.server.logic;
+package com.opensense.dashboard.shared;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.opensense.dashboard.server.util.DataHandler;
 
 public class Measurand {
 

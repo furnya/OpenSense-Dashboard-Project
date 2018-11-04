@@ -1,4 +1,4 @@
-package com.opensense.dashboard.server.logic;
+package com.opensense.dashboard.shared;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

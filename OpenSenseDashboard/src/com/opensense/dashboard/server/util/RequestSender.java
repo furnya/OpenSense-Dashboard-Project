@@ -1,4 +1,4 @@
-package com.opensense.dashboard.server.logic;
+package com.opensense.dashboard.server.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;

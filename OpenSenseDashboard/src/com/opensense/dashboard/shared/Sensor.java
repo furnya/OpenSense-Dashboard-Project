@@ -1,4 +1,4 @@
-package com.opensense.dashboard.server.logic;
+package com.opensense.dashboard.shared;
 
 
 import java.io.Serializable;
@@ -14,9 +14,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.opensense.dashboard.server.util.DataHandler;
 import com.opensense.dashboard.server.util.Location;
 
 public class Sensor implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9092878107269506316L;
 	private final JSONObject rawJSON;
 	private final int userId;
 	private final User user;

@@ -1,4 +1,4 @@
-package com.opensense.dashboard.server.logic;
+package com.opensense.dashboard.server.util;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,6 +7,13 @@ import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.opensense.dashboard.shared.License;
+import com.opensense.dashboard.shared.Measurand;
+import com.opensense.dashboard.shared.Sensor;
+import com.opensense.dashboard.shared.Unit;
+import com.opensense.dashboard.shared.User;
+import com.opensense.dashboard.shared.Value;
 
 public class DataHandler {
 	
