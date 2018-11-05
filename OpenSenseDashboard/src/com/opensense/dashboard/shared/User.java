@@ -7,7 +7,9 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
-public class User {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class User implements IsSerializable{
 
 	private final JSONObject rawJSON;
 	private final int id;
@@ -16,7 +18,6 @@ public class User {
 	private final String email;
 	private final String emailVerified;
 	private final Date created;
-	private HashMap<Integer, Sensor> sensors;
 	
 	public User(JSONObject unit){
 		this.rawJSON = unit;
@@ -53,23 +54,6 @@ public class User {
 	public String toString() {
 		return this.rawJSON.toString();
 	}
-
-
-	/**
-	 * @return the sensors
-	 */
-	public HashMap<Integer, Sensor> getSensors() {
-		return sensors;
-	}
-
-
-	/**
-	 * @param sensors the sensors to set
-	 */
-	public void addSensor(Sensor sensor) {
-		this.sensors.put(sensor.getId(), sensor);
-	}
-
 
 	/**
 	 * @return the email

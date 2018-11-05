@@ -14,32 +14,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.opensense.dashboard.server.util.DataHandler;
 import com.opensense.dashboard.server.util.Location;
 
-public class Sensor implements Serializable{
+public class Sensor implements IsSerializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 9092878107269506316L;
 	private final JSONObject rawJSON;
 	private final int userId;
-	private final User user;
 	private final double directionHorizontal;
 	private final double directionVertical;
 	private final String attributionText;
 	private final int measurandId;
-	private final Measurand measurand;
 	private final int licenseId;
-	private final License license;
 	private final double altitudeAboveGround;
 	private final int id;
 	private final String attributionURLString;
-	private final URL attributionURL;
 	private final String sensorModel;
 	private final Location location;
 	private final int unitId;
-	private final Unit unit;
 	private final double accuracy;
 	private LinkedList<Value> values;
 	
@@ -47,38 +43,18 @@ public class Sensor implements Serializable{
 		this.rawJSON = sensor;
 		values = new LinkedList<Value>();
 		this.userId = sensor.getInt("userId");
-		User user = DataHandler.getUsers().get(this.userId);
-		//TODO add user to DataHandler users if non-existent
-		this.user = user;
 		this.directionHorizontal = sensor.getDouble("directionHorizontal");
 		this.directionVertical = sensor.getDouble("directionVertical");
 		this.attributionText = sensor.getString("attributionText");
 		this.measurandId = sensor.getInt("measurandId");
-		Measurand measurand = DataHandler.getMeasurands().get(this.measurandId);
-		//TODO add measurand to DataHandler measurands if non-existent
-		this.measurand = measurand;
 		this.licenseId = sensor.getInt("licenseId");
-		License license = DataHandler.getLicenses().get(this.licenseId);
-		//TODO add license to DataHandler licenses if non-existent
-		this.license = license;
 		this.altitudeAboveGround = sensor.getDouble("altitudeAboveGround");
 		this.id = sensor.getInt("id");
 		this.attributionURLString = sensor.getString("attributionURL");
-		URL tryURL;
-		try {
-			tryURL = new URL(this.getAttributionURLString());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			tryURL = null;
-		}
-		this.attributionURL = tryURL;
 		this.sensorModel = sensor.getString("sensorModel");
 		JSONObject locationJSON = sensor.getJSONObject("location");
 		this.location = new Location(String.valueOf(this.getId()), locationJSON.getDouble("lat"), locationJSON.getDouble("lng"));
 		this.unitId = sensor.getInt("unitId");
-		Unit unit = DataHandler.getUnits().get(this.unitId);
-		//TODO add unit to DataHandler units if non-existent
-		this.unit = unit;
 		this.accuracy = sensor.getDouble("accuracy");
 	}
 
@@ -146,13 +122,6 @@ public class Sensor implements Serializable{
 	}
 
 	/**
-	 * @return the attributionURL
-	 */
-	public URL getAttributionURL() {
-		return attributionURL;
-	}
-
-	/**
 	 * @return the sensorModel
 	 */
 	public String getSensorModel() {
@@ -216,7 +185,7 @@ public class Sensor implements Serializable{
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			valuesToAdd.add(new Value(timestamp,valueJSON.getDouble("numberValue"),this,this.getMeasurand()));
+			valuesToAdd.add(new Value(timestamp,valueJSON.getDouble("numberValue"),this.getId(),this.getMeasurandId()));
 		}
 		this.addMultipleValues(valuesToAdd);
 	}
@@ -227,34 +196,5 @@ public class Sensor implements Serializable{
 	public void addValue(Value value) {
 		this.values.add(value);
 	}
-
-	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return user;
-	}
-
-	/**
-	 * @return the measurand
-	 */
-	public Measurand getMeasurand() {
-		return measurand;
-	}
-
-	/**
-	 * @return the license
-	 */
-	public License getLicense() {
-		return license;
-	}
-
-	/**
-	 * @return the unit
-	 */
-	public Unit getUnit() {
-		return unit;
-	}
-	
 	
 }

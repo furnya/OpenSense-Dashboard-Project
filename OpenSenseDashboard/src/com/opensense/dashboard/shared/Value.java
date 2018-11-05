@@ -3,22 +3,20 @@ package com.opensense.dashboard.shared;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Value implements Serializable{
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Value implements IsSerializable{
 
 	private final Date timestamp;
 	private final double numberValue;
 	private final int sensorId;
-	private final Sensor sensor;
 	private final int measurandId;
-	private final Measurand measurand;
 	
-	public Value(Date timestamp, double numberValue, Sensor sensor, Measurand measurand) {
+	public Value(Date timestamp, double numberValue, int sensorId, int measurandId) {
 		this.timestamp = timestamp;
 		this.numberValue = numberValue;
-		this.sensor = sensor;
-		this.measurand = measurand;
-		this.sensorId = this.sensor.getId();
-		this.measurandId = this.measurand.getId();
+		this.sensorId = sensorId;
+		this.measurandId = measurandId;
 	}
 	
 	/**
@@ -33,13 +31,6 @@ public class Value implements Serializable{
 	 */
 	public Date getTimestamp() {
 		return this.timestamp;
-	}
-
-	/**
-	 * @return the sensor
-	 */
-	public Sensor getSensor() {
-		return this.sensor;
 	}
 
 	/**

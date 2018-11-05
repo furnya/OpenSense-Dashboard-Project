@@ -7,7 +7,9 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
-public class License {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class License implements IsSerializable{
 
 	private final JSONObject rawJSON;
 	private final int id;
@@ -24,7 +26,6 @@ public class License {
 	private final boolean requiresShareAlike;
 	private final boolean requiresKeepOpen;
 	private final boolean requiresChangeNote;
-	private HashMap<Integer, Sensor> sensors;
 	
 	public License(JSONObject license){
 		this.rawJSON = license;
@@ -62,22 +63,6 @@ public class License {
 	
 	public String toString() {
 		return this.rawJSON.toString();
-	}
-
-
-	/**
-	 * @return the sensors
-	 */
-	public HashMap<Integer, Sensor> getSensors() {
-		return sensors;
-	}
-
-
-	/**
-	 * @param sensors the sensors to set
-	 */
-	public void addSensor(Sensor sensor) {
-		this.sensors.put(sensor.getId(), sensor);
 	}
 
 	/**

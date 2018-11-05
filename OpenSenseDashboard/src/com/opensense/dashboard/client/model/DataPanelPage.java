@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.model;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.opensense.dashboard.client.AppController;
@@ -78,7 +79,9 @@ public enum DataPanelPage {
 		@Override public String displayName() {return Languages.user();}
 		@Override public Class<? extends IDataPanelPageView> getViewClass() {return UserView.class;}
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return UserPresenter.class;}
-		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new UserPresenter(eventBus, appController, (UserView) view);}
+		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {
+			GWT.log(new UserPresenter(eventBus, appController, (UserView) view)+"");
+			return new UserPresenter(eventBus, appController, (UserView) view);}
 		@Override public DataPanelPageView createViewInstance() {return new UserViewImpl();}
 		@Override public boolean hasBottomButton() {return true;}
 		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.userIconSvg().getSafeUri();}
