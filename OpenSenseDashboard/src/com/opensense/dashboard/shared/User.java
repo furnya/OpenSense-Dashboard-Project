@@ -3,7 +3,6 @@ package com.opensense.dashboard.shared;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 import org.json.JSONObject;
 
@@ -11,20 +10,23 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class User implements IsSerializable{
 
-	private final JSONObject rawJSON;
-	private final int id;
-	private final String username;
-	//private String password;
-	private final String email;
-	private final String emailVerified;
-	private final Date created;
+	private JSONObject rawJSON;
+	private int id;
+	private String username;
+	private String password;
+	private String email;
+	private String emailVerified;
+	private Date created;
+	
+	public User() {
+	}
 	
 	public User(JSONObject unit){
-		this.rawJSON = unit;
-		this.id = unit.getInt("id");
-		this.username = unit.getString("username");
-		this.email = unit.getString("email");
-		this.emailVerified = unit.getString("emailVerified");
+		this.setRawJSON(unit);
+		this.setId(unit.getInt("id"));
+		this.setUsername(unit.getString("username"));
+		this.setEmail(unit.getString("email"));
+		this.setEmailVerified(unit.getString("emailVerified"));
 		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
 		Date timestamp = null;
 		try {
@@ -32,7 +34,7 @@ public class User implements IsSerializable{
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		this.created = timestamp;
+		this.setCreated(timestamp);
 	}
 
 	
@@ -52,7 +54,7 @@ public class User implements IsSerializable{
 	}
 	
 	public String toString() {
-		return this.rawJSON.toString();
+		return this.getRawJSON().toString();
 	}
 
 	/**
@@ -76,6 +78,78 @@ public class User implements IsSerializable{
 	 */
 	public Date getCreated() {
 		return created;
+	}
+
+
+	/**
+	 * @return the rawJSON
+	 */
+	public JSONObject getRawJSON() {
+		return rawJSON;
+	}
+
+
+	/**
+	 * @param rawJSON the rawJSON to set
+	 */
+	public void setRawJSON(JSONObject rawJSON) {
+		this.rawJSON = rawJSON;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	/**
+	 * @param emailVerified the emailVerified to set
+	 */
+	public void setEmailVerified(String emailVerified) {
+		this.emailVerified = emailVerified;
+	}
+
+
+	/**
+	 * @param created the created to set
+	 */
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 
 }

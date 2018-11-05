@@ -3,7 +3,6 @@ package com.opensense.dashboard.shared;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 import org.json.JSONObject;
 
@@ -11,30 +10,33 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class License implements IsSerializable{
 
-	private final JSONObject rawJSON;
-	private final int id;
-	private final String shortName;
-	private final String fullName;
-	private final String version;
-	private final String referenceLink;
-	private final String description;
+	private JSONObject rawJSON;
+	private int id;
+	private String shortName;
+	private String fullName;
+	private String version;
+	private String referenceLink;
+	private String description;
 	private Date created;
-	private final boolean allowsRedistribution;
-	private final boolean allowsDerivatives;
-	private final boolean noncommercial;
-	private final boolean requiresAttribution;
-	private final boolean requiresShareAlike;
-	private final boolean requiresKeepOpen;
-	private final boolean requiresChangeNote;
+	private boolean allowsRedistribution;
+	private boolean allowsDerivatives;
+	private boolean noncommercial;
+	private boolean requiresAttribution;
+	private boolean requiresShareAlike;
+	private boolean requiresKeepOpen;
+	private boolean requiresChangeNote;
+	
+	public License() {
+	}
 	
 	public License(JSONObject license){
-		this.rawJSON = license;
-		this.id = license.getInt("id");
-		this.shortName = license.getString("shortName");
-		this.fullName = license.getString("fullName");
-		this.version = license.getString("version");
-		this.referenceLink = license.getString("referenceLink");
-		this.description = license.getString("description");
+		this.setRawJSON(license);
+		this.setId(license.getInt("id"));
+		this.setShortName(license.getString("shortName"));
+		this.setFullName(license.getString("fullName"));
+		this.setVersion(license.getString("version"));
+		this.setReferenceLink(license.getString("referenceLink"));
+		this.setDescription(license.getString("description"));
 		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
 		Date timestamp = null;
 		try {
@@ -42,14 +44,14 @@ public class License implements IsSerializable{
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		this.created = timestamp;
-		this.allowsRedistribution = Boolean.parseBoolean(license.getString("allowsRedistribution"));
-		this.allowsDerivatives = Boolean.parseBoolean(license.getString("allowsDerivatives"));
-		this.noncommercial = Boolean.parseBoolean(license.getString("noncommercial"));
-		this.requiresAttribution = Boolean.parseBoolean(license.getString("requiresAttribution"));
-		this.requiresShareAlike = Boolean.parseBoolean(license.getString("requiresShareAlike"));
-		this.requiresKeepOpen = Boolean.parseBoolean(license.getString("requiresKeepOpen"));
-		this.requiresChangeNote = Boolean.parseBoolean(license.getString("requiresChangeNote"));
+		this.setCreated(timestamp);
+		this.setAllowsRedistribution(Boolean.parseBoolean(license.getString("allowsRedistribution")));
+		this.setAllowsDerivatives(Boolean.parseBoolean(license.getString("allowsDerivatives")));
+		this.setNoncommercial(Boolean.parseBoolean(license.getString("noncommercial")));
+		this.setRequiresAttribution(Boolean.parseBoolean(license.getString("requiresAttribution")));
+		this.setRequiresShareAlike(Boolean.parseBoolean(license.getString("requiresShareAlike")));
+		this.setRequiresKeepOpen(Boolean.parseBoolean(license.getString("requiresKeepOpen")));
+		this.setRequiresChangeNote(Boolean.parseBoolean(license.getString("requiresChangeNote")));
 	}
 
 	
@@ -62,7 +64,7 @@ public class License implements IsSerializable{
 
 	
 	public String toString() {
-		return this.rawJSON.toString();
+		return this.getRawJSON().toString();
 	}
 
 	/**
@@ -116,7 +118,7 @@ public class License implements IsSerializable{
 	/**
 	 * @return the allowsRedistribution
 	 */
-	public boolean isAllowsRedistribution() {
+	public boolean allowsRedistribution() {
 		return allowsRedistribution;
 	}
 
@@ -124,7 +126,7 @@ public class License implements IsSerializable{
 	/**
 	 * @return the allowsDerivatives
 	 */
-	public boolean isAllowsDerivatives() {
+	public boolean allowsDerivatives() {
 		return allowsDerivatives;
 	}
 
@@ -132,7 +134,7 @@ public class License implements IsSerializable{
 	/**
 	 * @return the noncommercial
 	 */
-	public boolean isNoncommercial() {
+	public boolean noncommercial() {
 		return noncommercial;
 	}
 
@@ -140,7 +142,7 @@ public class License implements IsSerializable{
 	/**
 	 * @return the requiresAttribution
 	 */
-	public boolean isRequiresAttribution() {
+	public boolean requiresAttribution() {
 		return requiresAttribution;
 	}
 
@@ -148,7 +150,7 @@ public class License implements IsSerializable{
 	/**
 	 * @return the requiresShareAlike
 	 */
-	public boolean isRequiresShareAlike() {
+	public boolean requiresShareAlike() {
 		return requiresShareAlike;
 	}
 
@@ -156,7 +158,7 @@ public class License implements IsSerializable{
 	/**
 	 * @return the requiresKeepOpen
 	 */
-	public boolean isRequiresKeepOpen() {
+	public boolean requiresKeepOpen() {
 		return requiresKeepOpen;
 	}
 
@@ -164,8 +166,130 @@ public class License implements IsSerializable{
 	/**
 	 * @return the requiresChangeNote
 	 */
-	public boolean isRequiresChangeNote() {
+	public boolean requiresChangeNote() {
 		return requiresChangeNote;
+	}
+
+
+	/**
+	 * @return the rawJSON
+	 */
+	public JSONObject getRawJSON() {
+		return rawJSON;
+	}
+
+
+	/**
+	 * @param rawJSON the rawJSON to set
+	 */
+	public void setRawJSON(JSONObject rawJSON) {
+		this.rawJSON = rawJSON;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	/**
+	 * @param shortName the shortName to set
+	 */
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+
+	/**
+	 * @param fullName the fullName to set
+	 */
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+
+	/**
+	 * @param referenceLink the referenceLink to set
+	 */
+	public void setReferenceLink(String referenceLink) {
+		this.referenceLink = referenceLink;
+	}
+
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+	/**
+	 * @param created the created to set
+	 */
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	/**
+	 * @param allowsRedistribution the allowsRedistribution to set
+	 */
+	public void setAllowsRedistribution(boolean allowsRedistribution) {
+		this.allowsRedistribution = allowsRedistribution;
+	}
+
+	/**
+	 * @param allowsDerivatives the allowsDerivatives to set
+	 */
+	public void setAllowsDerivatives(boolean allowsDerivatives) {
+		this.allowsDerivatives = allowsDerivatives;
+	}
+
+	/**
+	 * @param noncommercial the noncommercial to set
+	 */
+	public void setNoncommercial(boolean noncommercial) {
+		this.noncommercial = noncommercial;
+	}
+
+	/**
+	 * @param requiresAttribution the requiresAttribution to set
+	 */
+	public void setRequiresAttribution(boolean requiresAttribution) {
+		this.requiresAttribution = requiresAttribution;
+	}
+
+	/**
+	 * @param requiresShareAlike the requiresShareAlike to set
+	 */
+	public void setRequiresShareAlike(boolean requiresShareAlike) {
+		this.requiresShareAlike = requiresShareAlike;
+	}
+
+	/**
+	 * @param requiresKeepOpen the requiresKeepOpen to set
+	 */
+	public void setRequiresKeepOpen(boolean requiresKeepOpen) {
+		this.requiresKeepOpen = requiresKeepOpen;
+	}
+
+
+	/**
+	 * @param requiresChangeNote the requiresChangeNote to set
+	 */
+	public void setRequiresChangeNote(boolean requiresChangeNote) {
+		this.requiresChangeNote = requiresChangeNote;
 	}
 
 }

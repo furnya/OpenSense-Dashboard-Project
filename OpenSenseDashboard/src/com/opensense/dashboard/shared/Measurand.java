@@ -1,30 +1,24 @@
 package com.opensense.dashboard.shared;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.opensense.dashboard.server.util.DataHandler;
 
 public class Measurand implements IsSerializable{
 
-	private final JSONObject rawJSON;
-	private final int id;
-	private final String name;
-	private final int defaultUnitId;
+	private JSONObject rawJSON;
+	private int id;
+	private String name;
+	private int defaultUnitId;
+	
+	public Measurand() {
+	}
 	
 	public Measurand(JSONObject measurand){
-		this.rawJSON = measurand;
-		this.id = measurand.getInt("id");
-		this.name = measurand.getString("name");
-		this.defaultUnitId = measurand.getInt("defaultUnitId");
+		this.setRawJSON(measurand);
+		this.setId(measurand.getInt("id"));
+		this.setName(measurand.getString("name"));
+		this.setDefaultUnitId(measurand.getInt("defaultUnitId"));
 	}
 
 	
@@ -52,7 +46,47 @@ public class Measurand implements IsSerializable{
 	}
 	
 	public String toString() {
-		return this.rawJSON.toString();
+		return this.getRawJSON().toString();
+	}
+
+
+	/**
+	 * @return the rawJSON
+	 */
+	public JSONObject getRawJSON() {
+		return rawJSON;
+	}
+
+
+	/**
+	 * @param rawJSON the rawJSON to set
+	 */
+	public void setRawJSON(JSONObject rawJSON) {
+		this.rawJSON = rawJSON;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	/**
+	 * @param defaultUnitId the defaultUnitId to set
+	 */
+	public void setDefaultUnitId(int defaultUnitId) {
+		this.defaultUnitId = defaultUnitId;
 	}
 
 }

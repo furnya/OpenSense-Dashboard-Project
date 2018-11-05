@@ -1,6 +1,5 @@
 package com.opensense.dashboard.shared;
 
-import java.util.HashMap;
 
 import org.json.JSONObject;
 
@@ -8,14 +7,17 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Unit implements IsSerializable{
 
-	private final JSONObject rawJSON;
-	private final int id;
-	private final String name;
+	private JSONObject rawJSON;
+	private int id;
+	private String name;
+	
+	public Unit() {
+	}
 	
 	public Unit(JSONObject unit, Measurand measurand){
-		this.rawJSON = unit;
-		this.id = unit.getInt("id");
-		this.name = unit.getString("name");
+		this.setRawJSON(unit);
+		this.setId(unit.getInt("id"));
+		this.setName(unit.getString("name"));
 	}
 
 	
@@ -35,7 +37,39 @@ public class Unit implements IsSerializable{
 	}
 	
 	public String toString() {
-		return this.rawJSON.toString();
+		return this.getRawJSON().toString();
+	}
+
+
+	/**
+	 * @return the rawJSON
+	 */
+	public JSONObject getRawJSON() {
+		return rawJSON;
+	}
+
+
+	/**
+	 * @param rawJSON the rawJSON to set
+	 */
+	public void setRawJSON(JSONObject rawJSON) {
+		this.rawJSON = rawJSON;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
