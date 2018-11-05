@@ -1,6 +1,8 @@
 /*  DASHBOARD COLOURS:
+	DEFALUT HOMEPAGE COLOR := #42DCA3
 	LIGHTGREY BACKGROUND := #606060
 	GREY BACKGROUND := #404040
+	
 */
 
 /** USE THIS AS DEFAULT STYLE NAMES */
@@ -153,6 +155,14 @@
 	width: 90px;
 }
 
+ 
+#map {
+     height: 455px;
+     width: 800px;
+     margin: 0;
+     padding: 0;
+}
+
 .nav-container{
 	background-color: #606060;
 	width: 100%;
@@ -182,3 +192,4 @@
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 6px;
 }
+

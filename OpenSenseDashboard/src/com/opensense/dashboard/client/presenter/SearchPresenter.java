@@ -3,7 +3,10 @@ package com.opensense.dashboard.client.presenter;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.services.GeneralService;
+import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.view.SearchView;
+import com.opensense.dashboard.shared.TestClass;
 
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 	
@@ -42,8 +45,8 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 	
 	private void getSensorDataAndDisplay() {
-//		GeneralService.Util.getInstance().getSensorDataFromString("GIVE ME AS MUCH AS YOU CAN", new DefaultAsyncCallback<TestClass>(result ->  {
-//			view.showSensorData(result.getS());
-//		}));
+		GeneralService.Util.getInstance().getSensorDataFromString("GIVE ME AS MUCH AS YOU CAN", new DefaultAsyncCallback<TestClass>(result ->  {
+			view.showSensorData(result.getS());
+		}));
 	}
 }

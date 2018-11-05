@@ -3,6 +3,10 @@ package com.opensense.dashboard.client.view;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.maps.client.MapImpl;
+import com.google.gwt.maps.client.MapOptions;
+import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -37,11 +41,16 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	}
 	
 	private void showThisMap() {
-//		MapOptions mapOptions = MapOptions.newInstance();
-//		mapOptions.setZoom(20);
-//		mapOptions.setCenter(LatLng.newInstance(52.0, 52.0));
-//		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
-//		MapWidget mapWidget = MapWidget.newInstance(mapImpl);
+		MapOptions mapOptions = MapOptions.newInstance();
+		mapOptions.setCenter(LatLng.newInstance(52.521918,13.413215));
+		mapOptions.setZoom(10);
+		mapOptions.setDraggable(true);
+		mapOptions.setScaleControl(true);
+		mapOptions.setScrollWheel(true);
+		
+		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
+		MapWidget mapWidget = MapWidget.newInstance(mapImpl);
+		mapWidget.setVisible(true);
 	}
 
 

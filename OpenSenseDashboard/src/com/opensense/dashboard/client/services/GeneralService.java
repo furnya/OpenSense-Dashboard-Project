@@ -3,6 +3,7 @@ package com.opensense.dashboard.client.services;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.opensense.dashboard.shared.TestClass;
 
 @RemoteServiceRelativePath("../general")
 public interface GeneralService extends RemoteService {
@@ -26,5 +27,5 @@ public interface GeneralService extends RemoteService {
 		}
 	}
 	
-	public String getSensorDataFromString(String searchQuery);
+	public TestClass getSensorDataFromString(String searchQuery);
 }
