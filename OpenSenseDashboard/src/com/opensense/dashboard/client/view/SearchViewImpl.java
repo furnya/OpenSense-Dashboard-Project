@@ -13,6 +13,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 
+import gwt.material.design.client.ui.MaterialNavBar;
+
 public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@UiTemplate("SearchView.ui.xml")
@@ -22,8 +24,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@UiField
 	Div container;
 	
-//	@UiField
-//	MaterialNavBar navBarSearch;
+	@UiField
+	MaterialNavBar navBarSearch;
 	
 	@UiField
 	Input searchInput;
@@ -36,6 +38,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		initWidget(uiBinder.createAndBindUi(this));
 		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
 		Autocomplete auto = Autocomplete.newInstance(searchInput.getElement(), autoOptions);
+		
 	}
 	
 	@Override
