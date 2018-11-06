@@ -12,6 +12,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.presenter.DataPanelPresenter;
@@ -69,6 +70,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 //		if(History.getToken() != null && !History.getToken().isEmpty()) {
 //			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(History.getToken().toUpperCase())));
 //		}else {
+		History.newItem(DataPanelPage.HOME.name(), true);
 //			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME));
 //		}
 	}
@@ -76,9 +78,9 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	private void bindHandler() {
 		History.addValueChangeHandler(this);
 		
-//		eventBus.addHandler(OpenDataPanelPageEvent.TYPE, event -> {
-//			History.newItem(event.getDataPanelPage().name(), true);
-//		});
+		eventBus.addHandler(OpenDataPanelPageEvent.TYPE, event -> {
+			History.newItem(event.getDataPanelPage().name(), true);
+		});
 	}
 	
 	@Override

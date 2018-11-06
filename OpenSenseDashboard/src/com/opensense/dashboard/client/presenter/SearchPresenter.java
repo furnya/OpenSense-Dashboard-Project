@@ -43,7 +43,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	
 	@Override
 	public void handleParamters(Map<String, String> parameters) {
-		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
