@@ -1,7 +1,5 @@
 package com.opensense.dashboard.client.view;
 
-import java.security.DrbgParameters.Reseed;
-
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
