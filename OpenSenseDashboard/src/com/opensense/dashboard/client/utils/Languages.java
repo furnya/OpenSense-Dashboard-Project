@@ -185,4 +185,12 @@ public class Languages {
 			return "";
 		}
 	}
+	
+	public static String type() {
+		if(de) {
+			return "Typ";
+		}else {
+			return "";
+		}
+	}
 }

@@ -6,6 +6,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public interface SearchView extends IDataPanelPageView{
 	public interface Presenter{
+
+		void buildRequestAndSend();
 	}
 	
 	public void setPresenter(Presenter presenter);

@@ -49,4 +49,9 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			view.showSensorData(result.getS());
 		}));
 	}
+
+	@Override
+	public void buildRequestAndSend() {
+		
+	}
 }

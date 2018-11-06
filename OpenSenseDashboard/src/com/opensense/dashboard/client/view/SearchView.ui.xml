@@ -26,27 +26,41 @@
 .con{
 	overflow: auto;	
 }
+.panel{
+	max-height: 300px;
+}
+.margin > * {
+	margin-right: 30px;
+}	
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="{style.con}">
-	<m:MaterialTextBox  ui:field="maxSensors" label="{lang.maxSensors}"/>
-	<m:MaterialTextBox ui:field="minAccuracy" label="{lang.minAccuracy}"/>
-	<m:MaterialTextBox ui:field="maxAccuracy" label="{lang.maxAccuracy}"/>
-	<m:MaterialTextBox ui:field="minValue" label="{lang.minValue}"/>
-	<m:MaterialTextBox ui:field="maxValue" label="{lang.maxValue}"/>
-	<m:MaterialTextBox ui:field="unit" label="{lang.unit}"/>
-	<m:MaterialDatePicker ui:field="minDate" placeholder="{lang.minDate}"/>
-	<!-- <ma:MaterialTimePicker>
-		<m:MaterialTextBox ui:field="minTime" placeholder="{lang.minTime}"/>
-	</ma:MaterialTimePicker>  -->
-	<m:MaterialDatePicker  ui:field="maxDate" placeholder="{lang.maxDate}"/>
-	<!-- <ma:MaterialTimePicker>
-		<m:MaterialTextBox ui:field="maxTime" placeholder="{lang.maxTime}"/>
-	</ma:MaterialTimePicker>	 -->
-		
-	 <m:MaterialNavBar ui:field="navBarSearch" addStyleNames="{style.nav-bar} round-corners"> 
- 		 <b:Input ui:field="searchInput" type="TEXT" placeholder="{lang.searchPlace}" addStyleNames="{style.input}"/>
- 	</m:MaterialNavBar>  
+	<bh:Div ui:field="searchPanel" addStyleNames="{style.panel}">
+		<bh:Div addStyleNames="flex {style.margin}">
+			<m:MaterialNavBar ui:field="navBarSearch" addStyleNames="{style.nav-bar} round-corners"> 
+		 		 <b:Input ui:field="searchInput" type="TEXT" placeholder="{lang.searchPlace}" addStyleNames="{style.input}"/>
+		 	</m:MaterialNavBar>  
+			<m:MaterialTextBox ui:field="minAccuracy" textColor="WHITE" width="30%" label="{lang.minAccuracy}"/>
+			<m:MaterialTextBox ui:field="maxAccuracy" textColor="WHITE" width="30%" label="{lang.maxAccuracy}"/>
+		</bh:Div>
+		<bh:Div addStyleNames="flex {style.margin}">
+		 	<m:MaterialButton  width="30%" text="{lang.type}" textColor="WHITE" activates="dp-1" addStyleNames="d-btn margin-top-20"/>
+	 		<m:MaterialDropDown ui:field="type" activator="dp-1" constrainWidth="true">
+	 			<m:MaterialLink text="ALL" />
+	 		</m:MaterialDropDown>
+	 		<m:MaterialTextBox width="12.5%" textColor="WHITE" ui:field="unit" label="{lang.unit}"/>
+			<m:MaterialTextBox width="23.5%" textColor="WHITE" ui:field="maxSensors" label="{lang.maxSensors}"/>
+			<m:MaterialTextBox width="17.5%" textColor="WHITE" ui:field="minValue" label="{lang.minValue}"/>
+			<m:MaterialTextBox  width="17.5%" textColor="WHITE" ui:field="maxValue" label="{lang.maxValue}"/>
+		</bh:Div>
+		<bh:Div addStyleNames="flex {style.margin}">
+			<m:MaterialDatePicker width="30%" textColor="WHITE" ui:field="minDate" placeholder="{lang.minDate}"/>
+			<m:MaterialTextBox width="30%" textColor="WHITE" ui:field="minTime" placeholder="{lang.minTime}"/>
+			<m:MaterialDatePicker width="30%" textColor="WHITE" ui:field="maxDate" placeholder="{lang.maxDate}"/>
+			<m:MaterialTextBox width="30%" textColor="WHITE" ui:field="maxTime" placeholder="{lang.maxTime}"/>
+			<m:MaterialButton  ui:field="searchButton" width="30%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
+		</bh:Div>	
+	</bh:Div>	
 </bh:Div>
 
 </ui:UiBinder>
