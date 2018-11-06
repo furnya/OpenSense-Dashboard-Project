@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client.presenter;
 
+import java.util.Map;
+
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -36,6 +38,11 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	
 	@Override
 	public void onPageLeave() {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void handleParamters(Map<String, String> parameters) {
 		// TODO Auto-generated method stub
 	}
 
