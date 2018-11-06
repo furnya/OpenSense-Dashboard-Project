@@ -53,6 +53,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.presenter = presenter;
 	}
 	
+	//Important do not delete
 	@Override
 	public void initView() {
 		// init UI Elements if needed
