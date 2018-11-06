@@ -59,9 +59,15 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	}
 	
 	private void showThisMap() {
+<<<<<<< HEAD
+		MapOptions mapOptions = MapOptions.newInstance();
+		mapOptions.setCenter(LatLng.newInstance(52.521918,13.413215));
+		mapOptions.setZoom(10);
+=======
 		mapOptions = MapOptions.newInstance();
 		mapOptions.setCenter(LatLng.newInstance(52.521918,13.413215));
 		mapOptions.setZoom(7);
+>>>>>>> 66832bd... added basic markers to Map
 		mapOptions.setDraggable(true);
 		mapOptions.setScaleControl(true);
 		mapOptions.setScrollWheel(true);
