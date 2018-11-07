@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client.services;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -28,4 +30,6 @@ public interface GeneralService extends RemoteService {
 	}
 	
 	public TestClass getSensorDataFromString(String searchQuery);
+	
+	public List<String> getMapSensorData();
 }

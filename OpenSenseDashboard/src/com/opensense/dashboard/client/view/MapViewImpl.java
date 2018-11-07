@@ -1,6 +1,9 @@
 package com.opensense.dashboard.client.view;
 
-import java.security.DrbgParameters.Reseed;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.gwtbootstrap3.client.ui.html.Div;
 
@@ -12,8 +15,6 @@ import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.events.MapEventType;
 import com.google.gwt.maps.client.events.MapHandlerRegistration;
 import com.google.gwt.maps.client.events.MouseEvent;
-import com.google.gwt.maps.client.events.click.ClickMapEvent;
-import com.google.gwt.maps.client.events.click.ClickMapHandler;
 import com.google.gwt.maps.client.overlays.InfoWindow;
 import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
@@ -21,9 +22,9 @@ import com.google.gwt.maps.client.overlays.MarkerOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
+import com.opensense.dashboard.client.utils.MarkerInfoWindow;
 
 public class MapViewImpl extends DataPanelPageView implements MapView {
 	
@@ -39,13 +40,21 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	protected Presenter presenter;
 	private MapWidget mapWidget;
 	private MapOptions mapOptions;
+	private Map<Integer,Marker> markers = new HashMap<>();
+	private List<InfoWindow> infoWindows = new ArrayList<>();
+	
 	
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		showThisMap();
-		setMarkers(52.521918,13.513215);
-		resize();
-		setMarkers(52.12341,13.34235);
+//		setMarkers(52.521918,13.513215);
+//		resize();
+//		setMarkers(52.42341,13.34235);
+//		resize();
+//		setMarkers(52.43523,13.52335);
+//		resize();
+//		setMarkers(52.54441,13.4235);
+//		resize();
 	}
 	
 	@Override
@@ -70,20 +79,46 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
+		
+		mapWidget.addDragStartHandler(event-> {
+			infoWindows.forEach(InfoWindow::close);
+		});
+		
+		mapWidget.addZoomChangeHandler(event-> {
+			infoWindows.forEach(InfoWindow::close);
+		});
 	}
 	
+	//this function will add a basic InfoWindow to the Markers on the Map
+	//Sensor Data:
+	/*
+	 * license: boolean ? true/false -> if true shows licenseId: Int - false-> ---
+	 * id: int
+	 * accuracy: int
+	 * altitudeAboveGround: int
+	 * sensorModel: String
+	 * attributionText: String
+	 * 
+	 * 
+	 * */
 	
-	 protected void drawInfoWindow(Marker marker, MouseEvent mouseEvent) {
-		    if (marker == null || mouseEvent == null) {
+	
+	 protected void drawInfoWindow(Marker marker,String sensor) {
+		    if (marker == null) {
 		      return;
 		    }
-
-		    HTML html = new HTML("You clicked on: " + mouseEvent.getLatLng().getToString());
-
 		    InfoWindowOptions options = InfoWindowOptions.newInstance();
-		    options.setContent(html);
+		    MarkerInfoWindow infoWindow = new MarkerInfoWindow();
+		    infoWindow.setHeader("DemoSensor X");
+		    ArrayList<String> testData = new ArrayList<String>();
+		    testData.add("Temperatur: "+ "20");
+		    testData.add("Ort:  Berlin");
+		    testData.add("Einheit:  Grad Celcius");
+		    infoWindow.setData(testData);
+		    options.setContent(infoWindow);
 		    InfoWindow iw = InfoWindow.newInstance(options);
 		    iw.open(mapWidget, marker);
+		    infoWindows.add(iw);
 		  }
 	
 	 public void resize() {
@@ -95,19 +130,27 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	 
 	 
 	 
-	private void setMarkers(double bg, double lg) {
+	private void setMarkers(double bg, double lg, String sensor) {
 			LatLng position = LatLng.newInstance(bg, lg);
 			MarkerOptions markerOpt = MarkerOptions.newInstance();
 			markerOpt.setPosition(position);
-			markerOpt.setTitle("Berlin Alexanderplatz");
 			final Marker markerBasic = Marker.newInstance(markerOpt);
-			markerBasic.setMap(mapWidget); 
-			markerBasic.setIcon(GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString());
-			markerBasic.addClickHandler(new ClickMapHandler() {
-			      @Override
-			      public void onEvent(ClickMapEvent event) {
-			        drawInfoWindow(markerBasic, event.getMouseEvent());
-			      }
-			    });
+			markerBasic.setMap(mapWidget);
+			markerBasic.setIcon(GUIImageBundle.INSTANCE.testtempIconSvg().getSafeUri().asString());
+			markerBasic.addClickHandler(event-> drawInfoWindow(markerBasic, sensor));
+			int i = 0;
+			markers.put(i++,markerBasic);
 	}
+	
+	public void showMarkers(List<String> stringlist) {
+		stringlist.forEach(item-> {
+			LatLng postion = LatLng.newInstance(Double.valueOf(item.split(",")[0]),Double.valueOf(item.split(",")[1]));
+			GWT.log(postion.getLatitude()+" "+ postion.getLongitude());
+			
+			setMarkers(postion.getLatitude(),postion.getLongitude(),item);
+			resize();
+		});
+		
+	}
+
 }

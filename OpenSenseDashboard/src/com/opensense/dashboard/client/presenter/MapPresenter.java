@@ -1,8 +1,12 @@
 package com.opensense.dashboard.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.services.GeneralService;
+import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.view.MapView;
 
 public class MapPresenter extends DataPanelPagePresenter implements IPresenter, MapView.Presenter{
@@ -23,6 +27,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
+		getAndShowSensorData();
 	}
 
 	@Override
@@ -38,5 +43,10 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	@Override
 	public void initView() {
 		view.initView();
+	}
+	
+	//get Sensor Data from Server
+	public void getAndShowSensorData() {
+		GeneralService.Util.getInstance().getMapSensorData(new DefaultAsyncCallback<List<String>>(view::showMarkers));
 	}
 }

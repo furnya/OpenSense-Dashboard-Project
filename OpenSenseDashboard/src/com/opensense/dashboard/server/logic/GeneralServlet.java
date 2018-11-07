@@ -1,6 +1,8 @@
 package com.opensense.dashboard.server.logic;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,5 +30,14 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}
 		return new TestClass(sensorList);
 	}
-
+	@Override 
+	public List<String> getMapSensorData() {
+		List<String> testList = new ArrayList<>();
+		testList.add("52.521918,13.513215");
+		testList.add("52.42341,13.34235");
+		testList.add("52.43523,13.52335");
+		testList.add("52.54441,13.4235");
+		return testList;
+	}
+	
 }
