@@ -87,8 +87,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@Override
 	public LatLngBounds getBounds() {
-		if(autoComplete.getPlace() != null && autoComplete.getPlace().getGeometry() != null)
+		if(autoComplete.getPlace() != null && autoComplete.getPlace().getGeometry() != null) {
 			return autoComplete.getPlace().getGeometry().getViewPort();
+		}
 		return null;
 	}
 	

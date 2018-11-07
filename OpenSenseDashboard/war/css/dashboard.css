@@ -203,3 +203,7 @@
 .flex{
 	display: flex;
 }
+
+.caret{
+    filter: invert(100%);
+}

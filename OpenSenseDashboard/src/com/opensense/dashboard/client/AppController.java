@@ -67,12 +67,11 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	}
 	
 	private void handleStart() {
-//		if(History.getToken() != null && !History.getToken().isEmpty()) {
-//			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(History.getToken().toUpperCase())));
-//		}else {
-		History.newItem(DataPanelPage.HOME.name(), true);
-//			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME));
-//		}
+		if(History.getToken() != null && History.getToken().isEmpty()) {
+			History.newItem(DataPanelPage.HOME.name(), true);
+		}else {
+			History.replaceItem(History.getToken(), true);
+		}
 	}
 
 	private void bindHandler() {
@@ -110,7 +109,6 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		if(event.getValue() == null && !event.getValue().isEmpty()) {
 			return;
 		}
-		
 		String pageString = event.getValue();
 		DataPanelPage page = null;
 		Map<String, String> parameters = null;
