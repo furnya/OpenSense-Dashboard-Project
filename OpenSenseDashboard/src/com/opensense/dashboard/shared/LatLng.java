@@ -7,7 +7,6 @@ public class LatLng implements IsSerializable {
 	double lon;
 	
 	public LatLng() {
-		super();	
 	}
 
 	public LatLng(double lat, double lon) {
