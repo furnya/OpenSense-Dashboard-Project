@@ -44,6 +44,11 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	public void onPageLeave() {
 		// TODO Auto-generated method stub
 	}
+	
+	@Override
+	public void handleParamters(Map<String, String> parameters) {
+		
+	}
 
 	@Override
 	public void initView() {

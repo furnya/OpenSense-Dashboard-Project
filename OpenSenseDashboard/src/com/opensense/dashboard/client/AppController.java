@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,20 +67,19 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	}
 	
 	private void handleStart() {
-		if(History.getToken() != null && !History.getToken().isEmpty()) {
-			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(History.getToken().toUpperCase())));
-		}else {
-			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME));
-		}
+//		if(History.getToken() != null && !History.getToken().isEmpty()) {
+//			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(History.getToken().toUpperCase())));
+//		}else {
+		History.newItem(DataPanelPage.HOME.name(), true);
+//			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME));
+//		}
 	}
 
 	private void bindHandler() {
 		History.addValueChangeHandler(this);
 		
 		eventBus.addHandler(OpenDataPanelPageEvent.TYPE, event -> {
-			History.newItem(event.getDataPanelPage().name(), false);
-			dataPanelPresenter.navigateTo(event.getDataPanelPage());
-			navigationPanelPresenter.setActiveDataPanelPage(event.getDataPanelPage());
+			History.newItem(event.getDataPanelPage().name(), true);
 		});
 	}
 	
@@ -106,6 +107,48 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			LOGGER.log(Level.WARNING, "NAVIGATION: The dataPanelPresenter is null.");
 			return;
 		}
-		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(event.getValue().toUpperCase())));
+		if(event.getValue() == null && !event.getValue().isEmpty()) {
+			return;
+		}
+		
+		String pageString = event.getValue();
+		DataPanelPage page = null;
+		Map<String, String> parameters = null;
+		try {
+			if(event.getValue().contains("?")) {
+				int endIndex = pageString.indexOf('?');
+				page = DataPanelPage.valueOf(pageString.substring(0, endIndex));
+				if(pageString.length() > endIndex + 1) {
+					parameters = getParameters(pageString.substring(endIndex + 1, pageString.length()));
+				}
+			}else {
+				page = DataPanelPage.valueOf(pageString);
+			}
+		}catch(Exception e) {
+			page = DataPanelPage.HOME;
+			LOGGER.log(Level.WARNING, "Invalid navigation page or invalid parameters.");
+		}
+		
+		dataPanelPresenter.navigateTo(page, parameters);
+		navigationPanelPresenter.setActiveDataPanelPage(page);
+	}
+
+	private Map<String, String> getParameters(String substring){
+		final Map<String, String> parameters = new HashMap<>();
+		String[] params;
+		if(substring.contains("&")) {
+			params = substring.split("&");
+		}else {
+			params = new String[]{substring};
+		}
+		for (String parameter : params) {
+			if(!parameter.isEmpty() && parameter.contains("=")) {
+				String[] keyValue = parameter.split("=");
+				if(keyValue != null && keyValue[0] != null && keyValue[1] != null) {
+					parameters.put(keyValue[0], keyValue[1]);
+				}
+			}
+		}
+		return parameters;
 	}
 }
