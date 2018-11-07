@@ -6,42 +6,23 @@ public class Sensor implements IsSerializable{
 	/**
 	 * 
 	 */
-//	private JSONObject rawJSON;
 	private int userId;
 	private double directionHorizontal;
 	private double directionVertical;
 	private String attributionText;
 	private int measurandId;
+	private Measurand measurand;
 	private int licenseId;
 	private double altitudeAboveGround;
 	private int id;
 	private String attributionURLString;
 	private String sensorModel;
-//	private Location location;
 	private int unitId;
+	private Unit unit;
 	private double accuracy;
-//	private LinkedList<Value> values;
+	private LatLng location;
 	
 	public Sensor() {
-	}	
-	
-	public Sensor(String sensor) {
-//		this.setRawJSON(sensor);
-//		values = new LinkedList<Value>();
-//		this.setUserId(sensor.getInt("userId"));
-//		this.setDirectionHorizontal(sensor.getDouble("directionHorizontal"));
-//		this.setDirectionVertical(sensor.getDouble("directionVertical"));
-//		this.setAttributionText(sensor.getString("attributionText"));
-//		this.setMeasurandId(sensor.getInt("measurandId"));
-//		this.setLicenseId(sensor.getInt("licenseId"));
-//		this.setAltitudeAboveGround(sensor.getDouble("altitudeAboveGround"));
-//		this.setId(sensor.getInt("id"));
-//		this.setAttributionURLString(sensor.getString("attributionURL"));
-//		this.setSensorModel(sensor.getString("sensorModel"));
-//		JSONObject locationJSON = sensor.getJSONObject("location");
-//		this.setLocation(new Location(String.valueOf(this.getId()), locationJSON.getDouble("lat"), locationJSON.getDouble("lng")));
-//		this.setUnitId(sensor.getInt("unitId"));
-//		this.setAccuracy(sensor.getDouble("accuracy"));
 	}
 
 	/**
@@ -286,6 +267,48 @@ public class Sensor implements IsSerializable{
 	 */
 	public void setAccuracy(double accuracy) {
 		this.accuracy = accuracy;
+	}
+
+	/**
+	 * @return the location
+	 */
+	public LatLng getLocation() {
+		return location;
+	}
+
+	/**
+	 * @param location the location to set
+	 */
+	public void setLocation(LatLng location) {
+		this.location = location;
+	}
+
+	/**
+	 * @return the unit
+	 */
+	public Unit getUnit() {
+		return unit;
+	}
+
+	/**
+	 * @param unit the unit to set
+	 */
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+
+	/**
+	 * @return the measurand
+	 */
+	public Measurand getMeasurand() {
+		return measurand;
+	}
+
+	/**
+	 * @param measurand the measurand to set
+	 */
+	public void setMeasurand(Measurand measurand) {
+		this.measurand = measurand;
 	}
 	
 }

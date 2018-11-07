@@ -6,21 +6,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Measurand implements IsSerializable{
 
-	private JSONObject rawJSON;
 	private int id;
 	private String name;
 	private int defaultUnitId;
 	
 	public Measurand() {
 	}
-	
-	public Measurand(JSONObject measurand){
-		this.setRawJSON(measurand);
-		this.setId(measurand.getInt("id"));
-		this.setName(measurand.getString("name"));
-		this.setDefaultUnitId(measurand.getInt("defaultUnitId"));
-	}
-
 	
 	/**
 	 * @return the id
@@ -44,27 +35,6 @@ public class Measurand implements IsSerializable{
 	public int getDefaultUnitId() {
 		return defaultUnitId;
 	}
-	
-	public String toString() {
-		return this.getRawJSON().toString();
-	}
-
-
-	/**
-	 * @return the rawJSON
-	 */
-	public JSONObject getRawJSON() {
-		return rawJSON;
-	}
-
-
-	/**
-	 * @param rawJSON the rawJSON to set
-	 */
-	public void setRawJSON(JSONObject rawJSON) {
-		this.rawJSON = rawJSON;
-	}
-
 
 	/**
 	 * @param id the id to set

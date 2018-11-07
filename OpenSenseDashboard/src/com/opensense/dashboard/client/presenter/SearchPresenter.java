@@ -19,7 +19,7 @@ import com.opensense.dashboard.shared.ResultType;
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 	
 	private final SearchView view;
-	private static final int MAX_SENSOR_REQUEST = 20000;
+	private static final int MAX_SENSOR_REQUEST = 10000;
 	
 	public SearchPresenter(HandlerManager eventBus, AppController appController, SearchView view) {
 		super(view, eventBus, appController);
@@ -64,7 +64,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void buildSensorRequestAndSend() {
-		final Request request = new Request(ResultType.SENSOR);
+		final Request request = new Request(ResultType.SENSOR_LIST);
 		List<Parameter> parameters = new ArrayList<>();
 		if(view.getBounds() != null) {
 			parameters.add(new Parameter("bounds", view.getBounds().toUrlValue(6)));
