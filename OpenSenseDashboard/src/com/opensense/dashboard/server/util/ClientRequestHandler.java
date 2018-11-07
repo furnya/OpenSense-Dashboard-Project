@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import com.opensense.dashboard.shared.LatLng;
 import com.opensense.dashboard.shared.Measurand;
+import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Unit;
 
@@ -50,9 +51,9 @@ public class ClientRequestHandler {
 		return measurandMap;
 	}
 	
-	public List<Sensor> getSensorList(String parameters){
+	public List<Sensor> getSensorList(List<Parameter> parameterList){
 		RequestSender rs = new RequestSender();
-		rs.setParameterString(parameters);
+		rs.setParameters(parameterList);
 		JSONArray sensorArrayJSON = rs.arrayRequest(baseURL+"/units");
 		LinkedList<Sensor> sensorList = new LinkedList<>();
 		HashMap<Integer, Measurand> measurandMap = getMeasurandMap();
@@ -80,6 +81,32 @@ public class ClientRequestHandler {
 			sensorList.add(s);
 		}
 		return sensorList;
+	}
+	
+	public Sensor getSensor(int id){
+		RequestSender rs = new RequestSender();
+		JSONObject sensorJSON = rs.objectRequest(baseURL+"/sensors/"+id);
+		HashMap<Integer, Measurand> measurandMap = getMeasurandMap();
+		HashMap<Integer, Unit> unitMap = getUnitMap();
+		Sensor s = new Sensor();
+		s.setId(sensorJSON.getInt("id"));
+		s.setAccuracy(sensorJSON.getDouble("accuracy"));
+		s.setUserId(sensorJSON.getInt("userId"));
+		s.setId(sensorJSON.getInt("id"));
+		s.setDirectionHorizontal(sensorJSON.getDouble("directionHorizontal"));
+		s.setDirectionVertical(sensorJSON.getDouble("directionVertical"));
+		s.setAttributionText(sensorJSON.getString("attributionText"));
+		s.setMeasurandId(sensorJSON.getInt("measurandId"));
+		s.setMeasurand(measurandMap.get(s.getMeasurandId()));
+		s.setLicenseId(sensorJSON.getInt("licenseId"));
+		s.setAltitudeAboveGround(sensorJSON.getDouble("altitudeAboveGround"));
+		s.setAttributionURLString(sensorJSON.getString("attributionURL"));
+		s.setSensorModel(sensorJSON.getString("sensorModel"));
+		JSONObject locationJSON = sensorJSON.getJSONObject("location");
+		s.setLocation(new LatLng(locationJSON.getDouble("lat"), locationJSON.getDouble("lng")));
+		s.setUnitId(sensorJSON.getInt("unitId"));
+		s.setUnit(unitMap.get(s.getUnitId()));
+		return s;
 	}
 
 }

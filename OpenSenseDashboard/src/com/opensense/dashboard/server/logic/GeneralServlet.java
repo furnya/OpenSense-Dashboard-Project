@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.internal.compiler.ast.Clinit;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,6 +16,7 @@ import com.opensense.dashboard.server.util.RequestSender;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
+import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.Sensor;
 
 @SuppressWarnings("serial")
@@ -22,8 +24,19 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public Response getDataFromRequest(Request searchRequest) {
-		
-		return new Response();
+		Response response = new Response();
+		ClientRequestHandler clientRequestHandler = new ClientRequestHandler();
+		response.setResultType(searchRequest.getRequestType());
+		if(searchRequest.getRequestType()==ResultType.MEASURAND_MAP) {
+			response.setMeasurands(clientRequestHandler.getMeasurandMap());
+		} else if(searchRequest.getRequestType()==ResultType.UNIT_MAP) {
+			response.setUnits(clientRequestHandler.getUnitMap());
+		} else if(searchRequest.getRequestType()==ResultType.SENSOR_LIST) {
+			response.setSensors(clientRequestHandler.getSensorList(searchRequest.getParameters()));
+		} else if(searchRequest.getRequestType()==ResultType.SINGLE_SENSOR) {
+			response.setSensor(clientRequestHandler.getSensor(searchRequest.getId()));
+		}
+		return response;
 	}
 
 	@Override

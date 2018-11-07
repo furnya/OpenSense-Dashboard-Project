@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Response implements IsSerializable {
 	
 	private ResultType resultType;
+	private Sensor sensor;
 	private List<Sensor> sensors;
 	private Map<Integer, Measurand> measurands;
 	private Map<Integer, Unit> units;
@@ -58,5 +59,19 @@ public class Response implements IsSerializable {
 	 */
 	public void setUnits(Map<Integer, Unit> units) {
 		this.units = units;
+	}
+
+	/**
+	 * @return the sensor
+	 */
+	public Sensor getSensor() {
+		return sensor;
+	}
+
+	/**
+	 * @param sensor the sensor to set
+	 */
+	public void setSensor(Sensor sensor) {
+		this.sensor = sensor;
 	}
 }

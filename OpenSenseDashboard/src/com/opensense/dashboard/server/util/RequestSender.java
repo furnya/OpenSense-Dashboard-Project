@@ -7,11 +7,13 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gwt.json.client.JSONException;
+import com.opensense.dashboard.shared.Parameter;
 
 public class RequestSender implements Serializable{
 	
@@ -106,5 +108,9 @@ public class RequestSender implements Serializable{
 	 */
 	public void setParameterString(String parameterString) {
 		this.parameterString = parameterString;
+	}
+	
+	public void setParameters(List<Parameter> parameterList) {
+		parameterList.forEach(parameter -> this.parameters.put(parameter.getKey(), parameter.getValue()));
 	}
 }
