@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui" 
 	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html" xmlns:m="urn:import:gwt.material.design.client.ui"
-	xmlns:ma="urn:import:gwt.material.design.addins.client.timepicker">
+	xmlns:ma="urn:import:gwt.material.design.addins.client">
 	
 	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
@@ -44,22 +44,11 @@
 			<m:MaterialTextBox ui:field="maxAccuracy" textColor="WHITE" width="30%" label="{lang.maxAccuracy}"/>
 		</bh:Div>
 		<bh:Div addStyleNames="flex {style.margin}">
-		 	<m:MaterialButton  width="30%" text="{lang.type}" textColor="WHITE" activates="dp-1" addStyleNames="d-btn margin-top-20"/>
-	 		<m:MaterialDropDown ui:field="type" activator="dp-1" constrainWidth="true">
-	 			<m:MaterialLink text="ALL" />
-	 		</m:MaterialDropDown>
-	 		<m:MaterialTextBox width="12.5%" textColor="WHITE" ui:field="unit" label="{lang.unit}"/>
-			<m:MaterialTextBox width="23.5%" textColor="WHITE" ui:field="maxSensors" label="{lang.maxSensors}"/>
-			<m:MaterialTextBox width="17.5%" textColor="WHITE" ui:field="minValue" label="{lang.minValue}"/>
-			<m:MaterialTextBox  width="17.5%" textColor="WHITE" ui:field="maxValue" label="{lang.maxValue}"/>
+			<m:MaterialListBox placeholder="{lang.unit}" ui:field="unitList" width="30%" textColor="WHITE"/>
+	 		<!-- <ma:combobox:MaterialComboBox placeholder="{lang.unit}" ui:field="unitList" width="30%" textColor="WHITE"/> -->
+			<m:MaterialTextBox width="30%" textColor="WHITE" ui:field="maxSensors" label="{lang.maxSensors}"/>
+			<m:MaterialButton  ui:field="searchButton" width="40%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
 		</bh:Div>
-		<bh:Div addStyleNames="flex {style.margin}">
-			<m:MaterialDatePicker width="30%" textColor="WHITE" ui:field="minDate" placeholder="{lang.minDate}"/>
-			<m:MaterialTextBox width="30%" textColor="WHITE" ui:field="minTime" placeholder="{lang.minTime}"/>
-			<m:MaterialDatePicker width="30%" textColor="WHITE" ui:field="maxDate" placeholder="{lang.maxDate}"/>
-			<m:MaterialTextBox width="30%" textColor="WHITE" ui:field="maxTime" placeholder="{lang.maxTime}"/>
-			<m:MaterialButton  ui:field="searchButton" width="30%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
-		</bh:Div>	
 	</bh:Div>	
 </bh:Div>
 
