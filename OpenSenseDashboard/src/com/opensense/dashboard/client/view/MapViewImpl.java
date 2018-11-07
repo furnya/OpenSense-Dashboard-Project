@@ -14,7 +14,6 @@ import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.events.MapEventType;
 import com.google.gwt.maps.client.events.MapHandlerRegistration;
-import com.google.gwt.maps.client.events.MouseEvent;
 import com.google.gwt.maps.client.overlays.InfoWindow;
 import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
@@ -41,20 +40,18 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private MapWidget mapWidget;
 	private MapOptions mapOptions;
 	private Map<Integer,Marker> markers = new HashMap<>();
+	//This should be a HashMap
+	/*NOTE: 
+	 * 
+	 * Changing the List to a HashMap will cause problems with the Handlers-> should be considered while changing
+	 * 
+	 * */
 	private List<InfoWindow> infoWindows = new ArrayList<>();
 	
 	
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		showThisMap();
-//		setMarkers(52.521918,13.513215);
-//		resize();
-//		setMarkers(52.42341,13.34235);
-//		resize();
-//		setMarkers(52.43523,13.52335);
-//		resize();
-//		setMarkers(52.54441,13.4235);
-//		resize();
 	}
 	
 	@Override
@@ -75,7 +72,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapOptions.setDraggable(true);
 		mapOptions.setScaleControl(true);
 		mapOptions.setScrollWheel(true);
-		
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
@@ -85,6 +81,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		});
 		
 		mapWidget.addZoomChangeHandler(event-> {
+			infoWindows.forEach(InfoWindow::close);
+		});
+		
+		mapWidget.addClickHandler(event-> {
 			infoWindows.forEach(InfoWindow::close);
 		});
 	}
@@ -140,6 +140,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			markerBasic.addClickHandler(event-> drawInfoWindow(markerBasic, sensor));
 			int i = 0;
 			markers.put(i++,markerBasic);
+	}
+	
+	private void markerClusterer(Map<Integer,Marker> markers) {
+		
 	}
 	
 	public void showMarkers(List<String> stringlist) {
