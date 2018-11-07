@@ -105,4 +105,92 @@ public class Languages {
 			return "Sensors ..";
 		}
 	}
+	
+	public static String maxSensors() {
+		if(de) {
+			return "Maximale Anzahl von Sensoren";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String minAccuracy() {
+		if(de) {
+			return "Min Genauigkeit";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String maxAccuracy() {
+		if(de) {
+			return "Max Genauigkeit";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String unit() {
+		if(de) {
+			return "Einheit";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String minValue() {
+		if(de) {
+			return "Min Wert";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String maxValue() {
+		if(de) {
+			return "Max Wert";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String minDate() {
+		if(de) {
+			return "Min Datum";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String maxDate() {
+		if(de) {
+			return "Max Datum";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String minTime() {
+		if(de) {
+			return "Min Zeit";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String maxTime() {
+		if(de) {
+			return "Max Zeit";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String type() {
+		if(de) {
+			return "Typ";
+		}else {
+			return "";
+		}
+	}
 }

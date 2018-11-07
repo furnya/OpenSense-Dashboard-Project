@@ -163,6 +163,13 @@
      padding: 0;
 }
 
+.btn.d-btn, .btn.d-btn:active, .btn.d-btn:focus, .btn.d-btn:visited{
+	 background-color: #606060;
+}
+.btn.d-btn:hover, .btn.d-btn.active{
+	background-color: #42DCA3;
+}
+
 .nav-container{
 	background-color: #606060;
 	width: 100%;
@@ -193,3 +200,6 @@
     border-bottom-left-radius: 6px;
 }
 
+.flex{
+	display: flex;
+}
