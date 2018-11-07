@@ -45,9 +45,9 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 	
 	private void getSensorDataAndDisplay() {
-		GeneralService.Util.getInstance().getSensorDataFromString("GIVE ME AS MUCH AS YOU CAN", new DefaultAsyncCallback<TestClass>(result ->  {
-			view.showSensorData(result.getS());
-		}));
+//		GeneralService.Util.getInstance().getSensorDataFromString("GIVE ME AS MUCH AS YOU CAN", new DefaultAsyncCallback<TestClass>(result ->  {
+//			view.showSensorData(result.getS());
+//		}));
 	}
 
 	@Override

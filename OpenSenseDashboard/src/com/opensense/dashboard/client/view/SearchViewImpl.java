@@ -2,7 +2,6 @@ package com.opensense.dashboard.client.view;
 
 import java.util.List;
 
-import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
 
@@ -17,6 +16,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 
+import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialNavBar;
 
 public class SearchViewImpl extends DataPanelPageView implements SearchView {
@@ -35,7 +35,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	Input searchInput;
 	
 	@UiField
-	Button searchButton;
+	MaterialButton searchButton;
 	
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
