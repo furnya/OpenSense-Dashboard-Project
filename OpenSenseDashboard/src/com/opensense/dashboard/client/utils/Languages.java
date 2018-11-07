@@ -193,4 +193,20 @@ public class Languages {
 			return "";
 		}
 	}
+	
+	public static String measurand() {
+		if(de) {
+			return "Messgroesse";
+		}else {
+			return "Measurand";
+		}
+	}
+
+	public static String all() {
+		if(de) {
+			return "Alle";
+		}else {
+			return "All";
+		}
+	}
 }

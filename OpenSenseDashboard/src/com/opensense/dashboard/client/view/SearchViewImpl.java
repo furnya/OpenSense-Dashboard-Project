@@ -1,6 +1,5 @@
 package com.opensense.dashboard.client.view;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +16,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.shared.Sensor;
 
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialListBox;
@@ -48,14 +49,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	MaterialTextBox maxAccuracy;
 	
 	@UiField
-	MaterialListBox unitList;
-//	@UiField
-//	MaterialComboBox<String> unitList;
-	
+	MaterialListBox measurandList;
 	
 	@UiField
 	MaterialTextBox maxSensors;
-	
 	
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
@@ -85,7 +82,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 	
 	@Override
-	public void showSensorData(List<String> result) {
+	public void showSensorData(List<Sensor> sensors) {
 	}
 	
 	@Override
@@ -106,17 +103,16 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 	
 	@Override
-	public void setUnitList(Map<Integer, String> units) {
-//		units.entrySet().forEach(entry -> unitList.addItem(entry.getValue(), entry.getKey()));
-		units.values().forEach(unitList::addItem); 
+	public void setMeasurandsList(Map<Integer, String> measurands) {
+		measurandList.clear();
+		measurandList.addItem("", Languages.all());
+		measurandList.setSelectedIndex(0);
+		measurands.entrySet().forEach(entry -> measurandList.addItem(entry.getKey().toString(), entry.getValue()));
 	}
 	
 	@Override
-	public List<String> getUnits() {
-		List<String> list = new ArrayList<>();
-		list.add(unitList.getSelectedIndex()+"");
-		return list;
-//		return unitList.getSelectedValues();
+	public String getMeasurandId() {
+		return measurandList.getSelectedValue();
 	}
 	
 	@Override
@@ -127,5 +123,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@Override
 	public void setMaxSensors(Integer maxSensors) {
 		this.maxSensors.setText(maxSensors.toString());
+	}
+
+	@Override
+	public void showLoadSensorError() {
+		//TODO:
 	}
 }

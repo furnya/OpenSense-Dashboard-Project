@@ -40,14 +40,12 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			activeDataPanelPagePresenter.onPageLeave();
 		}
 		try {
-			GWT.debugger();
 			// Creating the view of the new page if the user hasn't used this page yet
 			if (pageViews.get(page) == null)
 				pageViews.put(page, page.createViewInstance());
 
 			// Creating the presenter of the new page and assigning the view.
 			activeDataPanelPagePresenter = page.createPresenterInstance(eventBus, appController, pageViews.get(page));
-			GWT.log(activeDataPanelPagePresenter+"");
 			// Initializing the new page if needed. This will happen only when
 			// using the page for the first time.
 			activeDataPanelPagePresenter.initIfNeeded();
