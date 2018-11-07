@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client.presenter;
 
 import java.util.EnumMap;
+import java.util.Map;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.HandlerManager;
@@ -34,7 +35,7 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 		container.add(view.asWidget());
 	}
 
-	public void navigateTo(DataPanelPage page) {
+	public void navigateTo(DataPanelPage page, Map<String, String> parameters) {
 		if (activeDataPanelPagePresenter != null) {
 			activeDataPanelPagePresenter.onPageLeave();
 		}
@@ -57,6 +58,12 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			
 			// Firing the presenter of the new page.
 			activeDataPanelPagePresenter.go(view.getContentContainer());
+			
+			//If parameters are not empty give them to the active presenter
+			if(parameters != null && !parameters.isEmpty()) {
+				parameters.entrySet().forEach(entry -> GWT.log(entry.getKey() + " " + entry.getValue()));
+				activeDataPanelPagePresenter.handleParamters(parameters);
+			}
 			
 		} catch (Exception e) {
 			GWT.log("Error while navigating to page " + page + ".", e);
