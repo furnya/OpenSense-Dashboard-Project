@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,7 +18,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.client.utils.SensorItemCard;
 import com.opensense.dashboard.shared.Sensor;
 
 import gwt.material.design.client.base.validator.RegExValidator;
@@ -34,6 +37,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@UiField
 	Div container;
+	
+	@UiField
+	Div sensorContainer;
 	
 	@UiField
 	MaterialNavBar navBarSearch;
@@ -87,6 +93,18 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@Override
 	public void showSensorData(List<Sensor> sensors) {
+		sensors.forEach(sensor -> {
+			final SensorItemCard card = new SensorItemCard();
+			card.setHeader("Sensor: " + sensor.getId());
+			card.setIcon(GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString());
+			card.getContent().add(new Span("Genauigkeit " + sensor.getAccuracy()));
+			card.addClickHandler(event -> {
+				event.stopPropagation();
+				GWT.log(card.isActive()+"");
+				card.setActive(!card.isActive());
+			});
+			sensorContainer.add(card);
+		});
 	}
 	
 	private void buildValidators() {
@@ -157,17 +175,17 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@Override
 	public void setMaxSensors(String maxSensors) {
-		this.maxSensors.setText(maxSensors);
+		this.maxSensors.setValue(maxSensors, true);
 	}
 
 	@Override
 	public void setMinAccuracy(String minAccuracy) {
-		this.minAccuracy.setText(minAccuracy);
+		this.minAccuracy.setValue(minAccuracy, true);
 	}
 	
 	@Override
 	public void setMaxAccuracy(String maxAccuracy) {
-		this.maxAccuracy.setText(maxAccuracy);
+		this.maxAccuracy.setValue(maxAccuracy, true);
 	}
 
 	@Override

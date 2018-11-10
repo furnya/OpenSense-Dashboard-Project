@@ -2,7 +2,7 @@
 	DEFALUT HOMEPAGE COLOR := #42DCA3
 	LIGHTGREY BACKGROUND := #606060
 	GREY BACKGROUND := #404040
-	
+	VERY LIGHT GREY := #909090
 */
 
 /** USE THIS AS DEFAULT STYLE NAMES */
@@ -206,4 +206,8 @@
 
 .caret{
     filter: invert(100%);
+}
+.override-corners.active > Div:first-child{
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
 }

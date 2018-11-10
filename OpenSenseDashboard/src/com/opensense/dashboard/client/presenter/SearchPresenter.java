@@ -110,7 +110,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			if(result != null && result.getResultType() != null && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
 				view.showSensorData(result.getSensors());
 			}else {
-				LOGGER.log(Level.WARNING, "Result is null, empty or did not match the expected ResultType.");
+				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
 				view.showLoadSensorError();
 			}
 		},caught -> {
