@@ -23,6 +23,9 @@ public interface SearchView extends IDataPanelPageView{
 	void setMeasurandsList(Map<Integer, String> measurands);
 	String getMeasurandId();
 	String getMaxSensors();
-	void setMaxSensors(Integer maxSensors);
 	public void showLoadSensorError();
+	void setMaxSensors(String maxSensors);
+	void setMaxAccuracy(String maxAccuracy);
+	void setMinAccuracy(String minAccuracy);
+	public boolean isSearchButtonEnabled();
 }

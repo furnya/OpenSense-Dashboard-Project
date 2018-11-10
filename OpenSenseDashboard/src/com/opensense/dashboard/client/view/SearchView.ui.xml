@@ -10,8 +10,8 @@
 <ui:style>
 .input{
 	color: #FFF;
-	margin-left: 15px !important;
-    width: 92% !important;
+	margin-left: 7% !important;
+	width: 86% !important;
 }
 .input:focus{
 	border-bottom: 1px solid #42DCA3 !important;

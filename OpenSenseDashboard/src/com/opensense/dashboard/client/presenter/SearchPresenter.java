@@ -1,8 +1,9 @@
 package com.opensense.dashboard.client.presenter;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -16,8 +17,10 @@ import com.opensense.dashboard.shared.ResultType;
 
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 	
+	private static final Logger LOGGER = Logger.getLogger(SearchPresenter.class.getName());
+	
 	private final SearchView view;
-	private static final int MAX_SENSOR_REQUEST = 20000;
+	private static final String MAX_SENSOR_REQUEST = "20000";
 	
 	public SearchPresenter(HandlerManager eventBus, AppController appController, SearchView view) {
 		super(view, eventBus, appController);
@@ -46,8 +49,29 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 	
 	@Override
-	public void handleParamters(Map<String, String> parameters) {
-		// TODO:
+	public void handleParamters(Map<ParamType, String> parameters) {
+		parameters.entrySet().forEach(entry -> {
+			switch(entry.getKey()) {
+				case MEASURAND_ID:
+					break;
+				case BOUNDING_BOX:
+					break;
+				case MAX_ACCURACY:
+					view.setMinAccuracy(entry.getValue());
+					break;
+				case MAX_SENSORS:
+					view.setMaxSensors(entry.getValue());
+					break;
+				case MIN_ACCURACY:
+					view.setMinAccuracy(entry.getValue());
+					break;
+				default:
+					break;
+			}
+		});
+		if(view.isSearchButtonEnabled()) {
+			buildSensorRequestAndSend();
+		}
 	}
 
 	@Override
@@ -57,7 +81,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	
 	public void getMeasurandsAndDispaly() {
 		GeneralService.Util.getInstance().getMeasurands(new DefaultAsyncCallback<Map<Integer, String>>(view::setMeasurandsList,
-				caucht -> GWT.log("Fehler"), false));
+				caucht -> LOGGER.log(Level.WARNING, "Failure requesting the measurands."), false));
 	}
 
 	@Override
@@ -82,14 +106,16 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			view.setMaxSensors(MAX_SENSOR_REQUEST);
 		}
 		
-		requestBuilder.getRequest().getParameters().forEach(param -> GWT.log(param.getKey() + " " + param.getValue()));
-		
 		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
 				view.showSensorData(result.getSensors());
 			}else {
-				//TODO:
+				LOGGER.log(Level.WARNING, "Result is null, empty or did not match the expected ResultType.");
+				view.showLoadSensorError();
 			}
-		},caught -> view.showLoadSensorError(), false));
+		},caught -> {
+			LOGGER.log(Level.WARNING, "Failure requesting the sensors.");
+			view.showLoadSensorError();
+		}, false));
 	}
 }

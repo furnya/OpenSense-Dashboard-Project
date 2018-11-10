@@ -3,6 +3,7 @@ package com.opensense.dashboard.client.presenter;
 import java.util.Map;
 
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.model.ParamType;
 
 public  interface IDataPanelPagePresenter extends IPresenter {
 
@@ -11,5 +12,5 @@ public  interface IDataPanelPagePresenter extends IPresenter {
 	public abstract void onPageReturn();
 	public abstract void onPageLeave();
 	public abstract void initView();
-	public abstract void handleParamters(Map<String, String> parameters);
+	public abstract void handleParamters(Map<ParamType, String> parameters);
 }

@@ -1,6 +1,6 @@
 package com.opensense.dashboard.client;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
@@ -111,7 +112,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		}
 		String pageString = event.getValue();
 		DataPanelPage page = null;
-		Map<String, String> parameters = null;
+		Map<ParamType, String> parameters = null;
 		try {
 			if(event.getValue().contains("?")) {
 				int endIndex = pageString.indexOf('?');
@@ -131,8 +132,8 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		navigationPanelPresenter.setActiveDataPanelPage(page);
 	}
 
-	private Map<String, String> getParameters(String substring){
-		final Map<String, String> parameters = new HashMap<>();
+	private Map<ParamType, String> getParameters(String substring){
+		final Map<ParamType, String> validParameters = new EnumMap<>(ParamType.class);
 		String[] params;
 		if(substring.contains("&")) {
 			params = substring.split("&");
@@ -143,10 +144,20 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			if(!parameter.isEmpty() && parameter.contains("=")) {
 				String[] keyValue = parameter.split("=");
 				if(keyValue != null && keyValue[0] != null && keyValue[1] != null) {
-					parameters.put(keyValue[0], keyValue[1]);
+					boolean isValid = false;
+					for (ParamType type : ParamType.values()) {
+						if(type.getValue().equalsIgnoreCase(keyValue[0])) {
+							isValid = true;
+							validParameters.put(type, keyValue[1]);
+							break;
+						}
+					}
+					if(!isValid) {
+						LOGGER.log(Level.WARNING, () -> "Parameter key is not valid: "+ keyValue[0]);
+					}
 				}
 			}
 		}
-		return parameters;
+		return validParameters;
 	}
 }

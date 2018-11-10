@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.view.ListsView;
 
 public class ListsPresenter extends DataPanelPagePresenter implements IPresenter, ListsView.Presenter{
@@ -38,7 +39,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 	}
 	
 	@Override
-	public void handleParamters(Map<String, String> parameters) {
+	public void handleParamters(Map<ParamType, String> parameters) {
 		// TODO Auto-generated method stub
 	}
 
