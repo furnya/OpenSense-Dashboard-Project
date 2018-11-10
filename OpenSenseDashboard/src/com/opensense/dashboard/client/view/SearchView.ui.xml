@@ -30,6 +30,9 @@
 .margin > * {
 	margin-right: 30px;
 }	
+.max> div > ul {
+    max-height: 200px !important;
+}
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="{style.con}">
@@ -42,7 +45,7 @@
 			<m:MaterialTextBox ui:field="maxAccuracy" textColor="WHITE" width="30%" label="{lang.maxAccuracy}"/>
 		</bh:Div>
 		<bh:Div addStyleNames="flex {style.margin}">
-			<m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" width="30%" textColor="WHITE"/>
+			<m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" width="30%" textColor="WHITE" addStyleNames="{style.max} round-corners"/>
 			<m:MaterialTextBox width="30%" textColor="WHITE" ui:field="maxSensors" label="{lang.maxSensors}"/>
 			<m:MaterialButton  ui:field="searchButton" width="40%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
 		</bh:Div>

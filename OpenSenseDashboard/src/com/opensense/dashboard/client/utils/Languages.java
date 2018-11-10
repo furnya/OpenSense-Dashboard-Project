@@ -209,4 +209,12 @@ public class Languages {
 			return "All";
 		}
 	}
+	
+	public static String languageChange() {
+		if(de) {
+			return "EN";
+		}else {
+			return "DE";
+		}
+	}
 }

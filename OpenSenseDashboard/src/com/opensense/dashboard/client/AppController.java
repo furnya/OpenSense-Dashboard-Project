@@ -17,9 +17,12 @@ import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.presenter.DataPanelPresenter;
+import com.opensense.dashboard.client.presenter.FooterPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
+import com.opensense.dashboard.client.view.FooterViewImpl;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
@@ -48,12 +51,14 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	  */
 	 private DataPanelPresenter dataPanelPresenter = null;
 	 private NavigationPanelPresenter navigationPanelPresenter = null;
+	 private FooterPresenter footerPresenter = null;
 	 
 	 /**
 	  * Views
 	  */
 	 private DataPanelViewImpl dataPanelView = null;
 	 private NavigationPanelViewImpl navigationPanelView = null;
+	 private FooterViewImpl footerView = null;
 	 
 	 /**
 	 * Constructs the application controller (main presenter).
@@ -99,6 +104,13 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			dataPanelView = new DataPanelViewImpl();
 		dataPanelPresenter = new DataPanelPresenter(eventBus, this, dataPanelView);
 		dataPanelPresenter.go(dataPanelContainer);
+		
+		HasWidgets footerContainer = RootPanel.get("footer");
+		footerContainer.clear();
+		if (footerView == null)
+			footerView = new FooterViewImpl();
+		footerPresenter = new FooterPresenter(eventBus, this, footerView);
+		footerPresenter.go(footerContainer);
 	}
 
 	@Override
@@ -159,5 +171,14 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			}
 		}
 		return validParameters;
+	}
+
+	public void switchLanguage() { // TODO
+		if(Languages.isGerman()) {
+			Languages.setEnglish();
+		}else {
+			Languages.setGerman();
+		}
+		GWT.log("SWICHED TO " + (Languages.isGerman() ? "DEUUTSCH" : "ENGGLIISSHHH"));
 	}
 }

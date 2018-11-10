@@ -68,6 +68,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	private Autocomplete autoComplete;
 	
+	private final static String AUTOCOMPLETE = "autocomplete";
+	
 	public SearchViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
@@ -109,8 +111,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	private void buildValidators() {
 		final RegExValidator rgx = new RegExValidator("^(?:[0-9]|0[0-9]|10|)$");
-		minAccuracy.setAllowBlank(true);
 		minAccuracy.addValidator(rgx);
+		minAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTOCOMPLETE, "off");
 		minAccuracy.addValueChangeHandler(event -> {
 			if(!minAccuracy.validate(true)) {
 				searchButton.setEnabled(false);
@@ -119,6 +121,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			}
 		});
 		maxAccuracy.addValidator(rgx);
+		maxAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTOCOMPLETE, "off");
 		maxAccuracy.addValueChangeHandler(event -> {
 			if(!maxAccuracy.validate(true)) {
 				searchButton.setEnabled(false);
@@ -128,6 +131,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		});
 		final RegExValidator digitrgx = new RegExValidator("^1?\\d{0,4}$");
 		maxSensors.addValidator(digitrgx);
+		maxSensors.getChildrenList().get(0).getElement().setAttribute(AUTOCOMPLETE, "off");
 		maxSensors.addValueChangeHandler(event -> {
 			if(!maxSensors.validate(true)) {
 				searchButton.setEnabled(false);
