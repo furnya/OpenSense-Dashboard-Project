@@ -27,16 +27,14 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		Response response = new Response();
 		ClientRequestHandler clientRequestHandler = new ClientRequestHandler();
 		response.setResultType(searchRequest.getRequestType());
-		if(searchRequest.getRequestType()==ResultType.MEASURAND_MAP) {
+		if(searchRequest.getRequestType()==ResultType.MEASURAND) {
 			response.setMeasurands(clientRequestHandler.getMeasurandMap());
-		} else if(searchRequest.getRequestType()==ResultType.UNIT_MAP) {
+		} else if(searchRequest.getRequestType()==ResultType.UNIT) {
 			response.setUnits(clientRequestHandler.getUnitMap());
-		} else if(searchRequest.getRequestType()==ResultType.SENSOR_LIST) {
-			response.setSensors(clientRequestHandler.getSensorList(searchRequest.getParameters()));
-		} else if(searchRequest.getRequestType()==ResultType.SINGLE_SENSOR) {
-			response.setSensor(clientRequestHandler.getSensor(searchRequest.getId()));
-		} else if(searchRequest.getRequestType()==ResultType.VALUE_LIST) {
-			response.setValues(clientRequestHandler.getValueList(searchRequest.getId(),searchRequest.getParameters()));
+		} else if(searchRequest.getRequestType()==ResultType.SENSOR) {
+			response.setSensors(clientRequestHandler.getSensorList(searchRequest.getParameters(), searchRequest.getIds()));
+		} else if(searchRequest.getRequestType()==ResultType.VALUE) {
+			response.setValues(clientRequestHandler.getValueList(searchRequest.getIds().get(0),searchRequest.getParameters()));
 		}
 		return response;
 	}

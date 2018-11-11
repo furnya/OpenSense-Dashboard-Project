@@ -86,7 +86,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void buildSensorRequestAndSend() {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR_LIST);
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR);
 		if(view.getBounds() != null) {
 			requestBuilder.addParameter(ParamType.BOUNDING_BOX, "[" + view.getBounds().toUrlValue(6) + "]");
 		}

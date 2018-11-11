@@ -36,7 +36,12 @@ public class RequestSender implements Serializable{
 		for(String key: parameters.keySet()) {
 			sb.append(key).append("=").append(parameters.get(key)).append("&");
 		}
-		this.setParameterString(sb.toString().substring(0, getParameterString().length()-1));
+		String pString = sb.toString();
+		if(pString.charAt(pString.length()-1)=='&'){
+			this.setParameterString(pString.substring(0, pString.length()-1));
+		}else {
+			this.setParameterString(pString);
+		}
 	}
 	
 	public String sendGETRequest(String urlString){

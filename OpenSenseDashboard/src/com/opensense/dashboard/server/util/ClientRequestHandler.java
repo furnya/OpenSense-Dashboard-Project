@@ -11,6 +11,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gwt.core.shared.GWT;
 import com.opensense.dashboard.shared.LatLng;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Parameter;
@@ -42,7 +43,7 @@ public class ClientRequestHandler {
 	
 	public HashMap<Integer, Measurand> getMeasurandMap(){
 		RequestSender rs = new RequestSender();
-		JSONArray measurandArrayJSON = rs.arrayRequest(baseURL+"/units");
+		JSONArray measurandArrayJSON = rs.arrayRequest(baseURL+"/measurands");
 		HashMap<Integer, Measurand> measurandMap= new HashMap<>();
 		for(Object o : measurandArrayJSON) {
 			JSONObject measurandJSON = (JSONObject) o;
@@ -55,11 +56,17 @@ public class ClientRequestHandler {
 		return measurandMap;
 	}
 	
-	public List<Sensor> getSensorList(List<Parameter> parameterList){
+	public List<Sensor> getSensorList(List<Parameter> parameterList, List<Integer> ids){
+		LinkedList<Sensor> sensorList = new LinkedList<>();
+		if(ids!=null && !ids.isEmpty()) {
+			for(int id : ids) {
+				sensorList.add(getSensor(id));
+			}
+			return sensorList;
+		}
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
-		JSONArray sensorArrayJSON = rs.arrayRequest(baseURL+"/units");
-		LinkedList<Sensor> sensorList = new LinkedList<>();
+		JSONArray sensorArrayJSON = rs.arrayRequest(baseURL+"/sensors");
 		HashMap<Integer, Measurand> measurandMap = getMeasurandMap();
 		HashMap<Integer, Unit> unitMap = getUnitMap();
 		for(Object o : sensorArrayJSON) {
