@@ -18,13 +18,15 @@ import com.google.gwt.maps.client.overlays.InfoWindow;
 import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
 import com.google.gwt.maps.client.overlays.MarkerOptions;
-import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClusterer;
+//import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClusterer;
+//import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClustererOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.utils.MarkerInfoWindow;
+import com.opensense.dashboard.shared.Sensor;
 
 public class MapViewImpl extends DataPanelPageView implements MapView {
 	
@@ -170,7 +172,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	 
 	 
 	 
-	private void setMarkers(double bg, double lg, String sensor) {
+	private void setMarkers(double bg, double lg) {
 			LatLng position = LatLng.newInstance(bg, lg);
 			MarkerOptions markerOpt = MarkerOptions.newInstance();
 			markerOpt.setPosition(position);
@@ -188,16 +190,24 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			});
 	}
 	
-	public void showMarkers(List<String> stringlist) {
-		stringlist.forEach(item-> {
-			LatLng postion = LatLng.newInstance(Double.valueOf(item.split(",")[0]),Double.valueOf(item.split(",")[1]));
-			GWT.log(postion.getLatitude()+" "+ postion.getLongitude());
-			
-			setMarkers(postion.getLatitude(),postion.getLongitude(),item);
+	public void showMarkers(List<Sensor> sensorList) {
+		LatLng postion = LatLng.newInstance(52.521918,13.413215);
+		GWT.log(postion.getLatitude()+" "+ postion.getLongitude());
+		
+		setMarkers(postion.getLatitude(),postion.getLongitude());
+		setMarkers(postion.getLatitude()+0.0211,postion.getLongitude()+0.0112);
+//		MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
+//		MarkerClusterer cluster = MarkerClusterer.newInstance(mapWidget,mList,mCO);
+//		cluster.repaint();
+//		sensorList.forEach(item-> {
+//			LatLng postion = LatLng.newInstance(52.521918,13.413215);
+//			GWT.log(postion.getLatitude()+" "+ postion.getLongitude());
+//			
+//			setMarkers(postion.getLatitude(),postion.getLongitude());
 //			MarkerClusterer cluster = MarkerClusterer.newInstance(mapWidget);
 //			cluster.repaint();
 //			cluster.addMarkers(mList);
-		});
+//		});
 		
-	}
+	}	
 }
