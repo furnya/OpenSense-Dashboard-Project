@@ -1,5 +1,10 @@
 package com.opensense.dashboard.client.view;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
@@ -9,19 +14,19 @@ import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.events.MapEventType;
 import com.google.gwt.maps.client.events.MapHandlerRegistration;
-import com.google.gwt.maps.client.events.MouseEvent;
-import com.google.gwt.maps.client.events.click.ClickMapEvent;
-import com.google.gwt.maps.client.events.click.ClickMapHandler;
 import com.google.gwt.maps.client.overlays.InfoWindow;
 import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
 import com.google.gwt.maps.client.overlays.MarkerOptions;
+//import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClusterer;
+//import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClustererOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
+import com.opensense.dashboard.client.utils.MarkerInfoWindow;
+import com.opensense.dashboard.shared.Sensor;
 
 public class MapViewImpl extends DataPanelPageView implements MapView {
 	
@@ -36,14 +41,32 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	
 	protected Presenter presenter;
 	private MapWidget mapWidget;
+	//########################################################################
+	/*
+	 * variables for Map & Markers
+	 * */
+	//########################################################################
 	private MapOptions mapOptions;
+	private Map<Integer,Marker> markers = new HashMap<>();
+	private List<Marker> mList = new ArrayList<Marker>();
+
+	//This should be a HashMap
+	//########################################################################
+	/*
+	 * variables for InfoWindow
+	 * */
+	//########################################################################
+	//last opened infoWindow
+	private ArrayList<InfoWindow> lastOpened = new ArrayList<>();
+	private Map<Marker,InfoWindow> infoWindows = new HashMap<>();
+	int id = 0;
+	
+	
+	
 	
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		showThisMap();
-		setMarkers(52.521918,13.513215);
-		resize();
-		setMarkers(52.12341,13.34235);
 	}
 	
 	@Override
@@ -51,6 +74,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.presenter = presenter;
 	}
 	
+	//Important do not delete
 	@Override
 	public void initView() {
 		// init UI Elements if needed
@@ -58,37 +82,93 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	
 	private void showThisMap() {
 		mapOptions = MapOptions.newInstance();
+		//DefaultCenter is Berlin Alexanderplatz 
+		//52.521918,13.413215
 		mapOptions.setCenter(LatLng.newInstance(52.521918,13.413215));
-		mapOptions.setZoom(7);
+		mapOptions.setZoom(11);
 		mapOptions.setDraggable(true);
 		mapOptions.setScaleControl(true);
 		mapOptions.setScrollWheel(true);
-		
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
+		
+		mapWidget.addDragStartHandler(event-> {
+			for(InfoWindow infoWindow:infoWindows.values()){
+				infoWindow.close();
+				lastOpened.clear();
+			}
+		});
+		
+		mapWidget.addZoomChangeHandler(event-> {
+			for(InfoWindow infoWindow:infoWindows.values()){
+				infoWindow.close();
+				lastOpened.clear();
+			}
+		});
+		
+		mapWidget.addClickHandler(event-> {
+			for(InfoWindow infoWindow:infoWindows.values()){
+				infoWindow.close();
+				lastOpened.clear();
+			}
+		});
 	}
 	
-	
-	 protected void drawInfoWindow(Marker marker, MouseEvent mouseEvent) {
-		    if (marker == null || mouseEvent == null) {
+	//this function will add a basic InfoWindow to the Markers on the Map
+	//Sensor Data:
+	/*
+	 * license: boolean ? true/false -> if true shows licenseId: Int - false-> ---
+	 * id: int
+	 * accuracy: int
+	 * altitudeAboveGround: int
+	 * sensorModel: String
+	 * attributionText: String
+	 * 
+	 * 
+	 * */	
+	protected void drawInfoWindow(Marker marker,Integer id) {
+		    if (marker == null || id < 0) {
 		      return;
 		    }
-
-		    HTML html = new HTML("You clicked on: " + mouseEvent.getLatLng().getToString());
-
+		    
 		    InfoWindowOptions options = InfoWindowOptions.newInstance();
-		    options.setContent(html);
+		    MarkerInfoWindow infoWindow = new MarkerInfoWindow();
+		    infoWindow.setHeader("DemoSensor X");
+		    ArrayList<String> testData = new ArrayList<>();
+			testData.add("Temperatur: "+ "20");
+		    testData.add("Ort:  Berlin");
+		    testData.add("Einheit:  Grad Celcius");
+		    infoWindow.setData(testData);
+		    options.setContent(infoWindow);
 		    InfoWindow iw = InfoWindow.newInstance(options);
-		    iw.open(mapWidget, marker);
+		    lastOpened.add(iw);
+		    infoWindows.put(marker, iw);
+		    String size = Integer.toString(lastOpened.size());
+		    GWT.log("This is lastOpened size: " + size);
+		    if(lastOpened.size()>1) {
+		    	GWT.log("There is a opened InfoWindow");
+		    	closeLastInfoWindow(lastOpened.get(0));
+		    	iw.open(mapWidget,marker);
+		    }else {
+		    	iw.open(mapWidget,marker);
+		    }
 		  }
 	
-	 public void resize() {
-		    LatLng center = LatLng.newInstance(52.521918,13.413215);
+	 
+	 //Still not working -> should zoom and center to markers position on click
+	 public void resize(double bg, double lg) {
+		    LatLng reCenter = LatLng.newInstance(bg,lg);
 		    MapHandlerRegistration.trigger(mapWidget, MapEventType.RESIZE);        
-		    mapOptions.setCenter(center);
+		    mapOptions.setCenter(reCenter);
+			mapOptions.setZoom(16);
 		}
 	 
+	 
+	public void closeLastInfoWindow(InfoWindow iw) {
+		lastOpened.get(0).close();
+		lastOpened.remove(0);
+	}
 	 
 	 
 	 
@@ -96,15 +176,38 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			LatLng position = LatLng.newInstance(bg, lg);
 			MarkerOptions markerOpt = MarkerOptions.newInstance();
 			markerOpt.setPosition(position);
-			markerOpt.setTitle("Berlin Alexanderplatz");
-			final Marker markerBasic = Marker.newInstance(markerOpt);
-			markerBasic.setMap(mapWidget); 
-			markerBasic.setIcon(GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString());
-			markerBasic.addClickHandler(new ClickMapHandler() {
-			      @Override
-			      public void onEvent(ClickMapEvent event) {
-			        drawInfoWindow(markerBasic, event.getMouseEvent());
-			      }
-			    });
+			markerOpt.setTitle("Current postion is: "+ bg + ", " + lg);
+			Marker markerBasic = Marker.newInstance(markerOpt);
+			markerBasic.setMap(mapWidget);
+			markerBasic.setIcon(GUIImageBundle.INSTANCE.testtempIconSvg().getSafeUri().asString());
+			markers.put(id++,markerBasic);
+			mList.add(markerBasic);
+			String idToString = Integer.toString(id);
+			markerBasic.addClickHandler(event->{
+						GWT.log("Current id: "+idToString);
+						drawInfoWindow(markerBasic,id);
+//						resize(bg, lg);
+			});
 	}
+	
+	public void showMarkers(List<Sensor> sensorList) {
+		LatLng postion = LatLng.newInstance(52.521918,13.413215);
+		GWT.log(postion.getLatitude()+" "+ postion.getLongitude());
+		
+		setMarkers(postion.getLatitude(),postion.getLongitude());
+		setMarkers(postion.getLatitude()+0.0211,postion.getLongitude()+0.0112);
+//		MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
+//		MarkerClusterer cluster = MarkerClusterer.newInstance(mapWidget,mList,mCO);
+//		cluster.repaint();
+//		sensorList.forEach(item-> {
+//			LatLng postion = LatLng.newInstance(52.521918,13.413215);
+//			GWT.log(postion.getLatitude()+" "+ postion.getLongitude());
+//			
+//			setMarkers(postion.getLatitude(),postion.getLongitude());
+//			MarkerClusterer cluster = MarkerClusterer.newInstance(mapWidget);
+//			cluster.repaint();
+//			cluster.addMarkers(mList);
+//		});
+		
+	}	
 }

@@ -142,5 +142,11 @@
 			<artifactId>gwt-maps-api</artifactId>
 			<version>3.10.0-alpha-7</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.branflake2267/gwt-maps-utility-markerclustererplus -->
+		<!-- <dependency>
+	  	 	 <groupId>com.github.branflake2267</groupId>
+	  		 <artifactId>gwt-maps-utility-markerclustererplus</artifactId>
+	  	  	 <version>3.10.0-alpha-7</version>
+		</dependency> -->
   </dependencies>
 </project>

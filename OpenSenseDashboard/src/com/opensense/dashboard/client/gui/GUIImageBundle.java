@@ -48,4 +48,7 @@ public interface GUIImageBundle extends ClientBundle {
 	
 	@Source("icons/temp.svg")
 	SVGResource tempIconSvg();
+	
+	@Source("icons/testtemp.svg")
+	SVGResource testtempIconSvg();
 }
