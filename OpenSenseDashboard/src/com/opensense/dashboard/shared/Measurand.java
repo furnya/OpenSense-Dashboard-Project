@@ -1,35 +1,24 @@
 package com.opensense.dashboard.shared;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.opensense.dashboard.server.util.DataHandler;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Measurand {
+public class Measurand implements IsSerializable{
 
-	private final JSONObject rawJSON;
-	private final int id;
-	private final String name;
-	private final int defaultUnitId;
-	private final Unit defaultUnit;
-	private HashMap<Integer, Sensor> sensors;
-	private LinkedList<Value> values;
+	private JSONObject rawJSON;
+	private int id;
+	private String name;
+	private int defaultUnitId;
+	
+	public Measurand() {
+	}
 	
 	public Measurand(JSONObject measurand){
-		this.rawJSON = measurand;
-		this.id = measurand.getInt("id");
-		this.name = measurand.getString("name");
-		this.defaultUnitId = measurand.getInt("defaultUnitId");
-		Unit defaultUnit = DataHandler.getUnits().get(this.defaultUnitId);
-		//TODO add unit to DataHandler units if non-existent
-		this.defaultUnit = defaultUnit;
+		this.setRawJSON(measurand);
+		this.setId(measurand.getInt("id"));
+		this.setName(measurand.getString("name"));
+		this.setDefaultUnitId(measurand.getInt("defaultUnitId"));
 	}
 
 	
@@ -55,77 +44,49 @@ public class Measurand {
 	public int getDefaultUnitId() {
 		return defaultUnitId;
 	}
-
-
-	/**
-	 * @return the defaultUnit
-	 */
-	public Unit getDefaultUnit() {
-		return defaultUnit;
-	}
 	
 	public String toString() {
-		return this.rawJSON.toString();
+		return this.getRawJSON().toString();
 	}
 
 
 	/**
-	 * @return the sensors
+	 * @return the rawJSON
 	 */
-	public HashMap<Integer, Sensor> getSensors() {
-		return sensors;
+	public JSONObject getRawJSON() {
+		return rawJSON;
 	}
 
 
 	/**
-	 * @param sensors the sensors to set
+	 * @param rawJSON the rawJSON to set
 	 */
-	public void addSensor(Sensor sensor) {
-		this.sensors.put(sensor.getId(), sensor);
+	public void setRawJSON(JSONObject rawJSON) {
+		this.rawJSON = rawJSON;
 	}
-	
+
+
 	/**
-	 * @return the values
+	 * @param id the id to set
 	 */
-	public LinkedList<Value> getValues() {
-		return values;
+	public void setId(int id) {
+		this.id = id;
 	}
-	
+
+
 	/**
-	 * @param value the value to be added
+	 * @param name the name to set
 	 */
-	public void addValue(Value value) {
-		this.values.add(value);
+	public void setName(String name) {
+		this.name = name;
 	}
-	
+
+
 	/**
-	 * @param values the values to add
-	 * @throws ParseException 
+	 * @param defaultUnitId the defaultUnitId to set
 	 */
-	public void addMultipleValues(LinkedList<Value> values){
-		this.values.addAll(values);
-	}
-	
-	/**
-	 * @param values the values to add
-	 * @throws ParseException 
-	 */
-	public void addMultipleValues(JSONArray values, Sensor sensor){
-		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
-		LinkedList<Value> valuesToAdd = new LinkedList<Value>();
-		for(Object value : values) {
-			JSONObject valueJSON = (JSONObject) value;
-			Date timestamp = null;
-			try {
-				timestamp = inputFormat.parse(valueJSON.getString("timestamp"));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			valuesToAdd.add(new Value(timestamp,valueJSON.getDouble("numberValue"),sensor,this));
-		}
-		this.addMultipleValues(valuesToAdd);
+	public void setDefaultUnitId(int defaultUnitId) {
+		this.defaultUnitId = defaultUnitId;
 	}
 
 }

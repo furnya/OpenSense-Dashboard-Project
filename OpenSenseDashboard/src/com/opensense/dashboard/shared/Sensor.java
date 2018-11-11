@@ -1,85 +1,47 @@
 package com.opensense.dashboard.shared;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.opensense.dashboard.server.util.DataHandler;
-import com.opensense.dashboard.server.util.Location;
-
-public class Sensor implements Serializable{
+public class Sensor implements IsSerializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 9092878107269506316L;
-	private final JSONObject rawJSON;
-	private final int userId;
-	private final User user;
-	private final double directionHorizontal;
-	private final double directionVertical;
-	private final String attributionText;
-	private final int measurandId;
-	private final Measurand measurand;
-	private final int licenseId;
-	private final License license;
-	private final double altitudeAboveGround;
-	private final int id;
-	private final String attributionURLString;
-	private final URL attributionURL;
-	private final String sensorModel;
-	private final Location location;
-	private final int unitId;
-	private final Unit unit;
-	private final double accuracy;
-	private LinkedList<Value> values;
+//	private JSONObject rawJSON;
+	private int userId;
+	private double directionHorizontal;
+	private double directionVertical;
+	private String attributionText;
+	private int measurandId;
+	private int licenseId;
+	private double altitudeAboveGround;
+	private int id;
+	private String attributionURLString;
+	private String sensorModel;
+//	private Location location;
+	private int unitId;
+	private double accuracy;
+//	private LinkedList<Value> values;
 	
-	public Sensor(JSONObject sensor) throws JSONException{
-		this.rawJSON = sensor;
-		values = new LinkedList<Value>();
-		this.userId = sensor.getInt("userId");
-		User user = DataHandler.getUsers().get(this.userId);
-		//TODO add user to DataHandler users if non-existent
-		this.user = user;
-		this.directionHorizontal = sensor.getDouble("directionHorizontal");
-		this.directionVertical = sensor.getDouble("directionVertical");
-		this.attributionText = sensor.getString("attributionText");
-		this.measurandId = sensor.getInt("measurandId");
-		Measurand measurand = DataHandler.getMeasurands().get(this.measurandId);
-		//TODO add measurand to DataHandler measurands if non-existent
-		this.measurand = measurand;
-		this.licenseId = sensor.getInt("licenseId");
-		License license = DataHandler.getLicenses().get(this.licenseId);
-		//TODO add license to DataHandler licenses if non-existent
-		this.license = license;
-		this.altitudeAboveGround = sensor.getDouble("altitudeAboveGround");
-		this.id = sensor.getInt("id");
-		this.attributionURLString = sensor.getString("attributionURL");
-		URL tryURL;
-		try {
-			tryURL = new URL(this.getAttributionURLString());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			tryURL = null;
-		}
-		this.attributionURL = tryURL;
-		this.sensorModel = sensor.getString("sensorModel");
-		JSONObject locationJSON = sensor.getJSONObject("location");
-		this.location = new Location(String.valueOf(this.getId()), locationJSON.getDouble("lat"), locationJSON.getDouble("lng"));
-		this.unitId = sensor.getInt("unitId");
-		Unit unit = DataHandler.getUnits().get(this.unitId);
-		//TODO add unit to DataHandler units if non-existent
-		this.unit = unit;
-		this.accuracy = sensor.getDouble("accuracy");
+	public Sensor() {
+	}	
+	
+	public Sensor(String sensor) {
+//		this.setRawJSON(sensor);
+//		values = new LinkedList<Value>();
+//		this.setUserId(sensor.getInt("userId"));
+//		this.setDirectionHorizontal(sensor.getDouble("directionHorizontal"));
+//		this.setDirectionVertical(sensor.getDouble("directionVertical"));
+//		this.setAttributionText(sensor.getString("attributionText"));
+//		this.setMeasurandId(sensor.getInt("measurandId"));
+//		this.setLicenseId(sensor.getInt("licenseId"));
+//		this.setAltitudeAboveGround(sensor.getDouble("altitudeAboveGround"));
+//		this.setId(sensor.getInt("id"));
+//		this.setAttributionURLString(sensor.getString("attributionURL"));
+//		this.setSensorModel(sensor.getString("sensorModel"));
+//		JSONObject locationJSON = sensor.getJSONObject("location");
+//		this.setLocation(new Location(String.valueOf(this.getId()), locationJSON.getDouble("lat"), locationJSON.getDouble("lng")));
+//		this.setUnitId(sensor.getInt("unitId"));
+//		this.setAccuracy(sensor.getDouble("accuracy"));
 	}
 
 	/**
@@ -146,25 +108,18 @@ public class Sensor implements Serializable{
 	}
 
 	/**
-	 * @return the attributionURL
-	 */
-	public URL getAttributionURL() {
-		return attributionURL;
-	}
-
-	/**
 	 * @return the sensorModel
 	 */
 	public String getSensorModel() {
 		return sensorModel;
 	}
 
-	/**
-	 * @return the location
-	 */
-	public Location getLocation() {
-		return location;
-	}
+//	/**
+//	 * @return the location
+//	 */
+//	public Location getLocation() {
+//		return location;
+//	}
 
 	/**
 	 * @return the unitId
@@ -180,81 +135,157 @@ public class Sensor implements Serializable{
 		return accuracy;
 	}
 	
-	public String toString() {
-		return this.rawJSON.toString();
-	}
+//	public String toString() {
+//		return this.getRawJSON().toString();
+//	}
 
-	/**
-	 * @return the values
-	 */
-	public LinkedList<Value> getValues() {
-		return this.values;
-	}
-
-	/**
-	 * @param values the values to add
-	 * @throws ParseException 
-	 */
-	public void addMultipleValues(LinkedList<Value> values){
-		this.values.addAll(values);
-	}
+//	/**
+//	 * @return the values
+//	 */
+//	public LinkedList<Value> getValues() {
+//		return this.values;
+//	}
+//
+//	/**
+//	 * @param values the values to add
+//	 * @throws ParseException 
+//	 */
+//	public void addMultipleValues(LinkedList<Value> values){
+//		this.values.addAll(values);
+//	}
 	
-	/**
-	 * @param values the values to add
-	 * @throws ParseException 
-	 */
-	public void addMultipleValues(JSONArray values){
-		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
-		LinkedList<Value> valuesToAdd = new LinkedList<Value>();
-		for(Object value : values) {
-			JSONObject valueJSON = (JSONObject) value;
-			Date timestamp = null;
-			try {
-				timestamp = inputFormat.parse(valueJSON.getString("timestamp"));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			valuesToAdd.add(new Value(timestamp,valueJSON.getDouble("numberValue"),this,this.getMeasurand()));
-		}
-		this.addMultipleValues(valuesToAdd);
-	}
+//	/**
+//	 * @param values the values to add
+//	 * @throws ParseException 
+//	 */
+//	public void addMultipleValues(JSONArray values){
+//		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
+//		LinkedList<Value> valuesToAdd = new LinkedList<Value>();
+//		for(Object value : values) {
+//			JSONObject valueJSON = (JSONObject) value;
+//			Date timestamp = null;
+//			try {
+//				timestamp = inputFormat.parse(valueJSON.getString("timestamp"));
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//			valuesToAdd.add(new Value(timestamp,valueJSON.getDouble("numberValue"),this.getId(),this.getMeasurandId()));
+//		}
+//		this.addMultipleValues(valuesToAdd);
+//	}
 	
+//	/**
+//	 * @param value the value to be added
+//	 */
+//	public void addValue(Value value) {
+//		this.values.add(value);
+//	}
+//
+//	/**
+//	 * @return the rawJSON
+//	 */
+//	public JSONObject getRawJSON() {
+//		return rawJSON;
+//	}
+//
+//	/**
+//	 * @param rawJSON the rawJSON to set
+//	 */
+//	public void setRawJSON(JSONObject rawJSON) {
+//		this.rawJSON = rawJSON;
+//	}
+
 	/**
-	 * @param value the value to be added
+	 * @param userId the userId to set
 	 */
-	public void addValue(Value value) {
-		this.values.add(value);
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	/**
-	 * @return the user
+	 * @param directionHorizontal the directionHorizontal to set
 	 */
-	public User getUser() {
-		return user;
+	public void setDirectionHorizontal(double directionHorizontal) {
+		this.directionHorizontal = directionHorizontal;
 	}
 
 	/**
-	 * @return the measurand
+	 * @param directionVertical the directionVertical to set
 	 */
-	public Measurand getMeasurand() {
-		return measurand;
+	public void setDirectionVertical(double directionVertical) {
+		this.directionVertical = directionVertical;
 	}
 
 	/**
-	 * @return the license
+	 * @param attributionText the attributionText to set
 	 */
-	public License getLicense() {
-		return license;
+	public void setAttributionText(String attributionText) {
+		this.attributionText = attributionText;
 	}
 
 	/**
-	 * @return the unit
+	 * @param measurandId the measurandId to set
 	 */
-	public Unit getUnit() {
-		return unit;
+	public void setMeasurandId(int measurandId) {
+		this.measurandId = measurandId;
 	}
-	
+
+	/**
+	 * @param licenseId the licenseId to set
+	 */
+	public void setLicenseId(int licenseId) {
+		this.licenseId = licenseId;
+	}
+
+	/**
+	 * @param altitudeAboveGround the altitudeAboveGround to set
+	 */
+	public void setAltitudeAboveGround(double altitudeAboveGround) {
+		this.altitudeAboveGround = altitudeAboveGround;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param attributionURLString the attributionURLString to set
+	 */
+	public void setAttributionURLString(String attributionURLString) {
+		this.attributionURLString = attributionURLString;
+	}
+
+	/**
+	 * @param sensorModel the sensorModel to set
+	 */
+	public void setSensorModel(String sensorModel) {
+		this.sensorModel = sensorModel;
+	}
+
+//	/**
+//	 * @param location the location to set
+//	 */
+//	public void setLocation(Location location) {
+//		this.location = location;
+//	}
+
+	/**
+	 * @param unitId the unitId to set
+	 */
+	public void setUnitId(int unitId) {
+		this.unitId = unitId;
+	}
+
+	/**
+	 * @param accuracy the accuracy to set
+	 */
+	public void setAccuracy(double accuracy) {
+		this.accuracy = accuracy;
+	}
 	
 }

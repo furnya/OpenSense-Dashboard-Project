@@ -1,8 +1,9 @@
 /*  DASHBOARD COLOURS:
 	DEFALUT HOMEPAGE COLOR := #42DCA3
+	DARK := #202020
 	LIGHTGREY BACKGROUND := #606060
 	GREY BACKGROUND := #404040
-	
+	VERY LIGHT GREY := #909090
 */
 
 /** USE THIS AS DEFAULT STYLE NAMES */
@@ -145,6 +146,7 @@
 	left: 90px;
 	width: 100%;
 	height: 100%;
+    z-index: 0;
 }
 
 #control-panel{
@@ -153,9 +155,18 @@
 	top: 0px;
 	left: 0px;
 	width: 90px;
+    z-index: 2;
 }
 
- 
+#footer{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 22px;
+    background-color: #202020;
+    z-index: 1;
+}
+
 #map {
      height: 455px;
      width: 800px;
@@ -163,11 +174,19 @@
      padding: 0;
 }
 
+.btn.d-btn, .btn.d-btn:active, .btn.d-btn:focus, .btn.d-btn:visited{
+	 background-color: #606060;
+}
+.btn.d-btn:hover, .btn.d-btn.active{
+	background-color: #42DCA3;
+}
+
 .nav-container{
 	background-color: #606060;
 	width: 100%;
 	height: 100%;
 }
+
 .btn.nav-button, .btn.nav-button:active, .btn.nav-button:focus, .btn.nav-button:visited{
 	height: 80px;
     width: 100%;
@@ -208,7 +227,25 @@
     padding-top: 10px;
     display: block !important;
 }    
+.flex{
+	display: flex;
+}
 
+.caret{
+    filter: invert(100%);
+}
+.override-corners.active > Div:first-child{
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+}
+
+.display-block{
+	display: block;
+}
+
+.clickable{
+	cursor: pointer;
+}
  .gm-style div div div div div div div div div {
     background-color: #606060 !important;
     color: #fff;

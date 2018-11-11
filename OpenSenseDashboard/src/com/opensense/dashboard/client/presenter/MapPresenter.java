@@ -1,11 +1,13 @@
 package com.opensense.dashboard.client.presenter;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.services.GeneralService;
+import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.view.MapView;
 
@@ -37,6 +39,11 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	
 	@Override
 	public void onPageLeave() {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void handleParamters(Map<ParamType, String> parameters) {
 		// TODO Auto-generated method stub
 	}
 

@@ -1,15 +1,15 @@
 package com.opensense.dashboard.client.services;
 
 
-import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.opensense.dashboard.shared.TestClass;
+import com.opensense.dashboard.shared.Request;
+import com.opensense.dashboard.shared.Response;
 
 public interface GeneralServiceAsync {
 
-	void getSensorDataFromString(String searchQuery, AsyncCallback<TestClass> asyncCallback);
-
-	void getMapSensorData(AsyncCallback<List<String>> asyncCallback);
-
+	void getDataFromRequest(Request searchRequest, AsyncCallback<Response> asyncCallback);
+	void getMeasurands(AsyncCallback<Map<Integer, String>> asyncCallback);
+	
 }

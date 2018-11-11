@@ -1,23 +1,23 @@
 package com.opensense.dashboard.shared;
 
-import java.util.HashMap;
 
 import org.json.JSONObject;
 
-public class Unit {
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-	private final JSONObject rawJSON;
-	private final int id;
-	private final String name;
-	private HashMap<Integer, Sensor> sensors;
-	private HashMap<Integer, Measurand> measurands;
+public class Unit implements IsSerializable{
+
+	private JSONObject rawJSON;
+	private int id;
+	private String name;
+	
+	public Unit() {
+	}
 	
 	public Unit(JSONObject unit, Measurand measurand){
-		this.rawJSON = unit;
-		this.id = unit.getInt("id");
-		this.name = unit.getString("name");
-		this.measurands = new HashMap<Integer, Measurand>();
-		addMeasurand(measurand);
+		this.setRawJSON(unit);
+		this.setId(unit.getInt("id"));
+		this.setName(unit.getString("name"));
 	}
 
 	
@@ -37,39 +37,39 @@ public class Unit {
 	}
 	
 	public String toString() {
-		return this.rawJSON.toString();
+		return this.getRawJSON().toString();
 	}
 
 
 	/**
-	 * @return the sensors
+	 * @return the rawJSON
 	 */
-	public HashMap<Integer, Sensor> getSensors() {
-		return sensors;
+	public JSONObject getRawJSON() {
+		return rawJSON;
 	}
 
 
 	/**
-	 * @param sensors the sensors to set
+	 * @param rawJSON the rawJSON to set
 	 */
-	public void addSensor(Sensor sensor) {
-		this.sensors.put(sensor.getId(), sensor);
+	public void setRawJSON(JSONObject rawJSON) {
+		this.rawJSON = rawJSON;
 	}
 
 
 	/**
-	 * @return the measurands
+	 * @param id the id to set
 	 */
-	public HashMap<Integer, Measurand> getMeasurands() {
-		return measurands;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 
 	/**
-	 * @param measurand the measurand to be added
+	 * @param name the name to set
 	 */
-	public void addMeasurand(Measurand measurand) {
-		this.measurands.put(measurand.getId(),measurand);
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

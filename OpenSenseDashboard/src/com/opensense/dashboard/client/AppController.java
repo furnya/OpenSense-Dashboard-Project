@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,10 +15,14 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.presenter.DataPanelPresenter;
+import com.opensense.dashboard.client.presenter.FooterPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
+import com.opensense.dashboard.client.view.FooterViewImpl;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
@@ -45,12 +51,14 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	  */
 	 private DataPanelPresenter dataPanelPresenter = null;
 	 private NavigationPanelPresenter navigationPanelPresenter = null;
+	 private FooterPresenter footerPresenter = null;
 	 
 	 /**
 	  * Views
 	  */
 	 private DataPanelViewImpl dataPanelView = null;
 	 private NavigationPanelViewImpl navigationPanelView = null;
+	 private FooterViewImpl footerView = null;
 	 
 	 /**
 	 * Constructs the application controller (main presenter).
@@ -65,10 +73,10 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	}
 	
 	private void handleStart() {
-		if(History.getToken() != null && !History.getToken().isEmpty()) {
-			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(History.getToken().toUpperCase())));
+		if(History.getToken() != null && History.getToken().isEmpty()) {
+			History.newItem(DataPanelPage.HOME.name(), true);
 		}else {
-			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME));
+			History.replaceItem(History.getToken(), true);
 		}
 	}
 
@@ -76,9 +84,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		History.addValueChangeHandler(this);
 		
 		eventBus.addHandler(OpenDataPanelPageEvent.TYPE, event -> {
-			History.newItem(event.getDataPanelPage().name(), false);
-			dataPanelPresenter.navigateTo(event.getDataPanelPage());
-			navigationPanelPresenter.setActiveDataPanelPage(event.getDataPanelPage());
+			History.newItem(event.getDataPanelPage().name(), true);
 		});
 	}
 	
@@ -98,6 +104,13 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			dataPanelView = new DataPanelViewImpl();
 		dataPanelPresenter = new DataPanelPresenter(eventBus, this, dataPanelView);
 		dataPanelPresenter.go(dataPanelContainer);
+		
+		HasWidgets footerContainer = RootPanel.get("footer");
+		footerContainer.clear();
+		if (footerView == null)
+			footerView = new FooterViewImpl();
+		footerPresenter = new FooterPresenter(eventBus, this, footerView);
+		footerPresenter.go(footerContainer);
 	}
 
 	@Override
@@ -106,6 +119,66 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			LOGGER.log(Level.WARNING, "NAVIGATION: The dataPanelPresenter is null.");
 			return;
 		}
-		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(event.getValue().toUpperCase())));
+		if(event.getValue() == null && !event.getValue().isEmpty()) {
+			return;
+		}
+		String pageString = event.getValue();
+		DataPanelPage page = null;
+		Map<ParamType, String> parameters = null;
+		try {
+			if(event.getValue().contains("?")) {
+				int endIndex = pageString.indexOf('?');
+				page = DataPanelPage.valueOf(pageString.substring(0, endIndex));
+				if(pageString.length() > endIndex + 1) {
+					parameters = getParameters(pageString.substring(endIndex + 1, pageString.length()));
+				}
+			}else {
+				page = DataPanelPage.valueOf(pageString);
+			}
+		}catch(Exception e) {
+			page = DataPanelPage.HOME;
+			LOGGER.log(Level.WARNING, "Invalid navigation page or invalid parameters.");
+		}
+		
+		dataPanelPresenter.navigateTo(page, parameters);
+		navigationPanelPresenter.setActiveDataPanelPage(page);
+	}
+
+	private Map<ParamType, String> getParameters(String substring){
+		final Map<ParamType, String> validParameters = new EnumMap<>(ParamType.class);
+		String[] params;
+		if(substring.contains("&")) {
+			params = substring.split("&");
+		}else {
+			params = new String[]{substring};
+		}
+		for (String parameter : params) {
+			if(!parameter.isEmpty() && parameter.contains("=")) {
+				String[] keyValue = parameter.split("=");
+				if(keyValue != null && keyValue[0] != null && keyValue[1] != null) {
+					boolean isValid = false;
+					for (ParamType type : ParamType.values()) {
+						if(type.getValue().equalsIgnoreCase(keyValue[0])) {
+							isValid = true;
+							validParameters.put(type, keyValue[1]);
+							break;
+						}
+					}
+					if(!isValid) {
+						LOGGER.log(Level.WARNING, () -> "Parameter key is not valid: "+ keyValue[0]);
+					}
+				}
+			}
+		}
+		return validParameters;
+	}
+
+	public void switchLanguage() { // TODO
+		if(Languages.isGerman()) {
+			Languages.setEnglish();
+		}else {
+			Languages.setGerman();
+		}
+		GWT.log("SWICHED TO " + (Languages.isGerman() ? "DEUUTSCH" : "ENGGLIISSHHH"));
 	}
 }

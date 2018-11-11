@@ -1,24 +1,24 @@
 package com.opensense.dashboard.shared;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Value implements Serializable{
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-	private final Date timestamp;
-	private final double numberValue;
-	private final int sensorId;
-	private final Sensor sensor;
-	private final int measurandId;
-	private final Measurand measurand;
+public class Value implements IsSerializable{
+
+	private Date timestamp;
+	private double numberValue;
+	private int sensorId;
+	private int measurandId;
 	
-	public Value(Date timestamp, double numberValue, Sensor sensor, Measurand measurand) {
-		this.timestamp = timestamp;
-		this.numberValue = numberValue;
-		this.sensor = sensor;
-		this.measurand = measurand;
-		this.sensorId = this.sensor.getId();
-		this.measurandId = this.measurand.getId();
+	public Value() {
+	}
+	
+	public Value(Date timestamp, double numberValue, int sensorId, int measurandId) {
+		this.setTimestamp(timestamp);
+		this.setNumberValue(numberValue);
+		this.setSensorId(sensorId);
+		this.setMeasurandId(measurandId);
 	}
 	
 	/**
@@ -36,13 +36,6 @@ public class Value implements Serializable{
 	}
 
 	/**
-	 * @return the sensor
-	 */
-	public Sensor getSensor() {
-		return this.sensor;
-	}
-
-	/**
 	 * @return the sensorId
 	 */
 	public int getSensorId() {
@@ -54,5 +47,33 @@ public class Value implements Serializable{
 	 */
 	public int getMeasurandId() {
 		return measurandId;
+	}
+
+	/**
+	 * @param timestamp the timestamp to set
+	 */
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	/**
+	 * @param numberValue the numberValue to set
+	 */
+	public void setNumberValue(double numberValue) {
+		this.numberValue = numberValue;
+	}
+
+	/**
+	 * @param sensorId the sensorId to set
+	 */
+	public void setSensorId(int sensorId) {
+		this.sensorId = sensorId;
+	}
+
+	/**
+	 * @param measurandId the measurandId to set
+	 */
+	public void setMeasurandId(int measurandId) {
+		this.measurandId = measurandId;
 	}
 }
