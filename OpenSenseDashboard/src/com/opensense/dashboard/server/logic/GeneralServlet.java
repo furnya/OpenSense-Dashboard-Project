@@ -35,6 +35,8 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			response.setSensors(clientRequestHandler.getSensorList(searchRequest.getParameters()));
 		} else if(searchRequest.getRequestType()==ResultType.SINGLE_SENSOR) {
 			response.setSensor(clientRequestHandler.getSensor(searchRequest.getId()));
+		} else if(searchRequest.getRequestType()==ResultType.VALUE_LIST) {
+			response.setValues(clientRequestHandler.getValueList(searchRequest.getId(),searchRequest.getParameters()));
 		}
 		return response;
 	}

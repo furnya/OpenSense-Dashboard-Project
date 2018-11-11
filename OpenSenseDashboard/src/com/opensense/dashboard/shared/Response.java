@@ -12,7 +12,7 @@ public class Response implements IsSerializable {
 	private List<Sensor> sensors;
 	private Map<Integer, Measurand> measurands;
 	private Map<Integer, Unit> units;
-	//List of Values
+	private List<Value> values;
 	
 	public Response() {
 	}
@@ -73,5 +73,19 @@ public class Response implements IsSerializable {
 	 */
 	public void setSensor(Sensor sensor) {
 		this.sensor = sensor;
+	}
+
+	/**
+	 * @return the values
+	 */
+	public List<Value> getValues() {
+		return values;
+	}
+
+	/**
+	 * @param values the values to set
+	 */
+	public void setValues(List<Value> values) {
+		this.values = values;
 	}
 }

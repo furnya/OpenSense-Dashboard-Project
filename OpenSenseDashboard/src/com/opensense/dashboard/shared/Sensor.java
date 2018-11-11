@@ -95,13 +95,6 @@ public class Sensor implements IsSerializable{
 		return sensorModel;
 	}
 
-//	/**
-//	 * @return the location
-//	 */
-//	public Location getLocation() {
-//		return location;
-//	}
-
 	/**
 	 * @return the unitId
 	 */
@@ -115,68 +108,6 @@ public class Sensor implements IsSerializable{
 	public double getAccuracy() {
 		return accuracy;
 	}
-	
-//	public String toString() {
-//		return this.getRawJSON().toString();
-//	}
-
-//	/**
-//	 * @return the values
-//	 */
-//	public LinkedList<Value> getValues() {
-//		return this.values;
-//	}
-//
-//	/**
-//	 * @param values the values to add
-//	 * @throws ParseException 
-//	 */
-//	public void addMultipleValues(LinkedList<Value> values){
-//		this.values.addAll(values);
-//	}
-	
-//	/**
-//	 * @param values the values to add
-//	 * @throws ParseException 
-//	 */
-//	public void addMultipleValues(JSONArray values){
-//		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
-//		LinkedList<Value> valuesToAdd = new LinkedList<Value>();
-//		for(Object value : values) {
-//			JSONObject valueJSON = (JSONObject) value;
-//			Date timestamp = null;
-//			try {
-//				timestamp = inputFormat.parse(valueJSON.getString("timestamp"));
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			} catch (ParseException e) {
-//				e.printStackTrace();
-//			}
-//			valuesToAdd.add(new Value(timestamp,valueJSON.getDouble("numberValue"),this.getId(),this.getMeasurandId()));
-//		}
-//		this.addMultipleValues(valuesToAdd);
-//	}
-	
-//	/**
-//	 * @param value the value to be added
-//	 */
-//	public void addValue(Value value) {
-//		this.values.add(value);
-//	}
-//
-//	/**
-//	 * @return the rawJSON
-//	 */
-//	public JSONObject getRawJSON() {
-//		return rawJSON;
-//	}
-//
-//	/**
-//	 * @param rawJSON the rawJSON to set
-//	 */
-//	public void setRawJSON(JSONObject rawJSON) {
-//		this.rawJSON = rawJSON;
-//	}
 
 	/**
 	 * @param userId the userId to set
@@ -247,13 +178,6 @@ public class Sensor implements IsSerializable{
 	public void setSensorModel(String sensorModel) {
 		this.sensorModel = sensorModel;
 	}
-
-//	/**
-//	 * @param location the location to set
-//	 */
-//	public void setLocation(Location location) {
-//		this.location = location;
-//	}
 
 	/**
 	 * @param unitId the unitId to set

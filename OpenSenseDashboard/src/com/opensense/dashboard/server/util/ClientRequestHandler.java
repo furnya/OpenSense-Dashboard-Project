@@ -1,5 +1,8 @@
 package com.opensense.dashboard.server.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +16,7 @@ import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Unit;
+import com.opensense.dashboard.shared.Value;
 
 public class ClientRequestHandler {
 
@@ -107,6 +111,30 @@ public class ClientRequestHandler {
 		s.setUnitId(sensorJSON.getInt("unitId"));
 		s.setUnit(unitMap.get(s.getUnitId()));
 		return s;
+	}
+	
+	public List<Value> getValueList(int id, List<Parameter> parameterList){
+		RequestSender rs = new RequestSender();
+		rs.setParameters(parameterList);
+		JSONObject sensorJSON = rs.objectRequest(baseURL+"/sensors/"+id+"/values");
+		int sensorId = sensorJSON.getInt("id");
+		int measurandId = sensorJSON.getInt("measurandId");
+		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
+		JSONArray valueArrayJSON = sensorJSON.getJSONArray("values");
+		LinkedList<Value> valueList = new LinkedList<>();
+		for(Object o : valueArrayJSON) {
+			JSONObject valueJSON = (JSONObject) o;
+			Date timestamp;
+			try {
+				timestamp = inputFormat.parse(valueJSON.getString("timestamp"));
+			} catch (ParseException e) {
+				timestamp = null;
+			}
+			if(timestamp==null) continue;
+			Value v = new Value(timestamp,valueJSON.getDouble("numberValue"),sensorId,measurandId);
+			valueList.add(v);
+		}
+		return valueList;
 	}
 
 }
