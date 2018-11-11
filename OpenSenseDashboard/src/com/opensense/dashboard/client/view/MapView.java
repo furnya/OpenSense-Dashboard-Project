@@ -12,4 +12,5 @@ public interface MapView extends IDataPanelPageView{
 	public Widget asWidget();
 	public void initView();
 	public void showMarkers(List<String> stringlist);
+	public void resize(double lg,double bg);
 }

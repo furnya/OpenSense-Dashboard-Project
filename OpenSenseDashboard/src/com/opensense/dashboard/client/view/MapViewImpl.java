@@ -38,15 +38,26 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	
 	protected Presenter presenter;
 	private MapWidget mapWidget;
+	//########################################################################
+	/*
+	 * variables for Map & Markers
+	 * */
+	//########################################################################
 	private MapOptions mapOptions;
 	private Map<Integer,Marker> markers = new HashMap<>();
+
 	//This should be a HashMap
-	/*NOTE: 
-	 * 
-	 * Changing the List to a HashMap will cause problems with the Handlers-> should be considered while changing
-	 * 
+	//########################################################################
+	/*
+	 * variables for InfoWindow
 	 * */
-	private List<InfoWindow> infoWindows = new ArrayList<>();
+	//########################################################################
+	//last opened infoWindow
+	private ArrayList<InfoWindow> lastOpened = new ArrayList<>();
+	private Map<Marker,InfoWindow> infoWindows = new HashMap<>();
+	int id = 0;
+	
+	
 	
 	
 	public MapViewImpl() {
@@ -67,8 +78,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	
 	private void showThisMap() {
 		mapOptions = MapOptions.newInstance();
+		//DefaultCenter is Berlin Alexanderplatz 
+		//52.521918,13.413215
 		mapOptions.setCenter(LatLng.newInstance(52.521918,13.413215));
-		mapOptions.setZoom(7);
+		mapOptions.setZoom(11);
 		mapOptions.setDraggable(true);
 		mapOptions.setScaleControl(true);
 		mapOptions.setScrollWheel(true);
@@ -77,15 +90,24 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapWidget.setVisible(true);
 		
 		mapWidget.addDragStartHandler(event-> {
-			infoWindows.forEach(InfoWindow::close);
+			for(InfoWindow infoWindow:infoWindows.values()){
+				infoWindow.close();
+				lastOpened.clear();
+			}
 		});
 		
 		mapWidget.addZoomChangeHandler(event-> {
-			infoWindows.forEach(InfoWindow::close);
+			for(InfoWindow infoWindow:infoWindows.values()){
+				infoWindow.close();
+				lastOpened.clear();
+			}
 		});
 		
 		mapWidget.addClickHandler(event-> {
-			infoWindows.forEach(InfoWindow::close);
+			for(InfoWindow infoWindow:infoWindows.values()){
+				infoWindow.close();
+				lastOpened.clear();
+			}
 		});
 	}
 	
@@ -100,33 +122,65 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	 * attributionText: String
 	 * 
 	 * 
-	 * */
-	
-	
-	 protected void drawInfoWindow(Marker marker,String sensor) {
-		    if (marker == null) {
+	 * */	
+	protected void drawInfoWindow(Marker marker,Integer id) {
+		    if (marker == null || id < 0) {
 		      return;
 		    }
+		    
 		    InfoWindowOptions options = InfoWindowOptions.newInstance();
 		    MarkerInfoWindow infoWindow = new MarkerInfoWindow();
 		    infoWindow.setHeader("DemoSensor X");
-		    ArrayList<String> testData = new ArrayList<String>();
-		    testData.add("Temperatur: "+ "20");
+		    ArrayList<String> testData = new ArrayList<>();
+			testData.add("Temperatur: "+ "20");
 		    testData.add("Ort:  Berlin");
 		    testData.add("Einheit:  Grad Celcius");
 		    infoWindow.setData(testData);
 		    options.setContent(infoWindow);
 		    InfoWindow iw = InfoWindow.newInstance(options);
-		    iw.open(mapWidget, marker);
-		    infoWindows.add(iw);
+		    lastOpened.add(iw);
+		    infoWindows.put(marker, iw);
+		    String size = Integer.toString(lastOpened.size());
+		    GWT.log("This is lastOpened size: " + size);
+		    if(lastOpened.size()>1) {
+		    	GWT.log("There is a opened InfoWindow");
+		    	closeLastInfoWindow(lastOpened.get(0));
+		    	iw.open(mapWidget,marker);
+		    }else {
+		    	iw.open(mapWidget,marker);
+		    }
 		  }
 	
-	 public void resize() {
-		    LatLng center = LatLng.newInstance(52.521918,13.413215);
+	 
+	 //Still not working -> should zoom and center to markers position on click
+	 public void resize(double bg, double lg) {
+		    LatLng reCenter = LatLng.newInstance(bg,lg);
 		    MapHandlerRegistration.trigger(mapWidget, MapEventType.RESIZE);        
-		    mapOptions.setCenter(center);
+		    mapOptions.setCenter(reCenter);
+			mapOptions.setZoom(16);
 		}
 	 
+	 
+	public void closeLastInfoWindow(InfoWindow iw) {
+//		try {
+//			if(lastOpened.size()==1) {
+//				return;
+//			}
+//			if(lastOpened.size()>1) {
+//				GWT.log("true");
+//				lastOpened.get(markers.get(lastId)).close();
+//				lastOpened.remove(markers.get(lastId));
+//			}
+//			if(lastOpened.size() < 0) {
+//				GWT.log("no lastOpened iw");
+//			}
+//		} catch (NullPointerException e) {
+//			// TODO: handle exception
+//			GWT.log("NullPointerException caught");
+//		}
+		lastOpened.get(0).close();
+		lastOpened.remove(0);
+	}
 	 
 	 
 	 
@@ -134,16 +188,17 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			LatLng position = LatLng.newInstance(bg, lg);
 			MarkerOptions markerOpt = MarkerOptions.newInstance();
 			markerOpt.setPosition(position);
-			final Marker markerBasic = Marker.newInstance(markerOpt);
+			markerOpt.setTitle("Current postion is: "+ bg + ", " + lg);
+			Marker markerBasic = Marker.newInstance(markerOpt);
 			markerBasic.setMap(mapWidget);
 			markerBasic.setIcon(GUIImageBundle.INSTANCE.testtempIconSvg().getSafeUri().asString());
-			markerBasic.addClickHandler(event-> drawInfoWindow(markerBasic, sensor));
-			int i = 0;
-			markers.put(i++,markerBasic);
-	}
-	
-	private void markerClusterer(Map<Integer,Marker> markers) {
-		
+			markers.put(id++,markerBasic);
+			String idToString = Integer.toString(id);
+			markerBasic.addClickHandler(event->{
+						GWT.log("Current id: "+idToString);
+						drawInfoWindow(markerBasic,id);
+//						resize(bg, lg);
+			});
 	}
 	
 	public void showMarkers(List<String> stringlist) {
@@ -152,7 +207,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			GWT.log(postion.getLatitude()+" "+ postion.getLongitude());
 			
 			setMarkers(postion.getLatitude(),postion.getLongitude(),item);
-			resize();
+//			MarkerClusterer cluster = MarkerClusterer.newInstance(mapWidget);
+//			cluster.addMarkers(markersInList);
 		});
 		
 	}
