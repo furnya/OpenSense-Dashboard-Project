@@ -18,6 +18,7 @@ import com.google.gwt.maps.client.overlays.InfoWindow;
 import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
 import com.google.gwt.maps.client.overlays.MarkerOptions;
+import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClusterer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -45,6 +46,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	//########################################################################
 	private MapOptions mapOptions;
 	private Map<Integer,Marker> markers = new HashMap<>();
+	private List<Marker> mList = new ArrayList<Marker>();
 
 	//This should be a HashMap
 	//########################################################################
@@ -162,22 +164,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	 
 	 
 	public void closeLastInfoWindow(InfoWindow iw) {
-//		try {
-//			if(lastOpened.size()==1) {
-//				return;
-//			}
-//			if(lastOpened.size()>1) {
-//				GWT.log("true");
-//				lastOpened.get(markers.get(lastId)).close();
-//				lastOpened.remove(markers.get(lastId));
-//			}
-//			if(lastOpened.size() < 0) {
-//				GWT.log("no lastOpened iw");
-//			}
-//		} catch (NullPointerException e) {
-//			// TODO: handle exception
-//			GWT.log("NullPointerException caught");
-//		}
 		lastOpened.get(0).close();
 		lastOpened.remove(0);
 	}
@@ -193,6 +179,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			markerBasic.setMap(mapWidget);
 			markerBasic.setIcon(GUIImageBundle.INSTANCE.testtempIconSvg().getSafeUri().asString());
 			markers.put(id++,markerBasic);
+			mList.add(markerBasic);
 			String idToString = Integer.toString(id);
 			markerBasic.addClickHandler(event->{
 						GWT.log("Current id: "+idToString);
@@ -208,9 +195,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			
 			setMarkers(postion.getLatitude(),postion.getLongitude(),item);
 //			MarkerClusterer cluster = MarkerClusterer.newInstance(mapWidget);
-//			cluster.addMarkers(markersInList);
+//			cluster.repaint();
+//			cluster.addMarkers(mList);
 		});
 		
 	}
-
 }
