@@ -8,6 +8,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelPageView;
 import com.opensense.dashboard.client.view.DataPanelView;
@@ -35,7 +36,7 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 		container.add(view.asWidget());
 	}
 
-	public void navigateTo(DataPanelPage page, Map<String, String> parameters) {
+	public void navigateTo(DataPanelPage page, Map<ParamType, String> parameters) {
 		if (activeDataPanelPagePresenter != null) {
 			activeDataPanelPagePresenter.onPageLeave();
 		}
@@ -59,7 +60,7 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			
 			//If parameters are not empty give them to the active presenter
 			if(parameters != null && !parameters.isEmpty()) {
-				parameters.entrySet().forEach(entry -> GWT.log(entry.getKey() + " " + entry.getValue()));
+				parameters.entrySet().forEach(entry -> GWT.log(entry.getKey().name() + " " + entry.getValue()));
 				activeDataPanelPagePresenter.handleParamters(parameters);
 			}
 			

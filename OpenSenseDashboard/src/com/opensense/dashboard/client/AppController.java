@@ -1,6 +1,6 @@
 package com.opensense.dashboard.client;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,10 +15,14 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.presenter.DataPanelPresenter;
+import com.opensense.dashboard.client.presenter.FooterPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
+import com.opensense.dashboard.client.view.FooterViewImpl;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
@@ -47,12 +51,14 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	  */
 	 private DataPanelPresenter dataPanelPresenter = null;
 	 private NavigationPanelPresenter navigationPanelPresenter = null;
+	 private FooterPresenter footerPresenter = null;
 	 
 	 /**
 	  * Views
 	  */
 	 private DataPanelViewImpl dataPanelView = null;
 	 private NavigationPanelViewImpl navigationPanelView = null;
+	 private FooterViewImpl footerView = null;
 	 
 	 /**
 	 * Constructs the application controller (main presenter).
@@ -67,12 +73,11 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	}
 	
 	private void handleStart() {
-//		if(History.getToken() != null && !History.getToken().isEmpty()) {
-//			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.valueOf(History.getToken().toUpperCase())));
-//		}else {
-		History.newItem(DataPanelPage.HOME.name(), true);
-//			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME));
-//		}
+		if(History.getToken() != null && History.getToken().isEmpty()) {
+			History.newItem(DataPanelPage.HOME.name(), true);
+		}else {
+			History.replaceItem(History.getToken(), true);
+		}
 	}
 
 	private void bindHandler() {
@@ -99,6 +104,13 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			dataPanelView = new DataPanelViewImpl();
 		dataPanelPresenter = new DataPanelPresenter(eventBus, this, dataPanelView);
 		dataPanelPresenter.go(dataPanelContainer);
+		
+		HasWidgets footerContainer = RootPanel.get("footer");
+		footerContainer.clear();
+		if (footerView == null)
+			footerView = new FooterViewImpl();
+		footerPresenter = new FooterPresenter(eventBus, this, footerView);
+		footerPresenter.go(footerContainer);
 	}
 
 	@Override
@@ -110,10 +122,9 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		if(event.getValue() == null && !event.getValue().isEmpty()) {
 			return;
 		}
-		
 		String pageString = event.getValue();
 		DataPanelPage page = null;
-		Map<String, String> parameters = null;
+		Map<ParamType, String> parameters = null;
 		try {
 			if(event.getValue().contains("?")) {
 				int endIndex = pageString.indexOf('?');
@@ -133,8 +144,8 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		navigationPanelPresenter.setActiveDataPanelPage(page);
 	}
 
-	private Map<String, String> getParameters(String substring){
-		final Map<String, String> parameters = new HashMap<>();
+	private Map<ParamType, String> getParameters(String substring){
+		final Map<ParamType, String> validParameters = new EnumMap<>(ParamType.class);
 		String[] params;
 		if(substring.contains("&")) {
 			params = substring.split("&");
@@ -145,10 +156,29 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			if(!parameter.isEmpty() && parameter.contains("=")) {
 				String[] keyValue = parameter.split("=");
 				if(keyValue != null && keyValue[0] != null && keyValue[1] != null) {
-					parameters.put(keyValue[0], keyValue[1]);
+					boolean isValid = false;
+					for (ParamType type : ParamType.values()) {
+						if(type.getValue().equalsIgnoreCase(keyValue[0])) {
+							isValid = true;
+							validParameters.put(type, keyValue[1]);
+							break;
+						}
+					}
+					if(!isValid) {
+						LOGGER.log(Level.WARNING, () -> "Parameter key is not valid: "+ keyValue[0]);
+					}
 				}
 			}
 		}
-		return parameters;
+		return validParameters;
+	}
+
+	public void switchLanguage() { // TODO
+		if(Languages.isGerman()) {
+			Languages.setEnglish();
+		}else {
+			Languages.setGerman();
+		}
+		GWT.log("SWICHED TO " + (Languages.isGerman() ? "DEUUTSCH" : "ENGGLIISSHHH"));
 	}
 }

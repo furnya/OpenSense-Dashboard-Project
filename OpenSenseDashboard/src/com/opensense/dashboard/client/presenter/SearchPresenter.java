@@ -1,25 +1,26 @@
 package com.opensense.dashboard.client.presenter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
+import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.SearchView;
-import com.opensense.dashboard.shared.Parameter;
-import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 	
+	private static final Logger LOGGER = Logger.getLogger(SearchPresenter.class.getName());
+	
 	private final SearchView view;
-	private static final int MAX_SENSOR_REQUEST = 10000;
+	private static final String MAX_SENSOR_REQUEST = "20000";
 	
 	public SearchPresenter(HandlerManager eventBus, AppController appController, SearchView view) {
 		super(view, eventBus, appController);
@@ -48,8 +49,29 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 	
 	@Override
-	public void handleParamters(Map<String, String> parameters) {
-		// TODO:
+	public void handleParamters(Map<ParamType, String> parameters) {
+		parameters.entrySet().forEach(entry -> {
+			switch(entry.getKey()) {
+				case MEASURAND_ID:
+					break;
+				case BOUNDING_BOX:
+					break;
+				case MAX_ACCURACY:
+					view.setMinAccuracy(entry.getValue());
+					break;
+				case MAX_SENSORS:
+					view.setMaxSensors(entry.getValue());
+					break;
+				case MIN_ACCURACY:
+					view.setMinAccuracy(entry.getValue());
+					break;
+				default:
+					break;
+			}
+		});
+		if(view.isSearchButtonEnabled()) {
+			buildSensorRequestAndSend();
+		}
 	}
 
 	@Override
@@ -59,41 +81,41 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	
 	public void getMeasurandsAndDispaly() {
 		GeneralService.Util.getInstance().getMeasurands(new DefaultAsyncCallback<Map<Integer, String>>(view::setMeasurandsList,
-				caucht -> GWT.log("Fehler"), false));
+				caucht -> LOGGER.log(Level.WARNING, "Failure requesting the measurands."), false));
 	}
 
 	@Override
 	public void buildSensorRequestAndSend() {
-		final Request request = new Request(ResultType.SENSOR_LIST);
-		List<Parameter> parameters = new ArrayList<>();
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR_LIST);
 		if(view.getBounds() != null) {
-			parameters.add(new Parameter("bounds", view.getBounds().toUrlValue(6)));
+			requestBuilder.addParameter(ParamType.BOUNDING_BOX, "[" + view.getBounds().toUrlValue(6) + "]");
 		}
 		if(view.getMinAccuracy() != null && !view.getMinAccuracy().isEmpty()) {
-			parameters.add(new Parameter("minAccuracy", view.getMinAccuracy()));
+			requestBuilder.addParameter(ParamType.MIN_ACCURACY, view.getMinAccuracy());
 		}
 		if(view.getMaxAccuracy() != null && !view.getMaxAccuracy().isEmpty()) {
-			parameters.add(new Parameter("maxAccuracy", view.getMaxAccuracy()));
+			requestBuilder.addParameter(ParamType.MAX_ACCURACY, view.getMaxAccuracy());
 		}
 		if(view.getMeasurandId() != null && !view.getMeasurandId().isEmpty()) {
-			parameters.add(new Parameter("units", view.getMeasurandId()));
+			requestBuilder.addParameter(ParamType.MEASURAND_ID, view.getMeasurandId());
 		}
 		if(view.getMaxSensors() != null && !view.getMaxSensors().isEmpty()){
-			parameters.add(new Parameter("maxSensor", view.getMaxSensors()));
+			requestBuilder.addParameter(ParamType.MAX_SENSORS, view.getMaxSensors());
 		}else {
-			parameters.add(new Parameter("maxSensor", MAX_SENSOR_REQUEST+""));
+			requestBuilder.addParameter(ParamType.MAX_SENSORS, String.valueOf(MAX_SENSOR_REQUEST));
 			view.setMaxSensors(MAX_SENSOR_REQUEST);
 		}
-		request.setParameters(parameters);
 		
-		parameters.forEach(param -> GWT.log(param.getKey() + " " + param.getValue()));
-		
-		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
-			if(result != null && result.getResultType() != null && result.getResultType().equals(request.getRequestType()) && result.getSensors() != null) {
+		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+			if(result != null && result.getResultType() != null && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
 				view.showSensorData(result.getSensors());
 			}else {
-				//TODO:
+				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
+				view.showLoadSensorError();
 			}
-		},caught -> view.showLoadSensorError(), false));
+		},caught -> {
+			LOGGER.log(Level.WARNING, "Failure requesting the sensors.");
+			view.showLoadSensorError();
+		}, false));
 	}
 }
