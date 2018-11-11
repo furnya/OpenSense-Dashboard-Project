@@ -10,7 +10,6 @@ public class Sensor implements IsSerializable{
 	private double directionHorizontal;
 	private double directionVertical;
 	private String attributionText;
-	private int measurandId;
 	private Measurand measurand;
 	private int licenseId;
 	private double altitudeAboveGround;
@@ -51,13 +50,6 @@ public class Sensor implements IsSerializable{
 	 */
 	public String getAttributionText() {
 		return attributionText;
-	}
-
-	/**
-	 * @return the measurandId
-	 */
-	public int getMeasurandId() {
-		return measurandId;
 	}
 
 	/**
@@ -135,13 +127,6 @@ public class Sensor implements IsSerializable{
 	 */
 	public void setAttributionText(String attributionText) {
 		this.attributionText = attributionText;
-	}
-
-	/**
-	 * @param measurandId the measurandId to set
-	 */
-	public void setMeasurandId(int measurandId) {
-		this.measurandId = measurandId;
 	}
 
 	/**

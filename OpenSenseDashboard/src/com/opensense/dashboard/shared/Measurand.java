@@ -1,13 +1,12 @@
 package com.opensense.dashboard.shared;
 
-import org.json.JSONObject;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Measurand implements IsSerializable{
 
 	private int id;
-	private String name;
+	private MeasurandType measurandType;
+	private String displayName;
 	private int defaultUnitId;
 	
 	public Measurand() {
@@ -24,8 +23,8 @@ public class Measurand implements IsSerializable{
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public String getDisplayName() {
+		return displayName;
 	}
 
 
@@ -47,8 +46,8 @@ public class Measurand implements IsSerializable{
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 
@@ -57,6 +56,14 @@ public class Measurand implements IsSerializable{
 	 */
 	public void setDefaultUnitId(int defaultUnitId) {
 		this.defaultUnitId = defaultUnitId;
+	}
+
+	public MeasurandType getMeasurandType() {
+		return measurandType;
+	}
+
+	public void setMeasurandType(MeasurandType measurandType) {
+		this.measurandType = measurandType;
 	}
 
 }
