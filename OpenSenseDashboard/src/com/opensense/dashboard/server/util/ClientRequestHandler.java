@@ -6,12 +6,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.google.gwt.core.shared.GWT;
 import com.opensense.dashboard.shared.LatLng;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Parameter;
@@ -49,7 +47,7 @@ public class ClientRequestHandler {
 			JSONObject measurandJSON = (JSONObject) o;
 			Measurand m = new Measurand();
 			m.setId(measurandJSON.getInt("id"));
-			m.setName(measurandJSON.getString("name"));
+			m.setDisplayName(measurandJSON.getString("name"));
 			m.setDefaultUnitId(measurandJSON.getInt("defaultUnitId"));
 			measurandMap.put(m.getId(),m);
 		}
@@ -79,8 +77,8 @@ public class ClientRequestHandler {
 			s.setDirectionHorizontal(sensorJSON.getDouble("directionHorizontal"));
 			s.setDirectionVertical(sensorJSON.getDouble("directionVertical"));
 			s.setAttributionText(sensorJSON.getString("attributionText"));
-			s.setMeasurandId(sensorJSON.getInt("measurandId"));
-			s.setMeasurand(measurandMap.get(s.getMeasurandId()));
+//			s.setMeasurandId(sensorJSON.getInt("measurandId"));
+			s.setMeasurand(measurandMap.get(sensorJSON.getInt("measurandId")));
 			s.setLicenseId(sensorJSON.getInt("licenseId"));
 			s.setAltitudeAboveGround(sensorJSON.getDouble("altitudeAboveGround"));
 			s.setAttributionURLString(sensorJSON.getString("attributionURL"));
@@ -107,8 +105,8 @@ public class ClientRequestHandler {
 		s.setDirectionHorizontal(sensorJSON.getDouble("directionHorizontal"));
 		s.setDirectionVertical(sensorJSON.getDouble("directionVertical"));
 		s.setAttributionText(sensorJSON.getString("attributionText"));
-		s.setMeasurandId(sensorJSON.getInt("measurandId"));
-		s.setMeasurand(measurandMap.get(s.getMeasurandId()));
+//		s.setMeasurandId(sensorJSON.getInt("measurandId"));
+		s.setMeasurand(measurandMap.get(sensorJSON.getInt("measurandId")));
 		s.setLicenseId(sensorJSON.getInt("licenseId"));
 		s.setAltitudeAboveGround(sensorJSON.getDouble("altitudeAboveGround"));
 		s.setAttributionURLString(sensorJSON.getString("attributionURL"));
