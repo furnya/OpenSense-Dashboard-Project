@@ -52,18 +52,6 @@ public interface GUIImageBundle extends ClientBundle {
 	@Source("icons/testtemp.svg")
 	SVGResource testtempIconSvg();
 	
-	//MarkerClusterer Icons
-	@Source("icons/m1.png")
-	ImageResource m1Icon();
-	
-	@Source("icons/m2.png")
-	ImageResource m2Icon();
-	
-	@Source("icons/m3.png")
-	ImageResource m3Icon();
-	
-	@Source("icons/m4.png")
-	ImageResource m4Icon();
 	@Source("icons/wind-speed.svg")
 	SVGResource windSpeedIconSvg();
 	
