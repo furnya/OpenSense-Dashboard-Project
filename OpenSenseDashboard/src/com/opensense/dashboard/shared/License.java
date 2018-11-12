@@ -29,32 +29,6 @@ public class License implements IsSerializable{
 	public License() {
 	}
 	
-	public License(JSONObject license){
-		this.setRawJSON(license);
-		this.setId(license.getInt("id"));
-		this.setShortName(license.getString("shortName"));
-		this.setFullName(license.getString("fullName"));
-		this.setVersion(license.getString("version"));
-		this.setReferenceLink(license.getString("referenceLink"));
-		this.setDescription(license.getString("description"));
-		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
-		Date timestamp = null;
-		try {
-			timestamp = inputFormat.parse(license.getString("created"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		this.setCreated(timestamp);
-		this.setAllowsRedistribution(Boolean.parseBoolean(license.getString("allowsRedistribution")));
-		this.setAllowsDerivatives(Boolean.parseBoolean(license.getString("allowsDerivatives")));
-		this.setNoncommercial(Boolean.parseBoolean(license.getString("noncommercial")));
-		this.setRequiresAttribution(Boolean.parseBoolean(license.getString("requiresAttribution")));
-		this.setRequiresShareAlike(Boolean.parseBoolean(license.getString("requiresShareAlike")));
-		this.setRequiresKeepOpen(Boolean.parseBoolean(license.getString("requiresKeepOpen")));
-		this.setRequiresChangeNote(Boolean.parseBoolean(license.getString("requiresChangeNote")));
-	}
-
-	
 	/**
 	 * @return the id
 	 */

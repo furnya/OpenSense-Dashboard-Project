@@ -7,14 +7,18 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gwt.json.client.JSONException;
+import com.opensense.dashboard.shared.Parameter;
 
 public class RequestSender implements Serializable{
+	
 	private HashMap<String, String> parameters;
+	private String parameterString = "";
 	
 	public void addParameter(String key, String value) {
 		parameters.put(key, value);
@@ -24,23 +28,25 @@ public class RequestSender implements Serializable{
 		return parameters;
 	}
 	
-	public String buildURL(String url) {
+	public void buildParameters() {
 		if(parameters.size()==0) {
-			return url;
+			return;
 		}
-		String endURL = url+"?";
+		StringBuilder sb = new StringBuilder(this.getParameterString().isEmpty()? "" : this.getParameterString()+"&");
 		for(String key: parameters.keySet()) {
-			endURL += key;
-			endURL += "=";
-			endURL += parameters.get(key);
-			endURL += "&";
+			sb.append(key).append("=").append(parameters.get(key)).append("&");
 		}
-		endURL = endURL.substring(0, endURL.length()-1);
-		return endURL;
+		String pString = sb.toString();
+		if(pString.charAt(pString.length()-1)=='&'){
+			this.setParameterString(pString.substring(0, pString.length()-1));
+		}else {
+			this.setParameterString(pString);
+		}
 	}
 	
 	public String sendGETRequest(String urlString){
-		urlString = buildURL(urlString);
+		buildParameters();
+		urlString += "?"+this.getParameterString();
 		System.out.println(urlString);
 		URL url;
 		HttpURLConnection con;
@@ -93,5 +99,23 @@ public class RequestSender implements Serializable{
 	
 	public RequestSender(){
 		parameters = new HashMap<String,String>();
+	}
+
+	/**
+	 * @return the parameterString
+	 */
+	public String getParameterString() {
+		return parameterString;
+	}
+
+	/**
+	 * @param parameterString the parameterString to set
+	 */
+	public void setParameterString(String parameterString) {
+		this.parameterString = parameterString;
+	}
+	
+	public void setParameters(List<Parameter> parameterList) {
+		parameterList.forEach(parameter -> this.parameters.put(parameter.getKey(), parameter.getValue()));
 	}
 }

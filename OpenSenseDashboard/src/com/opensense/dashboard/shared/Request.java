@@ -6,15 +6,15 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Request implements IsSerializable{
 	
-	private Integer id;
+	private List<Integer> ids;
 	private List<Parameter> parameters;
 	private ResultType resultType;
 	
 	public Request() {
 	}
 	
-	public Request(Integer id, List<Parameter> parameters, ResultType requestType) {
-		this.id = id;
+	public Request(List<Integer> ids, List<Parameter> parameters, ResultType requestType) {
+		this.ids = ids;
 		this.parameters = parameters;
 		this.resultType = requestType;
 	}
@@ -44,11 +44,11 @@ public class Request implements IsSerializable{
 		this.resultType = requestType;
 	}
 
-	public Integer getId() {
-		return id;
+	public List<Integer> getIds() {
+		return ids;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setIds(List<Integer> ids) {
+		this.ids = ids;
 	}
 }

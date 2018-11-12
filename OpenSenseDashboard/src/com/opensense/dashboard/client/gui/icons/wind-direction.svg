@@ -1,0 +1,30 @@
+<svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+  <g display="none" overflow="visible" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <g transform="matrix(1.2841742126896132,0,0,1.2841742126896132,-44.09830742354461,-139.80617577260273) " id="svg_5">
+   <line id="svg_6" y2="261.450974" y1="261.450974" x2="393.450974" x1="56.450974" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <line id="svg_7" y2="227.450974" y1="227.450974" x2="246.450974" x1="90.450974" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <path id="svg_8" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none" d="m203.627974,206.726974"/>
+   <path id="svg_9" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none" d="m246.766974,227.766974"/>
+   <line id="svg_10" y2="295.450974" y1="295.450974" x2="313.450974" x1="124.450974" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <path id="svg_11" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none" d="m269.860974,327.808974c-1.327,4.313 -2.042,8.894 -2.042,13.642c0,25.579 20.736,46.316 46.316,46.316s46.316,-20.737 46.316,-46.316s-21.078,-46 -46.658,-46"/>
+   <path id="svg_12" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none" d="m270.996974,316.174974"/>
+   <path id="svg_13" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none" d="m332.539974,213.104974"/>
+   <path id="svg_14" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none" d="m331.539974,213.104974c-1.142,-4.751 -1.746,-9.711 -1.746,-14.812c0,-34.881 28.277,-63.158 63.158,-63.158s63.158,28.277 63.158,63.158s-28.278,63.158 -63.159,63.158"/>
+   <path id="svg_15" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none" d="m205.359974,192.938974"/>
+   <path id="svg_16" stroke-width="20" stroke-miterlimit="10" stroke="#000000" fill="none" d="m205.359974,192.938974c-0.373,-2.23 -0.567,-4.521 -0.567,-6.857c0,-22.802 18.484,-41.286 41.286,-41.286s41.286,18.484 41.286,41.286s-18.484,41.286 -41.286,41.286"/>
+  </g>
+  <g id="svg_17"/>
+  <path stroke="null" transform="rotate(180 160.77775573730466,327.920654296875) " id="svg_22" d="m236.253942,315.341289l-120.761887,0l29.058329,-29.058329c2.478135,-2.478135 3.648015,-5.434285 3.648015,-8.679761c0,-6.189047 -5.113511,-12.579363 -12.579363,-12.579363c-3.339821,0 -6.251944,1.213909 -8.679761,3.648015l-50.053286,50.053286c-2.063016,2.063016 -4.163769,4.610337 -4.163769,9.195515s1.754821,6.792856 4.063134,9.101169l50.153921,50.147631c2.427817,2.434107 5.33994,3.648015 8.679761,3.648015c7.472142,0 12.579363,-6.390317 12.579363,-12.579363c0,-3.245476 -1.169881,-6.201626 -3.648015,-8.679761l-29.058329,-29.058329l120.761887,0c6.943808,0 12.579363,-5.635555 12.579363,-12.579363s-5.635555,-12.579363 -12.579363,-12.579363z"/>
+  <g id="svg_23"/>
+ </g>
+</svg>

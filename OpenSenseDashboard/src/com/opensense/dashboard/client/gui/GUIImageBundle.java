@@ -64,4 +64,30 @@ public interface GUIImageBundle extends ClientBundle {
 	
 	@Source("icons/m4.png")
 	ImageResource m4Icon();
+	@Source("icons/wind-speed.svg")
+	SVGResource windSpeedIconSvg();
+	
+	@Source("icons/wind-direction.svg")
+	SVGResource windDirectionIconSvg();
+	
+	@Source("icons/sunny.svg")
+	SVGResource sunnyIconSvg();
+	
+	@Source("icons/pressure.svg")
+	SVGResource pressureIconSvg();
+	
+	@Source("icons/pracipitation.svg")
+	SVGResource pracipitaionIconSvg();
+	
+	@Source("icons/pracipitation-type.svg")
+	SVGResource pracipitationTypeIconSvg();
+	
+	@Source("icons/particulars.svg")
+	SVGResource particularsIconSvg();
+	
+	@Source("icons/noise.svg")
+	SVGResource noiseIconSvg();
+	
+	@Source("icons/particulars.svg")
+	SVGResource humidityIconSvg();
 }

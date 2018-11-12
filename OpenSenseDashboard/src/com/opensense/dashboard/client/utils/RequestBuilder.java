@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.shared.Parameter;
@@ -24,8 +25,8 @@ public class RequestBuilder {
 		request.getParameters().add(parameter);
 	}
 	
-	public void setId(int id) {
-		request.setId(id);
+	public void setIds(List<Integer> ids) {
+		request.setIds(ids);
 	}
 
 	public Request getRequest() {

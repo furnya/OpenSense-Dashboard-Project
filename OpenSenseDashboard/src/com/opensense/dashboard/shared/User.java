@@ -21,23 +21,6 @@ public class User implements IsSerializable{
 	public User() {
 	}
 	
-	public User(JSONObject unit){
-		this.setRawJSON(unit);
-		this.setId(unit.getInt("id"));
-		this.setUsername(unit.getString("username"));
-		this.setEmail(unit.getString("email"));
-		this.setEmailVerified(unit.getString("emailVerified"));
-		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
-		Date timestamp = null;
-		try {
-			timestamp = inputFormat.parse(unit.getString("created"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		this.setCreated(timestamp);
-	}
-
-	
 	/**
 	 * @return the id
 	 */

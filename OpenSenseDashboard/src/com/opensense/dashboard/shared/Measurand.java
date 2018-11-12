@@ -1,26 +1,16 @@
 package com.opensense.dashboard.shared;
 
-import org.json.JSONObject;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Measurand implements IsSerializable{
 
-	private JSONObject rawJSON;
 	private int id;
-	private String name;
+	private MeasurandType measurandType;
+	private String displayName;
 	private int defaultUnitId;
 	
 	public Measurand() {
 	}
-	
-	public Measurand(JSONObject measurand){
-		this.setRawJSON(measurand);
-		this.setId(measurand.getInt("id"));
-		this.setName(measurand.getString("name"));
-		this.setDefaultUnitId(measurand.getInt("defaultUnitId"));
-	}
-
 	
 	/**
 	 * @return the id
@@ -33,8 +23,8 @@ public class Measurand implements IsSerializable{
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public String getDisplayName() {
+		return displayName;
 	}
 
 
@@ -44,27 +34,6 @@ public class Measurand implements IsSerializable{
 	public int getDefaultUnitId() {
 		return defaultUnitId;
 	}
-	
-	public String toString() {
-		return this.getRawJSON().toString();
-	}
-
-
-	/**
-	 * @return the rawJSON
-	 */
-	public JSONObject getRawJSON() {
-		return rawJSON;
-	}
-
-
-	/**
-	 * @param rawJSON the rawJSON to set
-	 */
-	public void setRawJSON(JSONObject rawJSON) {
-		this.rawJSON = rawJSON;
-	}
-
 
 	/**
 	 * @param id the id to set
@@ -77,8 +46,8 @@ public class Measurand implements IsSerializable{
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 
@@ -87,6 +56,14 @@ public class Measurand implements IsSerializable{
 	 */
 	public void setDefaultUnitId(int defaultUnitId) {
 		this.defaultUnitId = defaultUnitId;
+	}
+
+	public MeasurandType getMeasurandType() {
+		return measurandType;
+	}
+
+	public void setMeasurandType(MeasurandType measurandType) {
+		this.measurandType = measurandType;
 	}
 
 }
