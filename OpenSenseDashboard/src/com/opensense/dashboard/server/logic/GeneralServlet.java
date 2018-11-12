@@ -19,14 +19,24 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		Response response = new Response();
 		ClientRequestHandler clientRequestHandler = new ClientRequestHandler();
 		response.setResultType(searchRequest.getRequestType());
-		if(searchRequest.getRequestType()==ResultType.MEASURAND) {
+		if(searchRequest.getRequestType()==null) {
+			return response;
+		}
+		switch(searchRequest.getRequestType()) {
+		case MEASURAND:
 			response.setMeasurands(clientRequestHandler.getMeasurandMap());
-		} else if(searchRequest.getRequestType()==ResultType.UNIT) {
-			response.setUnits(clientRequestHandler.getUnitMap());
-		} else if(searchRequest.getRequestType()==ResultType.SENSOR) {
+			break;
+		case SENSOR:
 			response.setSensors(clientRequestHandler.getSensorList(searchRequest.getParameters(), searchRequest.getIds()));
-		} else if(searchRequest.getRequestType()==ResultType.VALUE) {
+			break;
+		case UNIT:
+			response.setUnits(clientRequestHandler.getUnitMap());
+			break;
+		case VALUE:
 			response.setValues(clientRequestHandler.getValueList(searchRequest.getIds().get(0),searchRequest.getParameters()));
+			break;
+		default:
+			break;
 		}
 		return response;
 	}
@@ -36,6 +46,9 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		ClientRequestHandler clientRequestHandler = new ClientRequestHandler();
 		HashMap<Integer, Measurand> measurandMap = clientRequestHandler.getMeasurandMap();
 		HashMap<Integer, String> measurandStringMap = new HashMap<>();
+		if(measurandMap==null) {
+			return null;
+		}
 		measurandMap.forEach((id,measurand) -> measurandStringMap.put(id,measurand.getDisplayName()));
 		return measurandStringMap;
 	}

@@ -8,17 +8,8 @@ public class Value implements IsSerializable{
 
 	private Date timestamp;
 	private double numberValue;
-	private int sensorId;
-	private int measurandId;
 	
 	public Value() {
-	}
-	
-	public Value(Date timestamp, double numberValue, int sensorId, int measurandId) {
-		this.setTimestamp(timestamp);
-		this.setNumberValue(numberValue);
-		this.setSensorId(sensorId);
-		this.setMeasurandId(measurandId);
 	}
 	
 	/**
@@ -36,20 +27,6 @@ public class Value implements IsSerializable{
 	}
 
 	/**
-	 * @return the sensorId
-	 */
-	public int getSensorId() {
-		return sensorId;
-	}
-
-	/**
-	 * @return the measurandId
-	 */
-	public int getMeasurandId() {
-		return measurandId;
-	}
-
-	/**
 	 * @param timestamp the timestamp to set
 	 */
 	public void setTimestamp(Date timestamp) {
@@ -61,19 +38,5 @@ public class Value implements IsSerializable{
 	 */
 	public void setNumberValue(double numberValue) {
 		this.numberValue = numberValue;
-	}
-
-	/**
-	 * @param sensorId the sensorId to set
-	 */
-	public void setSensorId(int sensorId) {
-		this.sensorId = sensorId;
-	}
-
-	/**
-	 * @param measurandId the measurandId to set
-	 */
-	public void setMeasurandId(int measurandId) {
-		this.measurandId = measurandId;
 	}
 }
