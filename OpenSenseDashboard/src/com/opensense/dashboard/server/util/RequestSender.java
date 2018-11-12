@@ -1,7 +1,6 @@
 package com.opensense.dashboard.server.util;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
@@ -47,7 +46,6 @@ public class RequestSender implements Serializable{
 	public String sendGETRequest(String urlString){
 		buildParameters();
 		urlString += "?"+this.getParameterString();
-		System.out.println(urlString);
 		URL url;
 		HttpURLConnection con;
 		StringBuffer content;

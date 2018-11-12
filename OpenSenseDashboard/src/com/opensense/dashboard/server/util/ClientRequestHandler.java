@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import com.opensense.dashboard.shared.LatLng;
 import com.opensense.dashboard.shared.Measurand;
+import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Unit;
@@ -47,7 +48,13 @@ public class ClientRequestHandler {
 			JSONObject measurandJSON = (JSONObject) o;
 			Measurand m = new Measurand();
 			m.setId(measurandJSON.getInt("id"));
-			m.setDisplayName(measurandJSON.getString("name"));
+			String nameJSON = measurandJSON.getString("name");
+			m.setMeasurandType(MeasurandType.getTypeFromString(nameJSON));
+			if(m.getMeasurandType()==MeasurandType.DEFAULT) {
+				m.setDisplayName(nameJSON);
+			}else {
+				m.setDisplayName(ServerLanguages.getMeasurandName(m.getMeasurandType()));
+			}
 			m.setDefaultUnitId(measurandJSON.getInt("defaultUnitId"));
 			measurandMap.put(m.getId(),m);
 		}
@@ -77,7 +84,6 @@ public class ClientRequestHandler {
 			s.setDirectionHorizontal(sensorJSON.getDouble("directionHorizontal"));
 			s.setDirectionVertical(sensorJSON.getDouble("directionVertical"));
 			s.setAttributionText(sensorJSON.getString("attributionText"));
-//			s.setMeasurandId(sensorJSON.getInt("measurandId"));
 			s.setMeasurand(measurandMap.get(sensorJSON.getInt("measurandId")));
 			s.setLicenseId(sensorJSON.getInt("licenseId"));
 			s.setAltitudeAboveGround(sensorJSON.getDouble("altitudeAboveGround"));
@@ -105,7 +111,6 @@ public class ClientRequestHandler {
 		s.setDirectionHorizontal(sensorJSON.getDouble("directionHorizontal"));
 		s.setDirectionVertical(sensorJSON.getDouble("directionVertical"));
 		s.setAttributionText(sensorJSON.getString("attributionText"));
-//		s.setMeasurandId(sensorJSON.getInt("measurandId"));
 		s.setMeasurand(measurandMap.get(sensorJSON.getInt("measurandId")));
 		s.setLicenseId(sensorJSON.getInt("licenseId"));
 		s.setAltitudeAboveGround(sensorJSON.getDouble("altitudeAboveGround"));

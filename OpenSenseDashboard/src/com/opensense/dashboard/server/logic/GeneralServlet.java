@@ -36,7 +36,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		ClientRequestHandler clientRequestHandler = new ClientRequestHandler();
 		HashMap<Integer, Measurand> measurandMap = clientRequestHandler.getMeasurandMap();
 		HashMap<Integer, String> measurandStringMap = new HashMap<>();
-		measurandMap.forEach((k,v) -> measurandStringMap.put(k,v.getDisplayName()));
+		measurandMap.forEach((id,measurand) -> measurandStringMap.put(id,measurand.getDisplayName()));
 		return measurandStringMap;
 	}
 
