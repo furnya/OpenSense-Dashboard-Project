@@ -1,9 +1,11 @@
 package com.opensense.dashboard.client.presenter;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -20,6 +22,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	private static final Logger LOGGER = Logger.getLogger(MapPresenter.class.getName());
 	
 	private final MapView view;
+	private static final String MAX_SENSOR_REQUEST = "20";
 	
 	public MapPresenter(HandlerManager eventBus, AppController appController, MapView view) {
 		super(view, eventBus, appController);
@@ -35,7 +38,6 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
-		buildSensorRequestAndShowMarkers(null);
 	}
 
 	@Override
@@ -63,7 +65,9 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	public void buildSensorRequestAndShowMarkers(Map<ParamType, String> parameters) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR);
 		if(parameters != null) {
-			parameters.entrySet().forEach(entry -> requestBuilder.addParameter(entry.getKey(),entry.getValue()));
+			parameters.entrySet().forEach(entry -> {
+			requestBuilder.addParameter(entry.getKey(),entry.getValue());
+			});
 		}
 		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
