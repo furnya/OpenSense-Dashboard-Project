@@ -215,7 +215,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
 		mCO.setGridSize(50);
 		mCO.setAverageCenter(true);
-		mCO.setMaxZoom(5);
 		mCO.setMinimumClusterSize(2);
 		mCO.setZoomOnClick(true);
 		cluster = MarkerClusterer.newInstance(mapWidget,mCO);
