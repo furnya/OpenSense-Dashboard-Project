@@ -33,6 +33,10 @@
 .max> div > ul {
     max-height: 200px !important;
 }
+.sensor-container{
+    max-height: 58vh;
+    overflow: auto;
+}
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="{style.con}">
@@ -50,7 +54,7 @@
 			<m:MaterialButton  ui:field="searchButton" width="40%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
 		</bh:Div>
 	</bh:Div>	
-	<bh:Div ui:field="sensorContainer" width="100%"/>
+	<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="100%"/>
 </bh:Div>
 
 </ui:UiBinder>

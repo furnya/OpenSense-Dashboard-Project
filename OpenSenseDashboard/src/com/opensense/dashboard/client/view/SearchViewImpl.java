@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.SensorItemCard;
+import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 
 import gwt.material.design.client.base.validator.RegExValidator;
@@ -68,7 +69,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	private Autocomplete autoComplete;
 	
-	private final static String AUTOCOMPLETE = "autocomplete";
+	private static final String AUTO_COMPLETE = "autocomplete";
 	
 	public SearchViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -80,7 +81,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@UiHandler("searchButton")
 	public void onSearchButtonCLicked(ClickEvent e) {
-		presenter.buildSensorRequestAndSend();
+		if(minAccuracy.validate() && maxAccuracy.validate() && maxSensors.validate() && searchButton.isEnabled()) {
+			presenter.buildSensorRequestAndSend();
+		}
 	}
 	
 	@Override
@@ -95,10 +98,11 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@Override
 	public void showSensorData(List<Sensor> sensors) {
+		sensorContainer.clear();
 		sensors.forEach(sensor -> {
 			final SensorItemCard card = new SensorItemCard();
 			card.setHeader("Sensor: " + sensor.getId());
-			card.setIcon(GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString());
+			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.getContent().add(new Span("Genauigkeit " + sensor.getAccuracy()));
 			card.addClickHandler(event -> {
 				event.stopPropagation();
@@ -109,10 +113,44 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		});
 	}
 	
+	private String getIconUrlFromType(MeasurandType measurandType) {
+		if(measurandType == null) { //TODO: remove this
+			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString(); 
+		}
+		switch(measurandType) {
+		case AIR_PRESSURE:
+			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString();
+		case BRIGHTNESS:
+			return GUIImageBundle.INSTANCE.sunnyIconSvg().getSafeUri().asString();
+		case CLOUDINESS:
+			return GUIImageBundle.INSTANCE.cloudsIconSvg().getSafeUri().asString();
+		case HUMIDITY:
+			return GUIImageBundle.INSTANCE.humidityIconSvg().getSafeUri().asString();
+		case NOISE:
+			return GUIImageBundle.INSTANCE.noiseIconSvg().getSafeUri().asString();
+		case PM10:
+			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
+		case PM2_5:
+			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
+		case PRECIPITATION_AMOUNT:
+			return GUIImageBundle.INSTANCE.precipitaionIconSvg().getSafeUri().asString();
+		case PRECIPITATION_TYPE:
+			return GUIImageBundle.INSTANCE.precipitationTypeIconSvg().getSafeUri().asString();
+		case TEMPERATURE:
+			return GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString();
+		case WIND_DIRECTION:
+			return GUIImageBundle.INSTANCE.windDirectionIconSvg().getSafeUri().asString();
+		case WIND_SPEED:
+			return GUIImageBundle.INSTANCE.windSpeedIconSvg().getSafeUri().asString();
+		default:
+			return ""; //TODO: default image path
+		}
+	}
+
 	private void buildValidators() {
 		final RegExValidator rgx = new RegExValidator("^(?:[0-9]|0[0-9]|10|)$");
 		minAccuracy.addValidator(rgx);
-		minAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTOCOMPLETE, "off");
+		minAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
 		minAccuracy.addValueChangeHandler(event -> {
 			if(!minAccuracy.validate(true)) {
 				searchButton.setEnabled(false);
@@ -121,7 +159,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			}
 		});
 		maxAccuracy.addValidator(rgx);
-		maxAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTOCOMPLETE, "off");
+		maxAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
 		maxAccuracy.addValueChangeHandler(event -> {
 			if(!maxAccuracy.validate(true)) {
 				searchButton.setEnabled(false);
@@ -131,7 +169,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		});
 		final RegExValidator digitrgx = new RegExValidator("^1?\\d{0,4}$");
 		maxSensors.addValidator(digitrgx);
-		maxSensors.getChildrenList().get(0).getElement().setAttribute(AUTOCOMPLETE, "off");
+		maxSensors.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
 		maxSensors.addValueChangeHandler(event -> {
 			if(!maxSensors.validate(true)) {
 				searchButton.setEnabled(false);

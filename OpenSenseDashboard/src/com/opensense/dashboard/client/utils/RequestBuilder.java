@@ -10,6 +10,8 @@ import com.opensense.dashboard.shared.ResultType;
 
 public class RequestBuilder {
 	
+	private static final String MAX_SENSOR_REQUEST = "1000";
+	
 	private Request request;
 	
 	public RequestBuilder(ResultType resultType) {
@@ -28,9 +30,27 @@ public class RequestBuilder {
 	public void setIds(List<Integer> ids) {
 		request.setIds(ids);
 	}
-
+	
+	/**
+	 * checks if the request contains maxSensors -> false the maxSensor param will be set to {@link #MAX_SENSOR_REQUEST}
+	 * @return the builded and checked request
+	 */
 	public Request getRequest() {
+		checkParameters();
 		return request;
+	}
+	
+	private void checkParameters() {
+		boolean containsNeededParams = false;
+		for (Parameter param : request.getParameters()) {
+			if(ParamType.MAX_SENSORS.getValue().equals(param.getKey())) {
+				containsNeededParams = true;
+				break;
+			}
+		}
+		if(!containsNeededParams) {
+			addParameter(ParamType.MAX_SENSORS, MAX_SENSOR_REQUEST);
+		}
 	}
 
 	

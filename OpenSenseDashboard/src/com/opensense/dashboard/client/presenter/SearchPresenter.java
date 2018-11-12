@@ -4,9 +4,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
@@ -20,7 +23,6 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	private static final Logger LOGGER = Logger.getLogger(SearchPresenter.class.getName());
 	
 	private final SearchView view;
-	private static final String MAX_SENSOR_REQUEST = "20000";
 	
 	public SearchPresenter(HandlerManager eventBus, AppController appController, SearchView view) {
 		super(view, eventBus, appController);
@@ -101,13 +103,13 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		}
 		if(view.getMaxSensors() != null && !view.getMaxSensors().isEmpty()){
 			requestBuilder.addParameter(ParamType.MAX_SENSORS, view.getMaxSensors());
-		}else {
-			requestBuilder.addParameter(ParamType.MAX_SENSORS, String.valueOf(MAX_SENSOR_REQUEST));
-			view.setMaxSensors(MAX_SENSOR_REQUEST);
 		}
+		
+		requestBuilder.getRequest().getParameters().forEach(param -> GWT.log(param.getKey() + " " + param.getValue()));
 		
 		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
+				eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, requestBuilder.getRequest().getParameters(), false));
 				view.showSensorData(result.getSensors());
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
