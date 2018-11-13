@@ -65,8 +65,9 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 
 
 	@Override
-	public void initView() {
+	public void waitUntilViewInit(Runnable runnable) {
 		view.initView();
+		runnable.run();
 	}
 	
 	//get Sensor Data from Server

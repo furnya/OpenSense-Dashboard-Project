@@ -19,10 +19,12 @@ public abstract class DataPanelPagePresenter implements IDataPanelPagePresenter{
 	}
 	
 	@Override
-	public final void initIfNeeded() {
+	public final void initIfNeeded(final Runnable runnable) {
 		if(!view.isInitialized()) {
-			initView();
+			waitUntilViewInit(runnable);
 			view.setInitializedToTrue();
+		}else {
+			runnable.run();
 		}
 	}
 	

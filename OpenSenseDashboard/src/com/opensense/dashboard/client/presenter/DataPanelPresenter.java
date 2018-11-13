@@ -48,29 +48,32 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 
 			// Creating the presenter of the new page and assigning the view.
 			activeDataPanelPagePresenter = page.createPresenterInstance(eventBus, appController, pageViews.get(page));
+			
+			//TODO: insert loading page indicator 
+			
+			
 			// Initializing the new page if needed. This will happen only when
-			// using the page for the first time.
-			activeDataPanelPagePresenter.initIfNeeded();
-			
-			view.setHeading(page.displayName());
-			
-			activeDataPanelPagePresenter.onPageReturn();
-			
-			// Firing the presenter of the new page.
-			activeDataPanelPagePresenter.go(view.getContentContainer());
-			
-			//If parameters are not empty give them to the active presenter
-			if(parameters != null && !parameters.isEmpty()) {
-				parameters.entrySet().forEach(entry -> GWT.log("Param: " + entry.getKey().getValue() + " " + entry.getValue()));
-				activeDataPanelPagePresenter.handleParamters(parameters);
-			}
-			
-			//If ids are not empty give them to the active presenter
-			if(ids != null && !ids.isEmpty()) {
-				ids.forEach(entry -> GWT.log("Id: " + entry));
-				activeDataPanelPagePresenter.handleIds(ids);
-			}
-			
+			// using the page for the first time. The runnable is needed to wait until all view elements are initialized
+			activeDataPanelPagePresenter.initIfNeeded(() -> {
+				view.setHeading(page.displayName());
+				
+				activeDataPanelPagePresenter.onPageReturn();
+				
+				// Firing the presenter of the new page.
+				activeDataPanelPagePresenter.go(view.getContentContainer());
+				
+				//If parameters are not empty give them to the active presenter
+				if(parameters != null && !parameters.isEmpty()) {
+					parameters.entrySet().forEach(entry -> GWT.log("Param: " + entry.getKey().getValue() + " " + entry.getValue()));
+					activeDataPanelPagePresenter.handleParamters(parameters);
+				}
+				
+				//If ids are not empty give them to the active presenter
+				if(ids != null && !ids.isEmpty()) {
+					ids.forEach(entry -> GWT.log("Id: " + entry));
+					activeDataPanelPagePresenter.handleIds(ids);
+				}
+			});
 		} catch (Exception e) {
 			GWT.log("Error while navigating to page " + page + ".", e);
 			view.getContentContainer().clear();

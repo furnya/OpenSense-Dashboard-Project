@@ -51,8 +51,9 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 
 
 	@Override
-	public void initView() {
+	public void waitUntilViewInit(final Runnable runnable) {
 		view.initView();
+		runnable.run();
 	}
 
 }

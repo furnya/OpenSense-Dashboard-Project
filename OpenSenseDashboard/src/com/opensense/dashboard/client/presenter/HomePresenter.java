@@ -46,8 +46,9 @@ public class HomePresenter extends DataPanelPagePresenter implements HomeView.Pr
 	}
 
 	@Override
-	public void initView() {
+	public void waitUntilViewInit(final Runnable runnable) {
 		view.initView();
+		runnable.run();
 	}
 
 }

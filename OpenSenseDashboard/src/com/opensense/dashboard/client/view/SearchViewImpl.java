@@ -249,5 +249,11 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public void showLoadSensorError() {
 		//TODO:
 	}
+
+	@Override
+	public void selectMeasurandId(String value) {
+		GWT.log(this.measurandList.getIndex(value)+"");
+		this.measurandList.setSelectedIndex(this.measurandList.getIndex(value));
+	}
 	
 }

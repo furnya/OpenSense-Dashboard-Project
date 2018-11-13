@@ -44,7 +44,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void onPageReturn() {
-		getMeasurandsAndDispaly();
+		// TODO Auto-generated method stub
 	}
 	
 	@Override
@@ -57,7 +57,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		parameters.entrySet().forEach(entry -> {
 			switch(entry.getKey()) {
 				case MEASURAND_ID:
-					break;
+					view.selectMeasurandId(entry.getValue());
 				case BOUNDING_BOX:
 					break;
 				case MAX_ACCURACY:
@@ -88,13 +88,18 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 
 	@Override
-	public void initView() {
-		getMeasurandsAndDispaly();
+	public void waitUntilViewInit(final Runnable runnable) {
+		getMeasurandsAndDispaly(runnable);
 	}
 	
-	public void getMeasurandsAndDispaly() {
-		GeneralService.Util.getInstance().getMeasurands(new DefaultAsyncCallback<Map<Integer, String>>(view::setMeasurandsList,
-				caucht -> LOGGER.log(Level.WARNING, "Failure requesting the measurands."), false));
+	public void getMeasurandsAndDispaly(final Runnable runnable) {
+		GeneralService.Util.getInstance().getMeasurands(new DefaultAsyncCallback<Map<Integer, String>>(result -> {
+			view.setMeasurandsList(result);
+			runnable.run();
+		},caucht -> {
+			runnable.run();
+			LOGGER.log(Level.WARNING, "Failure requesting the measurands.");
+		}, false));
 	}
 
 	@Override

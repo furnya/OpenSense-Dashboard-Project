@@ -51,7 +51,8 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 
 
 	@Override
-	public void initView() {
+	public void waitUntilViewInit(final Runnable runnable) {
 		view.initView();
+		runnable.run();
 	}
 }

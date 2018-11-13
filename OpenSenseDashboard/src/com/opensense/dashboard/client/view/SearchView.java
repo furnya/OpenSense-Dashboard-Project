@@ -30,4 +30,5 @@ public interface SearchView extends IDataPanelPageView{
 	void setMaxAccuracy(String maxAccuracy);
 	void setMinAccuracy(String minAccuracy);
 	public boolean isSearchButtonEnabled();
+	public void selectMeasurandId(String id);
 }
