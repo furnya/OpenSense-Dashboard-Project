@@ -81,4 +81,7 @@ public interface GUIImageBundle extends ClientBundle {
 	
 	@Source("icons/clouds.svg")
 	SVGResource cloudsIconSvg();
+	
+	@Source("icons/question.svg")
+	SVGResource questionIconSvg();
 }

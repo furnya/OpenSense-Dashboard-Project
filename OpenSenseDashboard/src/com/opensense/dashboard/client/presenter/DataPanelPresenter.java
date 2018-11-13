@@ -51,7 +51,6 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			
 			//TODO: insert loading page indicator 
 			
-			
 			// Initializing the new page if needed. This will happen only when
 			// using the page for the first time. The runnable is needed to wait until all view elements are initialized
 			activeDataPanelPagePresenter.initIfNeeded(() -> {
@@ -73,6 +72,8 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 					ids.forEach(entry -> GWT.log("Id: " + entry));
 					activeDataPanelPagePresenter.handleIds(ids);
 				}
+				
+				view.hideLoader();
 			});
 		} catch (Exception e) {
 			GWT.log("Error while navigating to page " + page + ".", e);

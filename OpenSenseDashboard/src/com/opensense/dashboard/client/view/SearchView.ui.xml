@@ -55,6 +55,9 @@
 		</bh:Div>
 	</bh:Div>	
 	<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="100%"/>
+	<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="spinner">
+		<m:MaterialSpinner/>
+	</m:MaterialPreLoader>
 </bh:Div>
 
 </ui:UiBinder>

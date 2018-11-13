@@ -9,6 +9,7 @@ import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.maps.client.base.LatLngBounds;
 import com.google.gwt.maps.client.placeslib.Autocomplete;
@@ -31,6 +32,7 @@ import gwt.material.design.client.base.validator.RegExValidator;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialListBox;
 import gwt.material.design.client.ui.MaterialNavBar;
+import gwt.material.design.client.ui.MaterialPreLoader;
 import gwt.material.design.client.ui.MaterialTextBox;
 
 public class SearchViewImpl extends DataPanelPageView implements SearchView {
@@ -66,6 +68,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@UiField
 	MaterialTextBox maxSensors;
 	
+	@UiField
+	MaterialPreLoader spinner;
+	
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
 	protected Presenter presenter;
@@ -85,6 +90,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@UiHandler("searchButton")
 	public void onSearchButtonCLicked(ClickEvent e) {
 		if(minAccuracy.validate() && maxAccuracy.validate() && maxSensors.validate() && searchButton.isEnabled()) {
+			showLoadingIndicator();
 			presenter.buildSensorRequestAndSend();
 		}
 	}
@@ -121,12 +127,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			});
 			sensorContainer.add(card);
 		});
+		hideLoadingIndicator();
 	}
 	
 	private String getIconUrlFromType(MeasurandType measurandType) {
-		if(measurandType == null) { //TODO: remove this
-			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString(); 
-		}
 		switch(measurandType) {
 		case AIR_PRESSURE:
 			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString();
@@ -153,7 +157,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		case WIND_SPEED:
 			return GUIImageBundle.INSTANCE.windSpeedIconSvg().getSafeUri().asString();
 		default:
-			return ""; //TODO: default image path
+			return GUIImageBundle.INSTANCE.questionIconSvg().getSafeUri().asString();
 		}
 	}
 
@@ -247,6 +251,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@Override
 	public void showLoadSensorError() {
+		hideLoadingIndicator();
 		//TODO:
 	}
 
@@ -254,6 +259,14 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public void selectMeasurandId(String value) {
 		GWT.log(this.measurandList.getIndex(value)+"");
 		this.measurandList.setSelectedIndex(this.measurandList.getIndex(value));
+	}
+	
+	public void showLoadingIndicator() {
+		spinner.getElement().getStyle().clearDisplay();
+	}
+	
+	public void hideLoadingIndicator() {
+		spinner.getElement().getStyle().setDisplay(Display.NONE);
 	}
 	
 }

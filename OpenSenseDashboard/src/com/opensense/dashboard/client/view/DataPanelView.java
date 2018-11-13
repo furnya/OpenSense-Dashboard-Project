@@ -11,4 +11,6 @@ public interface DataPanelView {
 	public Widget asWidget();
 	HasWidgets getContentContainer();
 	void setHeading(String heading);
+	void showLoader();
+	void hideLoader();
 }

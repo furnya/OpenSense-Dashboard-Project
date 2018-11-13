@@ -251,3 +251,10 @@
     color: #fff;
     font-size: 16px;
 }
+
+.spinner{
+	left: 50%;
+}
+.spinner > Div {
+	 border-color: #42DCA3;
+}

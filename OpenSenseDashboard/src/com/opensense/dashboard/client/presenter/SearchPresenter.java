@@ -54,6 +54,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	
 	@Override
 	public void handleParamters(Map<ParamType, String> parameters) {
+		view.showLoadingIndicator();
 		parameters.entrySet().forEach(entry -> {
 			switch(entry.getKey()) {
 				case MEASURAND_ID:
@@ -80,6 +81,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	
 	@Override
 	public void handleIds(List<Integer> ids) {
+		view.showLoadingIndicator();
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, false);
 		ids.forEach(requestBuilder::addId);
 		
