@@ -1,13 +1,13 @@
 package com.opensense.dashboard.server.util;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,7 +24,7 @@ public class RequestSender implements Serializable{
 		parameters.put(key, value);
 	}
 	
-	public HashMap<String,String> getParameters(){
+	public Map<String,String> getParameters(){
 		return parameters;
 	}
 	
@@ -33,8 +33,8 @@ public class RequestSender implements Serializable{
 			return;
 		}
 		StringBuilder sb = new StringBuilder(this.getParameterString().isEmpty()? "" : this.getParameterString()+"&");
-		for(String key: parameters.keySet()) {
-			sb.append(key).append("=").append(parameters.get(key)).append("&");
+		for(Map.Entry<String, String> entry : parameters.entrySet()) {
+			sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
 		}
 		String pString = sb.toString();
 		if(pString.charAt(pString.length()-1)=='&'){
@@ -47,19 +47,16 @@ public class RequestSender implements Serializable{
 	public String sendGETRequest(String urlString){
 		buildParameters();
 		urlString += "?"+this.getParameterString();
-		System.out.println(urlString);
-		URL url;
 		HttpURLConnection con;
 		StringBuffer content;
 		try {
-			url = new URL(urlString);
+			URL url = new URL(urlString);
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			
 			con.setRequestProperty("Accept", "application/json");
 			con.setDoOutput(true);
-			int status = con.getResponseCode();
-			
+			con.getResponseMessage();
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;
 			content = new StringBuffer();
@@ -77,6 +74,9 @@ public class RequestSender implements Serializable{
 	
 	public JSONObject objectRequest(String urlString) {
 		String response = sendGETRequest(urlString);
+		if(response==null) {
+			return null;
+		}
 		try {
 			JSONObject o = new JSONObject(response);
 			return o;
@@ -88,6 +88,9 @@ public class RequestSender implements Serializable{
 	
 	public JSONArray arrayRequest(String urlString) {
 		String response = sendGETRequest(urlString);
+		if(response==null) {
+			return null;
+		}
 		try {
 			JSONArray a = new JSONArray(response);
 			return a;
