@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.utils;
 
+import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
@@ -46,11 +47,14 @@ public class SensorItemCard extends Composite{
 	@UiField
 	Div content;
 	
+	@UiField
+	Button goToMap;
+	
 	
 	public SensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
-
+	
 	public void setHeader(String text) {
 		this.header.setText(text);
 	}
@@ -72,10 +76,14 @@ public class SensorItemCard extends Composite{
 	}
 	
 	public void setActive(boolean active) {
-		if(item.getStyleName().contains("active")) {
+		if(!active && item.getStyleName().contains("active")) {
 			collapsible.close(1);
-		}else {
+		}else if(active && !item.getStyleName().contains("active")){
 			collapsible.open(1);
 		}
+	}
+	
+	public HandlerRegistration addGoToMapButtonClickHandler(ClickHandler handler) {
+		return goToMap.addClickHandler(handler);
 	}
 }

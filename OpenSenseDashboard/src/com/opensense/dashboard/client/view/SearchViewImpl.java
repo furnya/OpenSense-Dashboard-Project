@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,14 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
+import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.SensorItemCard;
 import com.opensense.dashboard.shared.MeasurandType;
+import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 
 import gwt.material.design.client.base.validator.RegExValidator;
@@ -97,7 +102,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 	
 	@Override
-	public void showSensorData(List<Sensor> sensors) {
+	public void showSensorData(final List<Sensor> sensors) {
 		sensorContainer.clear();
 		sensors.forEach(sensor -> {
 			final SensorItemCard card = new SensorItemCard();
@@ -108,6 +113,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 				event.stopPropagation();
 				GWT.log(card.isActive()+"");
 				card.setActive(!card.isActive());
+			});
+			final int id = sensor.getId();
+			card.addGoToMapButtonClickHandler(event -> {
+				List<Parameter> param = new ArrayList<>();
+				param.add(new Parameter(ParamType.SENSOR_IDS.getValue(), id+""));
+				presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, param, true));;
 			});
 			sensorContainer.add(card);
 		});

@@ -105,8 +105,9 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			requestBuilder.addParameter(ParamType.MAX_SENSORS, view.getMaxSensors());
 		}
 		
-		requestBuilder.getRequest().getParameters().forEach(param -> GWT.log(param.getKey() + " " + param.getValue()));
-		
+		requestBuilder.getRequest().getIds().forEach(param -> GWT.log("RequestId: " + param));
+		requestBuilder.getRequest().getParameters().forEach(param -> GWT.log("RequestParam: " + param.getKey() + " " + param.getValue()));
+		 
 		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
 				eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, requestBuilder.getRequest().getParameters(), false));

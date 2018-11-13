@@ -22,6 +22,10 @@
 	cursor: pointer;
     border: none;	
 }
+.float-right{
+	float: right;
+	display: none;	
+}
 </ui:style>
 
 <bh:Div ui:field="layout" addStyleNames="user-select-none">
@@ -30,6 +34,7 @@
 			<m:MaterialCollapsibleHeader ui:field="headerContainer" addStyleNames="round-corners {style.header}">
 				<b:Image ui:field="icon" title="Temperatur" url="{gui.tempIconSvg.getSafeUri.asString}"/>
 				<m:MaterialLabel ui:field="header" text="HEADER"/>
+				<b:Button ui:field="goToMap" text="Auf Karte zeigen" addStyleNames="{style.float-right}"/>
 			</m:MaterialCollapsibleHeader>
 			<m:MaterialCollapsibleBody addStyleNames="{style.body}">
 				<bh:Div ui:field="content" addStyleNames="{style.light-grey}"/>

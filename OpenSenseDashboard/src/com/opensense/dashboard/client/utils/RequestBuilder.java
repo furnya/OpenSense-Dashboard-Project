@@ -20,7 +20,24 @@ public class RequestBuilder {
 	}
 	
 	public void addParameter(ParamType paramType, String value) {
-		addParameter(new Parameter(paramType.getValue(), value));
+		if(ParamType.SENSOR_IDS.equals(paramType)) {
+			addIds(value);
+		}else {
+			addParameter(new Parameter(paramType.getValue(), value));
+		}
+	}	
+
+	private void addIds(String idsString) {
+		List<Integer> ids = new ArrayList<>();
+		if(idsString.contains(",")) {
+			String[] idsArray = idsString.split(";");
+			for (int i = 0; i < idsArray.length; i++) {
+				ids.add(Integer.valueOf(idsArray[i]));
+			}
+		}else {
+			ids.add(Integer.valueOf(idsString));
+		}
+		request.setIds(ids);
 	}
 	
 	private void addParameter(Parameter parameter) {
@@ -52,6 +69,4 @@ public class RequestBuilder {
 			addParameter(ParamType.MAX_SENSORS, MAX_SENSOR_REQUEST);
 		}
 	}
-
-	
 }
