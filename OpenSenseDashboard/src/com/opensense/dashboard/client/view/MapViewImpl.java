@@ -184,7 +184,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			MarkerOptions markerOpt = MarkerOptions.newInstance();
 			markerOpt.setPosition(position);
 			markerOpt.setTitle("Sensor postion is: "+ bg + ", " + lg + " Sensormodel: "+ smodel);
-			Marker markerBasic = Marker.newInstance(markerOpt);
+			final Marker markerBasic = Marker.newInstance(markerOpt);
 //			markerBasic.setMap(mapWidget);
 			markerBasic.setIcon(GUIImageBundle.INSTANCE.testtempIconSvg().getSafeUri().asString());
 			markerBasic.setDraggable(false);
@@ -213,12 +213,17 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			setMarkers(postion.getLatitude(),postion.getLongitude(),id,sensormodel,sensorAccuracy, aboveGround);
 		});
 		MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
-		mCO.setGridSize(50);
+		mCO.setGridSize(80);
 		mCO.setAverageCenter(true);
 		mCO.setMinimumClusterSize(2);
+		mCO.setMaxZoom(14);
 		mCO.setZoomOnClick(true);
 		cluster = MarkerClusterer.newInstance(mapWidget,mCO);
 		cluster.addMarkers(mList);
 		cluster.repaint();
 	}	 
+	
+	public void initSpiderfier() {
+//		OverlappingMarkerSpiderfier oms = new OverlappingMarkerSpiderfier;
+	}
 }
