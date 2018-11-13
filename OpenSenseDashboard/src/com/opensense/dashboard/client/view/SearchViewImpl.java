@@ -113,7 +113,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			card.setHeader("Sensor: " + sensor.getId());
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setIconTitle(sensor.getMeasurand().getDisplayName());
-			card.getContent().add(new Span("Genauigkeit " + sensor.getAccuracy()));
+			card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
+			card.getMiddleHeader().add(new Span(sensor.getAttributionText()));
+			card.getMiddleHeader().add(new Span(sensor.getSensorModel()));
 			card.addClickHandler(event -> {
 				event.stopPropagation();
 				GWT.log(card.isActive()+"");
@@ -123,6 +125,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			card.addGoToMapButtonClickHandler(event -> {
 				List<Integer> ids = new ArrayList<>();
 				ids.add(id);
+				GWT.log(id + "clicked");
 				presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, ids));
 			});
 			sensorContainer.add(card);

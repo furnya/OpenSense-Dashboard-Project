@@ -12,7 +12,9 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.gui.GUIImageBundle;
 
+import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialCollapsible;
 import gwt.material.design.client.ui.MaterialCollapsibleHeader;
 import gwt.material.design.client.ui.MaterialCollapsibleItem;
@@ -48,11 +50,17 @@ public class SensorItemCard extends Composite{
 	Div content;
 	
 	@UiField
+	Div midContainer;
+	
+	@UiField
 	Button goToMap;
 	
+	@UiField
+	MaterialCheckBox checkbox;
 	
 	public SensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
+		goToMap.add(new Image(GUIImageBundle.INSTANCE.mapIconSvg().getSafeUri().asString()));
 	}
 	
 	public void setHeader(String text) {
@@ -69,6 +77,10 @@ public class SensorItemCard extends Composite{
 	
 	public Div getContent() {
 		return this.content;
+	}
+	
+	public Div getMiddleHeader() {
+		return this.midContainer;
 	}
 	
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
@@ -88,6 +100,10 @@ public class SensorItemCard extends Composite{
 	}
 	
 	public HandlerRegistration addGoToMapButtonClickHandler(ClickHandler handler) {
-		return goToMap.addClickHandler(handler);
+		return goToMap.addClickHandler(event -> {
+			event.preventDefault();
+			event.stopPropagation();
+			handler.onClick(event);
+		});
 	}
 }

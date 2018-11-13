@@ -241,7 +241,6 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	}
 	
 	private String getIdAsString(List<Integer> idsList) {
-		GWT.log(idsList.toArray().toString());
 		StringBuilder idsAsString = new StringBuilder();
 		if(!idsList.isEmpty()) {
 			idsAsString.append('/');

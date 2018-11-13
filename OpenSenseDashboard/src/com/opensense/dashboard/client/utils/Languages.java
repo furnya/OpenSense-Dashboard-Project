@@ -217,4 +217,12 @@ public class Languages {
 			return "DE";
 		}
 	}
+	
+	public static String showOnMap() {
+		if(de) {
+			return "Auf Karte zeigen";
+		}else {
+			return "";
+		}
+	}
 }

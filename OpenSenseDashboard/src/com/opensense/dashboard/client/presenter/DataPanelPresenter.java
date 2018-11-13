@@ -79,6 +79,7 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			GWT.log("Error while navigating to page " + page + ".", e);
 			view.getContentContainer().clear();
 			view.setHeading(Languages.errorDataPanelPageLoading());
+			view.hideLoader();
 		}
 	}
 

@@ -38,7 +38,7 @@
 		<bh:Div addStyleNames="vertical {style.main-page}">
 			<bh:Div>
 				<b:Heading size="H2" addStyleNames="{style.heading}">
-					<bh:Text ui:field="heading" text="DATA PANEL PAGE" />
+					<bh:Text ui:field="heading"/>
 				</b:Heading>
 			</bh:Div>
 			<bh:Div ui:field="content" addStyleNames="{style.content}" />
