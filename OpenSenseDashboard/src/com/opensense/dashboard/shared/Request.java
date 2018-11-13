@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Request implements IsSerializable{
 	
-	private List<Integer> ids;
+	private List<Integer> ids; //TODO: List<String> ?
 	private List<Parameter> parameters;
 	private ResultType resultType;
 	

@@ -65,10 +65,10 @@ public interface GUIImageBundle extends ClientBundle {
 	SVGResource pressureIconSvg();
 	
 	@Source("icons/pracipitation.svg")
-	SVGResource pracipitaionIconSvg();
+	SVGResource precipitaionIconSvg();
 	
 	@Source("icons/pracipitation-type.svg")
-	SVGResource pracipitationTypeIconSvg();
+	SVGResource precipitationTypeIconSvg();
 	
 	@Source("icons/particulars.svg")
 	SVGResource particularsIconSvg();
@@ -78,4 +78,7 @@ public interface GUIImageBundle extends ClientBundle {
 	
 	@Source("icons/particulars.svg")
 	SVGResource humidityIconSvg();
+	
+	@Source("icons/clouds.svg")
+	SVGResource cloudsIconSvg();
 }

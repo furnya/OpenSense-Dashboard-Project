@@ -1,17 +1,30 @@
 package com.opensense.dashboard.client.event;
 
+import java.util.List;
+
 import com.google.gwt.event.shared.GwtEvent;
 import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.shared.Parameter;
 
 public class OpenDataPanelPageEvent extends GwtEvent<OpenDataPanelPageEventHandler>{
 	
 	public static final Type<OpenDataPanelPageEventHandler> TYPE = new Type<>();
 	
 	private DataPanelPage dataPanelPage;
+	private List<Parameter> parameters;
+	private boolean fireEvent;
 	
-	public OpenDataPanelPageEvent(DataPanelPage dataPanelPage) {
+	public OpenDataPanelPageEvent(DataPanelPage dataPanelPage, boolean fireEvent) {
 		super();
 		this.dataPanelPage = dataPanelPage;
+		this.fireEvent = fireEvent;
+	}
+	
+	public OpenDataPanelPageEvent(DataPanelPage dataPanelPage, List<Parameter> parameters, boolean fireEvent) {
+		super();
+		this.dataPanelPage = dataPanelPage;
+		this.parameters = parameters;
+		this.fireEvent = fireEvent;
 	}
 	
 	@Override
@@ -27,8 +40,13 @@ public class OpenDataPanelPageEvent extends GwtEvent<OpenDataPanelPageEventHandl
 	public DataPanelPage getDataPanelPage() {
 		return dataPanelPage;
 	}
-
-	public void setDataPanelPage(DataPanelPage dataPanelPage) {
-		this.dataPanelPage = dataPanelPage;
+	
+	public List<Parameter> getParameters() {
+		return parameters;
 	}
+	
+	public boolean isFireEvent() {
+		return fireEvent;
+	}
+
 }

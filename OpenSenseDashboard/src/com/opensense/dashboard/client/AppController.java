@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +25,7 @@ import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
 import com.opensense.dashboard.client.view.FooterViewImpl;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
+import com.opensense.dashboard.shared.Parameter;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
@@ -83,8 +85,15 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	private void bindHandler() {
 		History.addValueChangeHandler(this);
 		
+		/**
+		 * opens the page with the given parameters and fires the event
+		 */
 		eventBus.addHandler(OpenDataPanelPageEvent.TYPE, event -> {
-			History.newItem(event.getDataPanelPage().name(), true);
+			if(event.getParameters() != null) {
+				History.newItem(event.getDataPanelPage().name() + getParamterString(event.getParameters()), event.isFireEvent());;
+			}else {
+				History.newItem(event.getDataPanelPage().name(), event.isFireEvent());
+			}
 		});
 	}
 	
@@ -113,6 +122,11 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		footerPresenter.go(footerContainer);
 	}
 
+	/**
+	 * gets called if the history get changed and the event gets fired
+	 * tries to parse the eventValue and open the given page with given parameters
+	 * @logs invalid page or parameters in console and opens the homePage on default 
+	 */
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		if (dataPanelPresenter == null) {
@@ -127,11 +141,8 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		Map<ParamType, String> parameters = null;
 		try {
 			if(event.getValue().contains("?")) {
-				int endIndex = pageString.indexOf('?');
-				page = DataPanelPage.valueOf(pageString.substring(0, endIndex));
-				if(pageString.length() > endIndex + 1) {
-					parameters = getParameters(pageString.substring(endIndex + 1, pageString.length()));
-				}
+				page = DataPanelPage.valueOf(pageString.substring(0, pageString.indexOf('?')));
+				parameters = getParameterMap(pageString.substring(pageString.indexOf('?'), pageString.length()));
 			}else {
 				page = DataPanelPage.valueOf(pageString);
 			}
@@ -143,14 +154,20 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		dataPanelPresenter.navigateTo(page, parameters);
 		navigationPanelPresenter.setActiveDataPanelPage(page);
 	}
-
-	private Map<ParamType, String> getParameters(String substring){
+	
+	/**
+	 * 
+	 * @param parameterString
+	 * @returns the parameterString as Map<ParamType, String>
+	 */
+	private Map<ParamType, String> getParameterMap(String parameterString){
+		parameterString = parameterString.replace("?", "");
 		final Map<ParamType, String> validParameters = new EnumMap<>(ParamType.class);
 		String[] params;
-		if(substring.contains("&")) {
-			params = substring.split("&");
+		if(parameterString.contains("&")) {
+			params = parameterString.split("&");
 		}else {
-			params = new String[]{substring};
+			params = new String[]{parameterString};
 		}
 		for (String parameter : params) {
 			if(!parameter.isEmpty() && parameter.contains("=")) {
@@ -171,6 +188,25 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			}
 		}
 		return validParameters;
+	}
+	
+	/**
+	 * @param parameterList
+	 * @returns the given parameterMap as String 
+	 */
+	public String getParamterString(List<Parameter> parameterList) {
+		StringBuilder parameters = new StringBuilder();
+		if(!parameterList.isEmpty()) {
+			parameters.append('?');
+		}
+		parameterList.forEach(param -> {
+			parameters.append(param.getKey());
+			parameters.append('=');
+			parameters.append(param.getValue());
+			parameters.append('&');
+		});
+		parameters.deleteCharAt(parameters.length() - 1);
+		return parameters.toString();
 	}
 
 	public void switchLanguage() { // TODO

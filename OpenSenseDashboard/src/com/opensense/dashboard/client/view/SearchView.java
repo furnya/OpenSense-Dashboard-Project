@@ -3,6 +3,7 @@ package com.opensense.dashboard.client.view;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.maps.client.base.LatLngBounds;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.shared.Sensor;
@@ -11,6 +12,7 @@ public interface SearchView extends IDataPanelPageView{
 	public interface Presenter{
 
 		void buildSensorRequestAndSend();
+		HandlerManager getEventBus();
 	}
 	
 	public void setPresenter(Presenter presenter);
