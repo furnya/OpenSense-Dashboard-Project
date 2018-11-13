@@ -1,19 +1,21 @@
 package com.opensense.dashboard.client.presenter;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.MapView;
+import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 
@@ -22,7 +24,6 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	private static final Logger LOGGER = Logger.getLogger(MapPresenter.class.getName());
 	
 	private final MapView view;
-	private static final String MAX_SENSOR_REQUEST = "20";
 	
 	public MapPresenter(HandlerManager eventBus, AppController appController, MapView view) {
 		super(view, eventBus, appController);
@@ -52,9 +53,16 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	
 	@Override
 	public void handleParamters(Map<ParamType, String> parameters) {
-		// TODO Auto-generated method stub
 		buildSensorRequestAndShowMarkers(parameters);
 	}
+	
+	@Override
+	public void handleIds(List<Integer> ids) {
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, false);
+		ids.forEach(requestBuilder::addId);
+		sendRequest(requestBuilder.getRequest());
+	}
+
 
 	@Override
 	public void initView() {
@@ -63,21 +71,27 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	
 	//get Sensor Data from Server
 	public void buildSensorRequestAndShowMarkers(Map<ParamType, String> parameters) {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR);
-		if(parameters != null) {
-			parameters.entrySet().forEach(entry -> {
-			requestBuilder.addParameter(entry.getKey(),entry.getValue());
-			});
-		}
-		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
-			if(result != null && result.getResultType() != null && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, true);
+		parameters.entrySet().forEach(entry -> requestBuilder.addParameter(entry.getKey(),entry.getValue()));
+		sendRequest(requestBuilder.getRequest());
+	}
+	
+	private void sendRequest(final Request request) {
+		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
+			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
+				if(request.getParameters() != null) {
+					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, request.getParameters(), false));
+				}else if(request.getIds() != null) {
+					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, false, request.getIds()));
+				}
 				view.showMarkers(result.getSensors());
 			}else {
-				view.showMarkers(result.getSensors());
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
+				//TODO: show error
 			}
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the sensors.");
+			//TODO: show error
 		}, false));
 	}
 }

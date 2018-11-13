@@ -76,7 +76,7 @@ public interface GUIImageBundle extends ClientBundle {
 	@Source("icons/noise.svg")
 	SVGResource noiseIconSvg();
 	
-	@Source("icons/particulars.svg")
+	@Source("icons/humidity.svg")
 	SVGResource humidityIconSvg();
 	
 	@Source("icons/clouds.svg")

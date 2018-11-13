@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.presenter;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.event.shared.HandlerManager;
@@ -36,6 +37,11 @@ public class HomePresenter extends DataPanelPagePresenter implements HomeView.Pr
 	
 	@Override
 	public void handleParamters(Map<ParamType, String> parameters) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void handleIds(List<Integer> ids) {
 		// TODO Auto-generated method stub
 	}
 

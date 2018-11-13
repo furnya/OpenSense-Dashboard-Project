@@ -63,6 +63,10 @@ public class SensorItemCard extends Composite{
 		this.icon.setUrl(url);
 	}
 	
+	public void setIconTitle(String title) {
+		this.icon.setTitle(title);
+	}
+	
 	public Div getContent() {
 		return this.content;
 	}

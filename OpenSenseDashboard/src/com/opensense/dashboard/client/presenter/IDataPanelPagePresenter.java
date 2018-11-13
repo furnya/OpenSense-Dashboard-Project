@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.presenter;
 
+import java.util.List;
 import java.util.Map;
 
 import com.opensense.dashboard.client.AppController;
@@ -13,4 +14,5 @@ public  interface IDataPanelPagePresenter extends IPresenter {
 	public abstract void onPageLeave();
 	public abstract void initView();
 	public abstract void handleParamters(Map<ParamType, String> parameters);
+	public abstract void handleIds(List<Integer> ids);
 }

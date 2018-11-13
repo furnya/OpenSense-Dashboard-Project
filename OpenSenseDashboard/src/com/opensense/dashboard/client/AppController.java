@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -90,13 +91,16 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		 */
 		eventBus.addHandler(OpenDataPanelPageEvent.TYPE, event -> {
 			if(event.getParameters() != null) {
-				History.newItem(event.getDataPanelPage().name() + getParamterString(event.getParameters()), event.isFireEvent());;
+				History.newItem(event.getDataPanelPage().name() + getParamterAsString(event.getParameters()), event.isFireEvent());
+			}else if(event.getIds() != null) {
+				History.newItem(event.getDataPanelPage().name() + getIdAsString(event.getIds()), event.isFireEvent());
 			}else {
 				History.newItem(event.getDataPanelPage().name(), event.isFireEvent());
 			}
 		});
 	}
 	
+
 	@Override
 	public void go(HasWidgets container) {
 		HasWidgets controlPanel = RootPanel.get("control-panel");
@@ -139,10 +143,14 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		String pageString = event.getValue();
 		DataPanelPage page = null;
 		Map<ParamType, String> parameters = null;
+		List<Integer> ids = null;
 		try {
 			if(event.getValue().contains("?")) {
 				page = DataPanelPage.valueOf(pageString.substring(0, pageString.indexOf('?')));
-				parameters = getParameterMap(pageString.substring(pageString.indexOf('?'), pageString.length()));
+				parameters = getParameterAsMap(pageString.substring(pageString.indexOf('?'), pageString.length()));
+			}else if(event.getValue().contains("/")) {
+				page = DataPanelPage.valueOf(pageString.substring(0, pageString.indexOf('/')));
+				ids = getIdsAsList(pageString.substring(pageString.indexOf('/'), pageString.length()));
 			}else {
 				page = DataPanelPage.valueOf(pageString);
 			}
@@ -151,23 +159,23 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			LOGGER.log(Level.WARNING, "Invalid navigation page or invalid parameters.");
 		}
 		
-		dataPanelPresenter.navigateTo(page, parameters);
+		dataPanelPresenter.navigateTo(page, parameters, ids);
 		navigationPanelPresenter.setActiveDataPanelPage(page);
 	}
 	
 	/**
 	 * 
-	 * @param parameterString
+	 * @param parameterAsString
 	 * @returns the parameterString as Map<ParamType, String>
 	 */
-	private Map<ParamType, String> getParameterMap(String parameterString){
-		parameterString = parameterString.replace("?", "");
+	private Map<ParamType, String> getParameterAsMap(String parameterAsString){
+		parameterAsString = parameterAsString.replace("?", "");
 		final Map<ParamType, String> validParameters = new EnumMap<>(ParamType.class);
 		String[] params;
-		if(parameterString.contains("&")) {
-			params = parameterString.split("&");
+		if(parameterAsString.contains("&")) {
+			params = parameterAsString.split("&");
 		}else {
-			params = new String[]{parameterString};
+			params = new String[]{parameterAsString};
 		}
 		for (String parameter : params) {
 			if(!parameter.isEmpty() && parameter.contains("=")) {
@@ -185,16 +193,39 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 						LOGGER.log(Level.WARNING, () -> "Parameter key is not valid: "+ keyValue[0]);
 					}
 				}
+			}else {
+				LOGGER.log(Level.WARNING, "Paramter is not valid, do not cotains \"=\"");
 			}
 		}
 		return validParameters;
+	}
+	
+	private List<Integer> getIdsAsList(String idsAsString){
+		idsAsString = idsAsString.replace("/", "");
+		final List<Integer> idsAsList = new ArrayList<>();
+		String[] ids;
+		if(idsAsString.contains(",")) {
+			ids = idsAsString.split(",");
+		}else {
+			ids = new String[]{idsAsString};
+		}
+		for (String id : ids) {
+			//only numbers will be accepted and parsed
+			if(id.matches("^[0-9]*$")) {
+				idsAsList.add(Integer.valueOf(id));
+			}else{
+				LOGGER.log(Level.WARNING, "The id contains not a number, will be removed");
+			}
+		}
+		return idsAsList;
+		
 	}
 	
 	/**
 	 * @param parameterList
 	 * @returns the given parameterMap as String 
 	 */
-	public String getParamterString(List<Parameter> parameterList) {
+	public String getParamterAsString(List<Parameter> parameterList) {
 		StringBuilder parameters = new StringBuilder();
 		if(!parameterList.isEmpty()) {
 			parameters.append('?');
@@ -208,7 +239,21 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		parameters.deleteCharAt(parameters.length() - 1);
 		return parameters.toString();
 	}
-
+	
+	private String getIdAsString(List<Integer> idsList) {
+		GWT.log(idsList.toArray().toString());
+		StringBuilder idsAsString = new StringBuilder();
+		if(!idsList.isEmpty()) {
+			idsAsString.append('/');
+		}
+		idsList.forEach(id -> {
+			idsAsString.append(id);
+			idsAsString.append(',');
+		});
+		idsAsString.deleteCharAt(idsAsString.length() - 1);
+		return idsAsString.toString();
+	}
+	
 	public void switchLanguage() { // TODO
 		if(Languages.isGerman()) {
 			Languages.setEnglish();

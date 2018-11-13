@@ -26,13 +26,19 @@
 	float: right;
 	display: none;	
 }
+.icon-size{
+	height: 40px;
+	width: 40px;	
+}
 </ui:style>
 
 <bh:Div ui:field="layout" addStyleNames="user-select-none">
 	<m:MaterialCollapsible ui:field="collapsible" width="100%" addStyleNames="round-corners {style.collapsible}">
 		<m:MaterialCollapsibleItem ui:field="item" addStyleNames="override-corners">
 			<m:MaterialCollapsibleHeader ui:field="headerContainer" addStyleNames="round-corners {style.header}">
-				<b:Image ui:field="icon" title="Temperatur" url="{gui.tempIconSvg.getSafeUri.asString}"/>
+				<bh:Div addStyleNames="{style.icon-size} margin-right-10">
+					<b:Image ui:field="icon" title="Temperatur" width="100%" height="100%" url="{gui.tempIconSvg.getSafeUri.asString}"/>
+				</bh:Div>
 				<m:MaterialLabel ui:field="header" text="HEADER"/>
 				<b:Button ui:field="goToMap" text="Auf Karte zeigen" addStyleNames="{style.float-right}"/>
 			</m:MaterialCollapsibleHeader>

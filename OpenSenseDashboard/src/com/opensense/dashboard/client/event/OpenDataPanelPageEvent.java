@@ -12,6 +12,7 @@ public class OpenDataPanelPageEvent extends GwtEvent<OpenDataPanelPageEventHandl
 	
 	private DataPanelPage dataPanelPage;
 	private List<Parameter> parameters;
+	private List<Integer> ids;
 	private boolean fireEvent;
 	
 	public OpenDataPanelPageEvent(DataPanelPage dataPanelPage, boolean fireEvent) {
@@ -24,6 +25,13 @@ public class OpenDataPanelPageEvent extends GwtEvent<OpenDataPanelPageEventHandl
 		super();
 		this.dataPanelPage = dataPanelPage;
 		this.parameters = parameters;
+		this.fireEvent = fireEvent;
+	}
+	
+	public OpenDataPanelPageEvent(DataPanelPage dataPanelPage, boolean fireEvent, List<Integer> ids) {
+		super();
+		this.dataPanelPage = dataPanelPage;
+		this.ids = ids;
 		this.fireEvent = fireEvent;
 	}
 	
@@ -43,6 +51,10 @@ public class OpenDataPanelPageEvent extends GwtEvent<OpenDataPanelPageEventHandl
 	
 	public List<Parameter> getParameters() {
 		return parameters;
+	}
+	
+	public List<Integer> getIds() {
+		return ids;
 	}
 	
 	public boolean isFireEvent() {
