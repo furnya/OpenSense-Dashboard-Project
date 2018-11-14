@@ -7,6 +7,7 @@ public enum ParamType {
 	,MIN_ACCURACY {@Override public String getValue() {return "minAccuracy";}}
 	,MAX_ACCURACY {@Override public String getValue() {return "maxAccuracy";}}
 	,MAX_SENSORS {@Override public String getValue() {return "maxSensors";}}
+	,PLACE {@Override public String getValue() {return "place";}}
 	;
 	
 	public abstract String getValue();

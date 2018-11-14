@@ -266,14 +266,24 @@
 	 border-color: #42DCA3;
 }
 
-@keyframes color {
+@keyframes color-marked {
     from {background-color: #fff;}
     to {background-color: #42DCA3;}
 }
 
-.card-border{
-	animation: 2.5s color;
-/* 	border: 4px solid #42DCA3 !important; */
+@keyframes color-unmarked {
+    from {background-color: #42DCA3;}
+    to {background-color: #fff;}
+}
+
+.card-active{
+	animation: 1s color-marked;
 	background-color: #42DCA3 !important;
+    border-bottom: none !important;
+}
+
+.card-deactive{
+	animation: 1s color-unmarked;
+	background-color: #fff !important;
     border-bottom: none !important;
 }
