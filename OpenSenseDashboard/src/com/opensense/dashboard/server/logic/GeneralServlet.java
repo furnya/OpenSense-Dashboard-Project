@@ -9,7 +9,6 @@ import com.opensense.dashboard.server.util.ClientRequestHandler;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
-import com.opensense.dashboard.shared.ResultType;
 
 @SuppressWarnings("serial")
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
@@ -17,23 +16,22 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	@Override
 	public Response getDataFromRequest(Request searchRequest) {
 		Response response = new Response();
-		ClientRequestHandler clientRequestHandler = new ClientRequestHandler();
 		response.setResultType(searchRequest.getRequestType());
 		if(searchRequest.getRequestType()==null) {
 			return response;
 		}
 		switch(searchRequest.getRequestType()) {
 		case MEASURAND:
-			response.setMeasurands(clientRequestHandler.getMeasurandMap());
+			response.setMeasurands(ClientRequestHandler.getInstance().getMeasurandMap());
 			break;
 		case SENSOR:
-			response.setSensors(clientRequestHandler.getSensorList(searchRequest.getParameters(), searchRequest.getIds()));
+			response.setSensors(ClientRequestHandler.getInstance().getSensorList(searchRequest.getParameters(), searchRequest.getIds()));
 			break;
 		case UNIT:
-			response.setUnits(clientRequestHandler.getUnitMap());
+			response.setUnits(ClientRequestHandler.getInstance().getUnitMap());
 			break;
 		case VALUE:
-			response.setValues(clientRequestHandler.getValueList(searchRequest.getIds().get(0),searchRequest.getParameters()));
+			response.setValues(ClientRequestHandler.getInstance().getValueList(searchRequest.getIds().get(0),searchRequest.getParameters()));
 			break;
 		default:
 			break;
@@ -43,9 +41,8 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public Map<Integer, String> getMeasurands() {
-		ClientRequestHandler clientRequestHandler = new ClientRequestHandler();
-		HashMap<Integer, Measurand> measurandMap = clientRequestHandler.getMeasurandMap();
-		HashMap<Integer, String> measurandStringMap = new HashMap<>();
+		Map<Integer, Measurand> measurandMap = ClientRequestHandler.getInstance().getMeasurandMap();
+		Map<Integer, String> measurandStringMap = new HashMap<>();
 		if(measurandMap==null) {
 			return null;
 		}

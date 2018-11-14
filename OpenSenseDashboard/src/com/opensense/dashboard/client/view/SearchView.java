@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.maps.client.base.LatLngBounds;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.shared.Sensor;
 
@@ -19,7 +18,6 @@ public interface SearchView extends IDataPanelPageView{
 	public Widget asWidget();
 	public void initView();
 	public void showSensorData(List<Sensor> sensors);
-	LatLngBounds getBounds();
 	String getMinAccuracy();
 	String getMaxAccuracy();
 	void setMeasurandsList(Map<Integer, String> measurands);
@@ -32,4 +30,6 @@ public interface SearchView extends IDataPanelPageView{
 	public boolean isSearchButtonEnabled();
 	public void selectMeasurandId(String id);
 	public void showLoadingIndicator();
+	String getPlaceString();
+	public void setPlaceString(String value);
 }
