@@ -12,11 +12,13 @@ import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
+import com.google.gwt.maps.client.base.Size;
 import com.google.gwt.maps.client.events.MapEventType;
 import com.google.gwt.maps.client.events.MapHandlerRegistration;
 import com.google.gwt.maps.client.overlays.InfoWindow;
 import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
+import com.google.gwt.maps.client.overlays.MarkerImage;
 import com.google.gwt.maps.client.overlays.MarkerOptions;
 import com.google.gwt.maps.utility.markerclustererplus.client.ClusterCalculator;
 import com.google.gwt.maps.utility.markerclustererplus.client.ClusterIconStyle;
@@ -30,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.utils.MarkerInfoWindow;
 import com.opensense.dashboard.shared.Measurand;
+import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 
 public class MapViewImpl extends DataPanelPageView implements MapView {
@@ -79,6 +82,37 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	@Override
 	public void initView() {
 		// init UI Elements if needed
+	}
+	
+	private String getIconUrlFromType(MeasurandType measurandType) {
+		switch(measurandType) {
+		case AIR_PRESSURE:
+			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString();
+		case BRIGHTNESS:
+			return GUIImageBundle.INSTANCE.sunnyIconSvg().getSafeUri().asString();
+		case CLOUDINESS:
+			return GUIImageBundle.INSTANCE.cloudsIconSvg().getSafeUri().asString();
+		case HUMIDITY:
+			return GUIImageBundle.INSTANCE.humidityIconSvg().getSafeUri().asString();
+		case NOISE:
+			return GUIImageBundle.INSTANCE.noiseIconSvg().getSafeUri().asString();
+		case PM10:
+			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
+		case PM2_5:
+			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
+		case PRECIPITATION_AMOUNT:
+			return GUIImageBundle.INSTANCE.precipitaionIconSvg().getSafeUri().asString();
+		case PRECIPITATION_TYPE:
+			return GUIImageBundle.INSTANCE.precipitationTypeIconSvg().getSafeUri().asString();
+		case TEMPERATURE:
+			return GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString();
+		case WIND_DIRECTION:
+			return GUIImageBundle.INSTANCE.windDirectionIconSvg().getSafeUri().asString();
+		case WIND_SPEED:
+			return GUIImageBundle.INSTANCE.windSpeedIconSvg().getSafeUri().asString();
+		default:
+			return GUIImageBundle.INSTANCE.questionIconSvg().getSafeUri().asString();
+		}
 	}
 	
 	private void showThisMap() {
@@ -179,14 +213,16 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		lastOpened.remove(0);
 	}
 	
-	private void setMarkers(double bg, double lg, int sensorID, String smodel, double accuracy, double aGround) {
+	private void setMarkers(double bg, double lg, int sensorID, String smodel, double accuracy, double aGround, MeasurandType measurandType) {
 			LatLng position = LatLng.newInstance(bg, lg);
 			MarkerOptions markerOpt = MarkerOptions.newInstance();
 			markerOpt.setPosition(position);
 			markerOpt.setTitle("Sensor postion is: "+ bg + ", " + lg + " Sensormodel: "+ smodel);
 			final Marker markerBasic = Marker.newInstance(markerOpt);
 //			markerBasic.setMap(mapWidget);
-			markerBasic.setIcon(GUIImageBundle.INSTANCE.testtempIconSvg().getSafeUri().asString());
+			MarkerImage icon = MarkerImage.newInstance(getIconUrlFromType(measurandType), Size.newInstance(20, 20));
+			icon.setScaledSize(Size.newInstance(20, 20));
+			markerBasic.setIcon(icon);
 			markerBasic.setDraggable(false);
 			markers.put(sensorID,markerBasic);
 			mList.add(markerBasic);
@@ -210,7 +246,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			
 			GWT.log(postion.getLatitude()+" "+ postion.getLongitude()+" SensorID: "+ id);
 			
-			setMarkers(postion.getLatitude(),postion.getLongitude(),id,sensormodel,sensorAccuracy, aboveGround);
+			setMarkers(postion.getLatitude(),postion.getLongitude(),id,sensormodel,sensorAccuracy, aboveGround, item.getMeasurand().getMeasurandType());
 		});
 		MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
 		mCO.setGridSize(80);

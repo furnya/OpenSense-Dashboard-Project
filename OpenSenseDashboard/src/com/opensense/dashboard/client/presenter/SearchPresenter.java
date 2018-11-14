@@ -59,6 +59,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			switch(entry.getKey()) {
 				case MEASURAND_ID:
 					view.selectMeasurandId(entry.getValue());
+					break;
 				case BOUNDING_BOX:
 					break;
 				case MAX_ACCURACY:
@@ -69,6 +70,9 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 					break;
 				case MIN_ACCURACY:
 					view.setMinAccuracy(entry.getValue());
+					break;
+				case PLACE:
+					view.setPlaceString(entry.getValue());
 					break;
 				default:
 					break;
@@ -107,8 +111,8 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	@Override
 	public void buildSensorRequestAndSend() {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, true);
-		if(view.getBounds() != null) {
-			requestBuilder.addParameter(ParamType.BOUNDING_BOX, "[" + view.getBounds().toUrlValue(6) + "]");
+		if(view.getPlaceString() != null) {
+			requestBuilder.addParameter(ParamType.PLACE, view.getPlaceString());
 		}
 		if(view.getMinAccuracy() != null && !view.getMinAccuracy().isEmpty()) {
 			requestBuilder.addParameter(ParamType.MIN_ACCURACY, view.getMinAccuracy());
