@@ -1,20 +1,16 @@
 package com.opensense.dashboard.server.util;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.opensense.dashboard.shared.LatLng;
 import com.opensense.dashboard.shared.Measurand;
-import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Unit;
@@ -22,14 +18,26 @@ import com.opensense.dashboard.shared.Value;
 
 public class ClientRequestHandler {
 
-	private static String baseURL = "https://www.opensense.network/progprak/beta/api/v1.0";
+	private boolean useDefaultUrl = false;
 	
-	public ClientRequestHandler() {
+	private static final String BASE_URL = "https://www.opensense.network/beta/api/v1.0";
+	private static final String BASE_URL_DEFAULT = "https://www.opensense.network/progprak/beta/api/v1.0";
+	
+	private static ClientRequestHandler instance;
+	
+	public static ClientRequestHandler getInstance() {
+		if(instance == null) {
+			instance = new ClientRequestHandler();
+		}
+		return instance;
 	}
 	
-	public HashMap<Integer, Unit> getUnitMap(){
+	private ClientRequestHandler() {
+	}
+	
+	public Map<Integer, Unit> getUnitMap(){
 		RequestSender rs = new RequestSender();
-		JSONArray unitArrayJSON = rs.arrayRequest(baseURL+"/units");
+		JSONArray unitArrayJSON = rs.arrayRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/units");
 		if(unitArrayJSON==null) {
 			return null;
 		}
@@ -47,9 +55,9 @@ public class ClientRequestHandler {
 		return unitMap;
 	}
 	
-	public HashMap<Integer, Measurand> getMeasurandMap(){
+	public Map<Integer, Measurand> getMeasurandMap(){
 		RequestSender rs = new RequestSender();
-		JSONArray measurandArrayJSON = rs.arrayRequest(baseURL+"/measurands");
+		JSONArray measurandArrayJSON = rs.arrayRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/measurands");
 		if(measurandArrayJSON==null) {
 			return null;
 		}
@@ -77,12 +85,12 @@ public class ClientRequestHandler {
 		}
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
-		JSONArray sensorArrayJSON = rs.arrayRequest(baseURL+"/sensors");
+		JSONArray sensorArrayJSON = rs.arrayRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/sensors");
 		if(sensorArrayJSON==null) {
 			return sensorList;
 		}
-		HashMap<Integer, Measurand> measurandMap = getMeasurandMap();
-		HashMap<Integer, Unit> unitMap = getUnitMap();
+		Map<Integer, Measurand> measurandMap = getMeasurandMap();
+		Map<Integer, Unit> unitMap = getUnitMap();
 		for(Object o : sensorArrayJSON) {
 			if(!(o instanceof JSONObject)) {
 				continue;
@@ -98,19 +106,19 @@ public class ClientRequestHandler {
 	
 	public Sensor getSensor(int id){
 		RequestSender rs = new RequestSender();
-		JSONObject sensorJSON = rs.objectRequest(baseURL+"/sensors/"+id);
+		JSONObject sensorJSON = rs.objectRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/sensors/"+id);
 		if(sensorJSON==null) {
 			return null;
 		}
-		HashMap<Integer, Measurand> measurandMap = getMeasurandMap();
-		HashMap<Integer, Unit> unitMap = getUnitMap();
+		Map<Integer, Measurand> measurandMap = getMeasurandMap();
+		Map<Integer, Unit> unitMap = getUnitMap();
 		return DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
 	}
 	
 	public List<Value> getValueList(int id, List<Parameter> parameterList){
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
-		JSONObject sensorJSON = rs.objectRequest(baseURL+"/sensors/"+id+"/values");
+		JSONObject sensorJSON = rs.objectRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/sensors/"+id+"/values");
 		if(sensorJSON==null) {
 			return null;
 		}
@@ -119,7 +127,7 @@ public class ClientRequestHandler {
 		try {
 			inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
 		} catch(Exception e) {
-			e.printStackTrace();
+			e.printStackTrace(); //TODO: create logger
 			return valueList;
 		}
 		JSONArray valueArrayJSON;

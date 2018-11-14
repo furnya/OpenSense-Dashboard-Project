@@ -1,0 +1,38 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
+	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html"> 	
+
+	<ui:style>
+	.paging-button{
+		margin-right: 10px;
+		max-height: 15px;
+		max-width: 15px;
+		margin-top: 1px;
+	}
+	</ui:style>
+		<!-- <bh:Div>
+			<i:Layout direction="HORIZONTAL" main="CENTER">
+				<b:Image ui:field="backwardsButton" url="{icons.backwards.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.backwards}"/>
+				<b:Image ui:field="backwardsStepByStepButton" url="{icons.backwardsStepbyStep.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.backwardsStepByStep}"/>
+				<bh:Span ui:field="pageNumber" text="1-14 of 14" addStyleNames="margin-right-10 clickable" title="{lang.pageConfiguration}"/>
+				<b:Image ui:field="forwardsStepByStepButton" url="{icons.forwardsStepByStep.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.forwardsStepByStep}"/>
+				<b:Image ui:field="forwardsButton" url="{icons.forwards.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.forwards}"/>
+			</i:Layout>
+			
+	        <b:Modal ui:field="pageConfigurationModal" title="{lang.pageConfiguration}" closable="true" fade="true" dataKeyboard="true">
+            <b:ModalBody>
+				<b:ListBox b:id="pagesListBox" ui:field="pagesListBox" enabled="true" />
+				<i:Layout addStyleNames="margin-top-10">
+					<bh:Span ui:field="hintForInternetExplorer" visible="false" text="{lang.tooManyObjectsForInternetExplorer}" addStyleNames="red"/>
+            	</i:Layout>
+            </b:ModalBody>
+            <b:ModalFooter>
+            	<b:ButtonGroup>
+	                <b:Button text="{lang.cancel}" dataDismiss="MODAL" type="DEFAULT"/>
+	                <b:Button ui:field="loadPageConfig" text="{lang.save}" enabled="true" type="PRIMARY"/>
+                </b:ButtonGroup>
+            </b:ModalFooter>
+        </b:Modal> -->
+		</bh:Div>	
+</ui:UiBinder> 
