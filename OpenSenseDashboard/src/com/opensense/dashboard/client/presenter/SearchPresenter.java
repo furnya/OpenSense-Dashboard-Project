@@ -100,7 +100,11 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	
 	public void getMeasurandsAndDispaly(final Runnable runnable) {
 		GeneralService.Util.getInstance().getMeasurands(new DefaultAsyncCallback<Map<Integer, String>>(result -> {
-			view.setMeasurandsList(result);
+			if(result != null) {
+				view.setMeasurandsList(result);
+			}else {
+				//TODO: show Error
+			}
 			runnable.run();
 		},caucht -> {
 			runnable.run();
