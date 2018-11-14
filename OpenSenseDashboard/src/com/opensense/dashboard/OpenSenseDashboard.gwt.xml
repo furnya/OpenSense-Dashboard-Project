@@ -24,6 +24,7 @@
   <inherits name="gwt.material.design.GwtMaterialDesign" />
   <inherits name='com.google.gwt.maps.utility.markerclustererplus.MarkerClustererPlus' />
   <inherits name="gwt.material.design.addins.GwtMaterialAddins" /> 
+  <inherits name="org.pepstock.charba.Charba"/>
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.opensense.dashboard.client.Dashboard'/>
