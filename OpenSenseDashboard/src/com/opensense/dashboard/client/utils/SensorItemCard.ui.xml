@@ -35,11 +35,11 @@
 	width: 40px;	
 }
 .left{
-	width: 15%;
+	width: 25%;
 	display: flex;
 }
 .mid{
-	width: 65%;
+	width: 55%;
 	display: flex;
 }
 .mid > Span{
@@ -53,7 +53,7 @@
 }
 .checkbox{
 	display: flex !important;
-	margin-top: 10px;
+	margin-top: 13px;
 }
 </ui:style>
 

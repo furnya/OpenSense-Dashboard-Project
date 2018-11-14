@@ -5,9 +5,11 @@ import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -61,6 +63,13 @@ public class SensorItemCard extends Composite{
 	public SensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
 		goToMap.add(new Image(GUIImageBundle.INSTANCE.mapIconSvg().getSafeUri().asString()));
+		checkbox.addValueChangeHandler(event -> {
+			if(event.getValue()) {
+				headerContainer.addStyleName("card-border");
+			}else {
+				headerContainer.removeStyleName("card-border");
+			}
+		});
 	}
 	
 	public void setHeader(String text) {

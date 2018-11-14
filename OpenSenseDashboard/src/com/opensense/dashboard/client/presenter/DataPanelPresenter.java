@@ -49,7 +49,10 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			// Creating the presenter of the new page and assigning the view.
 			activeDataPanelPagePresenter = page.createPresenterInstance(eventBus, appController, pageViews.get(page));
 			
-			//TODO: insert loading page indicator 
+			if(view != null) {
+				view.setHeading("");
+				view.showLoader();
+			}
 			
 			// Initializing the new page if needed. This will happen only when
 			// using the page for the first time. The runnable is needed to wait until all view elements are initialized

@@ -44,7 +44,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void onPageReturn() {
-		// TODO Auto-generated method stub
+		// TODO write parameter back to history
 	}
 	
 	@Override
