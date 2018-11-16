@@ -23,6 +23,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.utils.ValueHandler;
 import com.opensense.dashboard.shared.Value;
 
 import gwt.material.design.client.ui.MaterialPreLoader;
@@ -73,11 +74,13 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	@Override
 	public void showValuesInChart(List<Value> values) {
+		ValueHandler valueHandler = new ValueHandler(values);
+		List<Value> filteredValues = valueHandler.getValues();
 		LineChart chart = new LineChart();
 		LineDataset dataset = chart.newDataset();
-		DataPoint[] points = new DataPoint[values.size()];
-		for(int i=0;i<values.size();i++) {
-			Value value = values.get(i);
+		DataPoint[] points = new DataPoint[filteredValues.size()];
+		for(int i=0;i<filteredValues.size();i++) {
+			Value value = filteredValues.get(i);
 			DataPoint p = new DataPoint();
 			p.setT(value.getTimestamp());
 			p.setY(value.getNumberValue());
@@ -87,8 +90,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		CartesianTimeAxis xAxis = new CartesianTimeAxis(chart, CartesianAxisType.x);
 		xAxis.setDistribution(ScaleDistribution.linear);
 		xAxis.setBounds(ScaleBounds.ticks);
-		xAxis.getTime().setMin(values.get(0).getTimestamp());
-		xAxis.getTime().setMax(values.get(values.size()-1).getTimestamp());
+		xAxis.getTime().setMin(filteredValues.get(0).getTimestamp());
+		xAxis.getTime().setMax(filteredValues.get(filteredValues.size()-1).getTimestamp());
 		CartesianLinearAxis yAxis = new CartesianLinearAxis(chart, CartesianAxisType.y);
 		yAxis.getTicks().setMin(0);
 		yAxis.getTicks().setMax(10);
