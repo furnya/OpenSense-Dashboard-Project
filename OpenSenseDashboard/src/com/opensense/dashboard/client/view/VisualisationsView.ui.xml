@@ -7,9 +7,15 @@
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
+.con{
+}
 </ui:style>
 
-<bh:Div>
+<bh:Div ui:field="container" addStyleNames="{style.con}">
+	<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="spinner">
+		<m:MaterialSpinner/>
+	</m:MaterialPreLoader>
+	<bh:Div ui:field="chartContainer" width="100%"/>
 </bh:Div>
 
 </ui:UiBinder>
