@@ -125,7 +125,7 @@ public class ClientRequestHandler {
 		LinkedList<Value> valueList = new LinkedList<>();
 		SimpleDateFormat inputFormat;
 		try {
-			inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
+			inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
 		} catch(Exception e) {
 			e.printStackTrace(); //TODO: create logger
 			return valueList;

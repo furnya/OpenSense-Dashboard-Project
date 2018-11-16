@@ -1,12 +1,15 @@
 package com.opensense.dashboard.client.view;
 
+import java.util.Date;
 import java.util.List;
 
 import org.gwtbootstrap3.client.ui.html.Div;
 import org.pepstock.charba.client.AbstractChart;
 import org.pepstock.charba.client.Defaults;
+import org.pepstock.charba.client.LineChart;
 import org.pepstock.charba.client.ScatterChart;
 import org.pepstock.charba.client.data.DataPoint;
+import org.pepstock.charba.client.data.LineDataset;
 import org.pepstock.charba.client.data.ScatterDataset;
 import org.pepstock.charba.client.enums.CartesianAxisType;
 import org.pepstock.charba.client.enums.ScaleBounds;
@@ -54,6 +57,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	@Override
 	public void initView() {
+		showLoadingIndicator();
 		presenter.buildValueRequestAndSend();
 	}
 	
@@ -69,8 +73,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	@Override
 	public void showValuesInChart(List<Value> values) {
-		ScatterChart chart = new ScatterChart();
-		ScatterDataset dataset = chart.newDataset();
+		LineChart chart = new LineChart();
+		LineDataset dataset = chart.newDataset();
 		DataPoint[] points = new DataPoint[values.size()];
 		for(int i=0;i<values.size();i++) {
 			Value value = values.get(i);
@@ -93,6 +97,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		chart.getOptions().setShowLines(true);
 		chart.getData().setDatasets(dataset);
 		chartContainer.clear();
+		hideLoadingIndicator();
 		chartContainer.add(chart);
 	}
 }
