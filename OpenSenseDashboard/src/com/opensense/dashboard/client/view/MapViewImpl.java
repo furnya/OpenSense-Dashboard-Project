@@ -294,8 +294,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			recenterMap();
 	}
 	public void recenterMap() {
+		allClusters.forEach(e->e.repaint());
+		cluster.repaint();
 		mapWidget.setCenter(LatLng.newInstance(52.521918,13.413215));
-		mapWidget.setZoom(2);
+		mapWidget.setZoom(3);
 	}
 	
 	
