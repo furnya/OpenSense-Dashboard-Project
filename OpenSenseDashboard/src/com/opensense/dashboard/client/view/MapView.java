@@ -14,4 +14,5 @@ public interface MapView extends IDataPanelPageView{
 	public void initView();
 	public void showMarkers(List<Sensor> sensorlist);
 	public void resize(double lg,double bg);
+	public void resetMarkerAndCluster();
 }

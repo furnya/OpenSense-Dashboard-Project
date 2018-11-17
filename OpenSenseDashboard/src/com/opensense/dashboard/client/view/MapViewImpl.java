@@ -8,11 +8,13 @@ import java.util.Map;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.base.Size;
+import com.google.gwt.maps.client.controls.ControlPosition;
 import com.google.gwt.maps.client.events.MapEventType;
 import com.google.gwt.maps.client.events.MapHandlerRegistration;
 import com.google.gwt.maps.client.overlays.InfoWindow;
@@ -27,6 +29,7 @@ import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClustererOpt
 import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
@@ -34,6 +37,8 @@ import com.opensense.dashboard.client.utils.MarkerInfoWindow;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
+
+import gwt.material.design.client.ui.MaterialButton;
 
 public class MapViewImpl extends DataPanelPageView implements MapView {
 	
@@ -43,7 +48,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	
 	@UiField
 	Div map;
-
+	
+	@UiField
+	MaterialButton resetBtn;
+	
 	private static MapViewUiBinder uiBinder = GWT.create(MapViewUiBinder.class);
 	
 	protected Presenter presenter;
@@ -56,7 +64,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	//########################################################################
 	private MapOptions mapOptions;
 	private Map<Integer,Marker> markers = new HashMap<>();
-	private List<Marker> mList = new ArrayList<Marker>();
+	private List<Marker> mList = new ArrayList<>();
+	private List<Marker> allMarkers = new ArrayList<>();
+	private List<MarkerClusterer> allClusters = new ArrayList<>();
 	private MarkerClusterer cluster;
 	//This should be a HashMap
 	//########################################################################
@@ -121,15 +131,16 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		//52.521918,13.413215
 		mapOptions.setCenter(LatLng.newInstance(52.521918,13.413215));
 		mapOptions.setMinZoom(2);
-		mapOptions.setMaxZoom(20);
-		mapOptions.setZoom(5);
+		mapOptions.setMaxZoom(18);
+		mapOptions.setZoom(2);
 		mapOptions.setDraggable(true);
 		mapOptions.setScaleControl(true);
+		mapOptions.setStreetViewControl(false);
 		mapOptions.setScrollWheel(true);
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
-		
+		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.BOTTOM_CENTER, resetBtn);
 		mapWidget.addDragStartHandler(event-> {
 			for(InfoWindow infoWindow:infoWindows.values()){
 				infoWindow.close();
@@ -143,8 +154,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			for(InfoWindow infoWindow:infoWindows.values()){
 				infoWindow.close();
 				lastOpened.clear();
-				//Mabye not doing anyting ?!
-				
 				cluster.repaint();
 			}
 		});
@@ -152,8 +161,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapWidget.addClickHandler(event-> {
 			for(InfoWindow infoWindow:infoWindows.values()){
 				infoWindow.close();
-				lastOpened.clear();
-				
+				lastOpened.clear();	
 			}
 		});
 	}
@@ -204,8 +212,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	 public void resize(double bg, double lg) {
 		    LatLng reCenter = LatLng.newInstance(bg,lg);
 		    MapHandlerRegistration.trigger(mapWidget, MapEventType.RESIZE);    
-		    mapOptions.setZoom(10);
-		    mapOptions.setCenter(reCenter);
+		    mapWidget.setZoom(15);
+		    mapWidget.setCenter(reCenter);
 		}
 	 
 	public void closeLastInfoWindow(InfoWindow iw) {
@@ -219,17 +227,17 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			markerOpt.setPosition(position);
 			markerOpt.setTitle("Sensor postion is: "+ bg + ", " + lg + " Sensormodel: "+ smodel);
 			final Marker markerBasic = Marker.newInstance(markerOpt);
-//			markerBasic.setMap(mapWidget);
 			MarkerImage icon = MarkerImage.newInstance(getIconUrlFromType(measurandType), Size.newInstance(20, 20));
 			icon.setScaledSize(Size.newInstance(20, 20));
 			markerBasic.setIcon(icon);
 			markerBasic.setDraggable(false);
 			markers.put(sensorID,markerBasic);
 			mList.add(markerBasic);
+			allMarkers.add(markerBasic);
 			String idToString = Integer.toString(sensorID);
 			markerBasic.addClickHandler(event->{
 						GWT.log("Current id: "+idToString);
-//						resize(bg, lg);
+						resize(bg, lg);
 						drawInfoWindow(markerBasic,sensorID,smodel,accuracy,aGround);
 						
 			});
@@ -256,10 +264,30 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mCO.setZoomOnClick(true);
 		cluster = MarkerClusterer.newInstance(mapWidget,mCO);
 		cluster.addMarkers(mList);
+		allClusters.add(cluster);
 		cluster.repaint();
 	}	 
 	
-	public void initSpiderfier() {
-//		OverlappingMarkerSpiderfier oms = new OverlappingMarkerSpiderfier;
+	
+	@UiHandler("resetBtn")
+	public void onResetBtnClicked(ClickEvent e) {
+			resetMarkerAndCluster();
 	}
+	public void resetMarkerAndCluster() {
+		mapWidget.setCenter(LatLng.newInstance(52.521918,13.413215));
+		mapWidget.setZoom(2);
+		allClusters.forEach(c->c.clearMarkers());
+		mList.clear();
+		allMarkers.clear();
+		markers.clear();
+	}
+	
+	
+//	public native void initSpiderfier(MapWidget mapWidget) /*-{
+//		var oms = new OverlappingMarkerSpiderfier(mapWidget,{
+//		markersWontMove: true,
+//		markersWontHide: true,
+//		basicFormatEvents: true
+//		});
+//	}-)*/;
 }
