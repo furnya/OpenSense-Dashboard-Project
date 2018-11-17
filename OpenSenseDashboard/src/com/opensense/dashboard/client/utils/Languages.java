@@ -225,4 +225,28 @@ public class Languages {
 			return "";
 		}
 	}
+	
+	public static String seletedShowOnMap() {
+		if(de) {
+			return "Auf Karte zeigen";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String selectedShowVisualisations() {
+		if(de) {
+			return "Graphisch darstellen";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String selectedAddToList() {
+		if(de) {
+			return "Liste hinzufügen";
+		}else {
+			return "";
+		}
+	}
 }

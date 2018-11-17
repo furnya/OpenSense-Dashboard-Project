@@ -26,10 +26,15 @@
 .con{
 }
 .panel{
+    background: #202020;
+    padding: 10px 10px 10px 10px;
 }
 .margin > * {
 	margin-right: 30px;
 }	
+.margin > *:last-child{
+	margin-right: 0px !important;
+}
 .max> div > ul {
     max-height: 200px !important;
 }
@@ -40,7 +45,7 @@
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="{style.con}">
-	<bh:Div ui:field="searchPanel" addStyleNames="{style.panel}">
+	<bh:Div ui:field="searchPanel" addStyleNames="{style.panel} round-corners">
 		<bh:Div addStyleNames="flex {style.margin}">
 			<m:MaterialNavBar ui:field="navBarSearch" addStyleNames="{style.nav-bar} round-corners"> 
 		 		 <b:Input ui:field="searchInput" type="TEXT" placeholder="{lang.searchPlace}" addStyleNames="{style.input}"/>
@@ -54,10 +59,15 @@
 			<m:MaterialButton  ui:field="searchButton" width="40%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
 		</bh:Div>
 	</bh:Div>	
-	<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="spinner">
+	<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10 {style.margin}">
+		<m:MaterialButton ui:field="showOnMapButton" width="33.3%" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn"/>
+		<m:MaterialButton  ui:field="showVisualizationsButton" width="33.3%" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn"/>
+		<m:MaterialButton  ui:field="addToListButton" width="33.3%" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn"/>
+	</bh:Div>
+	<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="margin-top-20 spinner">
 		<m:MaterialSpinner/>
 	</m:MaterialPreLoader>
-	<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="100%"/>
+	<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container} margin-top-10 " width="100%"/>
 </bh:Div>
 
 </ui:UiBinder>

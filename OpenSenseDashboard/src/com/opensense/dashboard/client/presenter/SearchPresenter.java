@@ -90,7 +90,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		ids.forEach(requestBuilder::addId);
 		
 		requestBuilder.getRequest().getIds().forEach(id -> GWT.log("RequestIds: " + id));
-		sendRequest(requestBuilder.getRequest());
+		sendSensorRequestAndShow(requestBuilder.getRequest());
 	}
 
 	@Override
@@ -131,10 +131,14 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			requestBuilder.addParameter(ParamType.MAX_SENSORS, view.getMaxSensors());
 		}
 		requestBuilder.getRequest().getParameters().forEach(param -> GWT.log("RequestParam: " + param.getKey() + " " + param.getValue()));
-		sendRequest(requestBuilder.getRequest());
+		sendSensorRequestAndShow(requestBuilder.getRequest());
 	}
 	
-	private void sendRequest(final Request request) {
+	private void sendValueRequestAndShow(final Request request) {
+		
+	}
+	
+	private void sendSensorRequestAndShow(final Request request) {
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
 				if(request.getParameters() != null) {

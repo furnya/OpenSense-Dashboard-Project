@@ -6,17 +6,17 @@ public class Sensor implements IsSerializable{
 	/**
 	 * 
 	 */
-	private int userId;
+	private int userId; 
 	private double directionHorizontal;
 	private double directionVertical;
 	private String attributionText;
 	private Measurand measurand;
 	private int licenseId;
 	private double altitudeAboveGround;
-	private int id;
+	private int sensorId; 
 	private String attributionURLString;
 	private String sensorModel;
-	private int unitId;
+	private int unitId; //doppelt?
 	private Unit unit;
 	private double accuracy;
 	private LatLng location;
@@ -69,8 +69,8 @@ public class Sensor implements IsSerializable{
 	/**
 	 * @return the id
 	 */
-	public int getId() {
-		return id;
+	public int getSensorId() {
+		return sensorId;
 	}
 
 	/**
@@ -146,8 +146,8 @@ public class Sensor implements IsSerializable{
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
-		this.id = id;
+	public void setSensorId(int id) {
+		this.sensorId = id;
 	}
 
 	/**

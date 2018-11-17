@@ -1,10 +1,10 @@
 package com.opensense.dashboard.client.utils;
 
-import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -12,7 +12,6 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.gui.GUIImageBundle;
 
 import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialCollapsible;
@@ -53,14 +52,10 @@ public class SensorItemCard extends Composite{
 	Div midContainer;
 	
 	@UiField
-	Button goToMap;
-	
-	@UiField
 	MaterialCheckBox checkbox;
 	
 	public SensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
-		goToMap.add(new Image(GUIImageBundle.INSTANCE.mapIconSvg().getSafeUri().asString()));
 		checkbox.addValueChangeHandler(event -> {
 			if(event.getValue()) {
 				headerContainer.addStyleName("card-active");
@@ -108,11 +103,16 @@ public class SensorItemCard extends Composite{
 		}
 	}
 	
-	public HandlerRegistration addGoToMapButtonClickHandler(ClickHandler handler) {
-		return goToMap.addClickHandler(event -> {
-			event.preventDefault();
-			event.stopPropagation();
-			handler.onClick(event);
+	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
+		return checkbox.addValueChangeHandler(event -> {
+			if(event.getValue()) {
+				headerContainer.addStyleName("card-active");
+				headerContainer.removeStyleName("card-deactive");
+			}else {
+				headerContainer.addStyleName("card-deactive");
+				headerContainer.removeStyleName("card-active");
+			}
+			handler.onValueChange(event);
 		});
 	}
 }

@@ -70,7 +70,6 @@
 				</bh:Div>
 				<bh:Div addStyleNames="{style.mid}" ui:field="midContainer"/>
 				<bh:Div addStyleNames="{style.right}">
-					<b:Button ui:field="goToMap" title="{lang.showOnMap}" addStyleNames="{style.card-button} d-btn"/>
 				</bh:Div>
 			</m:MaterialCollapsibleHeader>
 			<m:MaterialCollapsibleBody addStyleNames="{style.body}">

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.tools.ant.taskdefs.Sleep;
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
@@ -56,6 +57,15 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	MaterialButton searchButton;
 	
 	@UiField
+	MaterialButton showOnMapButton;
+	
+	@UiField
+	MaterialButton showVisualizationsButton;
+	
+	@UiField
+	MaterialButton addToListButton;
+	
+	@UiField
 	MaterialTextBox minAccuracy;
 	
 	@UiField
@@ -78,6 +88,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	private static final String AUTO_COMPLETE = "autocomplete";
 	
+	private List<Integer> unselectedSensors = new ArrayList<>();
+	private List<Integer> selectedSensors = new ArrayList<>();
+	
 	public SearchViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
@@ -87,10 +100,18 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 	
 	@UiHandler("searchButton")
-	public void onSearchButtonCLicked(ClickEvent e) {
+	public void onSearchButtonClicked(ClickEvent e) {
 		if(minAccuracy.validate() && maxAccuracy.validate() && maxSensors.validate() && searchButton.isEnabled()) {
+			sensorContainer.clear();
 			showLoadingIndicator();
 			presenter.buildSensorRequestAndSend();
+		}
+	}
+	
+	@UiHandler("showOnMapButton")
+	public void onShowOnMapButtonClicked(ClickEvent e) {
+		if(!selectedSensors.isEmpty()) {
+			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, selectedSensors));
 		}
 	}
 	
@@ -109,7 +130,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		sensorContainer.clear();
 		sensors.forEach(sensor -> {
 			final SensorItemCard card = new SensorItemCard();
-			card.setHeader("Sensor: " + sensor.getId());
+			final Integer sensorId = sensor.getSensorId();
+			card.setHeader("Sensor: " + sensorId);
+			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setIconTitle(sensor.getMeasurand().getDisplayName());
 			card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
@@ -120,12 +143,14 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 				GWT.log(card.isActive()+"");
 				card.setActive(!card.isActive());
 			});
-			final int id = sensor.getId();
-			card.addGoToMapButtonClickHandler(event -> {
-				List<Integer> ids = new ArrayList<>();
-				ids.add(id);
-				GWT.log(id + "clicked");
-				presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, ids));
+			card.addValueChangeHandler(event -> {
+				if(event.getValue()) {
+					unselectedSensors.remove(sensorId);
+					selectedSensors.add(sensorId);
+				}else {
+					unselectedSensors.add(sensorId);
+					selectedSensors.remove(sensorId);
+				}
 			});
 			sensorContainer.add(card);
 		});
