@@ -50,7 +50,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	Div map;
 	
 	@UiField
-	MaterialButton resetBtn;
+	MaterialButton recenterBtn;
+	
+	@UiField
+	MaterialButton clearBtn;
 	
 	private static MapViewUiBinder uiBinder = GWT.create(MapViewUiBinder.class);
 	
@@ -136,11 +139,13 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapOptions.setDraggable(true);
 		mapOptions.setScaleControl(true);
 		mapOptions.setStreetViewControl(false);
+		mapOptions.setMapTypeControl(false);
 		mapOptions.setScrollWheel(true);
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
-		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.BOTTOM_CENTER, resetBtn);
+		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.BOTTOM_CENTER, clearBtn);
+		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_TOP, recenterBtn);
 		mapWidget.addDragStartHandler(event-> {
 			for(InfoWindow infoWindow:infoWindows.values()){
 				infoWindow.close();
@@ -269,8 +274,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	}	 
 	
 	
-	@UiHandler("resetBtn")
-	public void onResetBtnClicked(ClickEvent e) {
+	@UiHandler("clearBtn")
+	public void onClearButtonClicked(ClickEvent e) {
 			resetMarkerAndCluster();
 	}
 	public void resetMarkerAndCluster() {
@@ -280,6 +285,17 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mList.clear();
 		allMarkers.clear();
 		markers.clear();
+	}
+	
+	
+	
+	@UiHandler("recenterBtn")
+	public void onRecenterBtnClicked(ClickEvent e) {
+			recenterMap();
+	}
+	public void recenterMap() {
+		mapWidget.setCenter(LatLng.newInstance(52.521918,13.413215));
+		mapWidget.setZoom(2);
 	}
 	
 	
