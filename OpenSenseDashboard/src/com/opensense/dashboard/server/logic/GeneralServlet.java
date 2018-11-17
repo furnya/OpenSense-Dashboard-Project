@@ -58,7 +58,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}else {
 			ServerLanguages.setGerman();
 		}
-		System.out.println(ServerLanguages.isGerman());
 	}
 
 }
