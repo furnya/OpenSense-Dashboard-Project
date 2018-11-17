@@ -12,6 +12,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
@@ -22,6 +23,9 @@ import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 import com.opensense.dashboard.client.presenter.FooterPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
+import com.opensense.dashboard.client.services.GeneralService;
+import com.opensense.dashboard.client.utils.CookieManager;
+import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
 import com.opensense.dashboard.client.view.FooterViewImpl;
@@ -71,6 +75,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 public AppController(final HandlerManager eventBus) {
 		this.eventBus = eventBus;
 		bindHandler();
+		setLanguageFromCookies();
 		go(RootPanel.get());
 		handleStart();
 	}
@@ -253,12 +258,23 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		return idsAsString.toString();
 	}
 	
-	public void switchLanguage() { // TODO
+	public void switchLanguage() {
 		if(Languages.isGerman()) {
 			Languages.setEnglish();
 		}else {
 			Languages.setGerman();
 		}
-		GWT.log("SWICHED TO " + (Languages.isGerman() ? "DEUUTSCH" : "ENGGLIISSHHH"));
+		CookieManager.writeLanguageCookie(Languages.getActualLanguageString());
+		Window.Location.reload();
+	}
+	
+	private void setLanguageFromCookies() {
+		if (CookieManager.getLanguage() != null && "en".equals(CookieManager.getLanguage())) {
+			Languages.setEnglish();
+		}else { 
+			Languages.setGerman();
+		}
+		// Sets the correct serverLanguage.
+		GeneralService.Util.getInstance().setServerLanguage(Languages.getActualLanguageString(), new DefaultAsyncCallback<Void>(result -> {}));
 	}
 }

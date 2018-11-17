@@ -34,6 +34,14 @@ public class Languages {
 		en = true;
 	}
 	
+	public static String getActualLanguageString() {
+		if(de) {
+			return "de";
+		}else {
+			return "en";
+		}
+	}
+	
 	public static String text() {
 		if(de) {
 			return "Das ist der text";

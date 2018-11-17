@@ -18,7 +18,7 @@ import com.opensense.dashboard.shared.Value;
 
 public class ClientRequestHandler {
 
-	private boolean useDefaultUrl = false;
+	private static final boolean USE_DEFAULT_URL = true;
 	
 	private static final String BASE_URL = "https://www.opensense.network/beta/api/v1.0";
 	private static final String BASE_URL_DEFAULT = "https://www.opensense.network/progprak/beta/api/v1.0";
@@ -37,7 +37,7 @@ public class ClientRequestHandler {
 	
 	public Map<Integer, Unit> getUnitMap(){
 		RequestSender rs = new RequestSender();
-		JSONArray unitArrayJSON = rs.arrayRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/units");
+		JSONArray unitArrayJSON = rs.arrayRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/units");
 		if(unitArrayJSON==null) {
 			return null;
 		}
@@ -57,7 +57,7 @@ public class ClientRequestHandler {
 	
 	public Map<Integer, Measurand> getMeasurandMap(){
 		RequestSender rs = new RequestSender();
-		JSONArray measurandArrayJSON = rs.arrayRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/measurands");
+		JSONArray measurandArrayJSON = rs.arrayRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/measurands");
 		if(measurandArrayJSON==null) {
 			return null;
 		}
@@ -85,7 +85,7 @@ public class ClientRequestHandler {
 		}
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
-		JSONArray sensorArrayJSON = rs.arrayRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/sensors");
+		JSONArray sensorArrayJSON = rs.arrayRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors");
 		if(sensorArrayJSON==null) {
 			return sensorList;
 		}
@@ -106,7 +106,7 @@ public class ClientRequestHandler {
 	
 	public Sensor getSensor(int id){
 		RequestSender rs = new RequestSender();
-		JSONObject sensorJSON = rs.objectRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/sensors/"+id);
+		JSONObject sensorJSON = rs.objectRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
 		if(sensorJSON==null) {
 			return null;
 		}
@@ -118,7 +118,7 @@ public class ClientRequestHandler {
 	public List<Value> getValueList(int id, List<Parameter> parameterList){
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
-		JSONObject sensorJSON = rs.objectRequest(useDefaultUrl ? BASE_URL_DEFAULT : BASE_URL+"/sensors/"+id+"/values");
+		JSONObject sensorJSON = rs.objectRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values");
 		if(sensorJSON==null) {
 			return null;
 		}
