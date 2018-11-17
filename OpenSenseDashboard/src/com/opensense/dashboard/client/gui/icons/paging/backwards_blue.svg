@@ -1,0 +1,23 @@
+<svg width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="28.086901" height="28.086901" id="canvas_background" fill="none"/>
+ </g>
+
+ <g>
+  <title>Layer 1</title>
+  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="2.1421900228804986,7.797153616878 2.1421900228804986,7.797153616878 " id="svg_4" stroke-linecap="round"/>
+  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="10.35822343826294,16.609855592250824 10.35822343826294,16.609855592250824 10.395836353302002,16.609855592250824 " id="svg_5" stroke-linecap="round"/>
+  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="1.8036750357746882,14.078487266508011 1.8036750357746882,14.078487266508011 " id="svg_6" stroke-linecap="round"/>
+  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="4.624633261656431,12.122622896563337 4.624633261656431,12.122622896563337 " id="svg_7" stroke-linecap="round"/>
+  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="4.2861182745506206,13.852810608437471 4.2861182745506206,13.852810608437471 4.2861182745506206,13.852810608437471 " id="svg_8" stroke-linecap="round"/>
+  <ellipse fill="#6b6b6b" stroke="null" stroke-width="null" stroke-opacity="null" cx="19.666927" cy="16.165954" id="svg_11" rx="1.185387" ry="0.097163"/>
+  <ellipse fill="#6b6b6b" stroke="null" stroke-width="null" stroke-opacity="null" cx="10.047805" cy="9.228526" id="svg_12" rx="1.185387" ry="0.097163"/>
+  <ellipse fill="#6b6b6b" stroke="null" stroke-width="null" stroke-opacity="null" cx="14.692189" cy="22.967353" id="svg_13" rx="0.019433" ry="0.019433"/>
+  <ellipse fill="#c7e0f5" stroke="null" stroke-width="null" stroke-opacity="null" cx="15.075223" cy="15" id="svg_10" rx="14.282938" ry="14.282938"/>
+  <g id="svg_1">
+   <polygon transform="rotate(180 9.52085494995117,15) " stroke-width="0" stroke="null" fill="#6b6b6b" points="10.816036224365234,5.512393951416016 10.816036224365234,14.787344932556152 10.816036224365234,15.44166374206543 10.816036224365234,24.487606048583984 8.22567367553711,24.487606048583984 8.22567367553711,5.512393951416016 " id="svg_3"/>
+   <polygon stroke-width="0" stroke="null" fill="#6b6b6b" points="22.09191131591797,24.43552017211914 10.787556648254395,15.000326156616211 22.09191131591797,5.564478874206543 " id="svg_2"/>
+  </g>
+ </g>
+</svg>

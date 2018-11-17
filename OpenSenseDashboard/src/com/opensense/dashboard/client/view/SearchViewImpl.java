@@ -1,10 +1,11 @@
 package com.opensense.dashboard.client.view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.tools.ant.taskdefs.Sleep;
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
@@ -24,6 +25,7 @@ import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.client.utils.Pager;
 import com.opensense.dashboard.client.utils.SensorItemCard;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
@@ -46,6 +48,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@UiField
 	Div sensorContainer;
+	
+	@UiField
+	Div noDataIndicator;
+	
+	@UiField
+	Div dataContent;
 	
 	@UiField
 	MaterialNavBar navBarSearch;
@@ -80,6 +88,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@UiField
 	MaterialPreLoader spinner;
 	
+	@UiField(provided = true)
+	Pager pagerTop = new Pager(this);
+	
+    @UiField(provided = true)
+    Pager pagerBottom = new Pager(this);
+	
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
 	protected Presenter presenter;
@@ -91,8 +105,15 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	private List<Integer> unselectedSensors = new ArrayList<>();
 	private List<Integer> selectedSensors = new ArrayList<>();
 	
+	private LinkedList<Integer> shownSensorIds = new LinkedList<>();
+	private Map<Integer, SensorItemCard> sensorViews = new HashMap<>();
+	private int maxSensorsOnPage = 10;//TODO: getMaxObjectsOnPageFromCookie();
+	private int sensorPage = 0;
+	
 	public SearchViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		showNoDataIndicator(false);
+		showDataContainer(false);
 		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
 		autoOptions.setTypes(AutocompleteType.GEOCODE);
 		autoComplete = Autocomplete.newInstance(searchInput.getElement(), autoOptions);
@@ -102,7 +123,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@UiHandler("searchButton")
 	public void onSearchButtonClicked(ClickEvent e) {
 		if(minAccuracy.validate() && maxAccuracy.validate() && maxSensors.validate() && searchButton.isEnabled()) {
-			sensorContainer.clear();
+			clearSensorData();
+			showDataContainer(true);
 			showLoadingIndicator();
 			presenter.buildSensorRequestAndSend();
 		}
@@ -127,7 +149,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	@Override
 	public void showSensorData(final List<Sensor> sensors) {
-		sensorContainer.clear();
+		clearSensorData();
 		sensors.forEach(sensor -> {
 			final SensorItemCard card = new SensorItemCard();
 			final Integer sensorId = sensor.getSensorId();
@@ -140,7 +162,6 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			card.getMiddleHeader().add(new Span(sensor.getSensorModel()));
 			card.addClickHandler(event -> {
 				event.stopPropagation();
-				GWT.log(card.isActive()+"");
 				card.setActive(!card.isActive());
 			});
 			card.addValueChangeHandler(event -> {
@@ -152,8 +173,13 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 					selectedSensors.remove(sensorId);
 				}
 			});
-			sensorContainer.add(card);
+			shownSensorIds.add(sensorId); //can order the list before adding
+			sensorViews.put(sensorId, card);
 		});
+		if(sensorViews.isEmpty()) {
+			noDataIndicator.getElement().getStyle().clearDisplay();
+		}
+		pagination();
 		hideLoadingIndicator();
 	}
 	
@@ -278,18 +304,18 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@Override
 	public void showLoadSensorError() {
+		pagination();
 		hideLoadingIndicator();
-		//TODO:
+		noDataIndicator.getElement().getStyle().clearDisplay();
 	}
 
 	@Override
 	public void selectMeasurandId(String value) {
-		GWT.log(this.measurandList.getIndex(value)+"");
 		this.measurandList.setSelectedIndex(this.measurandList.getIndex(value));
 	}
 	
 	public void showLoadingIndicator() {
-		spinner.getElement().getStyle().clearDisplay();
+		spinner.getElement().getStyle().setDisplay(Display.BLOCK);
 	}
 	
 	public void hideLoadingIndicator() {
@@ -299,6 +325,71 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@Override
 	public void setPlaceString(String value) {
 		searchInput.setValue(value);
+	}
+
+	@Override
+	public void pagination() {
+		sensorContainer.clear();
+		
+		for(int i = sensorPage * maxSensorsOnPage; i < shownSensorIds.size() && i < (sensorPage + 1) * maxSensorsOnPage; i++){
+			sensorContainer.add(sensorViews.get(shownSensorIds.get(i)));
+		}
+		
+		pagerTop.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));
+		pagerTop.setForwardsEnabled((sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage))) ? true : false);
+		pagerTop.setBackwardsEnabled((sensorPage > 0) ? true : false);
+		
+		pagerBottom.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));
+		pagerBottom.setForwardsEnabled((sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage))) ? true : false);
+		pagerBottom.setBackwardsEnabled((sensorPage > 0) ? true : false);
+	}
+
+	@Override
+	public List<Integer> getShownSensorIds() {
+		return shownSensorIds;
+	}
+
+	@Override
+	public double getMaxSensorsOnPage() {
+		return maxSensorsOnPage;
+	}
+
+	@Override
+	public int getSensorPage() {
+		return sensorPage;
+	}
+
+	@Override
+	public void setSensorPage(int page) {
+		this.sensorPage = page;
+	}
+	
+	@Override
+	public void clearSensorData() {
+		showNoDataIndicator(false);
+		sensorContainer.clear();
+		unselectedSensors.clear();
+		selectedSensors.clear();
+		sensorViews.clear();
+		shownSensorIds.clear();
+		sensorPage = 0;
+	}
+
+	@Override
+	public void showDataContainer(boolean show) {
+		if(show) {
+			dataContent.getElement().getStyle().clearDisplay();
+		}else {
+			dataContent.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+	
+	public void showNoDataIndicator(boolean show) {
+		if(show) {
+			noDataIndicator.getElement().getStyle().clearDisplay();
+		}else {
+			noDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
+		}
 	}
 	
 }

@@ -19,6 +19,7 @@
 	display: flex;
 }	
 .body{
+	<!-- display: flex !important; -->
 	cursor: pointer;
     border: none;	
 }
@@ -37,10 +38,12 @@
 .left{
 	width: 25%;
 	display: flex;
+	white-space: nowrap;
 }
 .mid{
 	width: 55%;
 	display: flex;
+	white-space: nowrap;
 }
 .mid > Span{
 	margin-right: 10px;

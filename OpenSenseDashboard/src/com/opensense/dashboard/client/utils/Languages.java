@@ -249,4 +249,59 @@ public class Languages {
 			return "";
 		}
 	}
+	
+	public static String backwards(){
+		if(de){
+			return "Zum Anfang";
+		}else{
+			return "To begin";
+		}
+	}
+	
+	public static String forwards(){
+		if(de){
+			return "Zum Ende";
+		}else{
+			return "To end";
+		}
+	}
+	
+	public static String forwardsStepByStep(){
+		if(de){
+			return "Nächste Seite";
+		}else{
+			return "Next site";
+		}
+	}
+	
+	public static String backwardsStepByStep(){
+		if(de){
+			return "Vorherige Seite";
+		}else{
+			return "Privious site";
+		}
+	}
+
+	public static String setPageNumber(int page, int maxObjectsOnPage, int size) {
+		if(de){
+			if (size == 0) {
+				return "0-0 von 0";
+			}
+			return Integer.toString(page * maxObjectsOnPage + 1) + "-" + ((size > (page + 1) * maxObjectsOnPage) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " von " + Integer.toString(size);
+		}else{
+			if (size == 0) {
+				return "0-0 of 0";
+			}
+			return Integer.toString(page * maxObjectsOnPage + 1) + "-" + ((size > (page + 1) * maxObjectsOnPage) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " of " + Integer.toString(size);
+		}
+	}
+	
+	public static String pageConfiguration(){
+		if(de){
+			return "Anzahl von Objekten auf einer Seite";
+		}else{
+			return "Number of objects on one page";
+		}
+	}
+	
 }

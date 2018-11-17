@@ -2,7 +2,10 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
 	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html"> 	
-
+	
+	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
+	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
+	
 	<ui:style>
 	.paging-button{
 		margin-right: 10px;
@@ -11,16 +14,16 @@
 		margin-top: 1px;
 	}
 	</ui:style>
-		<!-- <bh:Div>
-			<i:Layout direction="HORIZONTAL" main="CENTER">
-				<b:Image ui:field="backwardsButton" url="{icons.backwards.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.backwards}"/>
-				<b:Image ui:field="backwardsStepByStepButton" url="{icons.backwardsStepbyStep.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.backwardsStepByStep}"/>
-				<bh:Span ui:field="pageNumber" text="1-14 of 14" addStyleNames="margin-right-10 clickable" title="{lang.pageConfiguration}"/>
-				<b:Image ui:field="forwardsStepByStepButton" url="{icons.forwardsStepByStep.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.forwardsStepByStep}"/>
-				<b:Image ui:field="forwardsButton" url="{icons.forwards.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.forwards}"/>
-			</i:Layout>
+		<bh:Div>
+			<bh:Div>
+				<b:Image ui:field="backwardsButton" url="{gui.backwards.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.backwards}"/>
+				<b:Image ui:field="backwardsStepByStepButton" url="{gui.backwardsStepbyStep.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.backwardsStepByStep}"/>
+				<bh:Span ui:field="pageNumber" text="1-14 of 14" addStyleNames="margin-right-10 clickable" title="{lang.pageConfiguration}" color="white"/>
+				<b:Image ui:field="forwardsStepByStepButton" url="{gui.forwardsStepByStep.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.forwardsStepByStep}"/>
+				<b:Image ui:field="forwardsButton" url="{gui.forwards.getSafeUri.asString}" addStyleNames="clickable {style.paging-button}" title="{lang.forwards}"/>
+			</bh:Div>	
 			
-	        <b:Modal ui:field="pageConfigurationModal" title="{lang.pageConfiguration}" closable="true" fade="true" dataKeyboard="true">
+<!-- 	        <b:Modal ui:field="pageConfigurationModal" title="{lang.pageConfiguration}" closable="true" fade="true" dataKeyboard="true">
             <b:ModalBody>
 				<b:ListBox b:id="pagesListBox" ui:field="pagesListBox" enabled="true" />
 				<i:Layout addStyleNames="margin-top-10">
@@ -34,5 +37,5 @@
                 </b:ButtonGroup>
             </b:ModalFooter>
         </b:Modal> -->
-		</bh:Div>	
+	</bh:Div>	
 </ui:UiBinder> 

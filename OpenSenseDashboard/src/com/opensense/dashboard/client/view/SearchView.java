@@ -32,4 +32,11 @@ public interface SearchView extends IDataPanelPageView{
 	public void showLoadingIndicator();
 	String getPlaceString();
 	public void setPlaceString(String value);
+	public void pagination();
+	public List<Integer> getShownSensorIds();
+	public double getMaxSensorsOnPage();
+	public int getSensorPage();
+	public void setSensorPage(int i);
+	public void clearSensorData();
+	public void showDataContainer(boolean show);
 }

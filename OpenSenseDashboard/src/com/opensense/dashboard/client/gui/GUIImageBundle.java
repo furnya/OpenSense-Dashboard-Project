@@ -10,6 +10,7 @@ public interface GUIImageBundle extends ClientBundle {
 	
 	public static final GUIImageBundle INSTANCE =  GWT.create(GUIImageBundle.class);
 	
+	//DataPanelPages
 	@Source("icons/home.png")
 	ImageResource homeIcon();
 	
@@ -46,6 +47,7 @@ public interface GUIImageBundle extends ClientBundle {
 	@Source("icons/map.svg")
 	SVGResource mapIconSvg();
 	
+	//Sensor type icons
 	@Source("icons/temp.svg")
 	SVGResource tempIconSvg();
 	
@@ -84,4 +86,28 @@ public interface GUIImageBundle extends ClientBundle {
 	
 	@Source("icons/question.svg")
 	SVGResource questionIconSvg();
+	
+	@Source("icons/paging/backwards.svg")
+	SVGResource backwards();
+	
+	@Source("icons/paging/forwards.svg")
+	SVGResource forwards();
+	
+	@Source("icons/paging/backwards_step_by_step.svg")
+	SVGResource backwardsStepbyStep();
+	
+	@Source("icons/paging/forwards_step_by_step.svg")
+	SVGResource forwardsStepByStep();
+	
+	@Source("icons/paging/backwards_blue.svg")
+	SVGResource backwardsBlue();
+	
+	@Source("icons/paging/forwards_blue.svg")
+	SVGResource forwardsBlue();
+	
+	@Source("icons/paging/backwards_step_by_step_blue.svg")
+	SVGResource backwardsStepbyStepBlue();
+	
+	@Source("icons/paging/forwards_step_by_step_blue.svg")
+	SVGResource forwardsStepByStepBlue();
 }

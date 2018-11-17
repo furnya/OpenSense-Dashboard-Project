@@ -55,6 +55,8 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	@Override
 	public void handleParamters(Map<ParamType, String> parameters) {
 		view.showLoadingIndicator();
+		view.clearSensorData();
+		view.showDataContainer(true);
 		parameters.entrySet().forEach(entry -> {
 			switch(entry.getKey()) {
 				case MEASURAND_ID:
@@ -86,10 +88,11 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	@Override
 	public void handleIds(List<Integer> ids) {
 		view.showLoadingIndicator();
+		view.clearSensorData();
+		view.showDataContainer(true);
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, false);
 		ids.forEach(requestBuilder::addId);
 		
-		requestBuilder.getRequest().getIds().forEach(id -> GWT.log("RequestIds: " + id));
 		sendSensorRequestAndShow(requestBuilder.getRequest());
 	}
 
