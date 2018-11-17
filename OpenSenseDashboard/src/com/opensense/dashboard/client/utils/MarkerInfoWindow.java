@@ -7,11 +7,16 @@ import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+
+import gwt.material.design.client.ui.MaterialButton;
 
 public class MarkerInfoWindow extends Composite {
 	
@@ -22,6 +27,12 @@ public class MarkerInfoWindow extends Composite {
 	
 	@UiField
 	Div data;
+	
+	@UiField
+	MaterialButton iwVisuBtn;
+	
+	@UiField
+	MaterialButton iwSearchBtn;
 	
 	
 	//binder der xml in die datei bindet
@@ -47,5 +58,26 @@ public class MarkerInfoWindow extends Composite {
 	public void setData(List<String> sensorData) {
 		sensorData.forEach(item->this.data.add(new Span(item)));
 	}
+	
+	
+	@UiHandler("iwVisuBtn")
+	public void oniwVisuBtnClicked(ClickEvent e) {
+		getSensorAndShowVisu();
+	}
+	public void getSensorAndShowVisu() {
+		GWT.log("VisuBtn pressed");
+	}
+	
+	@UiHandler("iwSearchBtn")
+	public void oniwSearchBtnClicked(ClickEvent e) {
+		getSensorAndShowInSearch();
+	}
+	public void getSensorAndShowInSearch() {
+		GWT.log("SearchBtn pressed");
+	}
+	
+	
+	
+	
 	
 }

@@ -33,6 +33,8 @@
 	<bh:Div ui:field="infoBox" addStyleNames="{style.infowindow}">
 		<b:Heading ui:field="header" addStyleNames="{style.header}" size="H6"/>
 		<bh:Div ui:field="data" addStyleNames="{style.data}"/>
+		<m:MaterialButton  ui:field="iwSearchBtn" width="40px" text="❤" textColor="WHITE" addStyleNames="d-btn margin-buttom-20"/>
+		<m:MaterialButton  ui:field="iwVisuBtn" width="40px" text="👍" textColor="WHITE" addStyleNames="d-btn margin-buttom-20"/>
 	</bh:Div>
 
 </ui:UiBinder>
