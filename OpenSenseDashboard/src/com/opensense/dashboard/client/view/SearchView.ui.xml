@@ -26,6 +26,7 @@
 .con{
 	max-height: 80vh;
     overflow: auto; 
+    padding-right: 10px;
 }
 .panel{
     background: #202020;
@@ -45,7 +46,7 @@
 }
 .sensor-container{
 }
-.center-pager{
+.center-text{
 	margin-left: 45px;
 }
 .no-sensor{
@@ -75,16 +76,16 @@
 		<m:MaterialButton  ui:field="showVisualizationsButton" width="33.3%" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn"/>
 		<m:MaterialButton  ui:field="addToListButton" width="33.3%" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn"/>
 	</bh:Div>
-	<bh:Div ui:field="dataContent" addStyleNames="margin-top-20 margin-bottom-20 {style.center}"> 
-		<d:Pager ui:field="pagerTop" addStyleNames="{style.center-pager}"/>
+	<bh:Div ui:field="dataContent" addStyleNames="margin-top-20 margin-bottom-20 {style.panel} round-corners {style.center}"> 
+		<d:Pager ui:field="pagerTop" addStyleNames="{style.center-text}"/>
 		<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="margin-top-10 spinner">
 			<m:MaterialSpinner/>
 		</m:MaterialPreLoader>
 		<bh:Div ui:field="noDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
-			<bh:Span text="Keine Daten vorhanden" addStyleNames="{style.center-pager}"/>
+			<bh:Span text="Keine Daten vorhanden" addStyleNames="{style.center-text}"/>
 		</bh:Div>
 		<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container} margin-top-10 margin-bottom-10" width="100%"/> 
-		<d:Pager ui:field="pagerBottom"  addStyleNames="{style.center-pager}"/>
+		<d:Pager ui:field="pagerBottom"  addStyleNames="{style.center-text}"/>
 	</bh:Div>
 </bh:Div>
 

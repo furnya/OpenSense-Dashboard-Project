@@ -19,7 +19,6 @@
 	display: flex;
 }	
 .body{
-	<!-- display: flex !important; -->
 	cursor: pointer;
     border: none;	
 }
@@ -60,7 +59,7 @@
 }
 </ui:style>
 
-<bh:Div ui:field="layout" addStyleNames="user-select-none padding-right-10">
+<bh:Div ui:field="layout" addStyleNames="user-select-none">
 	<m:MaterialCollapsible ui:field="collapsible" width="100%" addStyleNames="round-corners {style.collapsible}">
 		<m:MaterialCollapsibleItem ui:field="item" addStyleNames="override-corners">
 			<m:MaterialCollapsibleHeader ui:field="headerContainer" addStyleNames="round-corners {style.header}">
