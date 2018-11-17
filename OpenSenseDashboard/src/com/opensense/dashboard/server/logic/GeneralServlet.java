@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.server.util.ClientRequestHandler;
+import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
@@ -48,6 +49,16 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}
 		measurandMap.forEach((id,measurand) -> measurandStringMap.put(id,measurand.getDisplayName()));
 		return measurandStringMap;
+	}
+	
+	@Override
+	public void setServerLanguage(String lang) {
+		if("en".equals(lang)) {
+			ServerLanguages.setEnglish();
+		}else {
+			ServerLanguages.setGerman();
+		}
+		System.out.println(ServerLanguages.isGerman());
 	}
 
 }
