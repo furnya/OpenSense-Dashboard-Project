@@ -9,6 +9,7 @@ public class Request implements IsSerializable{
 	private List<Integer> ids; //TODO: List<String> ?
 	private List<Parameter> parameters;
 	private ResultType resultType;
+	private DateRange dateRange;
 	
 	public Request() {
 	}
@@ -50,5 +51,19 @@ public class Request implements IsSerializable{
 
 	public void setIds(List<Integer> ids) {
 		this.ids = ids;
+	}
+
+	/**
+	 * @return the dateRange
+	 */
+	public DateRange getDateRange() {
+		return dateRange;
+	}
+
+	/**
+	 * @param dateRange the dateRange to set
+	 */
+	public void setDateRange(DateRange dateRange) {
+		this.dateRange = dateRange;
 	}
 }

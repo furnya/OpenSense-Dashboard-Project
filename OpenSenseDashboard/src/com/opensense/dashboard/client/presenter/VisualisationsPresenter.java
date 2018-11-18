@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.presenter;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.VisualisationsView;
+import com.opensense.dashboard.shared.DateRange;
+import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
@@ -71,11 +74,13 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		runnable.run();
 	}
 	
-	@Override
-	public void buildValueRequestAndSend() {
+	public void buildValueRequestAndSend(DateRange dateRange, Date minDate, Date maxDate) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.VALUE, true);
 		requestBuilder.setIds(new LinkedList<Integer>());
 		requestBuilder.addId(1);
+		requestBuilder.setDateRange(dateRange);
+		if(minDate != null) requestBuilder.addParameter(ParamType.MIN_TIMESTAMP, minDate.toGMTString().replace(" ", "%20"));
+		if(maxDate != null) requestBuilder.addParameter(ParamType.MAX_TIMESTAMP, maxDate.toGMTString().replace(" ", "%20"));
 		requestBuilder.getRequest().getParameters().forEach(param -> GWT.log("RequestParam: " + param.getKey() + " " + param.getValue()));
 		sendRequest(requestBuilder.getRequest());
 	}
@@ -83,12 +88,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	private void sendRequest(final Request request) {
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getValues() != null) {
-				if(request.getParameters() != null) {
-					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, request.getParameters(), false));
-				}else if(request.getIds() != null) {
-					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, false, request.getIds()));
-				}
-				view.showValuesInChart(result.getValues().subList(0, 100));
+				view.showValuesInChart(result.getValues());
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
 			}

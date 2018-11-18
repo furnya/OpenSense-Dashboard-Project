@@ -233,4 +233,68 @@ public class Languages {
 			return "";
 		}
 	}
+	
+	public static String past24Hours() {
+		if(de) {
+			return "Letzte 24h";
+		}else {
+			return "Past 24h";
+		}
+	}
+	
+	public static String pastWeek() {
+		if(de) {
+			return "Letzte Woche";
+		}else {
+			return "Past week";
+		}
+	}
+	
+	public static String pastMonth() {
+		if(de) {
+			return "Letzter Monat";
+		}else {
+			return "Past month";
+		}
+	}
+	
+	public static String pastYear() {
+		if(de) {
+			return "Letztes Jahr";
+		}else {
+			return "Past year";
+		}
+	}
+	
+	public static String customRange() {
+		if(de) {
+			return "Benutzerdefiniert";
+		}else {
+			return "Custom range";
+		}
+	}
+	
+	public static String timespan() {
+		if(de) {
+			return "Zeitspanne";
+		}else {
+			return "Timespan";
+		}
+	}
+	
+	public static String from() {
+		if(de) {
+			return "Von";
+		}else {
+			return "From";
+		}
+	}
+	
+	public static String to() {
+		if(de) {
+			return "Bis";
+		}else {
+			return "To";
+		}
+	}
 }

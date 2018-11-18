@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.ibm.icu.util.Calendar;
+import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
@@ -115,9 +117,10 @@ public class ClientRequestHandler {
 		return DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
 	}
 	
-	public List<Value> getValueList(int id, List<Parameter> parameterList){
+	public List<Value> getValueList(int id, List<Parameter> parameterList, DateRange dateRange){
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
+		setTimestampParameters(rs, dateRange);
 		JSONObject sensorJSON = rs.objectRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values");
 		if(sensorJSON==null) {
 			return null;
@@ -148,6 +151,36 @@ public class ClientRequestHandler {
 			}
 		}
 		return valueList;
+	}
+	
+	private void setTimestampParameters(RequestSender rs, DateRange dateRange) {
+		Calendar cal = Calendar.getInstance();
+		switch(dateRange) {
+		case CUSTOM:
+			break;
+		case PAST_24HOURS:
+			rs.addParameter("maxTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			cal.add(Calendar.DATE, -1);
+			rs.addParameter("minTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			break;
+		case PAST_MONTH:
+			rs.addParameter("maxTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			cal.add(Calendar.MONTH, -1);
+			rs.addParameter("minTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			break;
+		case PAST_WEEK:
+			rs.addParameter("maxTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			cal.add(Calendar.DATE, -7);
+			rs.addParameter("minTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			break;
+		case PAST_YEAR:
+			rs.addParameter("maxTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			cal.add(Calendar.YEAR, -1);
+			rs.addParameter("minTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			break;
+		default:
+			break;
+		}
 	}
 
 }

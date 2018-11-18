@@ -8,6 +8,8 @@ public enum ParamType {
 	,MAX_ACCURACY {@Override public String getValue() {return "maxAccuracy";}}
 	,MAX_SENSORS {@Override public String getValue() {return "maxSensors";}}
 	,PLACE {@Override public String getValue() {return "place";}}
+	,MIN_TIMESTAMP {@Override public String getValue() {return "minTimestamp";}}
+	,MAX_TIMESTAMP {@Override public String getValue() {return "maxTimestamp";}}
 	;
 	
 	public abstract String getValue();

@@ -1,7 +1,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui" 
-	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html" xmlns:m="urn:import:gwt.material.design.client.ui">
+	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html" xmlns:m="urn:import:gwt.material.design.client.ui"
+	xmlns:ma="urn:import:gwt.material.design.addins.client">
 	
 	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
@@ -15,6 +16,21 @@
 	<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="spinner">
 		<m:MaterialSpinner/>
 	</m:MaterialPreLoader>
+	<bh:Div ui:field="mdContainer" width="100%"/>
+	<m:MaterialNavBar ui:field="navBarVis">
+		<m:MaterialNavBrand float="LEFT" text="{lang.timespan}"/>
+		<m:MaterialNavSection float="RIGHT">
+			<m:MaterialLink ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT"/>
+			<m:MaterialDatePicker ui:field="startingDate" placeholder="{lang.from}"/>
+			<!-- ma:timepicker.MaterialTimePicker ui:field="startingTime" placeholder="Time"/-->
+			<m:MaterialDatePicker ui:field="endingDate" placeholder="{lang.to}"/>
+			<!-- ma:timepicker.MaterialTimePicker ui:field="endingTime" placeholder="Time"/-->
+			<m:MaterialLink ui:field="pastYear" text="{lang.pastYear}" textColor="WHITE" waves="LIGHT"/>
+			<m:MaterialLink ui:field="pastMonth" text="{lang.pastMonth}" textColor="WHITE" waves="LIGHT"/>
+			<m:MaterialLink ui:field="pastWeek" text="{lang.pastWeek}" textColor="WHITE" waves="LIGHT"/>
+			<m:MaterialLink ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT"/>
+		</m:MaterialNavSection>
+	</m:MaterialNavBar>
 	<bh:Div ui:field="chartContainer" width="100%"/>
 </bh:Div>
 

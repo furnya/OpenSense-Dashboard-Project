@@ -32,7 +32,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			response.setUnits(ClientRequestHandler.getInstance().getUnitMap());
 			break;
 		case VALUE:
-			response.setValues(ClientRequestHandler.getInstance().getValueList(searchRequest.getIds().get(0),searchRequest.getParameters()));
+			response.setValues(ClientRequestHandler.getInstance().getValueList(searchRequest.getIds().get(0),searchRequest.getParameters(),searchRequest.getDateRange()));
 			break;
 		default:
 			break;
