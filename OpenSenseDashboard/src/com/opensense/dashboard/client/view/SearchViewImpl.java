@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
-import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
@@ -153,17 +152,13 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		sensors.forEach(sensor -> {
 			final SensorItemCard card = new SensorItemCard();
 			final Integer sensorId = sensor.getSensorId();
-			card.setHeader("Sensor: " + sensorId);
+			card.setHeader(Languages.sensorId() + sensorId);
 			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setIconTitle(sensor.getMeasurand().getDisplayName());
-			card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
-			card.getMiddleHeader().add(new Span(sensor.getAttributionText()));
-			card.getMiddleHeader().add(new Span(sensor.getSensorModel()));
-			card.addClickHandler(event -> {
-				event.stopPropagation();
-				card.setActive(!card.isActive());
-			});
+//			card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
+//			card.getMiddleHeader().add(new Span(sensor.getAttributionText()));
+//			card.getMiddleHeader().add(new Span(sensor.getSensorModel()));
 			card.addValueChangeHandler(event -> {
 				if(event.getValue()) {
 					unselectedSensors.remove(sensorId);
@@ -336,12 +331,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		}
 		
 		pagerTop.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));
-		pagerTop.setForwardsEnabled((sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage))) ? true : false);
-		pagerTop.setBackwardsEnabled((sensorPage > 0) ? true : false);
+		pagerTop.setForwardsEnabled(sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage)));
+		pagerTop.setBackwardsEnabled(sensorPage > 0);
 		
 		pagerBottom.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));
-		pagerBottom.setForwardsEnabled((sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage))) ? true : false);
-		pagerBottom.setBackwardsEnabled((sensorPage > 0) ? true : false);
+		pagerBottom.setForwardsEnabled(sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage)));
+		pagerBottom.setBackwardsEnabled(sensorPage > 0);
 	}
 
 	@Override

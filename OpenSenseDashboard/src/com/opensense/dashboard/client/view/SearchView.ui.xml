@@ -45,6 +45,14 @@
 	text-align: center;	
 }
 .sensor-container{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.sensor-container > Div{
+	margin-bottom: 15px;
+}
+.sensor-container > Div:last-child{
+	margin-bottom: 0px !important; 
 }
 .center-text{
 	margin-left: 45px;
@@ -82,9 +90,9 @@
 			<m:MaterialSpinner/>
 		</m:MaterialPreLoader>
 		<bh:Div ui:field="noDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
-			<bh:Span text="Keine Daten vorhanden" addStyleNames="{style.center-text}"/>
+			<bh:Span text="{lang.noData}" addStyleNames="{style.center-text}"/>
 		</bh:Div>
-		<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container} margin-top-10 margin-bottom-10" width="100%"/> 
+		<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
 		<d:Pager ui:field="pagerBottom"  addStyleNames="{style.center-text}"/>
 	</bh:Div>
 </bh:Div>

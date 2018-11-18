@@ -283,11 +283,9 @@
 .card-active{
 	animation: 1s color-marked;
 	background-color: #42DCA3 !important;
-    border-bottom: none !important;
 }
 
 .card-deactive{
 	animation: 1s color-unmarked;
 	background-color: #fff !important;
-    border-bottom: none !important;
 }

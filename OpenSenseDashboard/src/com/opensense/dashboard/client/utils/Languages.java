@@ -312,4 +312,16 @@ public class Languages {
 		}
 	}
 	
+	public static String noData(){
+		if(de){
+			return "Es konnten keine Daten zu der gewählten Suchparameter gefunden werden";
+		}else{
+			return "";
+		}
+	}
+
+	public static String sensorId() {
+		return "Sensor ID: ";
+	}
+	
 }

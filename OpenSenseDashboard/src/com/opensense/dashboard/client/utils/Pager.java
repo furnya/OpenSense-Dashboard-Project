@@ -1,8 +1,13 @@
 package com.opensense.dashboard.client.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -10,7 +15,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.gui.GUIImageBundle;
+import com.opensense.dashboard.client.model.PagerImages;
 import com.opensense.dashboard.client.view.SearchView;
 
 public class Pager extends Composite{
@@ -26,23 +31,27 @@ public class Pager extends Composite{
 	@SuppressWarnings("unused")
 	private String[] pageSize = {"2", "5", "10", "25", "50", "100"};
 	
+	private JavaScriptObject backwardsButtonHandler;
+	private JavaScriptObject backwardsStepByStepButtonHandler;
+	private JavaScriptObject forwardsButtonHandler;
+	private JavaScriptObject forwardsStepByStepButtonHandler;
+	private Map<Element, JavaScriptObject> mouseOutHandler = new HashMap<>();
+	
     @UiField
     Image backwardsButton;
+    
     @UiField
     Image forwardsButton;
+    
     @UiField
     Span pageNumber;
+    
     @UiField
     Image backwardsStepByStepButton;
+    
     @UiField
     Image forwardsStepByStepButton;
-//    @UiField
-//    Modal pageConfigurationModal;
-//    @UiField
-//    Button loadPageConfig;
-//    @UiField
-//    ListBox pagesListBox;
-	
+    
 	public Pager(SearchView view) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.view = view;
@@ -82,33 +91,96 @@ public class Pager extends Composite{
 	}
 	
     public void setForwardsEnabled(final boolean enabled) {
+    	mouseOutHandler.entrySet().forEach(entry -> {
+    		removeListener(entry.getKey(), entry.getValue(), "mouseout");
+    	});
+    	mouseOutHandler.clear();
+    	if(forwardsButtonHandler != null) {
+    		removeListener(forwardsButton.getElement(), forwardsButtonHandler, "mouseover");
+    		forwardsButtonHandler = null;
+    	}
+    	if(forwardsStepByStepButtonHandler != null) {
+    		removeListener(forwardsStepByStepButton.getElement(), forwardsStepByStepButtonHandler, "mouseover");
+    		forwardsStepByStepButtonHandler = null;
+    	}
     	if(enabled){
-	    	forwardsButton.setUrl(GUIImageBundle.INSTANCE.forwardsBlue().getSafeUri().asString());
-	    	forwardsStepByStepButton.setUrl(GUIImageBundle.INSTANCE.forwardsStepByStepBlue().getSafeUri().asString());
+    		forwardsButtonHandler = addMouseOverListener(forwardsButton.getElement(), forwardsButton, PagerImages.FORWARDS_BUTTON_HOVER.name());
+    		forwardsStepByStepButtonHandler = addMouseOverListener(forwardsStepByStepButton.getElement(), forwardsStepByStepButton, PagerImages.FORWARDSSTEPBYSTEP_BUTTON_HOVER.name());
+	    	forwardsButton.setUrl(PagerImages.FORWARDS_BUTTON_ACTIVE.getImageUrl());
+	    	forwardsStepByStepButton.setUrl(PagerImages.FORWARDSSTEPBYSTEP_BUTTON_ACTIVE.getImageUrl());
 	    	forwardsButton.addStyleName(STYLE_CLICKABLE);
 	    	forwardsStepByStepButton.addStyleName(STYLE_CLICKABLE);
     	}else{
-    		forwardsButton.setUrl(GUIImageBundle.INSTANCE.forwards().getSafeUri().asString());
-	    	forwardsStepByStepButton.setUrl(GUIImageBundle.INSTANCE.forwardsStepByStep().getSafeUri().asString());
+    		forwardsButton.setUrl(PagerImages.FORWARDSBUTTON_DISABLED.getImageUrl());
+	    	forwardsStepByStepButton.setUrl(PagerImages.FORWARDSSTEPBYSTEP_BUTTON_DISABLED.getImageUrl());
 	    	forwardsButton.removeStyleName(STYLE_CLICKABLE);
 	    	forwardsStepByStepButton.removeStyleName(STYLE_CLICKABLE);
     	}
     }
     
     public void setBackwardsEnabled(final boolean enabled) {
+    	mouseOutHandler.entrySet().forEach(entry -> {
+    		removeListener(entry.getKey(), entry.getValue(), "mouseout");
+    	});
+    	mouseOutHandler.clear();
+    	if(backwardsButtonHandler != null) {
+    		removeListener(backwardsButton.getElement(), backwardsButtonHandler, "mouseover");
+    		backwardsButtonHandler = null;
+    	}
+    	if(backwardsStepByStepButtonHandler != null) {
+    		removeListener(backwardsStepByStepButton.getElement(), backwardsStepByStepButtonHandler, "mouseover");
+    		backwardsStepByStepButtonHandler = null;
+    	}
     	if(enabled){
-    		backwardsButton.setUrl(GUIImageBundle.INSTANCE.backwardsBlue().getSafeUri().asString());
-    		backwardsStepByStepButton.setUrl(GUIImageBundle.INSTANCE.backwardsStepbyStepBlue().getSafeUri().asString());
+    		backwardsButtonHandler = addMouseOverListener(backwardsButton.getElement(), backwardsButton, PagerImages.BACKWARDS_BUTTON_HOVER.name());
+    		backwardsStepByStepButtonHandler = addMouseOverListener(backwardsStepByStepButton.getElement(), backwardsStepByStepButton, PagerImages.BACKWARDSSTEPBYSTEP_BUTTON_HOVER.name());
+    		backwardsButton.setUrl(PagerImages.BACKWARDS_BUTTON_ACTIVE.getImageUrl());
+    		backwardsStepByStepButton.setUrl(PagerImages.BACKWARDSSTEPBYSTEP_BUTTON_ACTIVE.getImageUrl());
     		backwardsButton.addStyleName(STYLE_CLICKABLE);
         	backwardsStepByStepButton.addStyleName(STYLE_CLICKABLE);
     	}else{
-    		backwardsButton.setUrl(GUIImageBundle.INSTANCE.backwards().getSafeUri().asString());
-    		backwardsStepByStepButton.setUrl(GUIImageBundle.INSTANCE.backwardsStepbyStep().getSafeUri().asString());
+    		backwardsButton.setUrl(PagerImages.BACKWARDS_BUTTON_DISABLED.getImageUrl());
+    		backwardsStepByStepButton.setUrl(PagerImages.BACKWARDSSTEPBYSTEP_BUTTON_DISABLED.getImageUrl());
     		backwardsButton.removeStyleName(STYLE_CLICKABLE);
     		backwardsStepByStepButton.removeStyleName(STYLE_CLICKABLE);
     	}
     }
     
+	private native void removeListener(Element elem, JavaScriptObject handler, String type) /*-{
+		elem.removeEventListener(type, handler);
+	}-*/;
+    
+	private native JavaScriptObject addMouseOverListener(Element elem, Image image, String imageType) /*-{
+		var that = this;
+		var handler = function() { 
+			that.@com.opensense.dashboard.client.utils.Pager::setImage(*)(image, imageType);
+		};
+		elem.addEventListener("mouseover", handler);
+		return handler
+	}-*/;
+	
+	private native JavaScriptObject addMouseOutListener(Element elem, Image image, String imageType) /*-{
+		var that = this;
+		var handler = function() { 
+			that.@com.opensense.dashboard.client.utils.Pager::setImage(*)(image, imageType);
+			elem.removeEventListener("mouseout", handler);
+		};
+		elem.addEventListener("mouseout", handler);
+		return handler;
+	}-*/;
+	
+	public void setImage(Image image, String imageType) {
+		try{
+			image.setUrl(PagerImages.valueOf(imageType).getImageUrl());
+			if(imageType.contains("HOVER")) {
+				mouseOutHandler.put(image.getElement(), addMouseOutListener(image.getElement(), image, PagerImages.valueOf(imageType.replace("HOVER", "ACTIVE")).name()));
+			}
+			}catch(Exception e) {
+			//TODO:
+			GWT.log("Exception");
+		}
+	}
+	
     public void setPage(String pageNumber){
     	this.pageNumber.setText(pageNumber);
     }

@@ -1,23 +1,17 @@
-<svg width="30.000000000000004" height="30.000000000000004" xmlns="http://www.w3.org/2000/svg">
- <g>
-  <title>background</title>
-  <rect x="-1" y="-1" width="3.105526" height="3.105526" id="canvas_background" fill="none"/>
- </g>
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
 
  <g>
-  <title>Layer 1</title>
-  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="2.1421900228804986,7.797153616878 2.1421900228804986,7.797153616878 " id="svg_4" stroke-linecap="round"/>
-  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="10.35822343826294,16.609855592250824 10.35822343826294,16.609855592250824 10.395836353302002,16.609855592250824 " id="svg_5" stroke-linecap="round"/>
-  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="1.8036750357746882,14.078487266508011 1.8036750357746882,14.078487266508011 " id="svg_6" stroke-linecap="round"/>
-  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="4.624633261656431,12.122622896563337 4.624633261656431,12.122622896563337 " id="svg_7" stroke-linecap="round"/>
-  <polyline fill="none" stroke="null" stroke-width="null" stroke-opacity="null" points="4.2861182745506206,13.852810608437471 4.2861182745506206,13.852810608437471 4.2861182745506206,13.852810608437471 " id="svg_8" stroke-linecap="round"/>
-  <ellipse fill="#6b6b6b" stroke="null" stroke-width="null" stroke-opacity="null" cx="19.666927" cy="16.165954" id="svg_11" rx="1.185387" ry="0.097163"/>
-  <ellipse fill="#6b6b6b" stroke="null" stroke-width="null" stroke-opacity="null" cx="10.047805" cy="9.228526" id="svg_12" rx="1.185387" ry="0.097163"/>
-  <ellipse fill="#6b6b6b" stroke="null" stroke-width="null" stroke-opacity="null" cx="14.692189" cy="22.967353" id="svg_13" rx="0.019433" ry="0.019433"/>
-  <ellipse fill="#d8d8d8" stroke="null" stroke-width="null" stroke-opacity="null" cx="14.999999" cy="15" id="svg_10" rx="14.282938" ry="14.282938"/>
-  <g transform="rotate(180 14.999999999999998,15.000000000000002) " id="svg_1">
-   <polygon stroke-width="0" stroke="null" fill="#6b6b6b" points="10.657241344451904,5.512393951416016 10.657241344451904,14.787344932556152 10.657241344451904,15.44166374206543 10.657241344451904,24.487606048583984 8.066880702972412,24.487606048583984 8.066880702972412,5.512393951416016 " id="svg_3"/>
-   <polygon stroke-width="0" stroke="null" fill="#6b6b6b" points="21.933119297027588,24.43552017211914 10.628763675689697,15.000326156616211 21.933119297027588,5.564478874206543 " id="svg_2"/>
+  <title>background</title>
+  <rect x="-1" y="-1" width="567.100475" height="567.100475" id="canvas_background" fill="none"/>
+  <g id="canvasGrid" display="none">
+   <rect id="svg_1" width="100%" height="100%" x="0" y="0" stroke-width="0" fill="url(#gridpattern)"/>
   </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <rect fill="#9f9f9f" stroke="#42dca3" stroke-width="1.5" x="105" y="101.130199" width="308.888889" height="281.111111" id="svg_10"/>
+  <path d="m250.000023,13.112095c-130.821341,0 -236.887897,106.066556 -236.887897,236.887897s106.066556,236.887897 236.887897,236.887897s236.887897,-106.066556 236.887897,-236.887897s-106.066556,-236.887897 -236.887897,-236.887897zm0.45897,355.331846l0,-88.832961l-118.902919,0l0,-59.221974l118.902919,0l0,-88.373991l117.984978,117.984978l-117.984978,118.443949z" fill="#dfdfdf" id="svg_8" stroke="#dfdfdf"/>
+  <rect fill="#9f9f9f" stroke="#9f9f9f" stroke-width="1.5" x="331.647566" y="149.999993" width="38.888889" height="200" id="svg_11"/>
  </g>
 </svg>

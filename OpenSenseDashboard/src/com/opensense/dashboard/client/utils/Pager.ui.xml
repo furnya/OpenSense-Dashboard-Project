@@ -9,9 +9,9 @@
 	<ui:style>
 	.paging-button{
 		margin-right: 10px;
-		max-height: 15px;
-		max-width: 15px;
-		margin-top: 1px;
+		max-height: 20px;
+		max-width: 20px;
+		margin-top: -5px;
 	}
 	</ui:style>
 		<bh:Div>
