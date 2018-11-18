@@ -69,7 +69,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private Map<Integer, Marker> markers = new HashMap<>();
 	private List<Marker> mList = new ArrayList<>();
 	private List<Marker> allMarkers = new ArrayList<>();
-	private List<MarkerClusterer> allClusters = new ArrayList<>();
 	private MarkerClusterer cluster;
 	// This should be a HashMap
 	// ########################################################################
@@ -270,7 +269,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mCO.setZoomOnClick(true);
 		cluster = MarkerClusterer.newInstance(mapWidget, mCO);
 		cluster.addMarkers(mList);
-		allClusters.add(cluster);
 		cluster.repaint();
 	}
 
@@ -282,7 +280,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	public void resetMarkerAndCluster() {
 		mapWidget.setCenter(LatLng.newInstance(52.521918, 13.413215));
 		mapWidget.setZoom(4);
-		allClusters.forEach(c -> c.clearMarkers());
 		mList.clear();
 		allMarkers.clear();
 		markers.clear();
@@ -294,7 +291,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	}
 
 	public void recenterMap() {
-		allClusters.forEach(e -> e.repaint());
 		cluster.repaint();
 		mapWidget.setCenter(LatLng.newInstance(52.521918, 13.413215));
 		mapWidget.setZoom(3);
