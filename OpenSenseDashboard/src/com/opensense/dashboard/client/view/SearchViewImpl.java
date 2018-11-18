@@ -11,6 +11,7 @@ import org.gwtbootstrap3.client.ui.html.Span;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.maps.client.base.LatLngBounds;
 import com.google.gwt.maps.client.placeslib.Autocomplete;
 import com.google.gwt.maps.client.placeslib.AutocompleteOptions;
 import com.google.gwt.maps.client.placeslib.AutocompleteType;
@@ -195,6 +196,14 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		});
 	}
 	
+	@Override
+	public LatLngBounds getBounds() {
+		if(autoComplete.getPlace() != null && autoComplete.getPlace().getGeometry() != null) {
+			return autoComplete.getPlace().getGeometry().getViewPort();
+		}
+		return null;
+	}
+
 	@Override
 	public String getPlaceString() {
 		if(autoComplete.getPlace() != null && autoComplete.getPlace().getName() != null) {
