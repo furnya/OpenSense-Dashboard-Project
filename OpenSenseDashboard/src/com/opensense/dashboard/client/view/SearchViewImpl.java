@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.view;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
@@ -106,7 +108,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	private LinkedList<Integer> shownSensorIds = new LinkedList<>();
 	private Map<Integer, SensorItemCard> sensorViews = new HashMap<>();
-	private int maxSensorsOnPage = 10;//TODO: getMaxObjectsOnPageFromCookie();
+	private int maxSensorsOnPage = 15;//TODO: getMaxObjectsOnPageFromCookie();
 	private int sensorPage = 0;
 	
 	public SearchViewImpl() {
@@ -146,6 +148,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		// init UI Elements if needed
 	}
 	
+	public static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
+    public static final Charset UTF_8 = Charset.forName("cp1252");
+	
 	@Override
 	public void showSensorData(final List<Sensor> sensors) {
 		clearSensorData();
@@ -156,9 +161,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setIconTitle(sensor.getMeasurand().getDisplayName());
-//			card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
-//			card.getMiddleHeader().add(new Span(sensor.getAttributionText()));
-//			card.getMiddleHeader().add(new Span(sensor.getSensorModel()));
+			
+			card.getMiddleHeader().add(new Span("Messgröße: " + sensor.getMeasurand().getDisplayName()));
+			card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
+			card.getMiddleHeader().add(new Span(sensor.getAttributionText()));
 			card.addValueChangeHandler(event -> {
 				if(event.getValue()) {
 					unselectedSensors.remove(sensorId);

@@ -2,6 +2,8 @@ package com.opensense.dashboard.client.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.gwtbootstrap3.client.ui.html.Span;
 
@@ -20,7 +22,6 @@ import com.opensense.dashboard.client.view.SearchView;
 
 public class Pager extends Composite{
 
-	private static final String STYLE_CLICKABLE = "clickable";
 	private static PagerUiBinder uiBinder = GWT.create(PagerUiBinder.class);
 	
 	interface PagerUiBinder extends UiBinder<Widget, Pager> {
@@ -30,6 +31,12 @@ public class Pager extends Composite{
 	//The different types how many Sensors are on one page
 	@SuppressWarnings("unused")
 	private String[] pageSize = {"2", "5", "10", "25", "50", "100"};
+	
+	private static final Logger LOGGER = Logger.getLogger(Pager.class.getName());
+	
+	private static final String STYLE_CLICKABLE = "clickable";
+	private static final String MOUSE_OVER = "mouseover";
+	private static final String MOUSE_OUT = "mouseout";
 	
 	private JavaScriptObject backwardsButtonHandler;
 	private JavaScriptObject backwardsStepByStepButtonHandler;
@@ -60,7 +67,7 @@ public class Pager extends Composite{
     @UiHandler("forwardsStepByStepButton")
 	public void onForwardsStepByStepButtonClicked(ClickEvent e){
     	//If current page is the last do nothing 
-		if(((int) Math.ceil((double) view.getShownSensorIds().size() / (double) view.getMaxSensorsOnPage())) - 1 < view.getSensorPage() + 1){
+		if(((int) Math.ceil((double) view.getShownSensorIds().size() / view.getMaxSensorsOnPage())) - 1 < view.getSensorPage() + 1){
 			return;
 		}
     	view.setSensorPage(view.getSensorPage() + 1);
@@ -79,7 +86,7 @@ public class Pager extends Composite{
 	@UiHandler("forwardsButton")
 	public void onForwardsButtonClicked(ClickEvent e){
 		//Goes to the last page
-		view.setSensorPage(((int) Math.ceil((double) view.getShownSensorIds().size() / (double) view.getMaxSensorsOnPage())) - 1);
+		view.setSensorPage(((int) Math.ceil((double) view.getShownSensorIds().size() / view.getMaxSensorsOnPage())) - 1);
 		view.pagination();
 	}
 	
@@ -91,16 +98,14 @@ public class Pager extends Composite{
 	}
 	
     public void setForwardsEnabled(final boolean enabled) {
-    	mouseOutHandler.entrySet().forEach(entry -> {
-    		removeListener(entry.getKey(), entry.getValue(), "mouseout");
-    	});
+    	mouseOutHandler.entrySet().forEach(entry ->	removeListener(entry.getKey(), entry.getValue(), MOUSE_OUT));
     	mouseOutHandler.clear();
     	if(forwardsButtonHandler != null) {
-    		removeListener(forwardsButton.getElement(), forwardsButtonHandler, "mouseover");
+    		removeListener(forwardsButton.getElement(), forwardsButtonHandler, MOUSE_OVER);
     		forwardsButtonHandler = null;
     	}
     	if(forwardsStepByStepButtonHandler != null) {
-    		removeListener(forwardsStepByStepButton.getElement(), forwardsStepByStepButtonHandler, "mouseover");
+    		removeListener(forwardsStepByStepButton.getElement(), forwardsStepByStepButtonHandler, MOUSE_OVER);
     		forwardsStepByStepButtonHandler = null;
     	}
     	if(enabled){
@@ -119,16 +124,14 @@ public class Pager extends Composite{
     }
     
     public void setBackwardsEnabled(final boolean enabled) {
-    	mouseOutHandler.entrySet().forEach(entry -> {
-    		removeListener(entry.getKey(), entry.getValue(), "mouseout");
-    	});
+    	mouseOutHandler.entrySet().forEach(entry -> removeListener(entry.getKey(), entry.getValue(), MOUSE_OUT));
     	mouseOutHandler.clear();
     	if(backwardsButtonHandler != null) {
-    		removeListener(backwardsButton.getElement(), backwardsButtonHandler, "mouseover");
+    		removeListener(backwardsButton.getElement(), backwardsButtonHandler, MOUSE_OVER);
     		backwardsButtonHandler = null;
     	}
     	if(backwardsStepByStepButtonHandler != null) {
-    		removeListener(backwardsStepByStepButton.getElement(), backwardsStepByStepButtonHandler, "mouseover");
+    		removeListener(backwardsStepByStepButton.getElement(), backwardsStepByStepButtonHandler, MOUSE_OVER);
     		backwardsStepByStepButtonHandler = null;
     	}
     	if(enabled){
@@ -175,9 +178,8 @@ public class Pager extends Composite{
 			if(imageType.contains("HOVER")) {
 				mouseOutHandler.put(image.getElement(), addMouseOutListener(image.getElement(), image, PagerImages.valueOf(imageType.replace("HOVER", "ACTIVE")).name()));
 			}
-			}catch(Exception e) {
-			//TODO:
-			GWT.log("Exception");
+		}catch(Exception e) {
+			LOGGER.log(Level.WARNING, "Exception caught while adding hover or active images to pager.", e);
 		}
 	}
 	
