@@ -179,18 +179,20 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	 * 
 	 * 
 	 */
-	protected void drawInfoWindow(Marker marker, Integer id, String smodel, double accuracy, double aGround) {
-		if (marker == null || id < 0) {
+	protected void drawInfoWindow(Marker marker,Sensor si) {
+		if (marker == null || si.getId() < 0) {
 			return;
 		}
 		InfoWindowOptions options = InfoWindowOptions.newInstance();
 		MarkerInfoWindow infoWindow = new MarkerInfoWindow();
-		infoWindow.setHeader(smodel + " " + id);
+		infoWindow.setHeader(si.getSensorModel() + " " + si.getId());
 		ArrayList<String> sensorData = new ArrayList<>();
-		sensorData.add("Sensortyp: " + smodel);
-		sensorData.add("Genauigkeit: " + accuracy);
-		sensorData.add("SensorID: " + id);
-		sensorData.add("Hoehe ueber Grund: " + aGround);
+		sensorData.add("Messeinheit: "  + si.getMeasurand().getMeasurandType().toString());
+		sensorData.add("Sensortyp: " + si.getSensorModel());
+		sensorData.add("Genauigkeit: " + si.getAccuracy());
+		sensorData.add("Hoehe ueber Grund: " + si.getAltitudeAboveGround());
+		sensorData.add("Attribution: " + si.getAttributionText());
+
 		infoWindow.setData(sensorData);
 		options.setContent(infoWindow);
 		sensorData.clear();
@@ -221,25 +223,24 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		lastOpened.remove(0);
 	}
 
-	private void setMarkers(double bg, double lg, int sensorID, String smodel, double accuracy, double aGround,
-			MeasurandType measurandType) {
-		LatLng position = LatLng.newInstance(bg, lg);
+	private void setMarkers(Sensor s) {
+		LatLng position = LatLng.newInstance(s.getLocation().getLat(),s.getLocation().getLon());
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
-		markerOpt.setTitle("Sensor postion is: " + bg + ", " + lg + " Sensormodel: " + smodel);
+		markerOpt.setTitle("Sensor postion is: " + s.getLocation().getLat() + ", " + s.getLocation().getLon() + " Sensormodel: " + s.getSensorModel());
 		final Marker markerBasic = Marker.newInstance(markerOpt);
-		MarkerImage icon = MarkerImage.newInstance(getIconUrlFromType(measurandType), Size.newInstance(20, 20));
+		MarkerImage icon = MarkerImage.newInstance(getIconUrlFromType(s.getMeasurand().getMeasurandType()), Size.newInstance(20, 20));
 		icon.setScaledSize(Size.newInstance(20, 20));
 		markerBasic.setIcon(icon);
 		markerBasic.setDraggable(false);
-		markers.put(sensorID, markerBasic);
+		markers.put(s.getId(), markerBasic);
 		mList.add(markerBasic);
 		allMarkers.add(markerBasic);
-		String idToString = Integer.toString(sensorID);
+		String idToString = Integer.toString(s.getId());
 		markerBasic.addClickHandler(event -> {
 			GWT.log("Current id: " + idToString);
-			resize(bg, lg);
-			drawInfoWindow(markerBasic, sensorID, smodel, accuracy, aGround);
+			resize(position.getLatitude(), position.getLongitude());
+			drawInfoWindow(markerBasic,s);
 
 		});
 	}
@@ -249,18 +250,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			resetMarkerAndCluster();
 		}
 		sensorList.forEach(item -> {
-			LatLng postion = LatLng.newInstance(item.getLocation().getLat(), item.getLocation().getLon());
-			/* variables for Sensors */
-			int id = item.getId();
-			String sensormodel = item.getSensorModel();
-			double sensorAccuracy = item.getAccuracy();
-			double aboveGround = item.getAltitudeAboveGround();
-
-			GWT.log(postion.getLatitude() + " " + postion.getLongitude() + " SensorID: " + id);
-
-			setMarkers(postion.getLatitude(), postion.getLongitude(), id, sensormodel, sensorAccuracy, aboveGround,
-					item.getMeasurand().getMeasurandType());
+			GWT.log(item.getLocation().getLat() + " " + item.getLocation().getLon() + " SensorID: " + item.getId());
+			setMarkers(item);
 		});
+		
 		MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
 		mCO.setGridSize(80);
 		mCO.setAverageCenter(true);
