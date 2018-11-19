@@ -16,6 +16,7 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
+import gwt.material.design.client.constants.IconSize;
 import gwt.material.design.client.ui.MaterialButton;
 
 public class MarkerInfoWindow extends Composite {
@@ -72,6 +73,7 @@ public class MarkerInfoWindow extends Composite {
 	public void oniwSearchBtnClicked(ClickEvent e) {
 		getSensorAndShowInSearch();
 	}
+	
 	public void getSensorAndShowInSearch() {
 		GWT.log("SearchBtn pressed");
 	}

@@ -283,6 +283,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mList.clear();
 		allMarkers.clear();
 		markers.clear();
+		cluster.clearMarkers();
+		GWT.log("clearing All clusters & markers");
 	}
 
 	@UiHandler("recenterBtn")
