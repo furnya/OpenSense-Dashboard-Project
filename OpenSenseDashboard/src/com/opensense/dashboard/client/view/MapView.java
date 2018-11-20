@@ -2,11 +2,13 @@ package com.opensense.dashboard.client.view;
 
 import java.util.List;
 
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.shared.Sensor;
 
 public interface MapView extends IDataPanelPageView{
 	public interface Presenter{
+//		HandlerManager getEventBus();
 	}
 	
 	public void setPresenter(Presenter presenter);

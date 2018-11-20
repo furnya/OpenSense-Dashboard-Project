@@ -8,15 +8,16 @@ import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.view.MapView.Presenter;
 
-import gwt.material.design.client.constants.IconSize;
 import gwt.material.design.client.ui.MaterialButton;
 
 public class MarkerInfoWindow extends Composite {
@@ -41,8 +42,9 @@ public class MarkerInfoWindow extends Composite {
 	interface MarkerInfoWindowUiBinder extends UiBinder<Widget, MarkerInfoWindow> {
 	}
 	
-	
 	private static MarkerInfoWindowUiBinder uiBinder = GWT.create(MarkerInfoWindowUiBinder.class);
+	
+	protected Presenter presenter;
 	
 	public MarkerInfoWindow() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -67,19 +69,17 @@ public class MarkerInfoWindow extends Composite {
 	}
 	public void getSensorAndShowVisu() {
 		GWT.log("VisuBtn pressed");
+//		presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true));
 	}
 	
 	@UiHandler("iwSearchBtn")
 	public void oniwSearchBtnClicked(ClickEvent e) {
 		getSensorAndShowInSearch();
+		
 	}
 	
 	public void getSensorAndShowInSearch() {
 		GWT.log("SearchBtn pressed");
+//		presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true));
 	}
-	
-	
-	
-	
-	
 }
