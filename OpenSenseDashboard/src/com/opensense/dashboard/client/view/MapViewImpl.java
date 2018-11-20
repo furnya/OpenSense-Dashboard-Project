@@ -56,7 +56,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	@UiField
 	MaterialButton visuBtn;
-	
+
 	@UiField
 	MaterialButton searchBtn;
 
@@ -85,6 +85,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	// last opened infoWindow
 	private ArrayList<InfoWindow> lastOpened = new ArrayList<>();
 	private Map<Marker, InfoWindow> infoWindows = new HashMap<>();
+	private ArrayList<Integer> iwID = new ArrayList<>();
 
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -146,11 +147,16 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapOptions.setStreetViewControl(false);
 		mapOptions.setMapTypeControl(false);
 		mapOptions.setScrollWheel(true);
+		mapOptions.setPanControl(false);
+		mapOptions.setZoomControl(false);
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.BOTTOM_CENTER, clearBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_TOP, recenterBtn);
+		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_RIGHT, visuBtn);
+		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_CENTER, searchBtn);
+		
 		mapWidget.addDragStartHandler(event -> {
 			for (InfoWindow infoWindow : infoWindows.values()) {
 				infoWindow.close();
@@ -198,16 +204,20 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		sensorData.add("Genauigkeit: " + si.getAccuracy());
 		sensorData.add("Hoehe ueber Grund: " + si.getAltitudeAboveGround());
 		sensorData.add("Attribution: " + si.getAttributionText());
-
 		infoWindow.setData(sensorData);
 		options.setContent(infoWindow);
 		sensorData.clear();
 		InfoWindow iw = InfoWindow.newInstance(options);
 		lastOpened.add(iw);
 		infoWindows.put(marker, iw);
+		if (!iwID.isEmpty()) {
+			iwID.clear();
+		}
+		iwID.add(si.getId());
+		infoWindow.passID(iwID);
 		String size = Integer.toString(lastOpened.size());
 		GWT.log("This is lastOpened size: " + size);
-		if (lastOpened.size() > 1) {
+		if (lastOpened.size() >= 1) {
 			GWT.log("There is a opened InfoWindow");
 			closeLastInfoWindow(lastOpened.get(0));
 			iw.open(mapWidget, marker);
@@ -257,21 +267,25 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		if (!mList.isEmpty()) {
 			resetMarkerAndCluster();
 		}
-		sensorList.forEach(item -> {
-			GWT.log(item.getLocation().getLat() + " " + item.getLocation().getLon() + " SensorID: " + item.getId());
-			setMarkers(item);
-			sensIds.add(item.getId());
-		});
-
-		MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
-		mCO.setGridSize(80);
-		mCO.setAverageCenter(true);
-		mCO.setMinimumClusterSize(2);
-		mCO.setMaxZoom(14);
-		mCO.setZoomOnClick(true);
-		cluster = MarkerClusterer.newInstance(mapWidget, mCO);
-		cluster.addMarkers(mList);
-		cluster.repaint();
+		if (!sensorList.isEmpty()) {
+			sensorList.forEach(item -> {
+				GWT.log(item.getLocation().getLat() + " " + item.getLocation().getLon() + " SensorID: " + item.getId());
+				setMarkers(item);
+				sensIds.add(item.getId());
+			});
+			MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
+			mCO.setGridSize(80);
+			mCO.setAverageCenter(true);
+			mCO.setMinimumClusterSize(2);
+			mCO.setMaxZoom(14);
+			mCO.setZoomOnClick(true);
+			cluster = MarkerClusterer.newInstance(mapWidget, mCO);
+			cluster.addMarkers(mList);
+			cluster.repaint();
+		}
+		if (sensorList.isEmpty()) {
+			GWT.log("ERROR: Sensorlist is empty");
+		}
 	}
 
 	@UiHandler("clearBtn")
@@ -317,8 +331,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		}
 		presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, sensIds));
 	}
-	
-	
+
 	@UiHandler("searchBtn")
 	public void goToSearchPage(ClickEvent e) {
 		goToSearchPage();
