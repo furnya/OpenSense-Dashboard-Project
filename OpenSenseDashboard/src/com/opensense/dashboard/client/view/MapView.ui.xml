@@ -14,8 +14,8 @@
  <bh:Div ui:field="map" b:id="map"/>
   	<m:MaterialButton  ui:field="recenterBtn" width="50px" text="🙂" title="recenter" addStyleNames="d-btn"/>
   	<m:MaterialButton  ui:field="clearBtn" width="100px" text="clear" textColor="BLACK" addStyleNames="d-btn"/>
-  	<!-- <m:MaterialButton  ui:field="visuBtn" width="100px" text="visualize" textColor="BLACK" addStyleNames="d-btn"/> -->
-  	
+  	<m:MaterialButton  ui:field="visuBtn" width="120px" text="visualize" textColor="BLACK" addStyleNames="d-btn"/>
+  	<m:MaterialButton  ui:field="searchBtn" width="50%" text="Show on Search" textColor="BLACK" addStyleNames="d-btn"/>
 </bh:Div>
 
 </ui:UiBinder>

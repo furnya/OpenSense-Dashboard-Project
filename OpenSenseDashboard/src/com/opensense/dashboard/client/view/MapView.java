@@ -8,8 +8,9 @@ import com.opensense.dashboard.shared.Sensor;
 
 public interface MapView extends IDataPanelPageView{
 	public interface Presenter{
-//		HandlerManager getEventBus();
+		HandlerManager getEventBus();
 	}
+	
 	
 	public void setPresenter(Presenter presenter);
 	public Widget asWidget();
