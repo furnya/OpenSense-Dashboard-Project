@@ -244,7 +244,7 @@ public class Languages {
 	
 	public static String selectedShowVisualisations() {
 		if(de) {
-			return "Graphisch darstellen";
+			return "Werte anzeigen";
 		}else {
 			return "";
 		}
@@ -252,7 +252,31 @@ public class Languages {
 	
 	public static String selectedAddToList() {
 		if(de) {
-			return "Liste hinzufügen";
+			return "Zur Liste hinzufügen";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String allSelectedSensors() {
+		if(de) {
+			return "Alle ausgewählten Sensoren:";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String selectAllSensors() {
+		if(de) {
+			return "Alle Sensoren auswählen";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String deselectAllSensors() {
+		if(de) {
+			return "Alle Sensoren abwählen";
 		}else {
 			return "";
 		}
@@ -321,7 +345,7 @@ public class Languages {
 	}
 
 	public static String sensorId() {
-		return "Sensor ID: ";
+		return "ID: ";
 	}
 	
 }

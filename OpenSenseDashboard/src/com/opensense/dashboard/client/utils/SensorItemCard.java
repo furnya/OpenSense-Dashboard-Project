@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.utils;
 
+import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
@@ -8,10 +9,12 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.gui.GUIImageBundle;
 
 import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialLabel;
@@ -39,9 +42,18 @@ public class SensorItemCard extends Composite{
 	@UiField
 	MaterialCheckBox checkbox;
 	
+	@UiField
+	Button favButton;
+	
 	public SensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
 		addClickHandler();
+		favButton.add(new Image(GUIImageBundle.INSTANCE.favorite().getSafeUri().asString()));
+	}
+	
+	@UiHandler("favButton")
+	public void onFavButtonClicked(ClickEvent e) {
+		e.stopPropagation();
 	}
 	
 	public void setHeader(String text) {
@@ -66,14 +78,19 @@ public class SensorItemCard extends Composite{
 	
 	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
 		return checkbox.addValueChangeHandler(event -> {
-			if(event.getValue()) {
-				layout.addStyleName("card-active");
-				layout.removeStyleName("card-deactive");
-			}else {
-				layout.addStyleName("card-deactive");
-				layout.removeStyleName("card-active");
-			}
+			setActive(event.getValue());
 			handler.onValueChange(event);
 		});
+	}
+
+	public void setActive(boolean active) {
+		checkbox.setValue(active);
+		if(active) {
+			layout.addStyleName("card-active");
+			layout.removeStyleName("card-deactive");
+		}else {
+			layout.addStyleName("card-deactive");
+			layout.removeStyleName("card-active");
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package com.opensense.dashboard.client.view;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -89,6 +88,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@UiField
 	MaterialPreLoader spinner;
 	
+	@UiField
+	MaterialButton selectAllButton;
+	
 	@UiField(provided = true)
 	Pager pagerTop = new Pager(this);
 	
@@ -138,6 +140,32 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		}
 	}
 	
+	@UiHandler("showVisualizationsButton")
+	public void onShowVisualizationsButtonClicked(ClickEvent e) {
+		if(!selectedSensors.isEmpty()) {
+			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, selectedSensors));
+		}
+	}
+	
+	@UiHandler("selectAllButton")
+	public void onSelectAllButtonClicked(ClickEvent e) {
+		if(Languages.selectAllSensors().equals(selectAllButton.getText())) {
+			for (int i = unselectedSensors.size() - 1; i >= 0; i --) {
+				sensorViews.get(unselectedSensors.get(i)).setActive(true);
+				selectedSensors.add(unselectedSensors.get(i));
+				unselectedSensors.remove(i);
+			}
+			selectAllButton.setText(Languages.deselectAllSensors());
+		}else {
+			for (int i = selectedSensors.size() - 1; i >= 0; i --) {
+				sensorViews.get(selectedSensors.get(i)).setActive(false);
+				unselectedSensors.add(selectedSensors.get(i));
+				selectedSensors.remove(i);
+			}
+			selectAllButton.setText(Languages.selectAllSensors());
+		}
+	}
+
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
@@ -147,9 +175,6 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public void initView() {
 		// init UI Elements if needed
 	}
-	
-	public static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
-    public static final Charset UTF_8 = Charset.forName("cp1252");
 	
 	@Override
 	public void showSensorData(final List<Sensor> sensors) {
@@ -161,9 +186,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setIconTitle(sensor.getMeasurand().getDisplayName());
-			
-			card.getMiddleHeader().add(new Span("Messgröße: " + sensor.getMeasurand().getDisplayName()));
-			card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
+			card.getMiddleHeader().add(new Span("Messgroesse: " + sensor.getMeasurand().getDisplayName()+","));
+			card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()+","));
 			card.getMiddleHeader().add(new Span(sensor.getAttributionText()));
 			card.addValueChangeHandler(event -> {
 				if(event.getValue()) {

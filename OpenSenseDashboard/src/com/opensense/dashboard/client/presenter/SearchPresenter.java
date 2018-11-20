@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -133,7 +132,6 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		if(view.getMaxSensors() != null && !view.getMaxSensors().isEmpty()){
 			requestBuilder.addParameter(ParamType.MAX_SENSORS, view.getMaxSensors());
 		}
-		requestBuilder.getRequest().getParameters().forEach(param -> GWT.log("RequestParam: " + param.getKey() + " " + param.getValue()));
 		sendSensorRequestAndShow(requestBuilder.getRequest());
 	}
 	
