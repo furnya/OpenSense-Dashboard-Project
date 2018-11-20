@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.loading.MLet;
-
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
@@ -85,7 +83,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	// last opened infoWindow
 	private ArrayList<InfoWindow> lastOpened = new ArrayList<>();
 	private Map<Marker, InfoWindow> infoWindows = new HashMap<>();
-	private ArrayList<Integer> iwID = new ArrayList<>();
 
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -153,9 +150,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.BOTTOM_CENTER, clearBtn);
-		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_TOP, recenterBtn);
-		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_RIGHT, visuBtn);
-		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_CENTER, searchBtn);
+		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_RIGHT, recenterBtn);
+		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_TOP, visuBtn);
+		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_LEFT, searchBtn);
 		
 		mapWidget.addDragStartHandler(event -> {
 			for (InfoWindow infoWindow : infoWindows.values()) {
@@ -210,11 +207,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		InfoWindow iw = InfoWindow.newInstance(options);
 		lastOpened.add(iw);
 		infoWindows.put(marker, iw);
-		if (!iwID.isEmpty()) {
-			iwID.clear();
-		}
-		iwID.add(si.getId());
-		infoWindow.passID(iwID);
 		String size = Integer.toString(lastOpened.size());
 		GWT.log("This is lastOpened size: " + size);
 		if (lastOpened.size() >= 1) {
