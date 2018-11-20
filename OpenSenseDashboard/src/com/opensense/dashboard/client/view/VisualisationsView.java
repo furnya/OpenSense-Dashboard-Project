@@ -9,12 +9,13 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Parameter;
+import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
 
 public interface VisualisationsView extends IDataPanelPageView {
 	
 	public interface Presenter{
-		void buildValueRequestAndSend(DateRange dateRange, Date minDate, Date maxDate);
+		void valueRequestForSensorList(List<Sensor> sensors, DateRange dateRange, Date minDate, Date maxDate);
 		HandlerManager getEventBus();
 	}
 	
@@ -23,5 +24,9 @@ public interface VisualisationsView extends IDataPanelPageView {
 	public void initView();
 	void hideLoadingIndicator();
 	void showLoadingIndicator();
-	public void showValuesInChart(List<Value> values);
+	public void addSensorValues(Sensor sensor, List<Value> values);
+	public DateRange getDefaultRange();
+	public boolean showChart();
+	public void createChart();
+	public void setSensors(List<Sensor> sensors);
 }

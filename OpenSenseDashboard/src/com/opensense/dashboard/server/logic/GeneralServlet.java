@@ -33,6 +33,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			break;
 		case VALUE:
 			response.setValues(ClientRequestHandler.getInstance().getValueList(searchRequest.getIds().get(0),searchRequest.getParameters(),searchRequest.getDateRange()));
+			response.setSensors(ClientRequestHandler.getInstance().getSensorList(searchRequest.getParameters(), searchRequest.getIds()));
 			break;
 		default:
 			break;
