@@ -1,6 +1,7 @@
 package com.opensense.dashboard.server.logic;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -10,6 +11,7 @@ import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
+import com.opensense.dashboard.shared.ValuePreview;
 
 @SuppressWarnings("serial")
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
@@ -59,6 +61,11 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}else {
 			ServerLanguages.setGerman();
 		}
+	}
+
+	@Override
+	public Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids) {
+		return null;
 	}
 
 }

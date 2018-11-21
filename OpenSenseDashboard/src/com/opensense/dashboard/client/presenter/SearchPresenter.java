@@ -18,6 +18,7 @@ import com.opensense.dashboard.client.view.SearchView;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.ValuePreview;
 
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 	
@@ -100,7 +101,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		getMeasurandsAndDispaly(runnable);
 	}
 	
-	public void getMeasurandsAndDispaly(final Runnable runnable) {
+	private void getMeasurandsAndDispaly(final Runnable runnable) {
 		GeneralService.Util.getInstance().getMeasurands(new DefaultAsyncCallback<Map<Integer, String>>(result -> {
 			if(result != null) {
 				view.setMeasurandsList(result);
@@ -154,4 +155,18 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			view.showLoadSensorError();
 		}, false));
 	}
+		
+	public void getSensorValuePreviewAndShow(List<Integer> ids) {
+			GeneralService.Util.getInstance().getSensorValuePreview(ids, new DefaultAsyncCallback<Map<Integer, ValuePreview>>(result -> {
+				if(result != null) {
+					view.showSensorValuePreview(result);
+				}else {
+					LOGGER.log(Level.WARNING, "SensorValuePreview result is null.");
+					//TODO: show error
+				}
+			},caught -> {
+				LOGGER.log(Level.WARNING, "Failure requesting the sensorValuePreview.");
+				//TODO:showError
+			}, false));
+		}
 }

@@ -30,6 +30,7 @@ import com.opensense.dashboard.client.utils.Pager;
 import com.opensense.dashboard.client.utils.SensorItemCard;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
+import com.opensense.dashboard.shared.ValuePreview;
 
 import gwt.material.design.client.base.validator.RegExValidator;
 import gwt.material.design.client.ui.MaterialButton;
@@ -330,7 +331,6 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@Override
 	public void showLoadSensorError() {
-		pagination();
 		hideLoadingIndicator();
 		noDataIndicator.getElement().getStyle().clearDisplay();
 	}
@@ -357,9 +357,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public void pagination() {
 		sensorContainer.clear();
 		
+		List<Integer> idsOnPage = new ArrayList<>();
 		for(int i = sensorPage * maxSensorsOnPage; i < shownSensorIds.size() && i < (sensorPage + 1) * maxSensorsOnPage; i++){
 			sensorContainer.add(sensorViews.get(shownSensorIds.get(i)));
+			idsOnPage.add(shownSensorIds.get(i));
 		}
+		presenter.getSensorValuePreviewAndShow(idsOnPage);
 		
 		pagerTop.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));
 		pagerTop.setForwardsEnabled(sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage)));
@@ -368,6 +371,15 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		pagerBottom.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));
 		pagerBottom.setForwardsEnabled(sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage)));
 		pagerBottom.setBackwardsEnabled(sensorPage > 0);
+	}
+	
+	public void clearPager() {
+		pagerTop.setPage(Languages.setPageNumber(0, 0, 0));
+		pagerTop.setForwardsEnabled(false);
+		pagerTop.setBackwardsEnabled(false);
+		pagerBottom.setPage(Languages.setPageNumber(0, 0, 0));
+		pagerBottom.setForwardsEnabled(false);
+		pagerBottom.setBackwardsEnabled(false);
 	}
 
 	@Override
@@ -398,6 +410,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		selectedSensors.clear();
 		sensorViews.clear();
 		shownSensorIds.clear();
+		clearPager();
 		sensorPage = 0;
 	}
 
@@ -415,6 +428,18 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			noDataIndicator.getElement().getStyle().clearDisplay();
 		}else {
 			noDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+
+	@Override
+	public void showSensorValuePreview(Map<Integer, ValuePreview> preview) {
+		if(!shownSensorIds.isEmpty()) {
+			preview.entrySet().forEach(entry -> {
+				if(shownSensorIds.contains(entry.getKey()) && sensorViews.containsKey(entry.getKey())){
+					sensorViews.get(entry.getKey()).getMiddleHeader().add(new Span(entry.getValue().getMinValue().getTimestamp().toString() +" " +entry.getValue().getMinValue().getNumberValue()+""));
+					sensorViews.get(entry.getKey()).getMiddleHeader().add(new Span(entry.getValue().getMaxValue().getTimestamp().toString() +" " +entry.getValue().getMaxValue().getNumberValue()+""));
+				}
+			});
 		}
 	}
 }
