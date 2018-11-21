@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.maps.client.base.LatLngBounds;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.shared.Sensor;
 
@@ -33,6 +34,7 @@ public interface SearchView extends IDataPanelPageView{
 	String getPlaceString();
 	public void setPlaceString(String value);
 	public void pagination();
+	public LatLngBounds getBounds();
 	public List<Integer> getShownSensorIds();
 	public double getMaxSensorsOnPage();
 	public int getSensorPage();
