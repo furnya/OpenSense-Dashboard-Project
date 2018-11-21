@@ -2,7 +2,7 @@ package com.opensense.dashboard.server.util;
 
 import com.opensense.dashboard.shared.MeasurandType;
 
-public class ServerLanguages {
+public class ServerLanguages{ 
 	
 	/**
 	 * German or english
@@ -32,14 +32,6 @@ public class ServerLanguages {
 		en = true;
 	}
 	
-	public static String languageChange() {
-		if(de) {
-			return "EN";
-		}else {
-			return "DE";
-		}
-	}
-	
 	public static String getMeasurandName(MeasurandType measurandType) {
 		String measurandName = null;
 		switch(measurandType) {
@@ -47,35 +39,35 @@ public class ServerLanguages {
 			if(de) {
 				measurandName = "Luftdruck";
 			} else {
-				measurandName = "air pressure";
+				measurandName = "Air pressure";
 			}
 			break;
 		case BRIGHTNESS:
 			if(de) {
 				measurandName = "Helligkeit";
 			} else {
-				measurandName = "brightness";
+				measurandName = "Brightness";
 			}
 			break;
 		case CLOUDINESS:
 			if(de) {
 				measurandName = "Bewölkung";
 			} else {
-				measurandName = "cloudiness";
+				measurandName = "Cloudiness";
 			}
 			break;
 		case HUMIDITY:
 			if(de) {
 				measurandName = "Luftfeuchtigkeit";
 			} else {
-				measurandName = "humidity";
+				measurandName = "Humidity";
 			}
 			break;
 		case NOISE:
 			if(de) {
 				measurandName = "Lautstärke";
 			} else {
-				measurandName = "noise";
+				measurandName = "Noise";
 			}
 			break;
 		case DEFAULT:
@@ -98,35 +90,35 @@ public class ServerLanguages {
 			if(de) {
 				measurandName = "Niederschlagsmenge";
 			} else {
-				measurandName = "precipitation amount";
+				measurandName = "Precipitation amount";
 			}
 			break;
 		case PRECIPITATION_TYPE:
 			if(de) {
 				measurandName = "Niederschlagstyp";
 			} else {
-				measurandName = "precipitation type";
+				measurandName = "Precipitation type";
 			}
 			break;
 		case TEMPERATURE:
 			if(de) {
 				measurandName = "Temperatur";
 			} else {
-				measurandName = "temperature";
+				measurandName = "Temperature";
 			}
 			break;
 		case WIND_DIRECTION:
 			if(de) {
 				measurandName = "Windrichtung";
 			} else {
-				measurandName = "wind direction";
+				measurandName = "Wind direction";
 			}
 			break;
 		case WIND_SPEED:
 			if(de) {
 				measurandName = "Windgeschwindigkeit";
 			} else {
-				measurandName = "wind speed";
+				measurandName = "Wind speed";
 			}
 			break;
 		default:

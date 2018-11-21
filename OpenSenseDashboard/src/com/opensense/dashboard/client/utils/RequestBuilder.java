@@ -3,7 +3,9 @@ package com.opensense.dashboard.client.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dev.shell.remoteui.RemoteMessageProto.Message.Request.DevModeRequest.RequestType;
 import com.opensense.dashboard.client.model.ParamType;
+import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.ResultType;
@@ -63,8 +65,12 @@ public class RequestBuilder {
 				break;
 			}
 		}
-		if(!containsNeededParams) {
+		if(!containsNeededParams && request.getRequestType()==ResultType.SENSOR) {
 			addParameter(ParamType.MAX_SENSORS, MAX_SENSOR_REQUEST);
 		}
+	}
+	
+	public void setDateRange(DateRange dateRange) {
+		request.setDateRange(dateRange);
 	}
 }

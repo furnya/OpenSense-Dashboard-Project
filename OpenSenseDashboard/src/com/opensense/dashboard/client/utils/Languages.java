@@ -34,6 +34,14 @@ public class Languages {
 		en = true;
 	}
 	
+	public static String getActualLanguageString() {
+		if(de) {
+			return "de";
+		}else {
+			return "en";
+		}
+	}
+	
 	public static String text() {
 		if(de) {
 			return "Das ist der text";
@@ -225,4 +233,182 @@ public class Languages {
 			return "";
 		}
 	}
+	
+	public static String past24Hours() {
+		if(de) {
+			return "Letzte 24h";
+		}else {
+			return "Past 24h";
+		}
+	}
+	
+	public static String pastWeek() {
+		if(de) {
+			return "Letzte Woche";
+		}else {
+			return "Past week";
+		}
+	}
+	
+	public static String pastMonth() {
+		if(de) {
+			return "Letzter Monat";
+		}else {
+			return "Past month";
+		}
+	}
+	
+	public static String pastYear() {
+		if(de) {
+			return "Letztes Jahr";
+		}else {
+			return "Past year";
+		}
+	}
+	
+	public static String customRange() {
+		if(de) {
+			return "Benutzerdefiniert";
+		}else {
+			return "Custom range";
+		}
+	}
+	
+	public static String timespan() {
+		if(de) {
+			return "Zeitspanne";
+		}else {
+			return "Timespan";
+		}
+	}
+	
+	public static String from() {
+		if(de) {
+			return "Von";
+		}else {
+			return "From";
+		}
+	}
+	
+	public static String to() {
+		if(de) {
+			return "Bis";
+		}else {
+			return "To";
+		}
+	}
+public static String seletedShowOnMap() {
+		if(de) {
+			return "Auf Karte zeigen";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String selectedShowVisualisations() {
+		if(de) {
+			return "Werte anzeigen";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String selectedAddToList() {
+		if(de) {
+			return "Zur Liste hinzufügen";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String allSelectedSensors() {
+		if(de) {
+			return "Alle ausgewählten Sensoren:";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String selectAllSensors() {
+		if(de) {
+			return "Alle Sensoren auswählen";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String deselectAllSensors() {
+		if(de) {
+			return "Alle Sensoren abwählen";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String backwards(){
+		if(de){
+			return "Zum Anfang";
+		}else{
+			return "To begin";
+		}
+	}
+	
+	public static String forwards(){
+		if(de){
+			return "Zum Ende";
+		}else{
+			return "To end";
+		}
+	}
+	
+	public static String forwardsStepByStep(){
+		if(de){
+			return "NÃ¤chste Seite";
+		}else{
+			return "Next site";
+		}
+	}
+	
+	public static String backwardsStepByStep(){
+		if(de){
+			return "Vorherige Seite";
+		}else{
+			return "Privious site";
+		}
+	}
+
+	public static String setPageNumber(int page, int maxObjectsOnPage, int size) {
+		if(de){
+			if (size == 0) {
+				return "0-0 von 0";
+			}
+			return Integer.toString(page * maxObjectsOnPage + 1) + "-" + ((size > (page + 1) * maxObjectsOnPage) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " von " + Integer.toString(size);
+		}else{
+			if (size == 0) {
+				return "0-0 of 0";
+			}
+			return Integer.toString(page * maxObjectsOnPage + 1) + "-" + ((size > (page + 1) * maxObjectsOnPage) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " of " + Integer.toString(size);
+		}
+	}
+	
+	public static String pageConfiguration(){
+		if(de){
+			return "Anzahl von Objekten auf einer Seite";
+		}else{
+			return "Number of objects on one page";
+		}
+	}
+	
+	public static String noData(){
+		if(de){
+			return "Es konnten keine Daten zu der gewählten Suchparameter gefunden werden";
+		}else{
+			return "";
+		}
+	}
+
+	public static String sensorId() {
+		return "ID: ";
+	}
+	
 }

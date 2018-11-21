@@ -8,19 +8,10 @@
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
-.collapsible{
-	background-color: #909090;
-	border: none;
-}
-.light-grey{
-	background-color: #909090;
-}
-.header{
-	display: flex;
-}	
-.body{
+.content{
 	cursor: pointer;
-    border: none;	
+	display: flex;
+	background-color: #fff;
 }
 .card-button{
 	float: right;
@@ -35,52 +26,58 @@
 	width: 40px;	
 }
 .left{
-	width: 25%;
+	min-width: 20%;
 	display: flex;
+	white-space: nowrap;
+	overflow: hidden;
 }
 .mid{
-	width: 55%;
+	min-width: 65%;
 	display: flex;
+	white-space: nowrap;
+    align-items: center;
+    overflow: hidden;
 }
 .mid > Span{
 	margin-right: 10px;
 }
 .right{
-	width: 20%;
+	min-width: 15%;
 }
 .font{
+	margin-top: 5px;
 	font-size: 20px;	
 }
 .checkbox{
-	display: flex !important;
-	margin-top: 13px;
+	margin-top: auto;
+	margin-left: 10px;
+}
+.fav-icon > img{
+	filter: invert(100%);   
+	width: 30px;
+    height: 30px;
+	min-width: 30px;
+    margin-left: -15px;
+}
+.fav-icon{
+	margin-top: 2px;	
+    float: right;
+    margin-right: 10px;
 }
 </ui:style>
 
-<bh:Div ui:field="layout" addStyleNames="user-select-none padding-right-10">
-	<m:MaterialCollapsible ui:field="collapsible" width="100%" addStyleNames="round-corners {style.collapsible}">
-		<m:MaterialCollapsibleItem ui:field="item" addStyleNames="override-corners">
-			<m:MaterialCollapsibleHeader ui:field="headerContainer" addStyleNames="round-corners {style.header}">
-				<bh:Div addStyleNames="{style.left}">
-					<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>
-					<bh:Div addStyleNames="{style.icon-size} margin-right-10">
-						<b:Image ui:field="icon" title="Temperatur" width="100%" height="100%" url="{gui.tempIconSvg.getSafeUri.asString}"/>
-					</bh:Div>
-					<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
-				</bh:Div>
-				<bh:Div addStyleNames="{style.mid}" ui:field="midContainer"/>
-				<bh:Div addStyleNames="{style.right}">
-					<b:Button ui:field="goToMap" title="{lang.showOnMap}" addStyleNames="{style.card-button} d-btn"/>
-				</bh:Div>
-			</m:MaterialCollapsibleHeader>
-			<m:MaterialCollapsibleBody addStyleNames="{style.body}">
-				<bh:Div ui:field="content" addStyleNames="{style.light-grey}"/>
-				<m:MaterialPreLoader ui:field="spinner" addStyleNames="spinner">
-					<m:MaterialSpinner/>
-				</m:MaterialPreLoader>
-			</m:MaterialCollapsibleBody>
-		</m:MaterialCollapsibleItem>
-  </m:MaterialCollapsible>
+<bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
+	<bh:Div addStyleNames="{style.left}">
+		<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>
+		<bh:Div addStyleNames="{style.icon-size} margin-right-10">
+			<b:Image ui:field="icon" width="100%" height="100%"/>
+		</bh:Div>
+		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
+	</bh:Div>
+	<bh:Div addStyleNames="{style.mid}" ui:field="midContainer"/>
+	<bh:Div addStyleNames="{style.right}">
+		<b:Button  width="30px" ui:field="favButton" addStyleNames="d-btn {style.fav-icon}" />
+	</bh:Div>
 </bh:Div>
 
 </ui:UiBinder>

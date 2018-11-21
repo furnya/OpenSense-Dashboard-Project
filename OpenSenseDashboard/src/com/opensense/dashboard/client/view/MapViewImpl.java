@@ -218,12 +218,12 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	 * 
 	 */
 	protected void drawInfoWindow(Marker marker, Sensor si) {
-		if (marker == null || si.getId() < 0) {
+		if (marker == null || si.getSensorId() < 0) {
 			return;
 		}
 		InfoWindowOptions options = InfoWindowOptions.newInstance();
 		MarkerInfoWindow infoWindow = new MarkerInfoWindow();
-		infoWindow.setHeader(si.getSensorModel() + " " + si.getId());
+		infoWindow.setHeader(si.getSensorModel() + " " + si.getSensorId());
 		ArrayList<String> sensorData = new ArrayList<>();
 		sensorData.add("Messeinheit: " + si.getMeasurand().getMeasurandType().toString());
 		sensorData.add("Sensortyp: " + si.getSensorModel());
@@ -272,10 +272,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		icon.setScaledSize(Size.newInstance(20, 20));
 		markerBasic.setIcon(icon);
 		markerBasic.setDraggable(false);
-		markers.put(s.getId(), markerBasic);
+		markers.put(s.getSensorId(), markerBasic);
 		mList.add(markerBasic);
 		allMarkers.add(markerBasic);
-		String idToString = Integer.toString(s.getId());
+		String idToString = Integer.toString(s.getSensorId());
 		markerBasic.addClickHandler(event -> {
 			GWT.log("Current id: " + idToString);
 			resize(position.getLatitude(), position.getLongitude());
@@ -290,9 +290,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		}
 		if (!sensorList.isEmpty()) {
 			sensorList.forEach(item -> {
-				GWT.log(item.getLocation().getLat() + " " + item.getLocation().getLon() + " SensorID: " + item.getId());
+				GWT.log(item.getLocation().getLat() + " " + item.getLocation().getLon() + " SensorID: " + item.getSensorId());
 				setMarkers(item);
-				sensIds.add(item.getId());
+				sensIds.add(item.getSensorId());
 			});
 			MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
 			mCO.setGridSize(80);

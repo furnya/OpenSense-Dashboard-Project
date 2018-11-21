@@ -148,5 +148,10 @@
 	  		 <artifactId>gwt-maps-utility-markerclustererplus</artifactId>
 	  	  	 <version>3.10.0-alpha-7</version>
 		</dependency>
+		<dependency>
+    		<groupId>org.pepstock</groupId>
+    		<artifactId>charba</artifactId>
+    		<version>1.6</version>
+		</dependency>
   </dependencies>
 </project>
