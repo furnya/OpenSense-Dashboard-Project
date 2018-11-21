@@ -273,9 +273,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 	
 	@Override
-	public String getPlaceString() {
-		if(autoComplete.getPlace() != null && autoComplete.getPlace().getName() != null) {
-			return searchInput.getValue();
+	public LatLngBounds getBounds() {
+		if(autoComplete.getPlace() != null && autoComplete.getPlace().getGeometry() != null) {
+			return autoComplete.getPlace().getGeometry().getViewPort();
 		}
 		return null;
 	}
@@ -417,13 +417,4 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			noDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}
-
-	@Override
-	public LatLngBounds getBounds() {
-		if(autoComplete.getPlace() != null && autoComplete.getPlace().getGeometry() != null) {
-			return autoComplete.getPlace().getGeometry().getViewPort();
-		}
-		return null;
-	}
-	
 }
