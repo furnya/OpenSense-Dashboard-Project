@@ -83,7 +83,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	}
 	
 	public void valueRequestForSensorList(List<Sensor> sensors, DateRange dateRange, Date minDate, Date maxDate) {
-		sensors.forEach(sensor -> buildValueRequestAndSend(sensor.getId(), dateRange, minDate, maxDate));
+		sensors.forEach(sensor -> buildValueRequestAndSend(sensor.getSensorId(), dateRange, minDate, maxDate));
 	}
 	
 	private void buildValueRequestAndSend(Integer id, DateRange dateRange, Date minDate, Date maxDate) {

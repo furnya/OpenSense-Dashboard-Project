@@ -214,12 +214,12 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	public void addSensor(Sensor sensor) {
 		if(sensors==null) setSensors(new LinkedList<>());
-		if(!sensors.contains(sensor) && !containsSensorWithId(sensor.getId())) sensors.add(sensor);
+		if(!sensors.contains(sensor) && !containsSensorWithId(sensor.getSensorId())) sensors.add(sensor);
 	}
 	
 	public boolean containsSensorWithId(Integer id) {
 		for(Sensor s : sensors) {
-			if(s!= null && s.getId()==id) return true;
+			if(s!= null && s.getSensorId()==id) return true;
 		}
 		return false;
 	}
@@ -251,7 +251,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		chartContainer.clear();
 		chartContainer.add(chart);
 		String s = "";
-		for(Sensor sensor : sensors) s+= " "+sensor.getId()+" |";
+		for(Sensor sensor : sensors) s+= " "+sensor.getSensorId()+" |";
 		GWT.log("showing chart for: "+s+"datasets:"+chart.getData().getDatasets().size());
 		return true;
 	}
