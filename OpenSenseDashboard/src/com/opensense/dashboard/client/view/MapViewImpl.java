@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.gwtbootstrap3.client.ui.html.Div;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -31,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.utils.MapSensorItemCard;
 import com.opensense.dashboard.client.utils.MarkerInfoWindow;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
@@ -45,6 +47,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	@UiField
 	Div map;
+
+	@UiField
+	Div sensorContainer;
 
 	@UiField
 	MaterialButton recenterBtn;
@@ -73,6 +78,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private List<Integer> sensIds = new ArrayList<>();
 	private List<Marker> mList = new ArrayList<>();
 	private List<Marker> allMarkers = new ArrayList<>();
+	private List<List<Sensor>> listOfSensors = new ArrayList<>();
 	private MarkerClusterer cluster;
 	// This should be a HashMap
 	// ########################################################################
@@ -131,6 +137,29 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		}
 	}
 
+	public void showSensorData(final List<Sensor> sensors) {
+		sensorContainer.clear();
+		if (!listOfSensors.contains(sensors)) {
+			listOfSensors.add(sensors);
+		}
+		listOfSensors.forEach(list -> {
+			final MapSensorItemCard card = new MapSensorItemCard();
+			card.setHeader("Sensortyp: " + list.get(0).getMeasurand().getMeasurandType());
+			card.setIcon(getIconUrlFromType(list.get(0).getMeasurand().getMeasurandType()));
+			card.setIconTitle(list.get(0).getMeasurand().getDisplayName());
+			card.getMiddleHeader().add(new Span(list.get(0).getAttributionText()));
+			card.getMiddleHeader().add(new Span(list.get(0).getSensorModel()));
+			card.getMiddleHeader().add(new Span("Sensoren: "+Integer.toString(list.size())));
+			card.addClickHandler(event -> {
+				event.stopPropagation();
+				showMarkers(list);
+				GWT.log(card.isActive() + "");
+//				card.setActive(!card.isActive());
+			});
+			sensorContainer.add(card);
+		});
+	}
+
 	private void showThisMap() {
 		mapOptions = MapOptions.newInstance();
 		// DefaultCenter is Berlin Alexanderplatz
@@ -153,7 +182,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_RIGHT, recenterBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_TOP, visuBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_LEFT, searchBtn);
-		
+
 		mapWidget.addDragStartHandler(event -> {
 			for (InfoWindow infoWindow : infoWindows.values()) {
 				infoWindow.close();
@@ -278,6 +307,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		if (sensorList.isEmpty()) {
 			GWT.log("ERROR: Sensorlist is empty");
 		}
+		showSensorData(sensorList);
 	}
 
 	@UiHandler("clearBtn")

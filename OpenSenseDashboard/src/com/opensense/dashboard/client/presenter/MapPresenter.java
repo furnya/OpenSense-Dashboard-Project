@@ -85,6 +85,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 				}else if(request.getIds() != null) {
 					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, request.getIds()));
 				}
+				view.showSensorData(result.getSensors());
 				view.showMarkers(result.getSensors());
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
