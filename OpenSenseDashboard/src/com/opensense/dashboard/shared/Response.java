@@ -8,11 +8,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Response implements IsSerializable {
 	
 	private ResultType resultType;
-	private Sensor sensor;
+	private Sensor sensor; // not needed 
 	private List<Sensor> sensors;
-	private Map<Integer, Measurand> measurands;
-	private Map<Integer, Unit> units;
-	private List<Value> values;
+	private Map<Integer, Measurand> measurands;  // not needed 
+	private Map<Integer, Unit> units;  // not needed 
+	private List<Value> values; //Map<Integer, List<Value>> values
 	
 	public Response() {
 	}

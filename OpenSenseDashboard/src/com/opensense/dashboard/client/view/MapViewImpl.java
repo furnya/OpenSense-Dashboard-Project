@@ -239,7 +239,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		sensorList.forEach(item-> {
 			LatLng postion = LatLng.newInstance(item.getLocation().getLat(),item.getLocation().getLon());
 			/*variables for Sensors*/
-			int id = item.getId();
+			int id = item.getSensorId();
 			String sensormodel = item.getSensorModel();
 			double sensorAccuracy = item.getAccuracy();
 			double aboveGround = item.getAltitudeAboveGround();

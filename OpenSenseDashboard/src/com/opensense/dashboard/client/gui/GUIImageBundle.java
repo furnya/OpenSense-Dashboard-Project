@@ -10,6 +10,7 @@ public interface GUIImageBundle extends ClientBundle {
 	
 	public static final GUIImageBundle INSTANCE =  GWT.create(GUIImageBundle.class);
 	
+	//DataPanelPages
 	@Source("icons/home.png")
 	ImageResource homeIcon();
 	
@@ -46,6 +47,7 @@ public interface GUIImageBundle extends ClientBundle {
 	@Source("icons/map.svg")
 	SVGResource mapIconSvg();
 	
+	//Sensor type icons
 	@Source("icons/temp.svg")
 	SVGResource tempIconSvg();
 	
@@ -84,4 +86,45 @@ public interface GUIImageBundle extends ClientBundle {
 	
 	@Source("icons/question.svg")
 	SVGResource questionIconSvg();
+	
+	//Paging
+	@Source("icons/paging/backwards.svg")
+	SVGResource backwards();
+	
+	@Source("icons/paging/forwards.svg")
+	SVGResource forwards();
+	
+	@Source("icons/paging/backwards_step_by_step.svg")
+	SVGResource backwardsStepbyStep();
+	
+	@Source("icons/paging/forwards_step_by_step.svg")
+	SVGResource forwardsStepByStep();
+	
+	@Source("icons/paging/backwards_acitve.svg")
+	SVGResource backwardsBlue();
+	
+	@Source("icons/paging/forwards_acitve.svg")
+	SVGResource forwardsBlue();
+	
+	@Source("icons/paging/backwards_step_by_step_active.svg")
+	SVGResource backwardsStepbyStepBlue();
+	
+	@Source("icons/paging/forwards_step_by_step_active.svg")
+	SVGResource forwardsStepByStepBlue();
+	
+	@Source("icons/paging/backwards_hover.svg")
+	SVGResource backwardsHover();
+	
+	@Source("icons/paging/forwards_hover.svg")
+	SVGResource forwardsHover();
+	
+	@Source("icons/paging/backwards_step_by_step_hover.svg")
+	SVGResource backwardsStepbyStepHover();
+	
+	@Source("icons/paging/forwards_step_by_step_hover.svg")
+	SVGResource forwardsStepByStepHover();
+	
+	
+	@Source("icons/favorite.svg")
+	SVGResource favorite();
 }

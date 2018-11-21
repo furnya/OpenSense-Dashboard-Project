@@ -62,7 +62,7 @@ public class DataObjectBuilder {
 	public static Sensor buildSensor(JSONObject sensorJSON, Map<Integer, Measurand> measurandMap, Map<Integer, Unit> unitMap) {
 		Sensor s = new Sensor();
 		try {
-			s.setId(sensorJSON.getInt(JsonAttributes.ID.getNameString()));
+			s.setSensorId(sensorJSON.getInt(JsonAttributes.ID.getNameString()));
 			s.setAccuracy(sensorJSON.getDouble(JsonAttributes.ACCURACY.getNameString()));
 			s.setUserId(sensorJSON.getInt(JsonAttributes.USER_ID.getNameString()));
 			s.setDirectionHorizontal(sensorJSON.getDouble(JsonAttributes.DIRECTION_HORIZONTAL.getNameString()));
@@ -87,7 +87,7 @@ public class DataObjectBuilder {
 	public static Sensor buildSensor(JSONObject sensorJSON) {
 		Sensor s = new Sensor();
 		try {
-			s.setId(sensorJSON.getInt(JsonAttributes.ID.getNameString()));
+			s.setSensorId(sensorJSON.getInt(JsonAttributes.ID.getNameString()));
 			s.setAccuracy(sensorJSON.getDouble(JsonAttributes.ACCURACY.getNameString()));
 			s.setUserId(sensorJSON.getInt(JsonAttributes.USER_ID.getNameString()));
 			s.setDirectionHorizontal(sensorJSON.getDouble(JsonAttributes.DIRECTION_HORIZONTAL.getNameString()));
