@@ -92,7 +92,7 @@ public class Languages {
 	
 	public static String user() {
 		if(de) {
-			return "Benutzer";
+			return "Benutzeverwaltung";
 		}else {
 			return "User";
 		}
@@ -411,4 +411,19 @@ public static String seletedShowOnMap() {
 		return "ID: ";
 	}
 	
+	public static String username(){
+		if(de){
+			return "Nutzername";
+		}else{
+			return "";
+		}
+	}
+	
+	public static String password(){
+		if(de){
+			return "Passwort";
+		}else{
+			return "";
+		}
+	}
 }
