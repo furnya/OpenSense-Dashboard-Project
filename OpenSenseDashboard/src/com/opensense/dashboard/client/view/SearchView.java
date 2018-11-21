@@ -31,7 +31,6 @@ public interface SearchView extends IDataPanelPageView{
 	public boolean isSearchButtonEnabled();
 	public void selectMeasurandId(String id);
 	public void showLoadingIndicator();
-	String getPlaceString();
 	public void setPlaceString(String value);
 	public void pagination();
 	public LatLngBounds getBounds();
