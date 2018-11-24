@@ -81,10 +81,13 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private List<Marker> allMarkers = new ArrayList<>();
 	private List<List<Sensor>> listOfSensors = new ArrayList<>();
 	private MarkerClusterer cluster;
+
 	double minLat = Double.MAX_VALUE;
-	double maxLng = Double.MIN_VALUE;
 	double maxLat = Double.MIN_VALUE;
+
 	double minLng = Double.MAX_VALUE;
+	double maxLng = Double.MIN_VALUE;
+	
 	boolean boundsRdy = false;
 	// This should be a HashMap
 	// ########################################################################
@@ -338,6 +341,13 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			sensIds.clear();
 			GWT.log("clearing All clusters & markers");
 		}
+		if(boundsRdy) {
+			boundsRdy = false;
+			minLat = Double.MAX_VALUE;
+			maxLat = Double.MIN_VALUE;
+			minLng = Double.MAX_VALUE;
+			maxLng = Double.MIN_VALUE;
+		}
 		GWT.log("There are no markers/clusters on the map");
 	}
 
@@ -348,13 +358,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	}
 
 	public void calcBounds(List<Sensor> sensorList) {
-		if(boundsRdy) {
-			boundsRdy = false;
-			minLat = Double.MAX_VALUE;
-			maxLng = Double.MIN_VALUE;
-			maxLat = Double.MIN_VALUE;
-			minLng = Double.MAX_VALUE;
-		}
 		if (!sensorList.isEmpty()) {
 			sensorList.forEach(se -> {
 				double curSensLat = se.getLocation().getLat();
@@ -363,14 +366,16 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 				if (minLat >= curSensLat) {
 					minLat = curSensLat;
-				} else if (maxLat <= curSensLat) {
+				}
+				if (maxLat <= curSensLat) {
 					maxLat = curSensLat;
 				}
 
 				if (minLng >= curSensLng) {
 					minLng = curSensLng;
-				} else if (maxLng <= curSensLng) {
-					maxLng = curSensLat;
+				}
+				if (maxLng <= curSensLng) {
+					maxLng = curSensLng;
 				}
 			});
 			boundsRdy = true;
@@ -385,10 +390,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			cluster.repaint();
 		}
 		if (boundsRdy) {
-			LatLng southwest = LatLng.newInstance(maxLat, minLng);
 			LatLng northeast = LatLng.newInstance(minLat, maxLng);
-			GWT.log(Double.toString(minLat)+" "+Double.toString(maxLng));
-			GWT.log(Double.toString(maxLat)+" "+Double.toString(minLng));
+			LatLng southwest = LatLng.newInstance(maxLat, minLng);
+//			GWT.log(Double.toString(minLat)+" "+Double.toString(maxLng));
+//			GWT.log(Double.toString(maxLat)+" "+Double.toString(minLng));
 			mapWidget.fitBounds(LatLngBounds.newInstance(southwest, northeast));
 		} else {
 			GWT.log("Bounds haven't been calculated - recentering to @default: Berlin Alexanderplatz");
