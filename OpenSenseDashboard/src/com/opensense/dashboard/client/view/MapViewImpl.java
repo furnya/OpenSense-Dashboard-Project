@@ -299,6 +299,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	public void showMarkers(List<Sensor> sensorList) {
 		if (!mList.isEmpty()) {
 			resetMarkerAndCluster();
+			calcBounds(sensorList);
 		}
 		if (!sensorList.isEmpty()) {
 			sensorList.forEach(item -> {
@@ -392,8 +393,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		if (boundsRdy) {
 			LatLng northeast = LatLng.newInstance(minLat, maxLng);
 			LatLng southwest = LatLng.newInstance(maxLat, minLng);
-//			GWT.log(Double.toString(minLat)+" "+Double.toString(maxLng));
-//			GWT.log(Double.toString(maxLat)+" "+Double.toString(minLng));
+			GWT.log(Double.toString(minLat)+" "+Double.toString(maxLng));
+			GWT.log(Double.toString(maxLat)+" "+Double.toString(minLng));
 			mapWidget.fitBounds(LatLngBounds.newInstance(southwest, northeast));
 		} else {
 			GWT.log("Bounds haven't been calculated - recentering to @default: Berlin Alexanderplatz");
