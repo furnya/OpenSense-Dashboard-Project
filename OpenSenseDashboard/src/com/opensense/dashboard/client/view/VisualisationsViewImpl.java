@@ -138,6 +138,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	private List<Integer> unselectedSensors = new ArrayList<>();
 	private List<Integer> selectedSensors = new ArrayList<>();
 	
+	private String[] lineColors = {"#000000","#ff0000","#00ff00","#0000ff","ff00ff","#00ffff"};
+	private int nextColor = 0;
+	
 	public VisualisationsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
@@ -354,9 +357,10 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void setLineDatasetStyle(LineDataset dataset, int sensorId) {
-		dataset.setPointBackgroundColor("#ff0000");
+		dataset.setPointBackgroundColor(lineColors[nextColor]);
+		dataset.setBorderColor(lineColors[nextColor]);
+		nextColor = (nextColor+1)%lineColors.length;
 		dataset.setFill(Fill.nofill);
-		dataset.setBorderColor("#ff0000");
 		dataset.setLabel(""+sensorId);
 	}
 	
