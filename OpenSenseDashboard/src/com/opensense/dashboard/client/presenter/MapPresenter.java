@@ -87,6 +87,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 				}
 				view.showSensorData(result.getSensors());
 				view.showMarkers(result.getSensors());
+				view.calcBounds(result.getSensors());
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
 				//TODO: show error

@@ -124,7 +124,9 @@ public interface GUIImageBundle extends ClientBundle {
 	@Source("icons/paging/forwards_step_by_step_hover.svg")
 	SVGResource forwardsStepByStepHover();
 	
-	
 	@Source("icons/favorite.svg")
 	SVGResource favorite();
+	
+	@Source("icons/recenter.svg")
+	SVGResource recenter();
 }
