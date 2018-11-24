@@ -177,10 +177,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapOptions = MapOptions.newInstance();
 		// DefaultCenter is Berlin Alexanderplatz
 		// 52.521918,13.413215
-		mapOptions.setCenter(LatLng.newInstance(52.521918, 13.413215));
+//		mapOptions.setCenter(LatLng.newInstance(52.521918, 13.413215));
 		mapOptions.setMinZoom(2);
 		mapOptions.setMaxZoom(18);
-		mapOptions.setZoom(2);
+//		mapOptions.setZoom(2);
 		mapOptions.setDraggable(true);
 		mapOptions.setScaleControl(true);
 		mapOptions.setStreetViewControl(false);
@@ -259,7 +259,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		}
 	}
 
-	// Still not working -> should zoom and center to markers position on click
+	
 	public void resize(double bg, double lg) {
 		LatLng reCenter = LatLng.newInstance(bg, lg);
 		MapHandlerRegistration.trigger(mapWidget, MapEventType.RESIZE);
@@ -310,14 +310,14 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			});
 			MarkerClustererOptions mCO = MarkerClustererOptions.newInstance();
 			mCO.setGridSize(80);
-			mCO.setAverageCenter(true);
+//			mCO.setAverageCenter(true);
 			mCO.setMinimumClusterSize(2);
 			mCO.setMaxZoom(14);
 			mCO.setZoomOnClick(true);
 			cluster = MarkerClusterer.newInstance(mapWidget, mCO);
 			cluster.addMarkers(mList);
 			cluster.repaint();
-
+			recenterMap();
 		}
 		if (sensorList.isEmpty()) {
 			GWT.log("ERROR: Sensorlist is empty");
