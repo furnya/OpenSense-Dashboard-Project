@@ -1,51 +1,63 @@
 package com.opensense.dashboard.client.view;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.gwtbootstrap3.client.ui.html.Div;
-import org.pepstock.charba.client.AbstractChart;
+import org.gwtbootstrap3.client.ui.html.OrderedList;
+import org.gwtbootstrap3.client.ui.html.Span;
 import org.pepstock.charba.client.Defaults;
 import org.pepstock.charba.client.LineChart;
-import org.pepstock.charba.client.ScatterChart;
-import org.pepstock.charba.client.commons.ChartContainer;
 import org.pepstock.charba.client.data.DataPoint;
 import org.pepstock.charba.client.data.Dataset;
 import org.pepstock.charba.client.data.LineDataset;
-import org.pepstock.charba.client.data.ScatterDataset;
 import org.pepstock.charba.client.enums.CartesianAxisType;
+import org.pepstock.charba.client.enums.Fill;
 import org.pepstock.charba.client.enums.ScaleBounds;
 import org.pepstock.charba.client.enums.ScaleDistribution;
 import org.pepstock.charba.client.options.scales.CartesianLinearAxis;
 import org.pepstock.charba.client.options.scales.CartesianTimeAxis;
+import org.pepstock.charba.client.plugins.InvalidPluginIdException;
+import org.pepstock.charba.client.plugins.impl.ChartBackgroundColor;
 
+import com.github.gwtd3.api.D3;
+import com.github.gwtd3.api.core.Selection;
+import com.github.gwtd3.api.svg.Axis;
+import com.github.gwtd3.api.svg.SVG;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.datepicker.client.CalendarUtil;
-import com.opensense.dashboard.client.model.ParamType;
+import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.gui.GUIImageBundle;
+import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ValueHandler;
+import com.opensense.dashboard.client.utils.VisSensorItemCard;
 import com.opensense.dashboard.shared.DateRange;
-import com.opensense.dashboard.shared.Parameter;
+import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
 
 import gwt.material.design.addins.client.timepicker.MaterialTimePicker;
 import gwt.material.design.client.constants.DatePickerLanguage;
+import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialDatePicker;
 import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialPreLoader;
 import gwt.material.design.client.ui.MaterialToast;
+import javafx.collections.transformation.SortedList;
 
 public class VisualisationsViewImpl extends DataPanelPageView implements VisualisationsView {
 	
@@ -54,20 +66,23 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	@UiField
+	Div noDataIndicator;
+	
+	@UiField
 	Div container;
 	
 	@UiField
-	MaterialPreLoader spinner;
+	MaterialPreLoader viewSpinner;
 	
 	@UiField
 	Div chartContainer;
 	
 	@UiField
-	Div mdContainer;
+	MaterialButton addToListButton;
 	
 	@UiField
 	MaterialLink customRange;
-	
+
 	@UiField
 	MaterialLink pastYear;
 	
@@ -86,6 +101,15 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@UiField
 	MaterialDatePicker endingDate;
 	
+	@UiField
+	Div sensorContainer;
+	
+	@UiField
+	MaterialButton showOnMapButton;
+	
+	@UiField
+	MaterialButton selectAllButton;
+	
 //	@UiField
 //	MaterialTimePicker startingTime;
 //	
@@ -97,8 +121,11 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	protected Presenter presenter;
 	
 	private List<Sensor> sensors;
+	private Map<Integer, VisSensorItemCard> sensorMap = new HashMap<>();
+	private Map<Sensor, LineDataset> datasetMap = new HashMap<>();
 	
 	private static final DateRange DEFAULT_RANGE = DateRange.PAST_WEEK;
+	private DateRange dateRange = DEFAULT_RANGE;
 	
 	private LineChart chart;
 	
@@ -107,6 +134,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	private Double minValue = Double.POSITIVE_INFINITY;
 	private Double maxValue = Double.NEGATIVE_INFINITY;
+	
+	private List<Integer> unselectedSensors = new ArrayList<>();
+	private List<Integer> selectedSensors = new ArrayList<>();
 	
 	public VisualisationsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -120,74 +150,62 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@Override
 	public void initView() {
 		createChart();
+//		firstD3Chart();
 	}
 	
 	@UiHandler("customRange")
 	public void onCustomRangeButtonClicked(ClickEvent e) {
 		resetChart();
-		presenter.valueRequestForSensorList(sensors, DateRange.CUSTOM, startingDate.getDate(), endingDate.getDate());
+		setDateRange(DateRange.CUSTOM);
+		presenter.valueRequestForSensorList(selectedSensors, DateRange.CUSTOM, startingDate.getDate(), endingDate.getDate());
 	}
 	
 	@UiHandler("pastYear")
 	public void onPastYearButtonClicked(ClickEvent e) {
 		resetChart();
-		presenter.valueRequestForSensorList(sensors, DateRange.PAST_YEAR, null, null);
+		setDateRange(DateRange.PAST_YEAR);
+		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_YEAR, null, null);
 	}
 	
 	@UiHandler("pastMonth")
 	public void onPastMonthButtonClicked(ClickEvent e) {
 		resetChart();
-		presenter.valueRequestForSensorList(sensors, DateRange.PAST_MONTH, null, null);
+		setDateRange(DateRange.PAST_MONTH);
+		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_MONTH, null, null);
 	}
 	
 	@UiHandler("pastWeek")
 	public void onPastWeekButtonClicked(ClickEvent e) {
 		resetChart();
-		presenter.valueRequestForSensorList(sensors, DateRange.PAST_WEEK, null, null);
+		setDateRange(DateRange.PAST_WEEK);
+		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_WEEK, null, null);
 	}
 	
 	@UiHandler("past24Hours")
 	public void onPast24HoursButtonClicked(ClickEvent e) {
 		resetChart();
-		presenter.valueRequestForSensorList(sensors, DateRange.PAST_24HOURS, null, null);
+		setDateRange(DateRange.PAST_24HOURS);
+		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_24HOURS, null, null);
 	}
 	
 	@Override
 	public void showLoadingIndicator() {
-		spinner.getElement().getStyle().clearDisplay();
+		viewSpinner.getElement().getStyle().clearDisplay();
 	}
 	
 	@Override
 	public void hideLoadingIndicator() {
-		spinner.getElement().getStyle().setDisplay(Display.NONE);
+		viewSpinner.getElement().getStyle().setDisplay(Display.NONE);
 	}
 
 	@Override
 	public void addSensorValues(Sensor sensor, List<Value> values) {
 		addSensor(sensor);
 		if(sensor == null || values == null || values.isEmpty()) return;
-		GWT.log("values not empty");
 		ValueHandler valueHandler = new ValueHandler(values);
 		List<Value> filteredValues = valueHandler.getValues();
-		LineDataset dataset = chart.newDataset();
-		DataPoint[] points = new DataPoint[filteredValues.size()];
-		for(int i=0;i<filteredValues.size();i++) {
-			Value value = filteredValues.get(i);
-			DataPoint p = new DataPoint();
-			p.setT(value.getTimestamp());
-			p.setY(value.getNumberValue());
-			points[i] = p;
-		}
-		dataset.setDataPoints(points);
-		List<Dataset> datasets = chart.getData().getDatasets();
-		Dataset[] newDatasets = new Dataset[datasets.size()+1];
-		for(int i=0;i<datasets.size();i++) {
-			newDatasets[i] = datasets.get(i);
-		}
-		newDatasets[datasets.size()] = dataset;
-		GWT.log(datasets==null ? "empty datasets" : "dataset size: "+datasets.size());
-		chart.getData().setDatasets(newDatasets);
-		GWT.log(datasets==null ? "empty datasets" : "dataset size: "+datasets.size());
+		GWT.log("dataset size: "+filteredValues.size());
+		
 		Date earliest = valueHandler.getEarliest().getTimestamp();
 		Date latest = valueHandler.getLatest().getTimestamp();
 		Double lowest = valueHandler.getMin().getNumberValue();
@@ -196,6 +214,58 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		if(maxTimestamp==null || maxTimestamp.compareTo(latest)<0) maxTimestamp = latest;
 		if(minValue > lowest) minValue = lowest;
 		if(maxValue < highest) maxValue = highest;
+		
+		LineDataset dataset = createCrunchedDataset(filteredValues);
+		Sensor oldSensor = datasetsContainId(sensor.getSensorId());
+		if(oldSensor != null) datasetMap.remove(oldSensor);
+		datasetMap.put(sensor, dataset);
+		setLineDatasetStyle(dataset, sensor.getSensorId());
+//		addDatasetToChart(dataset);
+//		addDatasetToChart(createNormalDataset(filteredValues));
+	}
+	
+	public LineDataset createNormalDataset(List<Value> values) {
+		LineDataset dataset = chart.newDataset();
+		ArrayList<DataPoint> pointsList = new ArrayList<>();
+		for(int i=0;i<values.size();i++) {
+			Value value = values.get(i);
+			DataPoint p = new DataPoint();
+			p.setT(value.getTimestamp());
+			p.setY(value.getNumberValue());
+			pointsList.add(p);
+		}
+		DataPoint[] points = new DataPoint[pointsList.size()];
+		points = pointsList.toArray(points);
+		dataset.setDataPoints(points);
+		return dataset;
+	}
+	
+	public LineDataset createCrunchedDataset(List<Value> values) {
+		LineDataset dataset = chart.newDataset();
+		ArrayList<DataPoint> pointsList = new ArrayList<>();
+		int i=0;
+		int step = values.size()/100;
+		while(i<values.size()) {
+			Double numberValueAvg = 0.0;
+			long timestampAvg = 0;
+			int divideBy = 0;
+			for(int j=i;j<i+step && j<values.size();j++) {
+				Value value = values.get(j);
+				numberValueAvg += value.getNumberValue();
+				timestampAvg += value.getTimestamp().getTime();
+				divideBy++;
+			}
+			if(divideBy==0) continue;
+			DataPoint p = new DataPoint();
+			p.setT(new Date(timestampAvg/divideBy));
+			p.setY(numberValueAvg/divideBy);
+			pointsList.add(p);
+			i+=step;
+		}
+		DataPoint[] points = new DataPoint[pointsList.size()];
+		points = pointsList.toArray(points);
+		dataset.setDataPoints(points);
+		return dataset;
 	}
 
 	/**
@@ -214,7 +284,13 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	public void addSensor(Sensor sensor) {
 		if(sensors==null) setSensors(new LinkedList<>());
-		if(!sensors.contains(sensor) && !containsSensorWithId(sensor.getSensorId())) sensors.add(sensor);
+		if(!sensors.contains(sensor)) {
+			if(containsSensorWithId(sensor.getSensorId())) {
+				sensors.removeIf(s -> s.getSensorId()==sensor.getSensorId());
+			}
+			sensors.add(sensor);
+			if(!sensorMap.containsKey(sensor.getSensorId())) addSensorCard(sensor);
+		}
 	}
 	
 	public boolean containsSensorWithId(Integer id) {
@@ -234,10 +310,17 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void createChart() {
 		chart = new LineChart();
 		chart.getOptions().setShowLines(true);
+		try {
+			Defaults.getPlugins().register(new ChartBackgroundColor());
+		} catch (InvalidPluginIdException e) {
+			GWT.log(e.toString());
+		}
 	}
 	
 	public boolean showChart() {
-		if(sensors==null) return false;
+		if(sensors==null || sensors.isEmpty()) return false;
+		showNoDataIndicator(false);
+		addDatasetsToChart();
 		CartesianTimeAxis xAxis = new CartesianTimeAxis(chart, CartesianAxisType.x);
 		xAxis.setDistribution(ScaleDistribution.linear);
 		xAxis.setBounds(ScaleBounds.ticks);
@@ -250,9 +333,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		chart.getOptions().getScales().setYAxes(yAxis);
 		chartContainer.clear();
 		chartContainer.add(chart);
-		String s = "";
-		for(Sensor sensor : sensors) s+= " "+sensor.getSensorId()+" |";
-		GWT.log("showing chart for: "+s+"datasets:"+chart.getData().getDatasets().size());
 		return true;
 	}
 	
@@ -265,4 +345,177 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		maxValue = Double.NEGATIVE_INFINITY;
 	}
 	
+	public void addDatasetsToChart() {
+		ArrayList<Dataset> datasets = new ArrayList<>();
+		datasetMap.values().forEach(dataset -> datasets.add(dataset));
+		Dataset[] newDatasets = new Dataset[datasets.size()];
+		newDatasets = datasets.toArray(newDatasets);
+		chart.getData().setDatasets(newDatasets);
+	}
+	
+	public void setLineDatasetStyle(LineDataset dataset, int sensorId) {
+		dataset.setPointBackgroundColor("#ff0000");
+		dataset.setFill(Fill.nofill);
+		dataset.setBorderColor("#ff0000");
+		dataset.setLabel(""+sensorId);
+	}
+	
+	public void firstD3Chart() {
+		Selection s = D3.select(Document.get().getBody());
+		SVG svg = D3.svg();
+		Axis x = svg.axis();
+		s.call(x);
+	}
+	
+	public void addSensorCard(Sensor sensor) {
+		final VisSensorItemCard card = new VisSensorItemCard();
+		final Integer sensorId = sensor.getSensorId();
+		card.setHeader(Languages.sensorId() + sensorId);
+		selectedSensors.add(sensorId);
+		selectedSensors.sort((a,b) -> (a-b));
+		card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
+		card.setIconTitle(sensor.getMeasurand().getDisplayName());
+		card.getMiddleHeader().add(new Span("Messgroesse: " + sensor.getMeasurand().getDisplayName()+","));
+		card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()+","));
+		card.getMiddleHeader().add(new Span(sensor.getAttributionText()));
+		card.addValueChangeHandler(event -> {
+			if(event.getValue()) {
+				unselectedSensors.remove(sensorId);
+				selectedSensors.add(sensorId);
+				if(unselectedSensors.isEmpty()) selectAllButton.setText(Languages.deselectAllSensors());
+				addSensorDatasetToChart(sensorId);
+			}else {
+				unselectedSensors.add(sensorId);
+				selectedSensors.remove(sensorId);
+				if(selectedSensors.isEmpty()) selectAllButton.setText(Languages.selectAllSensors());
+				removeSensorDatasetFromChart(sensor);
+			}
+		});
+		sensorMap.put(sensorId, card);
+		sensorContainer.insert(card, selectedSensors.indexOf(sensorId));
+	}
+	
+	public void removeSensorCard(Integer id) {
+		sensorContainer.remove(sensorMap.get(id));
+	}
+	
+	private String getIconUrlFromType(MeasurandType measurandType) {
+		switch(measurandType) {
+		case AIR_PRESSURE:
+			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString();
+		case BRIGHTNESS:
+			return GUIImageBundle.INSTANCE.sunnyIconSvg().getSafeUri().asString();
+		case CLOUDINESS:
+			return GUIImageBundle.INSTANCE.cloudsIconSvg().getSafeUri().asString();
+		case HUMIDITY:
+			return GUIImageBundle.INSTANCE.humidityIconSvg().getSafeUri().asString();
+		case NOISE:
+			return GUIImageBundle.INSTANCE.noiseIconSvg().getSafeUri().asString();
+		case PM10:
+			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
+		case PM2_5:
+			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
+		case PRECIPITATION_AMOUNT:
+			return GUIImageBundle.INSTANCE.precipitaionIconSvg().getSafeUri().asString();
+		case PRECIPITATION_TYPE:
+			return GUIImageBundle.INSTANCE.precipitationTypeIconSvg().getSafeUri().asString();
+		case TEMPERATURE:
+			return GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString();
+		case WIND_DIRECTION:
+			return GUIImageBundle.INSTANCE.windDirectionIconSvg().getSafeUri().asString();
+		case WIND_SPEED:
+			return GUIImageBundle.INSTANCE.windSpeedIconSvg().getSafeUri().asString();
+		default:
+			return GUIImageBundle.INSTANCE.questionIconSvg().getSafeUri().asString();
+		}
+	}
+	
+	@UiHandler("showOnMapButton")
+	public void onShowOnMapButtonClicked(ClickEvent e) {
+		if(!selectedSensors.isEmpty()) {
+			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, selectedSensors));
+		}
+	}
+	
+	@UiHandler("selectAllButton")
+	public void onSelectAllButtonClicked(ClickEvent e) {
+		if(Languages.selectAllSensors().equals(selectAllButton.getText())) {
+			while(!unselectedSensors.isEmpty()) {
+				sensorMap.get(unselectedSensors.get(0)).setActive(true);
+				selectedSensors.add(unselectedSensors.get(0));
+				unselectedSensors.remove(0);
+			}
+			selectAllButton.setText(Languages.deselectAllSensors());
+			addAllDatasets();
+		}else {
+			while(!selectedSensors.isEmpty()) {
+				sensorMap.get(selectedSensors.get(0)).setActive(false);
+				unselectedSensors.add(selectedSensors.get(0));
+				selectedSensors.remove(0);
+			}
+			selectAllButton.setText(Languages.selectAllSensors());
+			removeAllDatasets();
+		}
+	}
+	
+	public void showNoDataIndicator(boolean show) {
+		if(show) {
+			noDataIndicator.getElement().getStyle().clearDisplay();
+		}else {
+			noDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+	
+	public void removeSensorDatasetFromChart(Sensor sensor) {
+		GWT.log("rm dataset: "+sensor.getSensorId());
+		LineDataset dataset = datasetMap.remove(sensor);
+		ArrayList<Dataset> datasets = new ArrayList<>();
+		chart.getData().getDatasets().forEach(ds -> datasets.add(ds));
+		datasets.remove(dataset);
+		Dataset[] newDatasets = new Dataset[datasets.size()];
+		newDatasets = datasets.toArray(newDatasets);
+		chart.getData().setDatasets(newDatasets);
+		chart.update();
+	}
+	
+	public void addSensorDatasetToChart(Integer sensorId) {
+		presenter.buildValueRequestAndSend(sensorId, getDateRange(), minTimestamp, maxTimestamp);
+	}
+
+	/**
+	 * @return the dateRange
+	 */
+	public DateRange getDateRange() {
+		return dateRange;
+	}
+
+	/**
+	 * @param dateRange the dateRange to set
+	 */
+	public void setDateRange(DateRange dateRange) {
+		this.dateRange = dateRange;
+	}
+	
+	@UiHandler("addToListButton")
+	public void bla(ClickEvent e) {
+	}
+	
+	public Sensor datasetsContainId(Integer id) {
+		for(Sensor s : datasetMap.keySet()) {
+			if(s.getSensorId()==id) return s;
+		}
+		return null;
+	}
+	
+	public void removeAllDatasets() {
+		if(datasetMap==null || datasetMap.isEmpty()) return;
+		for(Sensor sensor : sensors) {
+			removeSensorDatasetFromChart(sensor);
+		}
+	}
+	
+	public void addAllDatasets() {
+		if(sensors==null || sensors.isEmpty()) return;
+		sensors.forEach(sensor -> addSensorDatasetToChart(sensor.getSensorId()));
+	}
 }
