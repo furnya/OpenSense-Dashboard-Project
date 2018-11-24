@@ -65,7 +65,9 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids) {
-		return null;
+		HashMap<Integer, ValuePreview> previewMap = new HashMap<>();
+		ids.forEach(id -> previewMap.put(id, ClientRequestHandler.getInstance().getValuePreview(id)));
+		return previewMap;
 	}
 
 }

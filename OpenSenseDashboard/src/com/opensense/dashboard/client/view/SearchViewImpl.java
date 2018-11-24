@@ -435,7 +435,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public void showSensorValuePreview(Map<Integer, ValuePreview> preview) {
 		if(!shownSensorIds.isEmpty()) {
 			preview.entrySet().forEach(entry -> {
-				if(shownSensorIds.contains(entry.getKey()) && sensorViews.containsKey(entry.getKey())){
+				if(shownSensorIds.contains(entry.getKey()) && sensorViews.containsKey(entry.getKey()) && entry.getValue()!=null){
 					sensorViews.get(entry.getKey()).getMiddleHeader().add(new Span(entry.getValue().getMinValue().getTimestamp().toString() +" " +entry.getValue().getMinValue().getNumberValue()+""));
 					sensorViews.get(entry.getKey()).getMiddleHeader().add(new Span(entry.getValue().getMaxValue().getTimestamp().toString() +" " +entry.getValue().getMaxValue().getNumberValue()+""));
 				}
