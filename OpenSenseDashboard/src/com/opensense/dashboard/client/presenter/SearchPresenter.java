@@ -44,7 +44,23 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void onPageReturn() {
-		// TODO write parameter back to history
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, true);
+		if(view.getBounds() != null) {
+			requestBuilder.addParameter(ParamType.BOUNDING_BOX, "[" + view.getBounds().toUrlValue(6) + "]");
+		}
+		if(view.getMinAccuracy() != null && !view.getMinAccuracy().isEmpty()) {
+			requestBuilder.addParameter(ParamType.MIN_ACCURACY, view.getMinAccuracy());
+		}
+		if(view.getMaxAccuracy() != null && !view.getMaxAccuracy().isEmpty()) {
+			requestBuilder.addParameter(ParamType.MAX_ACCURACY, view.getMaxAccuracy());
+		}
+		if(view.getMeasurandId() != null && !view.getMeasurandId().isEmpty()) {
+			requestBuilder.addParameter(ParamType.MEASURAND_ID, view.getMeasurandId());
+		}
+		if(view.getMaxSensors() != null && !view.getMaxSensors().isEmpty()){
+			requestBuilder.addParameter(ParamType.MAX_SENSORS, view.getMaxSensors());
+		}
+		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, requestBuilder.getRequest().getParameters(), false));
 	}
 	
 	@Override
