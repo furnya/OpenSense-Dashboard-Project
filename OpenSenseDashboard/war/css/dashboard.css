@@ -281,11 +281,11 @@
 }
 
 .card-active{
-	animation: 1s color-marked;
+/* 	animation: 1s color-marked; */
 	background-color: #42DCA3 !important;
 }
 
 .card-deactive{
-	animation: 1s color-unmarked;
+/* 	animation: 1s color-unmarked; */
 	background-color: #fff !important;
 }

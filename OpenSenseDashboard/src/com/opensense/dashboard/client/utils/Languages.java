@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client.utils;
 
+import java.util.Date;
+
 /**
  * The languages are set to german by default to change it use the setter
  * @author Roeber
@@ -408,7 +410,16 @@ public static String seletedShowOnMap() {
 	}
 
 	public static String sensorId() {
-		return "ID: ";
+		return "ID ";
+	}
+
+	@SuppressWarnings("deprecation")
+	public static String getDate(Date timestamp) {
+		if(de){
+			return timestamp.toLocaleString();
+		}else{
+			return "";
+		}
 	}
 	
 }

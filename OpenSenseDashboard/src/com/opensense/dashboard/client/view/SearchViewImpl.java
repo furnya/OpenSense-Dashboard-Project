@@ -110,9 +110,11 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	private List<Integer> unselectedSensors = new ArrayList<>();
 	private List<Integer> selectedSensors = new ArrayList<>();
 	
+	private Map<Integer, Sensor> sensors = new HashMap<>();
+	
 	private LinkedList<Integer> shownSensorIds = new LinkedList<>();
 	private Map<Integer, SensorItemCard> sensorViews = new HashMap<>();
-	private int maxSensorsOnPage = 15;//TODO: getMaxObjectsOnPageFromCookie();
+	private int maxSensorsOnPage = 20;//TODO: getMaxObjectsOnPageFromCookie();
 	private int sensorPage = 0;
 	
 	public SearchViewImpl() {
@@ -184,13 +186,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		sensors.forEach(sensor -> {
 			final SensorItemCard card = new SensorItemCard();
 			final Integer sensorId = sensor.getSensorId();
-			card.setHeader(Languages.sensorId() + sensorId);
+			this.sensors.put(sensorId, sensor);
+			card.setHeader(sensor.getMeasurand().getDisplayName() + "   -   " + Languages.sensorId() + sensorId);
 			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
-			card.setIconTitle(sensor.getMeasurand().getDisplayName());
-			card.getMiddleHeader().add(new Span("Messgroesse: " + sensor.getMeasurand().getDisplayName()+","));
-			card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()+","));
-			card.getMiddleHeader().add(new Span(sensor.getAttributionText()));
+			card.getContent().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
+			card.getContent().add(new Span(sensor.getAttributionText()));
 			card.addValueChangeHandler(event -> {
 				if(event.getValue()) {
 					unselectedSensors.remove(sensorId);
@@ -405,6 +406,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@Override
 	public void clearSensorData() {
 		showNoDataIndicator(false);
+		this.sensors.clear();
 		sensorContainer.clear();
 		unselectedSensors.clear();
 		selectedSensors.clear();
@@ -435,9 +437,14 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public void showSensorValuePreview(Map<Integer, ValuePreview> preview) {
 		if(!shownSensorIds.isEmpty()) {
 			preview.entrySet().forEach(entry -> {
-				if(shownSensorIds.contains(entry.getKey()) && sensorViews.containsKey(entry.getKey()) && entry.getValue()!=null){
-					sensorViews.get(entry.getKey()).getMiddleHeader().add(new Span(entry.getValue().getMinValue().getTimestamp().toString() +" " +entry.getValue().getMinValue().getNumberValue()+""));
-					sensorViews.get(entry.getKey()).getMiddleHeader().add(new Span(entry.getValue().getMaxValue().getTimestamp().toString() +" " +entry.getValue().getMaxValue().getNumberValue()+""));
+				if(shownSensorIds.contains(entry.getKey())){
+					sensorViews.get(entry.getKey()).getPreviewContainer().clear();
+					if(sensorViews.containsKey(entry.getKey()) && entry.getValue()!=null) {
+						sensorViews.get(entry.getKey()).getPreviewContainer().add(new Span("Min Wert am " + Languages.getDate(entry.getValue().getMinValue().getTimestamp()) +": " +entry.getValue().getMinValue().getNumberValue()+""+sensors.get(entry.getKey()).getUnit().getName()));
+						sensorViews.get(entry.getKey()).getPreviewContainer().add(new Span("Max Wert am " + Languages.getDate(entry.getValue().getMaxValue().getTimestamp()) +": " +entry.getValue().getMaxValue().getNumberValue()+""+sensors.get(entry.getKey()).getUnit().getName()));
+					}else {
+						sensorViews.get(entry.getKey()).getPreviewContainer().add(new Span("Keine Werte vorhanden"));
+					}
 				}
 			});
 		}
