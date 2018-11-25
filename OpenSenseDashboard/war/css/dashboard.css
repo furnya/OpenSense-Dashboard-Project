@@ -299,6 +299,7 @@ input:focus+label{
 	background-color: #fff !important;
 }
 
-.display-grid{
+.display-grid-center{
 	display: grid;
+	place-items: center;
 }
