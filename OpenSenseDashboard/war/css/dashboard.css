@@ -145,7 +145,7 @@
 	position: absolute;
 	left: 90px;
 	width: 100%;
-	height: 100%;
+	height: 96.5%;
     z-index: 0;
 }
 
@@ -162,7 +162,7 @@
     position: absolute;
     bottom: 0px;
     width: 100%;
-    height: 22px;
+    height: 3.5%;
     background-color: #202020;
     z-index: 1;
 }
@@ -281,11 +281,11 @@
 }
 
 .card-active{
-	animation: 1s color-marked;
+/* 	animation: 1s color-marked; */
 	background-color: #42DCA3 !important;
 }
 
 .card-deactive{
-	animation: 1s color-unmarked;
+/* 	animation: 1s color-unmarked; */
 	background-color: #fff !important;
 }
