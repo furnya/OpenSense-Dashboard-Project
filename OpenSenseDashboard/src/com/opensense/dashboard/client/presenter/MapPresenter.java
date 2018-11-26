@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -25,6 +27,8 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	
 	private final MapView view;
 	
+	private JavaScriptObject markerSpiderfier;
+	
 	public MapPresenter(HandlerManager eventBus, AppController appController, MapView view) {
 		super(view, eventBus, appController);
 		this.view = view;
@@ -39,6 +43,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
+		initMarkerSpiderfier();
 	}
 
 	@Override
@@ -96,5 +101,44 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 			LOGGER.log(Level.WARNING, "Failure requesting the sensors.");
 			//TODO: show error
 		}, false));
+	}
+
+	private void initMarkerSpiderfier() {
+		markerSpiderfier = initMarkerSpiderfierJSNI(view.getMapWidget().getJso());
+	}
+	
+	private native JavaScriptObject initMarkerSpiderfierJSNI(JavaScriptObject mapWidget) /*-{
+		var oms = new $wnd.OverlappingMarkerSpiderfier(mapWidget, {
+			nearbyDistance : 10,
+			markersWontMove : true,
+			keepSpiderfied : true,
+			circleSpiralSwitchover : 20,
+			basicFormatEvents : true
+		});
+		var that = this;
+		
+		//destroy MarkerPopup whenever the spiderfier does some action:
+		oms.addListener('spiderfy',	function(marker) {
+			that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup();
+		});
+		
+		oms.addListener('unspiderfy', function(marker) {
+			that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup();
+		});
+	
+		return oms;
+	}-*/;
+	
+	
+	@Override
+	public JavaScriptObject getMarkerSpiderfier() {
+		return markerSpiderfier;
+	}
+
+	/**
+	 * destroys the marker popup
+	 */
+	private void destroyMarkerPopup() {
+		GWT.log("Destroyed");
 	}
 }
