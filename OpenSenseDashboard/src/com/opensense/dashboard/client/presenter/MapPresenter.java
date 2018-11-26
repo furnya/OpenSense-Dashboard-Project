@@ -112,7 +112,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 			nearbyDistance : 10,
 			markersWontMove : true,
 			keepSpiderfied : true,
-			circleSpiralSwitchover : 20,
+			circleSpiralSwitchover : 10,
 			basicFormatEvents : true
 		});
 		var that = this;

@@ -22,7 +22,6 @@ public interface MapView extends IDataPanelPageView{
 	public void initView();
 	public void showSensorData(final List<Sensor> sensors);
 	public void showMarkers(List<Sensor> sensorlist);
-	public void resize(double lg,double bg);
 	public void resetMarkerAndCluster();
 	public void calcBounds(List<Sensor> sensorlist);
 	public MapWidget getMapWidget();
