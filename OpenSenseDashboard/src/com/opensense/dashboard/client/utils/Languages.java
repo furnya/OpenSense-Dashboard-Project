@@ -317,7 +317,7 @@ public static String seletedShowOnMap() {
 	
 	public static String selectedAddToList() {
 		if(de) {
-			return "Zur Liste hinzuf¸gen";
+			return "Zur Liste hinzuf√ºgen";
 		}else {
 			return "";
 		}
@@ -325,7 +325,7 @@ public static String seletedShowOnMap() {
 	
 	public static String allSelectedSensors() {
 		if(de) {
-			return "Alle ausgew‰hlten Sensoren:";
+			return "Alle ausgew√§hlten Sensoren:";
 		}else {
 			return "";
 		}
@@ -333,7 +333,7 @@ public static String seletedShowOnMap() {
 	
 	public static String selectAllSensors() {
 		if(de) {
-			return "Alle Sensoren ausw‰hlen";
+			return "Alle Sensoren ausw√§hlen";
 		}else {
 			return "";
 		}
@@ -341,7 +341,7 @@ public static String seletedShowOnMap() {
 	
 	public static String deselectAllSensors() {
 		if(de) {
-			return "Alle Sensoren abw‰hlen";
+			return "Alle Sensoren abw√§hlen";
 		}else {
 			return "";
 		}
@@ -403,7 +403,7 @@ public static String seletedShowOnMap() {
 	
 	public static String noData(){
 		if(de){
-			return "Es konnten keine Daten zu der gew‰hlten Suchparameter gefunden werden";
+			return "Es konnten keine Daten zu der gew√§hlten Suchparameter gefunden werden";
 		}else{
 			return "";
 		}
