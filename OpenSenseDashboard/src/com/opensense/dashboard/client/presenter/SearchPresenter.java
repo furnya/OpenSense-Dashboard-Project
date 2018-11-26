@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
@@ -44,23 +45,25 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void onPageReturn() {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, true);
-		if(view.getBounds() != null) {
-			requestBuilder.addParameter(ParamType.BOUNDING_BOX, "[" + view.getBounds().toUrlValue(6) + "]");
+		if(!view.getShownSensorIds().isEmpty()) {
+			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, true);
+			if(view.getBounds() != null) {
+				requestBuilder.addParameter(ParamType.BOUNDING_BOX, "[" + view.getBounds().toUrlValue(6) + "]");
+			}
+			if(view.getMinAccuracy() != null && !view.getMinAccuracy().isEmpty()) {
+				requestBuilder.addParameter(ParamType.MIN_ACCURACY, view.getMinAccuracy());
+			}
+			if(view.getMaxAccuracy() != null && !view.getMaxAccuracy().isEmpty()) {
+				requestBuilder.addParameter(ParamType.MAX_ACCURACY, view.getMaxAccuracy());
+			}
+			if(view.getMeasurandId() != null && !view.getMeasurandId().isEmpty()) {
+				requestBuilder.addParameter(ParamType.MEASURAND_ID, view.getMeasurandId());
+			}
+			if(view.getMaxSensors() != null && !view.getMaxSensors().isEmpty()){
+				requestBuilder.addParameter(ParamType.MAX_SENSORS, view.getMaxSensors());
+			}
+			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, requestBuilder.getRequest().getParameters(), false));
 		}
-		if(view.getMinAccuracy() != null && !view.getMinAccuracy().isEmpty()) {
-			requestBuilder.addParameter(ParamType.MIN_ACCURACY, view.getMinAccuracy());
-		}
-		if(view.getMaxAccuracy() != null && !view.getMaxAccuracy().isEmpty()) {
-			requestBuilder.addParameter(ParamType.MAX_ACCURACY, view.getMaxAccuracy());
-		}
-		if(view.getMeasurandId() != null && !view.getMeasurandId().isEmpty()) {
-			requestBuilder.addParameter(ParamType.MEASURAND_ID, view.getMeasurandId());
-		}
-		if(view.getMaxSensors() != null && !view.getMaxSensors().isEmpty()){
-			requestBuilder.addParameter(ParamType.MAX_SENSORS, view.getMaxSensors());
-		}
-		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, requestBuilder.getRequest().getParameters(), false));
 	}
 	
 	@Override
@@ -153,6 +156,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 	
 	private void sendSensorRequestAndShow(final Request request) {
+		History.newItem(DataPanelPage.SEARCH.name(), false);
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
 				if(request.getParameters() != null) {

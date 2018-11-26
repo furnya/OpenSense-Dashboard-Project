@@ -1,17 +1,19 @@
-<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+<svg width="500.00000000000006" height="500.00000000000006" xmlns="http://www.w3.org/2000/svg">
  <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
 
  <g>
   <title>background</title>
-  <rect x="-1" y="-1" width="567.100475" height="567.100475" id="canvas_background" fill="none"/>
-  <g id="canvasGrid" display="none">
-   <rect id="svg_1" width="100%" height="100%" x="0" y="0" stroke-width="0" fill="url(#gridpattern)"/>
+  <rect fill="none" id="canvas_background" height="502" width="502" y="-1" x="-1"/>
+  <g display="none" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%" id="svg_1"/>
   </g>
  </g>
  <g>
   <title>Layer 1</title>
-  <rect fill="#9f9f9f" stroke="#42dca3" stroke-width="1.5" x="105" y="101.130199" width="308.888889" height="281.111111" id="svg_10"/>
-  <path d="m250.000023,13.112095c-130.821341,0 -236.887897,106.066556 -236.887897,236.887897s106.066556,236.887897 236.887897,236.887897s236.887897,-106.066556 236.887897,-236.887897s-106.066556,-236.887897 -236.887897,-236.887897zm0.45897,355.331846l0,-88.832961l-118.902919,0l0,-59.221974l118.902919,0l0,-88.373991l117.984978,117.984978l-117.984978,118.443949z" fill="#dfdfdf" id="svg_8" stroke="#dfdfdf"/>
-  <rect fill="#9f9f9f" stroke="#9f9f9f" stroke-width="1.5" x="331.647566" y="149.999993" width="38.888889" height="200" id="svg_11"/>
+  <g id="svg_7"/>
+  <g id="svg_9">
+   <path transform="rotate(180 235.32531738281247,249.9999694824219) " stroke="null" fill="#ffffff" id="svg_6" d="m384.932285,207.255119l-149.606983,0l0,-64.117279c0,-10.344254 -8.01466,-21.372426 -21.372426,-21.372426c-9.852688,0 -14.853836,6.133886 -21.372426,11.54111l-114.876791,95.321021c-8.185639,6.689569 -13.357766,11.861697 -13.357766,21.372426s5.172127,14.704229 13.357766,21.372426l114.876791,95.321021c6.51859,5.407224 11.519738,11.54111 21.372426,11.54111c13.357766,0 21.372426,-11.028172 21.372426,-21.372426l0,-64.117279l149.606983,0c11.754834,0 21.372426,-9.617592 21.372426,-21.372426l0,-42.744852c0,-11.754834 -9.617592,-21.372426 -21.372426,-21.372426z"/>
+   <rect stroke="null" id="svg_8" height="255.882579" width="57.353012" y="122.058684" x="378.301074" stroke-opacity="null" stroke-width="null" fill="#ffffff"/>
+  </g>
  </g>
 </svg>
