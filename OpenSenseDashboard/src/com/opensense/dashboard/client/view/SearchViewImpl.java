@@ -432,6 +432,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			noDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}
+	
 	public void showSensorValuePreview(Map<Integer, ValuePreview> preview) {
 		if(!shownSensorIds.isEmpty()) {
 			preview.entrySet().forEach(entry -> {
@@ -445,4 +446,6 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 					}
 				}
 			});
+		}
+	}
 }
