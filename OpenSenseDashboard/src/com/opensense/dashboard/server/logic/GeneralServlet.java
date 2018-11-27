@@ -62,11 +62,11 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			ServerLanguages.setGerman();
 		}
 	}
-	}
 
 	@Override
 	public Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids) {
 		HashMap<Integer, ValuePreview> previewMap = new HashMap<>();
 		ids.forEach(id -> previewMap.put(id, ClientRequestHandler.getInstance().getValuePreview(id)));
 		return previewMap;
+	}
 }
