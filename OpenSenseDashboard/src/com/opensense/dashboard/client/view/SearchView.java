@@ -7,12 +7,14 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.maps.client.base.LatLngBounds;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.shared.Sensor;
+import com.opensense.dashboard.shared.ValuePreview;
 
 public interface SearchView extends IDataPanelPageView{
 	public interface Presenter{
 
 		void buildSensorRequestAndSend();
 		HandlerManager getEventBus();
+		void getSensorValuePreviewAndShow(List<Integer> idsOnPage);
 	}
 	
 	public void setPresenter(Presenter presenter);
@@ -40,4 +42,5 @@ public interface SearchView extends IDataPanelPageView{
 	public void setSensorPage(int i);
 	public void clearSensorData();
 	public void showDataContainer(boolean show);
+	public void showSensorValuePreview(Map<Integer, ValuePreview> result);
 }

@@ -1,6 +1,5 @@
 package com.opensense.dashboard.client.utils;
 
-import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
@@ -14,7 +13,6 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.gui.GUIImageBundle;
 
 import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialLabel;
@@ -31,6 +29,12 @@ public class SensorItemCard extends Composite{
 	Div layout;
 	
 	@UiField
+	Div content;
+	
+	@UiField
+	Div previewContainer;
+	
+	@UiField
 	MaterialLabel header;
 	
 	@UiField
@@ -43,12 +47,11 @@ public class SensorItemCard extends Composite{
 	MaterialCheckBox checkbox;
 	
 	@UiField
-	Button favButton;
+	Image favButton;
 	
 	public SensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
 		addClickHandler();
-		favButton.add(new Image(GUIImageBundle.INSTANCE.favorite().getSafeUri().asString()));
 	}
 	
 	@UiHandler("favButton")
@@ -68,8 +71,12 @@ public class SensorItemCard extends Composite{
 		this.icon.setTitle(title);
 	}
 	
-	public Div getMiddleHeader() {
-		return this.midContainer;
+	public Div getContent() {
+		return this.content;
+	}
+	
+	public Div getPreviewContainer() {
+		return this.previewContainer;
 	}
 	
 	private void addClickHandler() {
@@ -87,9 +94,7 @@ public class SensorItemCard extends Composite{
 		checkbox.setValue(active);
 		if(active) {
 			layout.addStyleName("card-active");
-			layout.removeStyleName("card-deactive");
 		}else {
-			layout.addStyleName("card-deactive");
 			layout.removeStyleName("card-active");
 		}
 	}

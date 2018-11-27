@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
@@ -18,6 +19,7 @@ import com.opensense.dashboard.client.view.SearchView;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.ValuePreview;
 
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 	
@@ -43,7 +45,25 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void onPageReturn() {
-		// TODO write parameter back to history
+		if(!view.getShownSensorIds().isEmpty()) {
+			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, true);
+			if(view.getBounds() != null) {
+				requestBuilder.addParameter(ParamType.BOUNDING_BOX, "[" + view.getBounds().toUrlValue(6) + "]");
+			}
+			if(view.getMinAccuracy() != null && !view.getMinAccuracy().isEmpty()) {
+				requestBuilder.addParameter(ParamType.MIN_ACCURACY, view.getMinAccuracy());
+			}
+			if(view.getMaxAccuracy() != null && !view.getMaxAccuracy().isEmpty()) {
+				requestBuilder.addParameter(ParamType.MAX_ACCURACY, view.getMaxAccuracy());
+			}
+			if(view.getMeasurandId() != null && !view.getMeasurandId().isEmpty()) {
+				requestBuilder.addParameter(ParamType.MEASURAND_ID, view.getMeasurandId());
+			}
+			if(view.getMaxSensors() != null && !view.getMaxSensors().isEmpty()){
+				requestBuilder.addParameter(ParamType.MAX_SENSORS, view.getMaxSensors());
+			}
+			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, requestBuilder.getRequest().getParameters(), false));
+		}
 	}
 	
 	@Override
@@ -100,7 +120,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		getMeasurandsAndDispaly(runnable);
 	}
 	
-	public void getMeasurandsAndDispaly(final Runnable runnable) {
+	private void getMeasurandsAndDispaly(final Runnable runnable) {
 		GeneralService.Util.getInstance().getMeasurands(new DefaultAsyncCallback<Map<Integer, String>>(result -> {
 			if(result != null) {
 				view.setMeasurandsList(result);
@@ -136,6 +156,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 	
 	private void sendSensorRequestAndShow(final Request request) {
+		History.newItem(DataPanelPage.SEARCH.name(), false);
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
 				if(request.getParameters() != null) {
@@ -154,4 +175,18 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			view.showLoadSensorError();
 		}, false));
 	}
+		
+	public void getSensorValuePreviewAndShow(List<Integer> ids) {
+			GeneralService.Util.getInstance().getSensorValuePreview(ids, new DefaultAsyncCallback<Map<Integer, ValuePreview>>(result -> {
+				if(result != null) {
+					view.showSensorValuePreview(result);
+				}else {
+					LOGGER.log(Level.WARNING, "SensorValuePreview result is null.");
+					//TODO: show error
+				}
+			},caught -> {
+				LOGGER.log(Level.WARNING, "Failure requesting the sensorValuePreview.");
+				//TODO:showError
+			}, false));
+		}
 }

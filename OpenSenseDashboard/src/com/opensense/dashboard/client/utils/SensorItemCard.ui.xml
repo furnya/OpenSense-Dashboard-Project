@@ -10,8 +10,8 @@
 <ui:style>
 .content{
 	cursor: pointer;
-	display: flex;
 	background-color: #fff;
+	display: flex;
 }
 .card-button{
 	float: right;
@@ -26,57 +26,78 @@
 	width: 40px;	
 }
 .left{
-	min-width: 20%;
+	width: 5%;
 	display: flex;
-	white-space: nowrap;
-	overflow: hidden;
+    place-content: center;
+    place-items: center;
 }
 .mid{
-	min-width: 65%;
-	display: flex;
-	white-space: nowrap;
-    align-items: center;
-    overflow: hidden;
-}
-.mid > Span{
-	margin-right: 10px;
+	width: 95%;
+	padding: 10px;
 }
 .right{
-	min-width: 15%;
+    width: 10%;
+    place-content: center;
+    place-items: center;
+    display: flex;
 }
 .font{
 	margin-top: 5px;
 	font-size: 20px;	
 }
 .checkbox{
-	margin-top: auto;
-	margin-left: 10px;
-}
-.fav-icon > img{
-	filter: invert(100%);   
-	width: 30px;
-    height: 30px;
-	min-width: 30px;
-    margin-left: -15px;
+	margin-top: 8px;
 }
 .fav-icon{
-	margin-top: 2px;	
-    float: right;
-    margin-right: 10px;
+    filter: invert(40%);
+    width: 40px;
+}
+@keyframes trans {
+    0% {transform: scale(1,1);}
+    10% {transform: scale(1.1,1.1);}
+    20% {transform: scale(1.2,1.2);}
+    30% {transform: scale(1.1,1.1);}
+    40% {transform: scale(1,1);}
+    60% {transform: scale(0.9,0.9);}
+    80% {transform: scale(0.8,0.8);}
+    90% {transform: scale(0.9,0.9);}
+    100% {transform: scale(1,1);}
+}
+.fav-icon:hover{
+	animation: 1s trans;
+	animation-iteration-count: infinite;
+}
+.header{
+    display: flex;
+    width: 90%;
+}
+.content-container{
+	text-align: left;
+    width: 90%;	
+}
+.content-container > Span{
+	margin-right: 15px;	
 }
 </ui:style>
 
 <bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
 	<bh:Div addStyleNames="{style.left}">
 		<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>
-		<bh:Div addStyleNames="{style.icon-size} margin-right-10">
-			<b:Image ui:field="icon" width="100%" height="100%"/>
-		</bh:Div>
-		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
 	</bh:Div>
-	<bh:Div addStyleNames="{style.mid}" ui:field="midContainer"/>
+	<bh:Div addStyleNames="{style.mid}">
+		<bh:Div addStyleNames="flex">
+			<bh:Div addStyleNames="{style.header}" ui:field="midContainer">
+				<bh:Div addStyleNames="{style.icon-size} margin-right-10">
+					<b:Image ui:field="icon" width="100%" height="100%"/>
+				</bh:Div>	
+				<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
+			</bh:Div>
+		</bh:Div>
+		<bh:Div ui:field="content" addStyleNames="{style.content-container}"/>
+		<bh:Div  ui:field="previewContainer" addStyleNames="{style.content-container}"/>
+	</bh:Div>
 	<bh:Div addStyleNames="{style.right}">
-		<b:Button  width="30px" ui:field="favButton" addStyleNames="d-btn {style.fav-icon}" />
+		<b:Image ui:field="favButton" url="{gui.favorite.getSafeUri.asString}" addStyleNames="{style.fav-icon} clickable" />
 	</bh:Div>
 </bh:Div>
 
