@@ -17,6 +17,7 @@ import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Unit;
 import com.opensense.dashboard.shared.Value;
+import com.opensense.dashboard.shared.ValuePreview;
 
 public class ClientRequestHandler {
 
@@ -196,6 +197,30 @@ public class ClientRequestHandler {
 			return null;
 		}
 		return id;
+	}
+	
+	public ValuePreview getValuePreview(Integer id) {
+		RequestSender rs = new RequestSender();
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values/firstlast");
+		if(sensorJSON==null) {
+			return null;
+		}
+		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+		JSONArray valueArrayJSON;
+		try {
+			valueArrayJSON = sensorJSON.getJSONArray("values");
+		} catch(JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		if(valueArrayJSON.isEmpty()) return null;
+		Object firstValueObject = valueArrayJSON.get(0);
+		Object lastValueObject = valueArrayJSON.get(1);
+		if(!(firstValueObject instanceof JSONObject) || !(lastValueObject instanceof JSONObject)) return null;
+		Value firstValue = DataObjectBuilder.buildValue((JSONObject) firstValueObject, inputFormat);
+		Value lastValue = DataObjectBuilder.buildValue((JSONObject) lastValueObject, inputFormat);
+		if(firstValue == null || lastValue == null) return null;
+		return new ValuePreview(firstValue,lastValue);
 	}
 
 }

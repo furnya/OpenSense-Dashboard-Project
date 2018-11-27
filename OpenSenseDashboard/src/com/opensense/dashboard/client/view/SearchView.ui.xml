@@ -81,11 +81,11 @@
 	</bh:Div>	
 	<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10 {style.margin}">
 			<m:MaterialButton width="265px" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10"/>
-		<bh:Div addStyleNames="display-block"> 
+		<bh:Div addStyleNames="display-block" width="80%"> 
 			<m:MaterialLabel textColor="WHITE" text="{lang.allSelectedSensors}"/>
-			<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
-			<m:MaterialButton  ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
-			<m:MaterialButton  ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn"/>
+			<m:MaterialButton ui:field="showOnMapButton" width="33.3%" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
+			<m:MaterialButton  ui:field="showVisualizationsButton" width="33.3%" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
+			<m:MaterialButton  ui:field="addToListButton" width="30%" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn"/>
 		</bh:Div>
 	</bh:Div>
 	<bh:Div ui:field="dataContent" addStyleNames="margin-top-20 margin-bottom-20 {style.panel} round-corners {style.center}"> 

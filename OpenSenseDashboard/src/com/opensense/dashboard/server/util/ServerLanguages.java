@@ -51,7 +51,7 @@ public class ServerLanguages{
 			break;
 		case CLOUDINESS:
 			if(de) {
-				measurandName = "Bewölkung";
+				measurandName = "BewÃ¶lkung";
 			} else {
 				measurandName = "Cloudiness";
 			}
@@ -65,7 +65,7 @@ public class ServerLanguages{
 			break;
 		case NOISE:
 			if(de) {
-				measurandName = "Lautstärke";
+				measurandName = "LautstÃ¤rke";
 			} else {
 				measurandName = "Noise";
 			}

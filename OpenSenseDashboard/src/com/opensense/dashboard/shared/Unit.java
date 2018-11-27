@@ -1,8 +1,6 @@
 package com.opensense.dashboard.shared;
 
 
-import org.json.JSONObject;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Unit implements IsSerializable{

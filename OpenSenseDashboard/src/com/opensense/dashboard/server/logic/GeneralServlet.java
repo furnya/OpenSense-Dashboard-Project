@@ -1,6 +1,7 @@
 package com.opensense.dashboard.server.logic;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -11,6 +12,7 @@ import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.ValuePreview;
 
 @SuppressWarnings("serial")
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
@@ -67,6 +69,13 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		if(loginRequest.getRequestType() != ResultType.TOKEN) return null;
 		String body = "{\"username\":\""+loginRequest.getUsername()+"\",\"password\":\""+loginRequest.getPassword()+"\"}";
 		return ClientRequestHandler.getInstance().sendLoginRequest(body);
+	}
+
+	@Override
+	public Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids) {
+		HashMap<Integer, ValuePreview> previewMap = new HashMap<>();
+		ids.forEach(id -> previewMap.put(id, ClientRequestHandler.getInstance().getValuePreview(id)));
+		return previewMap;
 	}
 
 }
