@@ -10,6 +10,8 @@ public class Request implements IsSerializable{
 	private List<Parameter> parameters;
 	private ResultType resultType;
 	private DateRange dateRange;
+	private String username;
+	private String password;
 	
 	public Request() {
 	}
@@ -65,5 +67,33 @@ public class Request implements IsSerializable{
 	 */
 	public void setDateRange(DateRange dateRange) {
 		this.dateRange = dateRange;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

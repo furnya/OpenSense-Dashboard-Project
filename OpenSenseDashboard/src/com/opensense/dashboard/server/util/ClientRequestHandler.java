@@ -39,7 +39,7 @@ public class ClientRequestHandler {
 	
 	public Map<Integer, Unit> getUnitMap(){
 		RequestSender rs = new RequestSender();
-		JSONArray unitArrayJSON = rs.arrayRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/units");
+		JSONArray unitArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/units");
 		if(unitArrayJSON==null) {
 			return null;
 		}
@@ -59,7 +59,7 @@ public class ClientRequestHandler {
 	
 	public Map<Integer, Measurand> getMeasurandMap(){
 		RequestSender rs = new RequestSender();
-		JSONArray measurandArrayJSON = rs.arrayRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/measurands");
+		JSONArray measurandArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/measurands");
 		if(measurandArrayJSON==null) {
 			return null;
 		}
@@ -87,7 +87,7 @@ public class ClientRequestHandler {
 		}
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
-		JSONArray sensorArrayJSON = rs.arrayRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors");
+		JSONArray sensorArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors");
 		if(sensorArrayJSON==null) {
 			return sensorList;
 		}
@@ -108,7 +108,7 @@ public class ClientRequestHandler {
 	
 	public Sensor getSensor(int id){
 		RequestSender rs = new RequestSender();
-		JSONObject sensorJSON = rs.objectRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
 		if(sensorJSON==null) {
 			return null;
 		}
@@ -121,7 +121,7 @@ public class ClientRequestHandler {
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
 		setTimestampParameters(rs, dateRange);
-		JSONObject sensorJSON = rs.objectRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values");
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values");
 		if(sensorJSON==null) {
 			return null;
 		}
@@ -181,6 +181,21 @@ public class ClientRequestHandler {
 		default:
 			break;
 		}
+	}
+	
+	public String sendLoginRequest(String body) {
+		RequestSender rs = new RequestSender();
+		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/users/login", body);
+		if(idJSON==null) {
+			return null;
+		}
+		String id = null;
+		try {
+			id = idJSON.getString("id");
+		} catch(JSONException e) {
+			return null;
+		}
+		return id;
 	}
 
 }
