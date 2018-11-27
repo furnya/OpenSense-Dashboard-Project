@@ -21,7 +21,7 @@ import gwt.material.design.client.ui.MaterialLabel;
 
 public class VisSensorItemCard extends Composite{
 	
-	@UiTemplate("SensorItemCard.ui.xml")
+	@UiTemplate("VisSensorItemCard.ui.xml")
 	interface VisSensorItemCardUiBinder extends UiBinder<Widget, VisSensorItemCard> {
 	}
 	
