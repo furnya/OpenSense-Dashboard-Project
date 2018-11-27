@@ -129,4 +129,6 @@ public interface GUIImageBundle extends ClientBundle {
 	
 	@Source("icons/recenter.svg")
 	SVGResource recenter();
+	
+	
 }

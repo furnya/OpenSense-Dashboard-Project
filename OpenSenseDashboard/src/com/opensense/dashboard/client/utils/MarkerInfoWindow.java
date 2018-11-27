@@ -49,6 +49,10 @@ public class MarkerInfoWindow extends Composite {
 	public Widget getInfoBox() {
 		return this.infoBox;
 	}
+	
+	public Div getData() {
+		return this.data;
+	}
 
 	public void setHeader(String header) {
 		this.header.setText(header);
@@ -59,7 +63,7 @@ public class MarkerInfoWindow extends Composite {
 			this.data.add(new Span(item));
 			});
 	}
-
+	
 	public void passID(List<Integer> id) {
 		if(!currentID.isEmpty()) {
 			currentID.clear();

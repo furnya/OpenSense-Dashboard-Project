@@ -20,6 +20,7 @@ import com.opensense.dashboard.client.view.MapView;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.ValuePreview;
 
 public class MapPresenter extends DataPanelPagePresenter implements IPresenter, MapView.Presenter{
 	
@@ -92,7 +93,6 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 				}
 				view.showSensorData(result.getSensors());
 				view.showMarkers(result.getSensors());
-				view.calcBounds(result.getSensors());
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
 				//TODO: show error
@@ -112,18 +112,18 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 			nearbyDistance : 10,
 			markersWontMove : true,
 			keepSpiderfied : true,
-			circleSpiralSwitchover : 10,
+			circleSpiralSwitchover : 30,
 			basicFormatEvents : true
 		});
 		var that = this;
 		
 		//destroy MarkerPopup whenever the spiderfier does some action:
 		oms.addListener('spiderfy',	function(marker) {
-			that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup();
+			that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup(*)();
 		});
 		
 		oms.addListener('unspiderfy', function(marker) {
-			that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup();
+			that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup(*)();
 		});
 	
 		return oms;
@@ -138,7 +138,24 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	/**
 	 * destroys the marker popup
 	 */
-	private void destroyMarkerPopup() {
+	public void destroyMarkerPopup() {
 		GWT.log("Destroyed");
 	}
+	
+	//FOllowing Functions will handle ValuePreview Objects
+	
+	public void getValuePreviewAndShowOnInfoWindow(List<Integer> ids) {
+		GeneralService.Util.getInstance().getSensorValuePreview(ids, new DefaultAsyncCallback<Map<Integer, ValuePreview>>(result -> {
+			if(result != null) {
+				view.showValuePreviewOnInfoWindow(result);
+			}else {
+				LOGGER.log(Level.WARNING, "SensorValuePreview result is null.");
+				//TODO: show error
+			}
+		},caught -> {
+			LOGGER.log(Level.WARNING, "Failure requesting the sensorValuePreview.");
+			//TODO:showError
+		}, false));
+	}
+	
 }

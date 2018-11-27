@@ -1,0 +1,40 @@
+<svg width="500.00000000000006" height="399.99999999999994" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <defs>
+  <filter id="svg_52_blur">
+   <feGaussianBlur stdDeviation="2" in="SourceGraphic"/>
+  </filter>
+ </defs>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="502" y="-1" x="-1"/>
+  <g display="none" overflow="visible" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <ellipse filter="url(#svg_52_blur)" ry="190" rx="190" id="svg_52" cy="200.000004" cx="249.999998" stroke-width="1.5" fill="#c3e2f4"/>
+  <ellipse ry="170" rx="170" id="svg_49" cy="200.000006" cx="249.999998" stroke-width="1.5" fill="#89cef9"/>
+  <ellipse ry="150" rx="150" id="svg_1" cy="199.999992" cx="249.999998" stroke-width="1.5" fill="#009dff"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_21"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_22"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_23"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_24"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_25"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_26"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_27"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_28"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_29"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_30"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_31"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_32"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_33"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_34"/>
+  <g transform="matrix(0.25435834756340014,0,0,0.25435834756340014,0,0) " id="svg_35"/>
+  <g id="svg_36"/>
+  <ellipse ry="130" rx="130" id="svg_54" cy="199.999998" cx="249.999993" stroke-width="1.5" fill="#005dff"/>
+  <path stroke="null" fill="#000000" id="svg_59" d="m320.212018,186.414603l-56.291419,0l0,-54.935943c0,-7.174787 -6.220767,-12.991034 -13.920598,-12.991034c-7.699831,0 -13.920598,5.816247 -13.920598,12.991034l0,54.935943l-56.291419,0c-7.351816,0 -13.311572,6.070974 -13.311572,13.585395c0,7.514422 5.959756,13.585395 13.311572,13.585395l56.291419,0l0,54.935943c0,7.174787 6.220767,12.991034 13.920598,12.991034c7.699831,0 13.920598,-5.816247 13.920598,-12.991034l0,-54.935943l56.291419,0c7.351816,0 13.311572,-6.070974 13.311572,-13.585395c0,-7.514422 -5.959756,-13.585395 -13.311572,-13.585395z"/>
+  <g id="svg_60"/>
+ </g>
+</svg>
