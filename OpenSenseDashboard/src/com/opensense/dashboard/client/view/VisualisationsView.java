@@ -15,7 +15,8 @@ import com.opensense.dashboard.shared.Value;
 public interface VisualisationsView extends IDataPanelPageView {
 	
 	public interface Presenter{
-		void valueRequestForSensorList(List<Sensor> sensors, DateRange dateRange, Date minDate, Date maxDate);
+		void valueRequestForSensorList(List<Integer> sensorIds, DateRange dateRange, Date minDate, Date maxDate);
+		void buildValueRequestAndSend(Integer id, DateRange dateRange, Date minDate, Date maxDate);
 		HandlerManager getEventBus();
 	}
 	
@@ -29,4 +30,6 @@ public interface VisualisationsView extends IDataPanelPageView {
 	public boolean showChart();
 	public void createChart();
 	public void setSensors(List<Sensor> sensors);
+	public List<Sensor> getSensors();
+	public void showNoDataIndicator(boolean show);
 }
