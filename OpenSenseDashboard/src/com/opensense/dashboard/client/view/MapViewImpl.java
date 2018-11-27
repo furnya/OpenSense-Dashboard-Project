@@ -42,6 +42,8 @@ import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.ValuePreview;
 
+import sun.security.krb5.Config;
+
 public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	@UiTemplate("MapView.ui.xml")
@@ -180,8 +182,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			card.addClickHandler(event -> {
 				event.stopPropagation();
 				showMarkers(list);
-				GWT.log(card.isActive() + "");
-//				card.setActive(!card.isActive());
 			});
 			sensorContainer.add(card);
 		});
@@ -217,9 +217,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		});
 
 		mapWidget.addZoomChangeHandler(event -> {
-			if (mapWidget.getZoom() == 14) {
-				checkForNearMarkers();
-			}
+//			if (mapWidget.getZoom() == 14) {
+//				checkForNearMarkers();
+//			}
 			for (InfoWindow infoWindow : infoWindows.values()) {
 				infoWindow.close();
 				if (lastOpened != null) {
@@ -239,24 +239,24 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		});
 	}
 
-	private void checkForNearMarkers() {
-		mList.forEach(marker -> {
-			if (mapWidget.getBounds().contains(marker.getPosition()) && !markerHasNearMarkers(presenter.getMarkerSpiderfier(), marker)) {
-				MarkerOptions plusOptions = MarkerOptions.newInstance();
-				plusOptions.setMap(mapWidget);
-				plusOptions.setZindex(10000);
-				plusOptions.setIcon(GUIImageBundle.INSTANCE.diagramIcon().getSafeUri().asString());
-				final Marker plus = Marker.newInstance(plusOptions);
-				plus.setPosition(marker.getPosition());
-				//addMarkerToSpiderfier
-				plus.addClickHandler(event-> {
-					triggerClick(marker, marker.getPosition());
-					plus.clear();
-				});
-			}
-		});
-
-	}
+//	private void checkForNearMarkers() {
+//		mList.forEach(marker -> {
+//			if (mapWidget.getBounds().contains(marker.getPosition()) && !markerHasNearMarkers(presenter.getMarkerSpiderfier(), marker)) {
+//				MarkerOptions plusOptions = MarkerOptions.newInstance();
+//				plusOptions.setMap(mapWidget);
+//				plusOptions.setZindex(10000);
+//				plusOptions.setIcon(GUIImageBundle.INSTANCE.diagramIcon().getSafeUri().asString());
+//				final Marker plus = Marker.newInstance(plusOptions);
+//				plus.setPosition(marker.getPosition());
+//				//addMarkerToSpiderfier
+//				plus.addClickHandler(event-> {
+//					triggerClick(marker, marker.getPosition());
+//					plus.clear();
+//				});
+//			}
+//		});
+//
+//	}
 
 	// this function will add a basic InfoWindow to the Markers on the Map
 	// Sensor Data:
@@ -355,11 +355,56 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			mCo.setMaxZoom(13);
 			mCo.setZoomOnClick(true);
 			mCo.setAverageCenter(true);
-			ClusterIconStyle cis = ClusterIconStyle.newInstance();
-			cis.setUrl(GUIImageBundle.INSTANCE.homeIconSvg().getSafeUri().asString());
-			cis.setAnchorIcon(27,27);
-			cis.setAnchor(52,53);
-			mCo.setStyle(cis);
+//			mCo.setImagePath("/OpenSenseDashboard/src/com/opensense/dashboard/client/gui/icons/m");
+			List<ClusterIconStyle> cises = new ArrayList<>();
+			ClusterIconStyle cis1 = ClusterIconStyle.newInstance();
+			ClusterIconStyle cis2 = ClusterIconStyle.newInstance();
+			ClusterIconStyle cis3 = ClusterIconStyle.newInstance();
+			ClusterIconStyle cis4 = ClusterIconStyle.newInstance();
+			ClusterIconStyle cis5 = ClusterIconStyle.newInstance();
+			
+			cis1.setTextColor("WHITE");
+			cis2.setTextColor("WHITE");
+			cis3.setTextColor("WHITE");
+			cis4.setTextColor("WHITE");
+			cis5.setTextColor("WHITE");
+			cis1.setAnchorIcon(30,30);
+//			cis1.setAnchor(30,30);
+			cis2.setAnchorIcon(30,30);
+//			cis2.setAnchor(30,30);
+
+			cis3.setAnchorIcon(30,30);
+//			cis3.setAnchor(30,30);
+
+			cis4.setAnchorIcon(30,30);
+//			cis4.setAnchor(30,30);
+
+			cis5.setAnchorIcon(30,30);
+//			cis5.setAnchor(80,80);
+
+
+			cis1.setUrl(GUIImageBundle.INSTANCE.m1().getSafeUri().asString());
+			cis2.setUrl(GUIImageBundle.INSTANCE.m2().getSafeUri().asString());
+			cis3.setUrl(GUIImageBundle.INSTANCE.m3().getSafeUri().asString());
+			cis4.setUrl(GUIImageBundle.INSTANCE.m4().getSafeUri().asString());
+			cis5.setUrl(GUIImageBundle.INSTANCE.m5().getSafeUri().asString());
+
+			cis1.setHeight(66);
+			cis1.setWidth(66);
+			cis2.setHeight(66);
+			cis2.setWidth(66);
+			cis3.setHeight(66);
+			cis3.setWidth(66);
+			cis4.setHeight(66);
+			cis4.setWidth(66);
+			cis5.setHeight(66);
+			cis5.setWidth(66);
+			cises.add(cis1);
+			cises.add(cis2);
+			cises.add(cis3);
+			cises.add(cis4);
+			cises.add(cis5);
+			mCo.setStyles(cises);
 			cluster = MarkerClusterer.newInstance(mapWidget, mCo);
 			cluster.addMarkers(mList);
 			cluster.repaint();
