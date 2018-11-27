@@ -5,21 +5,14 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
-import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
-import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
-import com.opensense.dashboard.client.services.GeneralService;
+import com.opensense.dashboard.client.services.AuthenticationService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.view.UserView;
-import com.opensense.dashboard.shared.Request;
-import com.opensense.dashboard.shared.Response;
-import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.ActionResult;
 
 import gwt.material.design.client.ui.MaterialToast;
 
@@ -27,7 +20,7 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	
 	private final UserView view;
 	
-	private static final Logger LOGGER = Logger.getLogger(SearchPresenter.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(DataPanelPagePresenter.class.getName());
 	
 	public UserPresenter(HandlerManager eventBus, AppController appController, UserView view) {
 		super(view, eventBus, appController);
@@ -74,13 +67,11 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	
 	@Override
 	public void sendLoginRequest(String username, String password) {
-		Request loginRequest = new Request(ResultType.TOKEN);
-		loginRequest.setUsername(username);
-		loginRequest.setPassword(password);
-		GeneralService.Util.getInstance().userLoginRequest(loginRequest, new DefaultAsyncCallback<String>(result -> {
-			MaterialToast.fireToast(result==null? "Login failed" : "Logged in successfully");
-			GWT.log(result);
-			if(result!=null) Cookies.setCookie("access_token", result);
+//		String salt = BCrypt.gensalt();
+//        String hash1 = BCrypt.hashpw(password, salt);
+		AuthenticationService.Util.getInstance().userLoginRequest(username, password, new DefaultAsyncCallback<ActionResult>(result -> {
+			MaterialToast.fireToast(result!=null? result.getErrorMessage() : "Null");
+//			if(result!=null) Cookies.setCookie("access_token", result);
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the login.");
 		}, false));

@@ -35,6 +35,5 @@ public interface GeneralService extends RemoteService {
 	Response getDataFromRequest(Request searchRequest);
 	Map<Integer, String> getMeasurands();
 	void setServerLanguage(String lang);
-	String userLoginRequest(Request loginRequest);
 	Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids);
 }

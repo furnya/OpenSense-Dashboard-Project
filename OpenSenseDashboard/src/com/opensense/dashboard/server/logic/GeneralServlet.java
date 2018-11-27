@@ -11,7 +11,6 @@ import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
-import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.ValuePreview;
 
 @SuppressWarnings("serial")
@@ -63,12 +62,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			ServerLanguages.setGerman();
 		}
 	}
-	
-	@Override
-	public String userLoginRequest(Request loginRequest) {
-		if(loginRequest.getRequestType() != ResultType.TOKEN) return null;
-		String body = "{\"username\":\""+loginRequest.getUsername()+"\",\"password\":\""+loginRequest.getPassword()+"\"}";
-		return ClientRequestHandler.getInstance().sendLoginRequest(body);
 	}
 
 	@Override
@@ -76,6 +69,4 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		HashMap<Integer, ValuePreview> previewMap = new HashMap<>();
 		ids.forEach(id -> previewMap.put(id, ClientRequestHandler.getInstance().getValuePreview(id)));
 		return previewMap;
-	}
-
 }
