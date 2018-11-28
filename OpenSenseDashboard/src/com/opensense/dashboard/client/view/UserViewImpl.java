@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client.view;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -9,6 +10,7 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialTextBox;
 
 public class UserViewImpl extends DataPanelPageView implements UserView {
@@ -21,20 +23,6 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 
 	protected Presenter presenter;
 	
-	public UserViewImpl() {
-		initWidget(uiBinder.createAndBindUi(this));
-	}
-	
-	@Override
-	public void setPresenter(Presenter presenter) {
-		this.presenter = presenter;
-	}
-	
-	@Override
-	public void initView() {
-		// init UI Elements if needed
-	}
-	
 	@UiField
 	MaterialTextBox userName;
 	
@@ -42,10 +30,41 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 	MaterialTextBox password;
 	
 	@UiField
+	MaterialTextBox passwordVerify;
+	
+	@UiField
 	MaterialButton loginButton;
+	
+	@UiField
+	MaterialLabel regiLabel;
+	
+	public UserViewImpl() {
+		initWidget(uiBinder.createAndBindUi(this));
+	}
+	
+	@UiHandler("regiLabel")
+	public void onRegiLabelClicked(ClickEvent e) {
+		if("Registrieren".equals(regiLabel.getText())) {
+			regiLabel.setText("Anmelden");
+			passwordVerify.getElement().getStyle().setDisplay(Display.BLOCK);
+		}else {
+			regiLabel.setText("Registrieren");
+			passwordVerify.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
 	
 	@UiHandler("loginButton")
 	public void onLoginButtonClicked(ClickEvent e) {
 		presenter.sendLoginRequest(userName.getText(), password.getText());
+	}
+	
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
+	}
+
+	@Override
+	public void initView() {
+		// init UI Elements if needed
 	}
 }

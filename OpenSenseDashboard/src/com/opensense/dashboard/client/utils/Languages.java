@@ -437,4 +437,12 @@ public static String seletedShowOnMap() {
 			return "";
 		}
 	}
+	
+	public static String passwordVerify(){
+		if(de){
+			return "Passwort bestätigen";
+		}else{
+			return "";
+		}
+	}
 }
