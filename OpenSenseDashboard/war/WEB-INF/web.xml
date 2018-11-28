@@ -16,6 +16,16 @@
     <url-pattern>/general</url-pattern>
   </servlet-mapping>
   
+    <servlet>
+    <servlet-name>authenticationServlet</servlet-name>
+    <servlet-class>com.opensense.dashboard.server.logic.AuthenticationServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>authenticationServlet</servlet-name>
+    <url-pattern>/authentication</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>OpenSenseDashboard.html</welcome-file>
