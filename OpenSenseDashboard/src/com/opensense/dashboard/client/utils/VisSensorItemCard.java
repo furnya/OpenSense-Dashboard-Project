@@ -4,6 +4,7 @@ import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -47,7 +48,7 @@ public class VisSensorItemCard extends Composite{
 	
 	public VisSensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
-//		addClickHandler();
+		addClickHandler();
 		favButton.add(new Image(GUIImageBundle.INSTANCE.favorite().getSafeUri().asString()));
 		this.setActive(true);
 	}
@@ -74,7 +75,10 @@ public class VisSensorItemCard extends Composite{
 	}
 	
 	private void addClickHandler() {
-		layout.addDomHandler(event -> checkbox.setValue(!checkbox.getValue(), true), ClickEvent.getType());
+		layout.addDomHandler(event -> {
+			checkbox.setValue(!checkbox.getValue(), true);
+		}, ClickEvent.getType());
+		addClickListener(checkbox.getElement());
 	}
 	
 	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
@@ -94,4 +98,11 @@ public class VisSensorItemCard extends Composite{
 			layout.removeStyleName("card-active");
 		}
 	}
+	
+	private native void addClickListener(Element elem) /*-{
+		elem.addEventListener("click", function(event){
+			event.stopPropagation();
+		});
+	}-*/;
+
 }
