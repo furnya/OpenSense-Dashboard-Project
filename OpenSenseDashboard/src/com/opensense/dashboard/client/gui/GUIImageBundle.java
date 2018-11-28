@@ -100,7 +100,28 @@ public interface GUIImageBundle extends ClientBundle {
 	@Source("icons/paging/forwards_step_by_step.svg")
 	SVGResource forwardsStepByStep();
 	
-	
 	@Source("icons/favorite.svg")
 	SVGResource favorite();
+	
+	@Source("icons/recenter.svg")
+	SVGResource recenter();
+	
+	@Source("icons/m1.png")
+	ImageResource m1();
+	
+	@Source("icons/m2.png")
+	ImageResource m2();
+	
+	@Source("icons/m3.png")
+	ImageResource m3();
+	
+	@Source("icons/m4.png")
+	ImageResource m4();
+	
+	@Source("icons/m5.png")
+	ImageResource m5();
+	
+	@Source("icons/m1_plus.svg")
+	SVGResource m1_plus();
+	
 }

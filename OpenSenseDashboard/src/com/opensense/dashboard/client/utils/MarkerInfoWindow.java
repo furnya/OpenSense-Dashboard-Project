@@ -8,18 +8,12 @@ import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
-import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.view.MapView.Presenter;
-
-import gwt.material.design.client.ui.MaterialButton;
 
 public class MarkerInfoWindow extends Composite {
 
@@ -55,6 +49,10 @@ public class MarkerInfoWindow extends Composite {
 	public Widget getInfoBox() {
 		return this.infoBox;
 	}
+	
+	public Div getData() {
+		return this.data;
+	}
 
 	public void setHeader(String header) {
 		this.header.setText(header);
@@ -65,7 +63,7 @@ public class MarkerInfoWindow extends Composite {
 			this.data.add(new Span(item));
 			});
 	}
-
+	
 	public void passID(List<Integer> id) {
 		if(!currentID.isEmpty()) {
 			currentID.clear();
