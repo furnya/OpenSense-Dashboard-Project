@@ -7,9 +7,39 @@
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
+.content{
+	display: flex;
+	place-content: center;	
+}
+.login-container{
+	    display: grid;
+	background-color: #202020;
+	padding: 20px 20px;	
+	width: 50%;
+	height: 70vh;
+    margin-top: 5vh;
+    margin-right: 90px;
+    place-content: center;
+    place-items: center;
+}
+.center{
+	display: flex;
+	place-content: center;
+}
 </ui:style>
 
-<bh:Div>
+<bh:Div addStyleNames="{style.content}">
+	<bh:Div ui:field="loginContainer" addStyleNames="round-corners {style.login-container}">
+		<m:MaterialTextBox textColor="WHITE" width="50vh" ui:field="userName" type="TEXT" label="{lang.username}"/>
+		<m:MaterialTextBox textColor="WHITE" width="50vh" ui:field="password" type="PASSWORD" label="{lang.password}"/>
+		<bh:Div addStyleNames="{style.center}">
+			<bh:Div addStyleNames="display-grid-center">
+				<m:MaterialLabel text="Registrieren" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
+				<m:MaterialLabel text="Passwort vergessen?" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
+				<m:MaterialButton ui:field="loginButton" text="Login" textColor="WHITE" addStyleNames="d-btn"/>
+			</bh:Div>
+		</bh:Div>
+	</bh:Div>
 </bh:Div>
 
 </ui:UiBinder>

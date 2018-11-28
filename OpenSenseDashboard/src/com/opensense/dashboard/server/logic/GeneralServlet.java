@@ -69,5 +69,4 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		ids.forEach(id -> previewMap.put(id, ClientRequestHandler.getInstance().getValuePreview(id)));
 		return previewMap;
 	}
-
 }

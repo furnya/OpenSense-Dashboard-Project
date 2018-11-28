@@ -181,6 +181,15 @@
 	background-color: #42DCA3;
 }
 
+input:focus{
+    border-bottom: 1px solid #42DCA3 !important;
+    box-shadow: 0 1px 0 0 #42DCA3 !important;
+}
+
+input:focus+label{
+	color: #42DCA3 !important;
+}
+
 .nav-container{
 	background-color: #606060;
 	width: 100%;
@@ -288,4 +297,9 @@
 .card-deactive{
 /* 	animation: 1s color-unmarked; */
 	background-color: #fff !important;
+}
+
+.display-grid-center{
+	display: grid;
+	place-items: center;
 }

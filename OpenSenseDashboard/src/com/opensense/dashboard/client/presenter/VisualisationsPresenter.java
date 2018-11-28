@@ -78,21 +78,20 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 
 	@Override
 	public void waitUntilViewInit(final Runnable runnable) {
-		view.initView();
 		runnable.run();
 	}
 	
-	public void valueRequestForSensorList(List<Sensor> sensors, DateRange dateRange, Date minDate, Date maxDate) {
-		sensors.forEach(sensor -> buildValueRequestAndSend(sensor.getSensorId(), dateRange, minDate, maxDate));
+	public void valueRequestForSensorList(List<Integer> sensorIds, DateRange dateRange, Date minDate, Date maxDate) {
+		sensorIds.forEach(sensorId -> buildValueRequestAndSend(sensorId, dateRange, minDate, maxDate));
 	}
 	
-	private void buildValueRequestAndSend(Integer id, DateRange dateRange, Date minDate, Date maxDate) {
+	public void buildValueRequestAndSend(Integer id, DateRange dateRange, Date minDate, Date maxDate) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.VALUE, true);
 		requestBuilder.setIds(new LinkedList<Integer>());
 		requestBuilder.addId(id);
 		requestBuilder.setDateRange(dateRange);
-		if(minDate != null) requestBuilder.addParameter(ParamType.MIN_TIMESTAMP, minDate.toGMTString().replace(" ", "%20"));
-		if(maxDate != null) requestBuilder.addParameter(ParamType.MAX_TIMESTAMP, maxDate.toGMTString().replace(" ", "%20"));
+		if(minDate != null && dateRange==DateRange.CUSTOM) requestBuilder.addParameter(ParamType.MIN_TIMESTAMP, minDate.toGMTString().replace(" ", "%20"));
+		if(maxDate != null && dateRange==DateRange.CUSTOM) requestBuilder.addParameter(ParamType.MAX_TIMESTAMP, maxDate.toGMTString().replace(" ", "%20"));
 		requestBuilder.getRequest().getParameters().forEach(param -> GWT.log("RequestParam: " + param.getKey() + " " + param.getValue()));
 		sendRequest(requestBuilder.getRequest());
 	}

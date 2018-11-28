@@ -33,6 +33,7 @@
 }
 .mid{
 	width: 95%;
+	padding: 10px;
 }
 .right{
     width: 10%;
