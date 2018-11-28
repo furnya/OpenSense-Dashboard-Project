@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.googlecode.gwt.crypto.client.TripleDesCipher;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.AuthenticationService;
@@ -21,6 +22,11 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	private final UserView view;
 	
 	private static final Logger LOGGER = Logger.getLogger(DataPanelPagePresenter.class.getName());
+	
+	private static final byte[] GWT_DES_KEY = new byte[]{
+			(byte)5,(byte)6,(byte)1,(byte)1,(byte)0,(byte)1,(byte)8,(byte)7,
+			(byte)3,(byte)9,(byte)2,(byte)2,(byte)3,(byte)6,(byte)1,(byte)0,
+			(byte)9,(byte)2,(byte)1,(byte)1,(byte)5,(byte)7,(byte)1,(byte)1,};
 	
 	public UserPresenter(HandlerManager eventBus, AppController appController, UserView view) {
 		super(view, eventBus, appController);
@@ -67,13 +73,28 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	
 	@Override
 	public void sendLoginRequest(String username, String password) {
-//		String salt = BCrypt.gensalt();
-//        String hash1 = BCrypt.hashpw(password, salt);
-		AuthenticationService.Util.getInstance().userLoginRequest(username, password, new DefaultAsyncCallback<ActionResult>(result -> {
+		String encryptedPassword = getEnrypedPassword(password);
+		if(encryptedPassword.isEmpty()) {
+			LOGGER.log(Level.WARNING, "Password empty");
+			return;
+		}
+		AuthenticationService.Util.getInstance().userLoginRequest(username, encryptedPassword, new DefaultAsyncCallback<ActionResult>(result -> {
 			MaterialToast.fireToast(result!=null? result.getErrorMessage() : "Null");
 //			if(result!=null) Cookies.setCookie("access_token", result);
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the login.");
 		}, false));
+	}
+	
+	private String getEnrypedPassword(String password) {
+		TripleDesCipher cipher = new TripleDesCipher();
+		cipher.setKey(GWT_DES_KEY);
+		String encrypt = "";
+		try {
+			encrypt = cipher.encrypt(password);
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Failure encrypting password.", e); 
+		}
+		return encrypt;
 	}
 }
