@@ -6,11 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.gwtbootstrap3.client.ui.html.Div;
-import org.gwtbootstrap3.client.ui.html.OrderedList;
 import org.gwtbootstrap3.client.ui.html.Span;
 import org.pepstock.charba.client.Defaults;
 import org.pepstock.charba.client.LineChart;
@@ -50,14 +47,10 @@ import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
 
-import gwt.material.design.addins.client.timepicker.MaterialTimePicker;
-import gwt.material.design.client.constants.DatePickerLanguage;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialDatePicker;
 import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialPreLoader;
-import gwt.material.design.client.ui.MaterialToast;
-import javafx.collections.transformation.SortedList;
 
 public class VisualisationsViewImpl extends DataPanelPageView implements VisualisationsView {
 	
