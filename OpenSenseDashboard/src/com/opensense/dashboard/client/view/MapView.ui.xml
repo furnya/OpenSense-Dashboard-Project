@@ -16,74 +16,69 @@
 }
 .recenter-icon > img{
 	filter: invert(30%);   
-	width: 40px;
-    height: 40px;
-	min-width: 40px;
-	margin-left: -20px;
-}
-.clear-icon > img{
-	filter: invert(35%);   
-	width: 25px;
-    height: 25px;
-	min-width: 25px;
-    margin-left: -15px;
+	width: 40px !important;
+    height: 40px !important;
+	min-width: 40px !important;
 }
 .search-icon > img{
 	filter: invert(35%);   
 	width: 25px;
     height: 25px;
 	min-width: 25px;
-    margin-left: -15px;
 }
 .visual-icon > img{
 	filter: invert(35%);   
 	width: 25px;
     height: 25px;
 	min-width: 25px;
-    margin-left: -15px;
 }
 .recenter-icon{
     margin-right: 10px;
-    margin-bottom: 10px;
-    width: 40px;
-    height: 40px;
+    width: 40px !important;
+    height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    padding: unset;
 	background-color: #ffffff;
-}
-.clear-icon{
-	margin-top: 4px;	
-	max-height: 40vh;
-	max-width:40px;
-    margin-left: 10px;
-    margin-bottom: 4px;
-    background-color: #ffffff;
 }
 .search-icon{
 	margin-top: 10px;	
-	max-height: 40vh;
-	max-width:40px;
+	width: 40px !important;
+    height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
     margin-left: 10px;
     margin-bottom: 4px;
+    padding: unset;
     background-color: #ffffff;
 }
 .visual-icon{
 	margin-top: 4px;	
-	max-height: 40vh;
-	max-width:40px;
+	width: 40px !important;
+    height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
     margin-left: 10px;
     margin-bottom: 4px;
+    padding: unset;
     background-color: #ffffff;
 }
+.m-btn:hover{
+	background-color: #42DCA3 !important;
+}
+.m-btn:focus,m-btn:active,m-btn:visited{
+	background-color: #ffffff !important
+
+	}
 </ui:style>
 
 <bh:Div>
 
  <bh:Div ui:field="map" b:id="map"/>
 	<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="600px"/>
-  	<b:Button  ui:field="recenterBtn" title="recenters map to fit bounds" addStyleNames="{style.recenter-icon}"/>
-  	<b:Button  ui:field="clearBtn"  title="clears all marker and clusters" addStyleNames="{style.clear-icon}"/>
-  	<b:Button  ui:field="searchBtn" title="gets all sensors and sends them to searchPage" addStyleNames="{style.search-icon}"/>
-  	<b:Button  ui:field="visuBtn" title="gets all sensors and sends them to visuPage" addStyleNames="{style.visual-icon}"/>
-  	
+  	<b:Button  ui:field="recenterBtn" title="recenters map to fit bounds" addStyleNames="{style.m-btn} {style.recenter-icon}"/>
+  	<b:Button  ui:field="searchBtn" title="gets all sensors and sends them to searchPage" addStyleNames="{style.m-btn} {style.search-icon}"/>
+  	<b:Button  ui:field="visuBtn" title="gets all sensors and sends them to visuPage" addStyleNames="{style.m-btn} {style.visual-icon}"/>
 </bh:Div>
 
 </ui:UiBinder>

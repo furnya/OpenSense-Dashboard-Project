@@ -60,9 +60,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	Button recenterBtn;
 
 	@UiField
-	Button clearBtn;
-
-	@UiField
 	Button visuBtn;
 
 	@UiField
@@ -99,7 +96,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		initWidget(uiBinder.createAndBindUi(this));
 		showThisMap();
 		recenterBtn.add(new Image(GUIImageBundle.INSTANCE.recenter().getSafeUri().asString()));
-		clearBtn.add(new Image(GUIImageBundle.INSTANCE.favorite().getSafeUri().asString()));
 		visuBtn.add(new Image(GUIImageBundle.INSTANCE.diagramIconSvg().getSafeUri().asString()));
 		searchBtn.add(new Image(GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString()));
 	}
@@ -129,12 +125,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	public void onRecenterBtnClicked(ClickEvent e) {
 		recenterMap();
 	}
-
-	@UiHandler("clearBtn")
-	public void onClearButtonClicked(ClickEvent e) {
-		resetMarkerAndCluster();
-	}
-
 	private String getIconUrlFromType(MeasurandType measurandType) {
 		switch (measurandType) {
 		case AIR_PRESSURE:
@@ -197,11 +187,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapOptions.setMapTypeControl(false);
 		mapOptions.setScrollWheel(true);
 		mapOptions.setPanControl(false);
-		mapOptions.setZoomControl(false);
+		mapOptions.setZoomControl(true);
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
-		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_BOTTOM, clearBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.RIGHT_BOTTOM, recenterBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_LEFT, searchBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_TOP, visuBtn);
@@ -298,8 +287,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		LatLng position = LatLng.newInstance(s.getLocation().getLat(), s.getLocation().getLon());
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
-		markerOpt.setTitle("Sensor postion is: " + s.getLocation().getLat() + ", " + s.getLocation().getLon()
-				+ " Sensormodel: " + s.getSensorModel());
+//		markerOpt.setTitle("Sensor postion is: " + s.getLocation().getLat() + ", " + s.getLocation().getLon()
+//				+ " Sensormodel: " + s.getSensorModel());
 		final Marker markerBasic = Marker.newInstance(markerOpt);
 		MarkerImage icon = MarkerImage.newInstance(getIconUrlFromType(s.getMeasurand().getMeasurandType()),
 				Size.newInstance(30, 30));
@@ -350,60 +339,33 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 				sensIds.add(item.getSensorId());
 			});
 			MarkerClustererOptions mCo = MarkerClustererOptions.newInstance();
-			mCo.setGridSize(40);
+			mCo.setGridSize(80);
 			mCo.setMinimumClusterSize(2);
-			mCo.setMaxZoom(13);
+			mCo.setMaxZoom(15);
 			mCo.setZoomOnClick(true);
 			mCo.setAverageCenter(true);
-//			mCo.setImagePath("/OpenSenseDashboard/src/com/opensense/dashboard/client/gui/icons/m");
 			List<ClusterIconStyle> cises = new ArrayList<>();
 			ClusterIconStyle cis1 = ClusterIconStyle.newInstance();
 			ClusterIconStyle cis2 = ClusterIconStyle.newInstance();
 			ClusterIconStyle cis3 = ClusterIconStyle.newInstance();
 			ClusterIconStyle cis4 = ClusterIconStyle.newInstance();
 			ClusterIconStyle cis5 = ClusterIconStyle.newInstance();
-			
-			cis1.setTextColor("WHITE");
-			cis2.setTextColor("WHITE");
-			cis3.setTextColor("WHITE");
-			cis4.setTextColor("WHITE");
-			cis5.setTextColor("WHITE");
-			cis1.setAnchorIcon(30,30);
-//			cis1.setAnchor(30,30);
-			cis2.setAnchorIcon(30,30);
-//			cis2.setAnchor(30,30);
-
-			cis3.setAnchorIcon(30,30);
-//			cis3.setAnchor(30,30);
-
-			cis4.setAnchorIcon(30,30);
-//			cis4.setAnchor(30,30);
-
-			cis5.setAnchorIcon(30,30);
-//			cis5.setAnchor(80,80);
-
-
-			cis1.setUrl(GUIImageBundle.INSTANCE.m1().getSafeUri().asString());
-			cis2.setUrl(GUIImageBundle.INSTANCE.m2().getSafeUri().asString());
-			cis3.setUrl(GUIImageBundle.INSTANCE.m3().getSafeUri().asString());
-			cis4.setUrl(GUIImageBundle.INSTANCE.m4().getSafeUri().asString());
-			cis5.setUrl(GUIImageBundle.INSTANCE.m5().getSafeUri().asString());
-
-			cis1.setHeight(66);
-			cis1.setWidth(66);
-			cis2.setHeight(66);
-			cis2.setWidth(66);
-			cis3.setHeight(66);
-			cis3.setWidth(66);
-			cis4.setHeight(66);
-			cis4.setWidth(66);
-			cis5.setHeight(66);
-			cis5.setWidth(66);
 			cises.add(cis1);
 			cises.add(cis2);
 			cises.add(cis3);
 			cises.add(cis4);
 			cises.add(cis5);
+			cis1.setUrl(GUIImageBundle.INSTANCE.m1().getSafeUri().asString());
+			cis2.setUrl(GUIImageBundle.INSTANCE.m2().getSafeUri().asString());
+			cis3.setUrl(GUIImageBundle.INSTANCE.m3().getSafeUri().asString());
+			cis4.setUrl(GUIImageBundle.INSTANCE.m4().getSafeUri().asString());
+			cis5.setUrl(GUIImageBundle.INSTANCE.m5().getSafeUri().asString());
+			cises.forEach(cis-> {
+				cis.setTextColor("WHITE");
+				cis.setAnchor(24, 24);
+				cis.setHeight(90);
+				cis.setWidth(90);
+			});
 			mCo.setStyles(cises);
 			cluster = MarkerClusterer.newInstance(mapWidget, mCo);
 			cluster.addMarkers(mList);

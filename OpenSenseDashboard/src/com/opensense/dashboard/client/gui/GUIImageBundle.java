@@ -145,4 +145,7 @@ public interface GUIImageBundle extends ClientBundle {
 	@Source("icons/m5.png")
 	ImageResource m5();
 	
+	@Source("icons/m1_plus.svg")
+	SVGResource m1_plus();
+	
 }
