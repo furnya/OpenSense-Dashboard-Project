@@ -445,4 +445,28 @@ public static String seletedShowOnMap() {
 			return "";
 		}
 	}
+
+	public static String firstValue() {
+		if(de){
+			return "Erste Messung";
+		}else{
+			return "";
+		}
+	}
+
+	public static String lastValue() {
+		if(de){
+			return "Letzer Messung";
+		}else{
+			return "";
+		}
+	}
+
+	public static String noValuePreviewData() {
+		if(de){
+			return "Keine Messungen vorhanden";
+		}else{
+			return "";
+		}
+	}
 }

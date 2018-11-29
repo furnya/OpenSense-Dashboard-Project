@@ -10,8 +10,8 @@
 <ui:style>
 .input{
 	color: #FFF;
-	margin-left: 7% !important;
-	width: 86% !important;
+    margin-left: 4%!important;
+    width: 92%!important;
 }
 .input:focus{
 	border-bottom: 1px solid #42DCA3 !important;
@@ -60,35 +60,53 @@
 .no-sensor{
 	background-color: #fff;
 	height: 20px;
-	
+}
+.btn-image{
+    width: 25px;
+    margin-left: -20px;
+    margin-right: 25px;
+    filter: invert(100%);	
+}
+.image-btn{
+	width: calc(33.3% - 10px);
+	min-width: 0px;
 }
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="{style.con}">
 	<bh:Div ui:field="searchPanel" addStyleNames="{style.panel} round-corners">
 		<bh:Div addStyleNames="flex {style.margin}">
-			<m:MaterialNavBar ui:field="navBarSearch" addStyleNames="{style.nav-bar} round-corners"> 
+			<m:MaterialNavBar ui:field="navBarSearch" width="33%" addStyleNames="{style.nav-bar} round-corners"> 
 		 		 <b:Input ui:field="searchInput" type="TEXT" placeholder="{lang.searchPlace}" addStyleNames="{style.input}"/>
 		 	</m:MaterialNavBar>  
-			<m:MaterialTextBox ui:field="minAccuracy" textColor="WHITE" width="30%" label="{lang.minAccuracy}"/>
-			<m:MaterialTextBox ui:field="maxAccuracy" textColor="WHITE" width="30%" label="{lang.maxAccuracy}"/>
+			<m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" width="33%" textColor="WHITE" addStyleNames="{style.max} round-corners"/>
+			<m:MaterialTextBox width="33%" textColor="WHITE" ui:field="maxSensors" label="{lang.maxSensors}"/>
 		</bh:Div>
 		<bh:Div addStyleNames="flex {style.margin}">
-			<m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" width="30%" textColor="WHITE" addStyleNames="{style.max} round-corners"/>
-			<m:MaterialTextBox width="30%" textColor="WHITE" ui:field="maxSensors" label="{lang.maxSensors}"/>
-			<m:MaterialButton  ui:field="searchButton" width="40%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
+			<m:MaterialTextBox ui:field="minAccuracy" textColor="WHITE" width="33%" label="{lang.minAccuracy}"/>
+			<m:MaterialTextBox ui:field="maxAccuracy" textColor="WHITE" width="33%" label="{lang.maxAccuracy}"/>
+			<m:MaterialButton  ui:field="searchButton" width="33%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
 		</bh:Div>
 	</bh:Div>	
 	<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10 {style.margin}">
-			<m:MaterialButton width="265px" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10"/>
+			<m:MaterialButton width="265px" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10" enabled="false"/>
 		<bh:Div addStyleNames="display-block" width="80%"> 
 			<m:MaterialLabel textColor="WHITE" text="{lang.allSelectedSensors}"/>
-			<m:MaterialButton ui:field="showOnMapButton" width="33.3%" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
-			<m:MaterialButton  ui:field="showVisualizationsButton" width="33.3%" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
-			<m:MaterialButton  ui:field="addToListButton" width="30%" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn"/>
+			<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn margin-right-15 image-btn" enabled="false" >
+				<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+			<m:MaterialButton ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn margin-right-15 image-btn" enabled="false">
+				<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+			<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn image-btn" enabled="false" activates="dp-1">
+				<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+			<m:MaterialDropDown ui:field="listDropDown" activator="dp-1">
+				<m:MaterialLink text="Favoriten" /><m:MaterialLink text="Erste Liste" />
+			</m:MaterialDropDown>
 		</bh:Div>
 	</bh:Div>
-	<bh:Div ui:field="dataContent" addStyleNames="margin-top-20 margin-bottom-20 {style.panel} round-corners {style.center}"> 
+	<bh:Div ui:field="dataContent" addStyleNames="margin-top-10 {style.panel} round-corners {style.center}"> 
 		<d:Pager ui:field="pagerTop" addStyleNames="{style.center-text}"/>
 		<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="margin-top-10 spinner">
 			<m:MaterialSpinner/>

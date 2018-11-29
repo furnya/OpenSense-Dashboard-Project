@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client.utils;
 
 import org.gwtbootstrap3.client.ui.html.Div;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -76,10 +77,6 @@ public class SensorItemCard extends Composite{
 		return this.content;
 	}
 	
-	public Div getPreviewContainer() {
-		return this.previewContainer;
-	}
-	
 	private void addClickHandler() {
 		layout.addDomHandler(event -> checkbox.setValue(!checkbox.getValue(), true), ClickEvent.getType());
 		addClickListener(checkbox.getElement());
@@ -99,6 +96,26 @@ public class SensorItemCard extends Composite{
 		}else {
 			layout.removeStyleName("card-active");
 		}
+	}
+	
+	public void setValuePreviewConent(String firstValue, String lastValue) {
+		previewContainer.clear();
+		Div firstDiv = new Div();
+		Span titleSpanFirst = new Span(Languages.firstValue());
+		titleSpanFirst.addStyleName("title-sensor");
+		Span spanFirst = new Span(firstValue);
+		spanFirst.setStyleName("value-sensor");
+		firstDiv.add(titleSpanFirst);
+		firstDiv.add(spanFirst);
+		Div lastDiv = new Div();
+		Span titleSpanLast = new Span(Languages.lastValue());
+		titleSpanLast.addStyleName("title-sensor");
+		Span spanLirst = new Span(lastValue);
+		spanLirst.setStyleName("value-sensor");
+		lastDiv.add(titleSpanLast);
+		lastDiv.add(spanLirst);
+		previewContainer.add(firstDiv);
+		previewContainer.add(lastDiv);
 	}
 	
 	private native void addClickListener(Element elem) /*-{
