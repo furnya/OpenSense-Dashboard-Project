@@ -97,4 +97,9 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 		}
 		return encrypt;
 	}
+	
+	@Override
+	public boolean isUserLoggedIn() {
+		return !appController.isGuest();
+	}
 }

@@ -6,4 +6,5 @@ import com.opensense.dashboard.shared.ActionResult;
 public interface AuthenticationServiceAsync {
 	
 	void userLoginRequest(String userName, String password, AsyncCallback<ActionResult> asyncCallback);
+	void createUserInSession(AsyncCallback<Boolean> defaultAsyncCallback);
 }

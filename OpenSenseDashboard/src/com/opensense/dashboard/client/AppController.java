@@ -23,6 +23,7 @@ import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 import com.opensense.dashboard.client.presenter.FooterPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
+import com.opensense.dashboard.client.services.AuthenticationService;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
@@ -67,6 +68,9 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 private NavigationPanelViewImpl navigationPanelView = null;
 	 private FooterViewImpl footerView = null;
 	 
+	 
+	 private boolean isGuest = true;
+	 
 	 /**
 	 * Constructs the application controller (main presenter).
 	 * 
@@ -74,13 +78,18 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 */
 	 public AppController(final HandlerManager eventBus) {
 		this.eventBus = eventBus;
+		AuthenticationService.Util.getInstance().createUserInSession(new DefaultAsyncCallback<Boolean>(result -> {
+			if(result != null) {
+				isGuest = !result;
+			}
+		}));
 		bindHandler();
 		setLanguageFromCookies();
 		go(RootPanel.get());
 		handleStart();
 	}
-	
-	private void handleStart() {
+
+	 private void handleStart() {
 		if(History.getToken() != null && History.getToken().isEmpty()) {
 			History.newItem(DataPanelPage.HOME.name(), true);
 		}else {
@@ -276,5 +285,9 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		}
 		// Sets the correct serverLanguage.
 		GeneralService.Util.getInstance().setServerLanguage(Languages.getActualLanguageString(), new DefaultAsyncCallback<Void>(result -> {}));
+	}
+	
+	public boolean isGuest() {
+		return isGuest;
 	}
 }

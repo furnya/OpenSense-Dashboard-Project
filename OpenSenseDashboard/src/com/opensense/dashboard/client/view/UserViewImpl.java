@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client.view;
 
+import org.gwtbootstrap3.client.ui.html.Div;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,6 +24,9 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 	private static UserViewUiBinder uiBinder = GWT.create(UserViewUiBinder.class);
 
 	protected Presenter presenter;
+	
+	@UiField
+	Div loginContainer;
 	
 	@UiField
 	MaterialTextBox userName;
@@ -65,6 +70,10 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 
 	@Override
 	public void initView() {
-		// init UI Elements if needed
+		if(presenter.isUserLoggedIn()) {
+			loginContainer.getElement().getStyle().setDisplay(Display.NONE);
+		}else {
+			loginContainer.getElement().getStyle().clearDisplay();
+		}
 	}
 }

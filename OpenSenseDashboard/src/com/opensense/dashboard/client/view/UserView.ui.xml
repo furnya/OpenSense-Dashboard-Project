@@ -12,7 +12,7 @@
 	place-content: center;	
 }
 .login-container{
-	    display: grid;
+	display: grid;
 	background-color: #202020;
 	padding: 20px 20px;	
 	width: 50%;
