@@ -200,7 +200,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		if(sensor == null || values == null || values.isEmpty()) return;
 		ValueHandler valueHandler = new ValueHandler(values);
 		List<Value> filteredValues = valueHandler.getValues();
-		GWT.log("dataset size: "+filteredValues.size());
 		
 		Date earliest = valueHandler.getEarliest().getTimestamp();
 		Date latest = valueHandler.getLatest().getTimestamp();
@@ -317,6 +316,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		if(sensors==null || sensors.isEmpty()) return false;
 		showNoDataIndicator(false);
 		addDatasetsToChart();
+		chart.update();
 		CartesianTimeAxis xAxis = new CartesianTimeAxis(chart, CartesianAxisType.x);
 		xAxis.setDistribution(ScaleDistribution.linear);
 		xAxis.setBounds(ScaleBounds.ticks);
@@ -385,7 +385,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 				unselectedSensors.add(sensorId);
 				selectedSensors.remove(sensorId);
 				if(selectedSensors.isEmpty()) selectAllButton.setText(Languages.selectAllSensors());
-				removeSensorDatasetFromChart(sensor);
+				removeSensorDatasetFromChart(sensorId);
 			}
 		});
 		sensorMap.put(sensorId, card);
@@ -463,8 +463,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		}
 	}
 	
-	public void removeSensorDatasetFromChart(Sensor sensor) {
-		GWT.log("rm dataset: "+sensor.getSensorId());
+	public void removeSensorDatasetFromChart(Integer sensorId) {
+		Sensor sensor = getSensorFromId(sensorId);
 		LineDataset dataset = datasetMap.remove(sensor);
 		ArrayList<Dataset> datasets = new ArrayList<>();
 		chart.getData().getDatasets().forEach(ds -> datasets.add(ds));
@@ -507,12 +507,19 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void removeAllDatasets() {
 		if(datasetMap==null || datasetMap.isEmpty()) return;
 		for(Sensor sensor : sensors) {
-			removeSensorDatasetFromChart(sensor);
+			removeSensorDatasetFromChart(sensor.getSensorId());
 		}
 	}
 	
 	public void addAllDatasets() {
 		if(sensors==null || sensors.isEmpty()) return;
 		sensors.forEach(sensor -> addSensorDatasetToChart(sensor.getSensorId()));
+	}
+	
+	public Sensor getSensorFromId(Integer id) {
+		for(Sensor s : sensors) {
+			if(s.getSensorId()==id) return s;
+		}
+		return null;
 	}
 }
