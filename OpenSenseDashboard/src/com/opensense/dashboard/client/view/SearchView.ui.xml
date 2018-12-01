@@ -88,23 +88,20 @@
 			<m:MaterialButton  ui:field="searchButton" width="33%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
 		</bh:Div>
 	</bh:Div>	
-	<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10 {style.margin}">
-			<m:MaterialButton width="265px" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10" enabled="false"/>
-		<bh:Div addStyleNames="display-block" width="80%"> 
-			<m:MaterialLabel textColor="WHITE" text="{lang.allSelectedSensors}"/>
-			<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn margin-right-15 image-btn" enabled="false" >
-				<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-			</m:MaterialButton>
-			<m:MaterialButton ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn margin-right-15 image-btn" enabled="false">
-				<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-			</m:MaterialButton>
-			<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn image-btn" enabled="false" activates="dp-1">
-				<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-			</m:MaterialButton>
-			<m:MaterialDropDown ui:field="listDropDown" activator="dp-1">
-				<m:MaterialLink text="Favoriten" /><m:MaterialLink text="Erste Liste" />
-			</m:MaterialDropDown>
-		</bh:Div>
+	<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10">
+		<m:MaterialButton ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false"/>
+		<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false" >
+			<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+		</m:MaterialButton>
+		<m:MaterialButton ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false">
+			<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+		</m:MaterialButton>
+		<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn" enabled="false" activates="dp-1">
+			<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+		</m:MaterialButton>
+		<m:MaterialDropDown ui:field="listDropDown" activator="dp-1">
+			<m:MaterialLink text="Favoriten" /><m:MaterialLink text="Erste Liste" />
+		</m:MaterialDropDown>
 	</bh:Div>
 	<bh:Div ui:field="dataContent" addStyleNames="margin-top-10 {style.panel} round-corners {style.center}"> 
 		<d:Pager ui:field="pagerTop" addStyleNames="{style.center-text}"/>

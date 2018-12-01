@@ -309,8 +309,8 @@ input:focus+label{
 	place-items: center;
 }
 
-.image-btn{
-	width: calc(33.3% - 10px);
+.search-action-btn{
+	width: calc(25% - 11.25px);
 	min-width: 0px;
 }
 
