@@ -149,4 +149,16 @@ public class SensorItemCard extends Composite{
 			event.stopPropagation();
 		});
 	}-*/;
+
+	public void addContentValue(String titleText, String valueText) {
+		Div valueCon = new Div();
+		valueCon.addStyleName("flex");
+		Span title = new Span(titleText);
+		title.addStyleName("title-sensor");
+		valueCon.add(title);
+		Span value = new Span(valueText);
+		value.addStyleName("value-sensor");
+		valueCon.add(value);
+		content.add(valueCon);
+	}
 }

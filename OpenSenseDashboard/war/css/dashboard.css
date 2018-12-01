@@ -314,7 +314,11 @@ input:focus+label{
 	min-width: 0px;
 }
 
-.title-sensor{font-weight: 900;font-size: medium;margin-right: 10px;}
+.title-sensor{
+	font-weight: 900;
+	font-size: medium;
+	margin-right: 10px;
+}
 
 .value-sensor{
 	font-size: medium;

@@ -9,7 +9,6 @@ import java.util.Map;
 import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
-import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
@@ -201,8 +200,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			card.setHeader(sensor.getMeasurand().getDisplayName() + "   -   " + Languages.sensorId() + sensorId);
 			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
-			card.setRating(sensor.getAccuracy());
-			card.getContent().add(new Span(sensor.getAttributionText()));
+			card.setRating(sensor.getAccuracy()); //TODO:
+			card.addContentValue("Höhe über Grund", sensor.getAltitudeAboveGround()+"m");
+			card.addContentValue("Herkunft", sensor.getAttributionText());
 			card.addValueChangeHandler(event -> {
 				if(event.getValue()) {
 					unselectedSensors.remove(sensorId);
