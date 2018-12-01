@@ -11,6 +11,7 @@ import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
 import org.pepstock.charba.client.Defaults;
 import org.pepstock.charba.client.LineChart;
+import org.pepstock.charba.client.colors.Color;
 import org.pepstock.charba.client.data.DataPoint;
 import org.pepstock.charba.client.data.Dataset;
 import org.pepstock.charba.client.data.LineDataset;
@@ -18,6 +19,7 @@ import org.pepstock.charba.client.enums.CartesianAxisType;
 import org.pepstock.charba.client.enums.Fill;
 import org.pepstock.charba.client.enums.ScaleBounds;
 import org.pepstock.charba.client.enums.ScaleDistribution;
+import org.pepstock.charba.client.enums.TimeUnit;
 import org.pepstock.charba.client.options.scales.CartesianLinearAxis;
 import org.pepstock.charba.client.options.scales.CartesianTimeAxis;
 import org.pepstock.charba.client.plugins.InvalidPluginIdException;
@@ -120,10 +122,12 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	private static final DateRange DEFAULT_RANGE = DateRange.PAST_WEEK;
 	private DateRange dateRange = DEFAULT_RANGE;
 	
+	private final int MAX_POINTS = 100;
+	
 	private LineChart chart;
 	
-	private Date minTimestamp = null;
-	private Date maxTimestamp = null;
+	private Date maxTimestamp = new Date();
+	private Date minTimestamp = new Date(maxTimestamp.getTime()-604800000);
 	
 	private Double minValue = Double.POSITIVE_INFINITY;
 	private Double maxValue = Double.NEGATIVE_INFINITY;
@@ -131,8 +135,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	private List<Integer> unselectedSensors = new ArrayList<>();
 	private List<Integer> selectedSensors = new ArrayList<>();
 	
-	private String[] lineColors = {"#000000","#ff0000","#00ff00","#0000ff","ff00ff","#00ffff"};
-	private int nextColor = 0;
+	private HashMap<Integer,Color> colors = new HashMap<>();
 	
 	public VisualisationsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -239,7 +242,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		LineDataset dataset = chart.newDataset();
 		ArrayList<DataPoint> pointsList = new ArrayList<>();
 		int i=0;
-		int step = values.size()/100;
+		int step = values.size()/MAX_POINTS;
 		while(i<values.size()) {
 			Double numberValueAvg = 0.0;
 			long timestampAvg = 0;
@@ -322,9 +325,11 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		xAxis.setBounds(ScaleBounds.ticks);
 		xAxis.getTime().setMin(minTimestamp);
 		xAxis.getTime().setMax(maxTimestamp);
+		xAxis.getTime().setUnit(calculateTimeUnit());
+		xAxis.getTime().setStepSize(1);
 		CartesianLinearAxis yAxis = new CartesianLinearAxis(chart, CartesianAxisType.y);
-		yAxis.getTicks().setMin(minValue);
-		yAxis.getTicks().setMax(maxValue);
+		yAxis.getTicks().setMin(Math.floor(minValue));
+		yAxis.getTicks().setMax(Math.ceil(maxValue));
 		chart.getOptions().getScales().setXAxes(xAxis);
 		chart.getOptions().getScales().setYAxes(yAxis);
 		chartContainer.clear();
@@ -350,9 +355,10 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void setLineDatasetStyle(LineDataset dataset, int sensorId) {
-		dataset.setPointBackgroundColor(lineColors[nextColor]);
-		dataset.setBorderColor(lineColors[nextColor]);
-		nextColor = (nextColor+1)%lineColors.length;
+		Color color = getNewColor();
+		colors.put(sensorId,color);
+		dataset.setBorderColor(color);
+		dataset.setPointBackgroundColor(color);
 		dataset.setFill(Fill.nofill);
 		dataset.setLabel(""+sensorId);
 	}
@@ -466,6 +472,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void removeSensorDatasetFromChart(Integer sensorId) {
 		Sensor sensor = getSensorFromId(sensorId);
 		LineDataset dataset = datasetMap.remove(sensor);
+		colors.remove(sensorId);
 		ArrayList<Dataset> datasets = new ArrayList<>();
 		chart.getData().getDatasets().forEach(ds -> datasets.add(ds));
 		datasets.remove(dataset);
@@ -521,5 +528,37 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 			if(s.getSensorId()==id) return s;
 		}
 		return null;
+	}
+	
+	public TimeUnit calculateTimeUnit() {
+		TimeUnit tu = TimeUnit.hour;
+		if(maxTimestamp==null || minTimestamp==null) return tu;
+		long timeDifference = maxTimestamp.getTime()-minTimestamp.getTime();
+		if(172800000.0 < timeDifference && timeDifference < 5184000000.0) {
+			tu = TimeUnit.day;
+		}else if(5184000000.0 < timeDifference && timeDifference < 63072000000.0) {
+			tu = TimeUnit.month;
+		}else if(timeDifference > 63072000000.0) {
+			tu = TimeUnit.year;
+		}
+		return tu;
+	}
+	
+	public Color getNewColor() {
+		if(colors.isEmpty()) return new Color(64,128,192);
+		int r=0,g=0,b=0,rdmax=0,gdmax=0,bdmax=0;
+		for(int i=0;i<256;i++) {
+			int rdm=256,gdm=256,bdm=256;
+			for(Color c : colors.values()) {
+				if(Math.abs(i-c.getRed())<rdm) {rdm = Math.abs(i-c.getRed());}
+				if(Math.abs(i-c.getGreen())<gdm) {gdm = Math.abs(i-c.getGreen());}
+				if(Math.abs(i-c.getBlue())<bdm) {bdm = Math.abs(i-c.getBlue());}
+			}
+			if(rdm>rdmax) {r=i;rdmax=rdm;}
+			if(gdm>gdmax) {g=i;gdmax=gdm;}
+			if(bdm>bdmax) {b=i;bdmax=bdm;}
+		}
+		GWT.log(r+" "+g+" "+b);
+		return new Color(r,g,b);
 	}
 }
