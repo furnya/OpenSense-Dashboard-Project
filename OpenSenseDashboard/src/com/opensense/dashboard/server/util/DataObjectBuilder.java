@@ -1,8 +1,6 @@
 package com.opensense.dashboard.server.util;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 import org.json.JSONException;
@@ -17,14 +15,14 @@ import com.opensense.dashboard.shared.Value;
 
 public class DataObjectBuilder {
 	
-	public DataObjectBuilder() {
+	private DataObjectBuilder() {
 	}
 	
 	public static Unit buildUnit(JSONObject unitJSON) {
 		Unit u = new Unit();
 		try {
 			u.setId(unitJSON.getInt(JsonAttributes.ID.getNameString()));
-			u.setName(unitJSON.getString(JsonAttributes.NAME.getNameString()));
+			u.setDisplayName(unitJSON.getString(JsonAttributes.NAME.getNameString()));
 			u.setMeasurandId(unitJSON.getInt(JsonAttributes.MEASURAND_ID.getNameString()));
 		} catch(JSONException e) {
 			e.printStackTrace();
@@ -75,8 +73,7 @@ public class DataObjectBuilder {
 			s.setSensorModel(sensorJSON.getString(JsonAttributes.SENSOR_MODEL.getNameString()));
 			JSONObject locationJSON = sensorJSON.getJSONObject(JsonAttributes.LOCATION.getNameString());
 			s.setLocation(new LatLng(locationJSON.getDouble(JsonAttributes.LAT.getNameString()), locationJSON.getDouble(JsonAttributes.LNG.getNameString())));
-			s.setUnitId(sensorJSON.getInt(JsonAttributes.UNIT_ID.getNameString()));
-			s.setUnit(unitMap.get(s.getUnitId()));
+			s.setUnit(unitMap.get(sensorJSON.getInt(JsonAttributes.UNIT_ID.getNameString())));
 		} catch(JSONException e) {
 			e.printStackTrace();
 			return null;
@@ -84,6 +81,7 @@ public class DataObjectBuilder {
 		return s;
 	}
 	
+	//TODO: remove unused
 	public static Sensor buildSensor(JSONObject sensorJSON) {
 		Sensor s = new Sensor();
 		try {
@@ -99,7 +97,6 @@ public class DataObjectBuilder {
 			s.setSensorModel(sensorJSON.getString(JsonAttributes.SENSOR_MODEL.getNameString()));
 			JSONObject locationJSON = sensorJSON.getJSONObject(JsonAttributes.LOCATION.getNameString());
 			s.setLocation(new LatLng(locationJSON.getDouble(JsonAttributes.LAT.getNameString()), locationJSON.getDouble(JsonAttributes.LNG.getNameString())));
-			s.setUnitId(sensorJSON.getInt(JsonAttributes.UNIT_ID.getNameString()));
 		} catch(JSONException e) {
 			e.printStackTrace();
 			return null;

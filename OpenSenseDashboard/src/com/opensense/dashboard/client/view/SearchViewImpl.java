@@ -467,8 +467,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 				if(shownSensorIds.contains(entry.getKey())){
 					if(sensorViews.containsKey(entry.getKey()) && entry.getValue()!=null) {
 						sensorViews.get(entry.getKey()).setValuePreviewConent(
-						Languages.getDate(entry.getValue().getMinValue().getTimestamp()) + " - " + entry.getValue().getMinValue().getNumberValue() + " " + sensors.get(entry.getKey()).getUnit().getName(),
-						Languages.getDate(entry.getValue().getMaxValue().getTimestamp()) + " - " + entry.getValue().getMaxValue().getNumberValue() + " " + sensors.get(entry.getKey()).getUnit().getName());
+						Languages.getDate(entry.getValue().getMinValue().getTimestamp()) + " - " + entry.getValue().getMinValue().getNumberValue() + " " + sensors.get(entry.getKey()).getUnit().getDisplayName(),
+						Languages.getDate(entry.getValue().getMaxValue().getTimestamp()) + " - " + entry.getValue().getMaxValue().getNumberValue() + " " + sensors.get(entry.getKey()).getUnit().getDisplayName());
 					}else {
 						sensorViews.get(entry.getKey()).setValuePreviewConent(Languages.noValuePreviewData(), Languages.noValuePreviewData());
 					}
