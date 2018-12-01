@@ -469,4 +469,12 @@ public static String seletedShowOnMap() {
 			return "";
 		}
 	}
+	
+	public static String rating(double rating) {
+		if(de){
+			return rating + " von 5 Sternen";
+		}else{
+			return "";
+		}
+	}
 }

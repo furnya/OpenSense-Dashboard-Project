@@ -201,7 +201,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			card.setHeader(sensor.getMeasurand().getDisplayName() + "   -   " + Languages.sensorId() + sensorId);
 			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
-			card.getContent().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
+			card.setRating(sensor.getAccuracy());
+//			card.getContent().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
 			card.getContent().add(new Span(sensor.getAttributionText()));
 			card.addValueChangeHandler(event -> {
 				GWT.log("Hier");

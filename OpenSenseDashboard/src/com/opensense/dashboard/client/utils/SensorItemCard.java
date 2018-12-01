@@ -51,6 +51,9 @@ public class SensorItemCard extends Composite{
 	@UiField
 	Image favButton;
 	
+	@UiField
+	Rating rating;
+	
 	public SensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
 		addClickHandler();
@@ -116,6 +119,12 @@ public class SensorItemCard extends Composite{
 		lastDiv.add(spanLirst);
 		previewContainer.add(firstDiv);
 		previewContainer.add(lastDiv);
+	}
+	
+	public void setRating(Double accuracy) {
+		if(accuracy != null) {
+			rating.setRating(accuracy * 10);
+		}
 	}
 	
 	private native void addClickListener(Element elem) /*-{
