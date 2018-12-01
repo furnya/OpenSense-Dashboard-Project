@@ -16,8 +16,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
+import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialLabel;
+import gwt.material.design.client.ui.MaterialPreLoader;
 
 public class SensorItemCard extends Composite{
 	
@@ -53,6 +55,18 @@ public class SensorItemCard extends Composite{
 	
 	@UiField
 	Rating rating;
+	
+	@UiField
+	Span firstValue;
+	
+	@UiField
+	Span lastValue;
+	
+	@UiField
+	MaterialPreLoader firstSpinner;
+	
+	@UiField
+	MaterialPreLoader lastSpinner;
 	
 	public SensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -101,24 +115,27 @@ public class SensorItemCard extends Composite{
 		}
 	}
 	
-	public void setValuePreviewConent(String firstValue, String lastValue) {
-		previewContainer.clear();
-		Div firstDiv = new Div();
-		Span titleSpanFirst = new Span(Languages.firstValue());
-		titleSpanFirst.addStyleName("title-sensor");
-		Span spanFirst = new Span(firstValue);
-		spanFirst.setStyleName("value-sensor");
-		firstDiv.add(titleSpanFirst);
-		firstDiv.add(spanFirst);
-		Div lastDiv = new Div();
-		Span titleSpanLast = new Span(Languages.lastValue());
-		titleSpanLast.addStyleName("title-sensor");
-		Span spanLirst = new Span(lastValue);
-		spanLirst.setStyleName("value-sensor");
-		lastDiv.add(titleSpanLast);
-		lastDiv.add(spanLirst);
-		previewContainer.add(firstDiv);
-		previewContainer.add(lastDiv);
+	public void setValuePreviewConent(String firstText, String lastText) {
+		showPreviewContentSpinner(false);
+		firstValue.setText(firstText);
+		lastValue.setText(lastText);
+	}
+	
+	/**
+	 * shows the preview spinner which indicates that the content will be shown
+	 * clears the content before showing
+	 * @param show
+	 */
+	public void showPreviewContentSpinner(boolean show) {
+		if(show) {
+			firstValue.setText("");
+			lastValue.setText("");
+			firstSpinner.setDisplay(Display.BLOCK);
+			lastSpinner.setDisplay(Display.BLOCK);
+		}else {
+			firstSpinner.setDisplay(Display.NONE);
+			lastSpinner.setDisplay(Display.NONE);
+		}
 	}
 	
 	public void setRating(Double accuracy) {

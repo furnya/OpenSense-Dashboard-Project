@@ -52,8 +52,8 @@
 	margin-top: 8px;
 }
 .fav-icon{
-    filter: invert(40%);
     width: 40px;
+    filter: brightness(80%);
 }
 @keyframes trans {
     0% {transform: scale(1,1);}
@@ -85,6 +85,13 @@
 .inherit-background{
     background-color: inherit;
 }
+.small-spinner{
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    left: 0px;	
+    top: 3px;
+}
 </ui:style>
 
 <bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
@@ -102,10 +109,31 @@
 			</bh:Div>
 		</bh:Div>
 		<bh:Div ui:field="content" addStyleNames="{style.content-container}"/>
-		<bh:Div  ui:field="previewContainer" addStyleNames="{style.content-container}"/>
+		<bh:Div  ui:field="previewContainer" addStyleNames="{style.content-container}">
+			<bh:Div> 
+				<bh:Div addStyleNames="flex">
+					<bh:Span text="{lang.firstValue}" addStyleNames="title-sensor"/>
+					<bh:Div addStyleNames="position-relative">
+						<m:MaterialPreLoader ui:field="firstSpinner" addStyleNames="spinner {style.small-spinner}">
+							<m:MaterialSpinner/>
+						</m:MaterialPreLoader>
+						<bh:Span ui:field="firstValue" addStyleNames="value-sensor"/>
+					</bh:Div>
+				</bh:Div>
+				<bh:Div addStyleNames="flex">
+					<bh:Span text="{lang.lastValue}" addStyleNames="title-sensor"/>
+					<bh:Div addStyleNames="position-relative">
+						<m:MaterialPreLoader ui:field="lastSpinner" addStyleNames="spinner {style.small-spinner}">
+							<m:MaterialSpinner/>
+						</m:MaterialPreLoader>
+						<bh:Span ui:field="lastValue" addStyleNames="value-sensor"/>
+					</bh:Div>
+				</bh:Div>
+			</bh:Div>
+		</bh:Div>
 	</bh:Div>
 	<bh:Div addStyleNames="{style.right}">
-		<b:Image ui:field="favButton" url="{gui.favorite.getSafeUri.asString}" addStyleNames="{style.fav-icon} clickable" />
+		<b:Image ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" addStyleNames="{style.fav-icon} clickable" />
 	</bh:Div>
 </bh:Div>
 

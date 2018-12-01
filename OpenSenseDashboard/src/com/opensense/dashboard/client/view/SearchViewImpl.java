@@ -119,7 +119,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	private LinkedList<Integer> shownSensorIds = new LinkedList<>();
 	private Map<Integer, SensorItemCard> sensorViews = new HashMap<>();
-	private int maxSensorsOnPage = 20;//TODO: getMaxObjectsOnPageFromCookie();
+	private int maxSensorsOnPage = 20;
 	private int sensorPage = 0;
 	
 	public SearchViewImpl() {
@@ -202,10 +202,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setRating(sensor.getAccuracy());
-//			card.getContent().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
 			card.getContent().add(new Span(sensor.getAttributionText()));
 			card.addValueChangeHandler(event -> {
-				GWT.log("Hier");
 				if(event.getValue()) {
 					unselectedSensors.remove(sensorId);
 					selectedSensors.add(sensorId);
@@ -390,6 +388,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			sensorContainer.add(sensorViews.get(shownSensorIds.get(i)));
 			idsOnPage.add(shownSensorIds.get(i));
 		}
+		idsOnPage.forEach(id -> sensorViews.get(id).showPreviewContentSpinner(true));
 		presenter.getSensorValuePreviewAndShow(idsOnPage);
 		
 		pagerTop.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));

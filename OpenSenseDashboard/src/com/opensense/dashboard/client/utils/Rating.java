@@ -16,7 +16,7 @@ public class Rating extends Composite{
 	interface RatingUiBinder extends UiBinder<Widget, Rating> {
 	}
 	
-	private static final int CONTAINER_WIDTH = 170;
+	private static final double STAR_WIDTH = 30.5;
 	
 	@UiField
 	Div starContainer;
@@ -34,7 +34,7 @@ public class Rating extends Composite{
 	 * integer from 0-5 sets the star rating (percentage how many star will be shown is needed 0-100%)
 	 */
 	public void setRating(double rating) {
-		overlay.setWidth(CONTAINER_WIDTH * ((100 - rating) / 100) + "" + Unit.PX);
+		overlay.setWidth(STAR_WIDTH * (5 * (100 - rating) / 100) + 10 + "" + Unit.PX);
 		starContainer.setTitle(Languages.rating(5 * (rating / 100)));
 	}
 }

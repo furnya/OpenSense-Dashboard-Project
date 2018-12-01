@@ -84,7 +84,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 				case BOUNDING_BOX:
 					break;
 				case MAX_ACCURACY:
-					view.setMinAccuracy(entry.getValue());
+					view.setMaxAccuracy(entry.getValue());
 					break;
 				case MAX_SENSORS:
 					view.setMaxSensors(entry.getValue());

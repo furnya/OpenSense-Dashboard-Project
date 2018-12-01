@@ -46,6 +46,8 @@
 }
 </ui:style>
    
- <bh:Div addStyleNames="{style.star-five}"/>
+ <bh:Div>
+ 	<bh:Div addStyleNames="{style.star-five}"/>
+</bh:Div>
    
 </ui:UiBinder>

@@ -248,6 +248,10 @@ input:focus+label{
 	display: flex;
 }
 
+.position-relative{
+	position: relative;
+}
+
 .caret{
     filter: invert(100%);
 }
