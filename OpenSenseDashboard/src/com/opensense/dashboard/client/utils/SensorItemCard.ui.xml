@@ -78,8 +78,10 @@
 .content-container{
 	text-align: left;
     width: 90%;	
+    display: flex;
+    overflow: hidden;
 }
-.content-container > Span{
+.content-container > Div{
 	margin-right: 15px;	
 }
 .inherit-background{
@@ -109,7 +111,7 @@
 			</bh:Div>
 		</bh:Div>
 		<bh:Div ui:field="content" addStyleNames="{style.content-container}"/>
-		<bh:Div  ui:field="previewContainer" addStyleNames="{style.content-container}">
+		<bh:Div  ui:field="previewContainer">
 			<bh:Div> 
 				<bh:Div addStyleNames="flex">
 					<bh:Span text="{lang.firstValue}" addStyleNames="title-sensor"/>
