@@ -35,8 +35,8 @@
 		<m:MaterialTextBox textColor="WHITE" width="50vh" ui:field="passwordVerify" type="PASSWORD" label="{lang.passwordVerify}" display="NONE"/>
 		<bh:Div addStyleNames="{style.center}">
 			<bh:Div addStyleNames="display-grid-center">
-				<m:MaterialLabel ui:field="regiLabel" text="Registrieren" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
-				<m:MaterialLabel text="Passwort vergessen?" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
+				<m:MaterialLabel ui:field="regiLabel" text="{lang.register}" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
+				<m:MaterialLabel text="{lang.forgotPassword}" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
 				<m:MaterialButton ui:field="loginButton" text="Login" textColor="WHITE" addStyleNames="d-btn"/>
 			</bh:Div>
 		</bh:Div>

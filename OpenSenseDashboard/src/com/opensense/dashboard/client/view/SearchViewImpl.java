@@ -201,8 +201,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setRating(sensor.getAccuracy()); //TODO:
-			card.addContentValue("Höhe über Grund", sensor.getAltitudeAboveGround()+"m");
-			card.addContentValue("Herkunft", sensor.getAttributionText());
+			card.addContentValue(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
+			card.addContentValue(Languages.origin(), sensor.getAttributionText());
 			card.addValueChangeHandler(event -> {
 				if(event.getValue()) {
 					unselectedSensors.remove(sensorId);
