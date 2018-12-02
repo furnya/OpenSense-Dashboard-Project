@@ -33,6 +33,9 @@
     left: -10px;
     top: 5px;
 }
+.login-button{
+	width: fit-content;	
+}
 </ui:style>
 
 <bh:Div addStyleNames="{style.content}">
@@ -44,7 +47,7 @@
 			<bh:Div addStyleNames="display-grid-center">
 				<m:MaterialLabel ui:field="regiLabel" text="{lang.register}" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
 				<m:MaterialLabel text="{lang.forgotPassword}" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
-				<m:MaterialButton ui:field="loginButton" text="{lang.login}" textColor="WHITE" addStyleNames="d-btn" width="150px">
+				<m:MaterialButton ui:field="loginButton" text="{lang.login}" textColor="WHITE" addStyleNames="d-btn {style.login-button}">
 					<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="spinner {style.button-spinner}">
 						<m:MaterialSpinner/>
 					</m:MaterialPreLoader>
