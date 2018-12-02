@@ -20,13 +20,26 @@ public class DataObjectBuilder {
 	
 	public static Unit buildUnit(JSONObject unitJSON) {
 		Unit u = new Unit();
+		String nameJSON;
 		try {
 			u.setId(unitJSON.getInt(JsonAttributes.ID.getNameString()));
-			u.setDisplayName(unitJSON.getString(JsonAttributes.NAME.getNameString()));
 			u.setMeasurandId(unitJSON.getInt(JsonAttributes.MEASURAND_ID.getNameString()));
+			nameJSON = unitJSON.getString(JsonAttributes.NAME.getNameString());
 		} catch(JSONException e) {
 			e.printStackTrace();
 			return null;
+		}
+		UnitType ut = UnitType.DEFAULT;
+		for(UnitType uType : UnitType.values()) {
+			if(uType.getDisplayName().equals(nameJSON)) {
+				ut = uType;
+				break;
+			}
+		}
+		if(ut==UnitType.DEFAULT) {
+			u.setDisplayName(nameJSON);
+		}else {
+			u.setDisplayName(ServerLanguages.getUnitName(ut));
 		}
 		return u;
 	}
