@@ -51,6 +51,7 @@ import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
 
+import gwt.material.design.client.constants.DatePickerLanguage;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialDatePicker;
 import gwt.material.design.client.ui.MaterialPreLoader;
@@ -594,5 +595,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		CloseHandler<MaterialDatePicker> ch = event -> selectAllButton.setFocus(true);
 		startingDate.addCloseHandler(ch);
 		endingDate.addCloseHandler(ch);
+		DatePickerLanguage lang = Languages.isGerman()? DatePickerLanguage.DE : DatePickerLanguage.EN;
+		startingDate.setLanguage(lang);
+		endingDate.setLanguage(lang);
 	}
 }
