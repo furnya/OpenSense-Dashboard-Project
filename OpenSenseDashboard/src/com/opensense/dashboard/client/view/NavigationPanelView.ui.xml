@@ -12,11 +12,21 @@
 	width: 90px;
 	bottom: 0px;
 }
+.logout-container{
+    position: absolute;
+    bottom: 25px;
+}	
+}
 </ui:style>
 
 <bh:Div addStyleNames="nav-container vertical user-select-none">
 	<b:ButtonGroup ui:field="buttonGroup"/>
-	<bh:Div ui:field="lastButtonCon" addStyleNames="{style.bottom-con}"/>
+	<bh:Div ui:field="lastButtonCon" addStyleNames="{style.bottom-con}">
+		<b:Button addStyleNames="nav-button" ui:field="lastButton"/>
+ 	</bh:Div>
+ 	<bh:Div ui:field="logoutContainer" addStyleNames="{style.logout-container}">
+		<b:Button text="{lang.logout}" ui:field="logout" addStyleNames="d-btn"/>
+	</bh:Div>
 </bh:Div>
 
 </ui:UiBinder>

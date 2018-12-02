@@ -31,6 +31,8 @@ import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
 import com.opensense.dashboard.client.view.FooterViewImpl;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
+import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Parameter;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
@@ -79,9 +81,8 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 public AppController(final HandlerManager eventBus) {
 		this.eventBus = eventBus;
 		AuthenticationService.Util.getInstance().createUserInSession(new DefaultAsyncCallback<Boolean>(result -> {
-			if(result != null) {
-				isGuest = !result;
-				dataPanelPresenter.userLoggedIn(); 
+			if(result != null && result) {
+				userLoggedIn();
 			}
 		}));
 		bindHandler();
@@ -290,5 +291,19 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
 	public boolean isGuest() {
 		return isGuest;
+	}
+
+	public void logout() {
+		AuthenticationService.Util.getInstance().userLoggedOut(new DefaultAsyncCallback<ActionResult>(result -> {
+			if(result != null && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
+				isGuest = true;
+				eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
+			}
+		}));
+	}
+
+	public void userLoggedIn() {
+		isGuest = false;
+		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
 	}
 }

@@ -49,4 +49,12 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		SessionUser.getInstance().setUsername(username);
 		return new ActionResult(ActionResultType.SUCCESSFUL);
 	}
+
+	@Override
+	public ActionResult userLoggedOut() {
+		SessionUser.getInstance().setToken(null);
+		SessionUser.getInstance().setUsername(null);
+		SessionUser.getInstance().setGuest(true);
+		return new ActionResult(ActionResultType.SUCCESSFUL);
+	}
 }

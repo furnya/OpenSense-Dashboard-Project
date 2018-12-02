@@ -445,4 +445,12 @@ public static String seletedShowOnMap() {
 			return "";
 		}
 	}
+	
+	public static String logout(){
+		if(de){
+			return "Ausloggen";
+		}else{
+			return "";
+		}
+	}
 }

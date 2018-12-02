@@ -92,12 +92,4 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			}
 		}
 	}
-
-	public void userLoggedIn() {
-		if (activeDataPanelPagePresenter instanceof UserPresenter) {
-			UserPresenter presenter = (UserPresenter) activeDataPanelPagePresenter;
-			presenter.userLoggedIn();
-		}
-	}
-
 }

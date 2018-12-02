@@ -80,6 +80,7 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 		}
 		AuthenticationService.Util.getInstance().userLoginRequest(username, encryptedPassword, new DefaultAsyncCallback<ActionResult>(result -> {
 			MaterialToast.fireToast(result!=null? result.getErrorMessage() : "Null");
+			appController.userLoggedIn();
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the login.");
 		}, false));
@@ -100,7 +101,5 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	@Override
 	public boolean isUserLoggedIn() {
 		return !appController.isGuest();
-	}
-	public void userLoggedIn() {
 	}
 }

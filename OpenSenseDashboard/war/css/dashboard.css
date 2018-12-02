@@ -194,6 +194,7 @@ input:focus+label{
 	background-color: #606060;
 	width: 100%;
 	height: 100%;
+	position: relative;
 }
 
 .btn.nav-button, .btn.nav-button:active, .btn.nav-button:focus, .btn.nav-button:visited{
