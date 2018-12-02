@@ -103,6 +103,9 @@ public interface GUIImageBundle extends ClientBundle {
 	@Source("icons/favorite.svg")
 	SVGResource favorite();
 	
+	@Source("icons/favorite_red.svg")
+	SVGResource favoriteRed();
+	
 	@Source("icons/recenter.svg")
 	SVGResource recenter();
 	
@@ -122,6 +125,6 @@ public interface GUIImageBundle extends ClientBundle {
 	ImageResource m5();
 	
 	@Source("icons/m1_plus.svg")
-	SVGResource m1_plus();
+	SVGResource m1Plus();
 	
 }

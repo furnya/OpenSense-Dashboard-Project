@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Unit implements IsSerializable{
 
 	private int id;
-	private String name;
+	private String displayName;
 	private int measurandId;
 	
 	public Unit() {
@@ -23,8 +23,8 @@ public class Unit implements IsSerializable{
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public String getDisplayName() {
+		return displayName;
 	}
 
 	/**
@@ -38,8 +38,8 @@ public class Unit implements IsSerializable{
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setDisplayName(String name) {
+		this.displayName = name;
 	}
 
 	/**

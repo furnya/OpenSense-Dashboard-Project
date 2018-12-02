@@ -16,7 +16,6 @@ public class Sensor implements IsSerializable{
 	private int sensorId; 
 	private String attributionURLString;
 	private String sensorModel;
-	private int unitId; //doppelt?
 	private Unit unit;
 	private double accuracy;
 	private LatLng location;
@@ -88,13 +87,6 @@ public class Sensor implements IsSerializable{
 	}
 
 	/**
-	 * @return the unitId
-	 */
-	public int getUnitId() {
-		return unitId;
-	}
-
-	/**
 	 * @return the accuracy
 	 */
 	public double getAccuracy() {
@@ -162,13 +154,6 @@ public class Sensor implements IsSerializable{
 	 */
 	public void setSensorModel(String sensorModel) {
 		this.sensorModel = sensorModel;
-	}
-
-	/**
-	 * @param unitId the unitId to set
-	 */
-	public void setUnitId(int unitId) {
-		this.unitId = unitId;
 	}
 
 	/**

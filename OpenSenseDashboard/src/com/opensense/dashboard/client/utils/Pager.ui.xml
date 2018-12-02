@@ -18,6 +18,7 @@
 	    border-bottom-left-radius: 12px;
 	    padding: unset;
 	    margin-right: 10px;
+        margin-bottom: 3px;
 	}
 	.paging-button > img{
 	    margin-bottom: 13px;

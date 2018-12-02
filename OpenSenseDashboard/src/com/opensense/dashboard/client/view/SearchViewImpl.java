@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
-import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
@@ -34,6 +34,7 @@ import com.opensense.dashboard.shared.ValuePreview;
 
 import gwt.material.design.client.base.validator.RegExValidator;
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialListBox;
 import gwt.material.design.client.ui.MaterialNavBar;
 import gwt.material.design.client.ui.MaterialPreLoader;
@@ -76,6 +77,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	MaterialButton addToListButton;
 	
 	@UiField
+	MaterialDropDown listDropDown;
+	
+	@UiField
 	MaterialTextBox minAccuracy;
 	
 	@UiField
@@ -114,7 +118,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	
 	private LinkedList<Integer> shownSensorIds = new LinkedList<>();
 	private Map<Integer, SensorItemCard> sensorViews = new HashMap<>();
-	private int maxSensorsOnPage = 20;//TODO: getMaxObjectsOnPageFromCookie();
+	private int maxSensorsOnPage = 20;
 	private int sensorPage = 0;
 	
 	public SearchViewImpl() {
@@ -125,6 +129,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		autoOptions.setTypes(AutocompleteType.GEOCODE);
 		autoComplete = Autocomplete.newInstance(searchInput.getElement(), autoOptions);
 		buildValidators();
+		addToListButton.add(new Image(GUIImageBundle.INSTANCE.listIconSvg().getSafeUri().asString()));
 	}
 	
 	@UiHandler("searchButton")
@@ -168,6 +173,11 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			}
 			selectAllButton.setText(Languages.selectAllSensors());
 		}
+		onSelectedSensorsChanged();
+	}
+	
+	private void onShownSensorsChanged() {
+		selectAllButton.setEnabled(!shownSensorIds.isEmpty());
 	}
 
 	@Override
@@ -190,8 +200,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			card.setHeader(sensor.getMeasurand().getDisplayName() + "   -   " + Languages.sensorId() + sensorId);
 			unselectedSensors.add(sensorId);
 			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
-			card.getContent().add(new Span("Genauigkeit: " + sensor.getAccuracy()));
-			card.getContent().add(new Span(sensor.getAttributionText()));
+			card.setRating(sensor.getAccuracy()); //TODO:
+			card.addContentValue(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
+			card.addContentValue(Languages.origin(), sensor.getAttributionText());
 			card.addValueChangeHandler(event -> {
 				if(event.getValue()) {
 					unselectedSensors.remove(sensorId);
@@ -200,6 +211,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 					unselectedSensors.add(sensorId);
 					selectedSensors.remove(sensorId);
 				}
+				onSelectedSensorsChanged();
 			});
 			shownSensorIds.add(sensorId); //can order the list before adding
 			sensorViews.put(sensorId, card);
@@ -208,9 +220,22 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			noDataIndicator.getElement().getStyle().clearDisplay();
 		}
 		pagination();
+		onShownSensorsChanged();
 		hideLoadingIndicator();
 	}
 	
+	private void onSelectedSensorsChanged() {
+		if(!selectedSensors.isEmpty()) {
+			showOnMapButton.setEnabled(true);
+			showVisualizationsButton.setEnabled(true);
+			addToListButton.setEnabled(true);
+		}else {
+			showOnMapButton.setEnabled(false);
+			showVisualizationsButton.setEnabled(false);
+			addToListButton.setEnabled(false);
+		}
+	}
+
 	private String getIconUrlFromType(MeasurandType measurandType) {
 		switch(measurandType) {
 		case AIR_PRESSURE:
@@ -363,6 +388,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			sensorContainer.add(sensorViews.get(shownSensorIds.get(i)));
 			idsOnPage.add(shownSensorIds.get(i));
 		}
+		idsOnPage.forEach(id -> sensorViews.get(id).showPreviewContentSpinner(true));
 		presenter.getSensorValuePreviewAndShow(idsOnPage);
 		
 		pagerTop.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));
@@ -414,6 +440,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		shownSensorIds.clear();
 		clearPager();
 		sensorPage = 0;
+		onShownSensorsChanged();
+		onSelectedSensorsChanged();
 	}
 
 	@Override
@@ -437,12 +465,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		if(!shownSensorIds.isEmpty()) {
 			preview.entrySet().forEach(entry -> {
 				if(shownSensorIds.contains(entry.getKey())){
-					sensorViews.get(entry.getKey()).getPreviewContainer().clear();
 					if(sensorViews.containsKey(entry.getKey()) && entry.getValue()!=null) {
-						sensorViews.get(entry.getKey()).getPreviewContainer().add(new Span("Min Wert am " + Languages.getDate(entry.getValue().getMinValue().getTimestamp()) +": " +entry.getValue().getMinValue().getNumberValue()+""+sensors.get(entry.getKey()).getUnit().getName()));
-						sensorViews.get(entry.getKey()).getPreviewContainer().add(new Span("Max Wert am " + Languages.getDate(entry.getValue().getMaxValue().getTimestamp()) +": " +entry.getValue().getMaxValue().getNumberValue()+""+sensors.get(entry.getKey()).getUnit().getName()));
+						sensorViews.get(entry.getKey()).setValuePreviewConent(
+						Languages.getDate(entry.getValue().getMinValue().getTimestamp()) + " - " + entry.getValue().getMinValue().getNumberValue() + " " + sensors.get(entry.getKey()).getUnit().getDisplayName(),
+						Languages.getDate(entry.getValue().getMaxValue().getTimestamp()) + " - " + entry.getValue().getMaxValue().getNumberValue() + " " + sensors.get(entry.getKey()).getUnit().getDisplayName());
 					}else {
-						sensorViews.get(entry.getKey()).getPreviewContainer().add(new Span("Keine Werte vorhanden"));
+						sensorViews.get(entry.getKey()).setValuePreviewConent(Languages.noValuePreviewData(), Languages.noValuePreviewData());
 					}
 				}
 			});

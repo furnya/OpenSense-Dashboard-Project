@@ -10,6 +10,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.utils.Languages;
 
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialLabel;
@@ -53,11 +54,11 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 	
 	@UiHandler("regiLabel")
 	public void onRegiLabelClicked(ClickEvent e) {
-		if("Registrieren".equals(regiLabel.getText())) {
-			regiLabel.setText("Anmelden");
+		if(Languages.register().equals(regiLabel.getText())) {
+			regiLabel.setText(Languages.login());
 			passwordVerify.getElement().getStyle().setDisplay(Display.BLOCK);
 		}else {
-			regiLabel.setText("Registrieren");
+			regiLabel.setText(Languages.register());
 			passwordVerify.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}

@@ -144,8 +144,8 @@
 #data-panel{
 	position: absolute;
 	left: 90px;
-	width: 100%;
-	height: 96.5%;
+	width: calc(100% - 90px);
+	height: calc(100% - 25px);
     z-index: 0;
 }
 
@@ -162,7 +162,7 @@
     position: absolute;
     bottom: 0px;
     width: 100%;
-    height: 3.5%;
+    height: 25px;
     background-color: #202020;
     z-index: 1;
 }
@@ -176,6 +176,7 @@
 
 .btn.d-btn, .btn.d-btn:active, .btn.d-btn:focus, .btn.d-btn:visited{
 	 background-color: #606060;
+	 overflow: hidden;
 }
 .btn.d-btn:hover, .btn.d-btn.active{
 	background-color: #42DCA3;
@@ -248,6 +249,10 @@ input:focus+label{
 	display: flex;
 }
 
+.position-relative{
+	position: relative;
+}
+
 .caret{
     filter: invert(100%);
 }
@@ -307,4 +312,20 @@ input:focus+label{
 
 .remove-hover:hover{
 	background-color: #606060 !important;
+	min-width: 0px;
+}
+
+.search-action-btn{
+	width: calc(25% - 11.25px);
+	min-width: 0px;
+}
+
+.title-sensor{
+	font-weight: 900;
+	font-size: medium;
+	margin-right: 10px;
+}
+
+.value-sensor{
+	font-size: medium;
 }
