@@ -23,6 +23,7 @@ import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 import com.opensense.dashboard.client.presenter.FooterPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
+import com.opensense.dashboard.client.presenter.UserPresenter;
 import com.opensense.dashboard.client.services.AuthenticationService;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
@@ -34,6 +35,8 @@ import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Parameter;
+
+import gwt.material.design.client.ui.MaterialToast;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
@@ -82,7 +85,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		this.eventBus = eventBus;
 		AuthenticationService.Util.getInstance().createUserInSession(new DefaultAsyncCallback<Boolean>(result -> {
 			if(result != null && result) {
-				userLoggedIn();
+				userLoggedIn(false);
 			}
 		}));
 		bindHandler();
@@ -297,13 +300,16 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		AuthenticationService.Util.getInstance().userLoggedOut(new DefaultAsyncCallback<ActionResult>(result -> {
 			if(result != null && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
 				isGuest = true;
-				eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
+				MaterialToast.fireToast("Logged out");
 			}
 		}));
 	}
 
-	public void userLoggedIn() {
+	public void userLoggedIn(boolean goToHOme) {
 		isGuest = false;
-		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
+		if(goToHOme || dataPanelPresenter.getActiveDataPanelPagePresenter() instanceof UserPresenter) {
+			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
+		}
+		MaterialToast.fireToast("Logged in");
 	}
 }

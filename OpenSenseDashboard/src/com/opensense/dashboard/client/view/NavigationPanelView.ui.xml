@@ -14,8 +14,8 @@
 }
 .logout-container{
     position: absolute;
-    bottom: 25px;
-}	
+    bottom: 43px;
+    left: 85px;
 }
 </ui:style>
 
@@ -25,7 +25,7 @@
 		<b:Button addStyleNames="nav-button" ui:field="lastButton"/>
  	</bh:Div>
  	<bh:Div ui:field="logoutContainer" addStyleNames="{style.logout-container}">
-		<b:Button text="{lang.logout}" ui:field="logout" addStyleNames="d-btn"/>
+		<m:MaterialButton text="{lang.logout}" ui:field="logout" addStyleNames="d-btn"/>
 	</bh:Div>
 </bh:Div>
 

@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialLabel;
+import gwt.material.design.client.ui.MaterialPreLoader;
 import gwt.material.design.client.ui.MaterialTextBox;
 
 public class UserViewImpl extends DataPanelPageView implements UserView {
@@ -43,6 +44,9 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 	@UiField
 	MaterialLabel regiLabel;
 	
+	@UiField
+	MaterialPreLoader spinner;
+	
 	public UserViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
@@ -60,6 +64,8 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 	
 	@UiHandler("loginButton")
 	public void onLoginButtonClicked(ClickEvent e) {
+		spinner.getElement().getStyle().clearDisplay();
+		loginButton.setEnabled(false);
 		presenter.sendLoginRequest(userName.getText(), password.getText());
 	}
 	
@@ -75,5 +81,11 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 		}else {
 			loginContainer.getElement().getStyle().clearDisplay();
 		}
+	}
+
+	@Override
+	public void resetViewElements() {
+		loginButton.setEnabled(true);
+		spinner.getElement().getStyle().setDisplay(Display.NONE);
 	}
 }

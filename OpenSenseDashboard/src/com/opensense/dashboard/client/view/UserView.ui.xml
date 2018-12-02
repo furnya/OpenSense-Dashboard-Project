@@ -26,6 +26,13 @@
 	display: flex;
 	place-content: center;
 }
+.button-spinner{
+	width: 20px;
+    height: 20px;
+    position: relative;
+    left: -10px;
+    top: 5px;
+}
 </ui:style>
 
 <bh:Div addStyleNames="{style.content}">
@@ -37,7 +44,11 @@
 			<bh:Div addStyleNames="display-grid-center">
 				<m:MaterialLabel ui:field="regiLabel" text="Registrieren" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
 				<m:MaterialLabel text="Passwort vergessen?" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
-				<m:MaterialButton ui:field="loginButton" text="Login" textColor="WHITE" addStyleNames="d-btn"/>
+				<m:MaterialButton ui:field="loginButton" text="Login" textColor="WHITE" addStyleNames="d-btn" width="150px">
+					<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="spinner {style.button-spinner}">
+						<m:MaterialSpinner/>
+					</m:MaterialPreLoader>
+				</m:MaterialButton>
 			</bh:Div>
 		</bh:Div>
 	</bh:Div>

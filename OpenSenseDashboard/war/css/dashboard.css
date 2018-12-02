@@ -304,3 +304,7 @@ input:focus+label{
 	display: grid;
 	place-items: center;
 }
+
+.remove-hover:hover{
+	background-color: #606060 !important;
+}

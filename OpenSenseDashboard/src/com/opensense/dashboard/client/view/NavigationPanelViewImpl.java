@@ -10,14 +10,19 @@ import org.gwtbootstrap3.client.ui.html.Div;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.model.DataPanelPage;
+
+import gwt.material.design.client.ui.MaterialButton;
 
 public class NavigationPanelViewImpl extends Composite implements NavigationPanelView {
 
@@ -39,9 +44,11 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 	Button lastButton;
 	
 	@UiField
-	Button logout;
+	MaterialButton logout;
 	
 	private final EnumMap<DataPanelPage, Button> navElements = new EnumMap<>(DataPanelPage.class);
+	
+	private HandlerRegistration clickHandler;
 	
 	public NavigationPanelViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -51,7 +58,6 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 	
 	@UiHandler("logout")
 	public void onLogoutButtonClicked(ClickEvent e) {
-		logoutContainer.getElement().getStyle().setDisplay(Display.NONE);
 		presenter.onLogoutButtonClicked();
 	}
 	
@@ -67,7 +73,7 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 			navButton.add(new Image(page.iconImagePath()));
 			if(!page.logoutButton()) {
 				navButton.addClickHandler(event -> {
-					logoutContainer.getElement().getStyle().setDisplay(Display.NONE);
+					showLogoutButton(false);
 					presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(page, true));
 				});
 				buttonGroup.add(navButton);
@@ -78,7 +84,7 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 					if(presenter.isGuest()){
 						presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(page, true));
 					}else {
-						logoutContainer.getElement().getStyle().clearDisplay();
+						showLogoutButton(true);
 					}
 				});
 				navElements.put(page, lastButton);
@@ -86,6 +92,22 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 		}
 	}
 	
+	public void showLogoutButton(boolean show) {
+		if(show) {
+			new Timer() {@Override public void run() {
+				clickHandler = RootPanel.get().addDomHandler(event -> showLogoutButton(false), ClickEvent.getType());
+			}}.schedule(100);
+			lastButton.addStyleName("remove-hover");
+			logoutContainer.getElement().getStyle().clearDisplay();
+		}else {
+			if(clickHandler != null) {
+				clickHandler.removeHandler();
+			}
+			lastButton.removeStyleName("remove-hover");
+			logoutContainer.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+
 	@Override
 	public void setActiveDataPanelPage(DataPanelPage page) {
 		navElements.entrySet().forEach(entry -> entry.getValue().setActive(entry.getKey().equals(page)));
