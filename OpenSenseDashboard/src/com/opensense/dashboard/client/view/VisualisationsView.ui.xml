@@ -63,19 +63,19 @@
 	background-color: #fff;
 	height: 20px;	
 }
-.navVis{
-	background-color: #606060;
+.datepicker{
+}
+.visPanel {
+	margin-bottom: 10px;
 }
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="{style.con}">
-	<m:MaterialPreLoader ui:field="viewSpinner" display="NONE" addStyleNames="spinner">
-		<m:MaterialSpinner/>
-	</m:MaterialPreLoader>
 	<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10 {style.margin}">
-			<m:MaterialButton width="265px" ui:field="selectAllButton" text="{lang.deselectAllSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10"/>
+		<m:MaterialButton width="265px" ui:field="selectAllButton" text="{lang.deselectAllSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10"/>
 		<bh:Div addStyleNames="display-block"> 
 			<m:MaterialLabel textColor="WHITE" text="{lang.allSelectedSensors}"/>
+			<m:MaterialButton ui:field="showInSearchButton" text="{lang.selectedShowInSearch}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
 			<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
 			<!-- m:MaterialButton  ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/-->
 			<m:MaterialButton  ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn"/>
@@ -90,21 +90,23 @@
 		</bh:Div>
 		<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
 	</bh:Div>
-	<m:MaterialNavBar ui:field="navBarVis" addStyleNames="{style.navVis}">
-		<m:MaterialNavBrand float="LEFT" text="{lang.timespan}"/>
-		<m:MaterialNavSection float="RIGHT">
-			<m:MaterialLink ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT"/>
-			<m:MaterialDatePicker ui:field="startingDate" placeholder="{lang.from}"/>
-			<!-- ma:timepicker.MaterialTimePicker ui:field="startingTime" placeholder="Time"/-->
-			<m:MaterialDatePicker ui:field="endingDate" placeholder="{lang.to}"/>
-			<!-- ma:timepicker.MaterialTimePicker ui:field="endingTime" placeholder="Time"/-->
-			<m:MaterialLink ui:field="pastYear" text="{lang.pastYear}" textColor="WHITE" waves="LIGHT"/>
-			<m:MaterialLink ui:field="pastMonth" text="{lang.pastMonth}" textColor="WHITE" waves="LIGHT"/>
-			<m:MaterialLink ui:field="pastWeek" text="{lang.pastWeek}" textColor="WHITE" waves="LIGHT"/>
-			<m:MaterialLink ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT"/>
-		</m:MaterialNavSection>
-	</m:MaterialNavBar>
+	<bh:Div addStyleNames="{style.panel} {style.visPanel} visPanel flex round-corners margin-top-10">
+		<m:MaterialLabel textColor="WHITE" text="{lang.timespan}"/>
+		<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+		<m:MaterialDatePicker ui:field="startingDate" textColor="WHITE" autoClose="true" placeholder="{lang.from}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
+		<!-- ma:timepicker.MaterialTimePicker ui:field="startingTime" placeholder="Time"/-->
+		<m:MaterialDatePicker ui:field="endingDate" textColor="WHITE" autoClose="true" placeholder="{lang.to}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
+		<!-- ma:timepicker.MaterialTimePicker ui:field="endingTime" placeholder="Time"/-->
+		<m:MaterialButton ui:field="pastYear" text="{lang.pastYear}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+		<m:MaterialButton ui:field="pastMonth" text="{lang.pastMonth}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+		<m:MaterialButton ui:field="pastWeek" text="{lang.pastWeek}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+		<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+	</bh:Div>
+	<m:MaterialPreLoader ui:field="viewSpinner" display="NONE" addStyleNames="spinner">
+		<m:MaterialSpinner/>
+	</m:MaterialPreLoader>
 	<bh:Div ui:field="chartContainer" width="100%"/>
+	
 </bh:Div>
 
 </ui:UiBinder>

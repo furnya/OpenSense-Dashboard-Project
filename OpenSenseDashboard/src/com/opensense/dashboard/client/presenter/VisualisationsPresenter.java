@@ -66,7 +66,11 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	
 	@Override
 	public void handleIds(List<Integer> ids) {
+		view.showLoadingIndicator();
 		view.setSensors(new LinkedList<>());
+		for(Integer id : ids) {
+			view.addEmptySensorItemCard(id);
+		}
 		if(ids!=null && !ids.isEmpty()) {
 			for(Integer id : ids) {
 				buildValueRequestAndSend(id, view.getDefaultRange(), null, null);
@@ -100,6 +104,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getValues() != null) {
 				view.addSensorValues(result.getSensors().get(0), result.getValues());
+				view.hideLoadingIndicator();
 				view.showChart();
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");

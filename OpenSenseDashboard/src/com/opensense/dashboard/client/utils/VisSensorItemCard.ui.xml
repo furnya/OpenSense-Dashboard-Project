@@ -43,6 +43,7 @@
 }
 .right{
 	min-width: 15%;
+	position: relative;
 }
 .font{
 	margin-top: 5px;
@@ -74,8 +75,12 @@
 		</bh:Div>
 		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
 	</bh:Div>
-	<bh:Div addStyleNames="{style.mid}" ui:field="midContainer"/>
+	<bh:Div addStyleNames="{style.mid}" ui:field="midContainer">
+	</bh:Div>
 	<bh:Div addStyleNames="{style.right}">
+		<m:MaterialPreLoader ui:field="cardSpinner" display="NONE" addStyleNames="spinner">
+			<m:MaterialSpinner/>
+		</m:MaterialPreLoader>
 		<b:Button  width="30px" ui:field="favButton" addStyleNames="d-btn {style.fav-icon}" />
 	</bh:Div>
 </bh:Div>
