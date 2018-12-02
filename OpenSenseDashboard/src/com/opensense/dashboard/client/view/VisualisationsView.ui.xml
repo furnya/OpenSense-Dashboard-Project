@@ -24,7 +24,7 @@
 	display: none;	
 }
 .con{
-	max-height: 80vh;
+	max-height: 87vh;
     overflow: auto; 
     padding-right: 10px;
 }
@@ -64,9 +64,17 @@
 	height: 20px;	
 }
 .datepicker{
+	margin-top: 0;
+	margin-right: 10px;
+	height: 5vh;
 }
 .visPanel {
 	margin-bottom: 10px;
+	height: 7vh;
+	overflow: auto;
+}
+.chartContainer > *{
+	width:100% !important;
 }
 </ui:style>
 
@@ -105,7 +113,7 @@
 	<m:MaterialPreLoader ui:field="viewSpinner" display="NONE" addStyleNames="spinner">
 		<m:MaterialSpinner/>
 	</m:MaterialPreLoader>
-	<bh:Div ui:field="chartContainer" width="100%"/>
+	<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>
 	
 </bh:Div>
 

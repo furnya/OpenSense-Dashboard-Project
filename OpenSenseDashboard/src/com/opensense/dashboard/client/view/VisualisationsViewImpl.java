@@ -141,7 +141,11 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	private List<Integer> unselectedSensors = new ArrayList<>();
 	private List<Integer> selectedSensors = new ArrayList<>();
 	
-	private HashMap<Integer,Color> colors = new HashMap<>();
+	private String[] colors = {"#5899DA","#E8743B","#19A979","#ED4A7B","#945ECF","#13A4B4","#525DF4","#BF399E","#6C8893","#EE6868","#2F6497"};
+	private int nextColor = 0;
+	
+	private CartesianTimeAxis xAxis;
+	private CartesianLinearAxis yAxis;
 	
 	public VisualisationsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -322,20 +326,24 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		} catch (InvalidPluginIdException e) {
 			GWT.log(e.toString());
 		}
+		xAxis = new CartesianTimeAxis(chart, CartesianAxisType.x);
+		xAxis.setDistribution(ScaleDistribution.linear);
+		xAxis.setBounds(ScaleBounds.ticks);
+		xAxis.getTime().setStepSize(1);
+		yAxis = new CartesianLinearAxis(chart, CartesianAxisType.y);
+		chart.getOptions().getScales().setXAxes(xAxis);
+		chart.getOptions().getScales().setYAxes(yAxis);
 	}
 	
 	public boolean showChart() {
 		if(sensors==null || sensors.isEmpty()) return false;
 		showNoDataIndicator(false);
-		chart.update();
-		CartesianTimeAxis xAxis = new CartesianTimeAxis(chart, CartesianAxisType.x);
-		xAxis.setDistribution(ScaleDistribution.linear);
-		xAxis.setBounds(ScaleBounds.ticks);
+		TimeUnit tu = calculateTimeUnit();
 		xAxis.getTime().setMin(minTimestamp);
 		xAxis.getTime().setMax(maxTimestamp);
-		xAxis.getTime().setUnit(calculateTimeUnit());
-		xAxis.getTime().setStepSize(1);
-		CartesianLinearAxis yAxis = new CartesianLinearAxis(chart, CartesianAxisType.y);
+		xAxis.getTime().setUnit(tu);
+		xAxis.getTime().setTooltipFormat("DD MMM YYYY, HH:mm");
+		xAxis.getTime().getDisplayFormats().setDisplayFormat(tu, getDisplayFormat(tu));
 		yAxis.getTicks().setMin(Math.floor(minValue));
 		yAxis.getTicks().setMax(Math.ceil(maxValue));
 		chart.getOptions().getScales().setXAxes(xAxis);
@@ -365,8 +373,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void setLineDatasetStyle(LineDataset dataset, int sensorId) {
-		Color color = getNewColor();
-		colors.put(sensorId,color);
+		String color = getNewColor();
 		dataset.setBorderColor(color);
 		dataset.setPointBackgroundColor(color);
 		dataset.setFill(Fill.nofill);
@@ -472,7 +479,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void removeSensorDatasetFromChart(Integer sensorId) {
 		Sensor sensor = getSensorFromId(sensorId);
 		LineDataset dataset = datasetMap.remove(sensor);
-		colors.remove(sensorId);
 		ArrayList<Dataset> datasets = new ArrayList<>();
 		chart.getData().getDatasets().forEach(datasets::add);
 		datasets.remove(dataset);
@@ -541,21 +547,25 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		return tu;
 	}
 	
-	public Color getNewColor() {
-		if(colors.isEmpty()) return new Color(23,130,200);
-		int r=0,g=0,b=0,rdmax=0,gdmax=0,bdmax=0;
-		for(int i=0;i<256;i++) {
-			int rdm=256,gdm=256,bdm=256;
-			for(Color c : colors.values()) {
-				if(Math.abs(i-c.getRed())<rdm) {rdm = Math.abs(i-c.getRed());}
-				if(Math.abs(i-c.getGreen())<gdm) {gdm = Math.abs(i-c.getGreen());}
-				if(Math.abs(i-c.getBlue())<bdm) {bdm = Math.abs(i-c.getBlue());}
-			}
-			if(rdm>rdmax) {r=i;rdmax=rdm;}
-			if(gdm>gdmax) {g=i;gdmax=gdm;}
-			if(bdm>bdmax) {b=i;bdmax=bdm;}
+	public String getDisplayFormat(TimeUnit tu) {
+		switch(tu) {
+		case day:
+			return "DD MMM";
+		case hour:
+			return "HH:mm";
+		case month:
+			return "MMM YYYY";
+		case year:
+			return "YYYY";
+		default:
+			return "DD MMM";
 		}
-		return new Color(r,g,b);
+	}
+	
+	public String getNewColor() {
+		String color = colors[nextColor];
+		nextColor = (nextColor+1)%colors.length;
+		return color;
 	}
 	
 	@Override
