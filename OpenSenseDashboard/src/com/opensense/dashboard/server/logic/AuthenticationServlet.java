@@ -44,10 +44,9 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		}
 		System.out.println(decryptedPassword);
 		String body = "{\"username\":\""+username+"\",\"password\":\""+decryptedPassword+"\"}";
-		ClientRequestHandler.getInstance().sendLoginRequest(body);
-		//TODO: 
-		//SessionUser.getInstance().setToken(token);
+		String token = ClientRequestHandler.getInstance().sendLoginRequest(body);
+		SessionUser.getInstance().setToken(token);
 		SessionUser.getInstance().setUsername(username);
-		return new ActionResult(ActionResultType.FAILED, "Unimplemented");
+		return new ActionResult(ActionResultType.SUCCESSFUL);
 	}
 }

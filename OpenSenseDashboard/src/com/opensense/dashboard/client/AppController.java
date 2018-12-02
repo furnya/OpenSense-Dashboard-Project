@@ -81,6 +81,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		AuthenticationService.Util.getInstance().createUserInSession(new DefaultAsyncCallback<Boolean>(result -> {
 			if(result != null) {
 				isGuest = !result;
+				dataPanelPresenter.userLoggedIn(); 
 			}
 		}));
 		bindHandler();
