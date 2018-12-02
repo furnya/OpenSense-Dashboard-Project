@@ -472,7 +472,7 @@ public static String seletedShowOnMap() {
 	
 	public static String rating(double rating) {
 		if(de){
-			return rating + " von 5 Sternen";
+			return "Genauigkeit " + rating + " von 5 Sterne";
 		}else{
 			return "";
 		}

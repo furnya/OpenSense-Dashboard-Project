@@ -33,6 +33,7 @@
     height: 40px;
     right: 0px;
     margin: unset !important;
+    opacity: 0.6;
 }
 </ui:style>
 
