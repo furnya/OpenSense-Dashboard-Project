@@ -161,4 +161,64 @@ public class ServerLanguages{
 		}
 		return measurandName;
 	}
+	
+	public static String getUnitName(UnitType unitType) {
+		String unitName = null;
+		switch(unitType) {
+		case CELSIUS:
+			unitName = "°C";
+			break;
+		case DECIBEL:
+			unitName = "dB";
+			break;
+		case DEGREES:
+			unitName = "°";
+			break;
+		case ENUM:
+			unitName = "";
+			break;
+		case FAHRENHEIT:
+			unitName = "°F";
+			break;
+		case HPA:
+			unitName = "hPa";
+			break;
+		case KELVIN:
+			unitName = "K";
+			break;
+		case KMH:
+			unitName = "km/h";
+			break;
+		case LEVEL:
+			unitName = "";
+			break;
+		case LUMEN:
+			unitName = "lm";
+			break;
+		case LUX:
+			unitName = "lx";
+			break;
+		case MBAR:
+			unitName = "mbar";
+			break;
+		case MM:
+			unitName = "mm";
+			break;
+		case MPS:
+			unitName = "m/s";
+			break;
+		case PERCENT:
+			unitName = "%";
+			break;
+		case UGPM3:
+			unitName = "\u00B5g/m\u00B3";
+			break;
+		case JPCM2:
+			unitName = "J/cm\u00B2";
+			break;
+		default:
+			break;
+		}
+		return unitName;
+	}
 }
