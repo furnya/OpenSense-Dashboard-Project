@@ -51,7 +51,7 @@ public class ServerLanguages{
 			break;
 		case CLOUDINESS:
 			if(de) {
-				measurandName = "Bewölkung";
+				measurandName = "Bew\u00F6lkung";
 			} else {
 				measurandName = "Cloudiness";
 			}
@@ -65,7 +65,7 @@ public class ServerLanguages{
 			break;
 		case NOISE:
 			if(de) {
-				measurandName = "Lautstärke";
+				measurandName = "Lautst\u00E4rke";
 			} else {
 				measurandName = "Noise";
 			}
@@ -119,6 +119,41 @@ public class ServerLanguages{
 				measurandName = "Windgeschwindigkeit";
 			} else {
 				measurandName = "Wind speed";
+			}
+			break;
+		case CO:
+			if(de) {
+				measurandName = "Kohlenstoffmonoxid";
+			}else {
+				measurandName = "Carbon monoxide";
+			}
+			break;
+		case NO2:
+			if(de) {
+				measurandName = "Stickstoffdioxid";
+			}else {
+				measurandName = "Nitrogen dioxide";
+			}
+			break;
+		case O3:
+			if(de) {
+				measurandName = "Sauerstoff";
+			}else {
+				measurandName = "Oxygen";
+			}
+			break;
+		case SO2:
+			if(de) {
+				measurandName = "Schwefeldioxid";
+			}else {
+				measurandName = "Sulfur dioxide";
+			}
+			break;
+		case SOLAR_RADIATION:
+			if(de) {
+				measurandName = "Sonnenstrahlung";
+			}else {
+				measurandName = "Solar radiation";
 			}
 			break;
 		default:
