@@ -17,7 +17,8 @@ public enum UnitType {
 	LUMEN("lumen"),
 	MBAR("mbar"),
 	KMH("km/h"),
-	DEFAULT(null);
+	JPCM2("j/cm2"),
+	DEFAULT("");
 	
 	private final String displayName;
 	

@@ -178,6 +178,9 @@ public class ServerLanguages{
 		case UGPM3:
 			unitName = "\u00B5g/m\u00B3";
 			break;
+		case JPCM2:
+			unitName = "J/cm\u00B2";
+			break;
 		default:
 			break;
 		}
