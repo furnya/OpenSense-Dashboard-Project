@@ -608,5 +608,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		DatePickerLanguage lang = Languages.isGerman()? DatePickerLanguage.DE : DatePickerLanguage.EN;
 		startingDate.setLanguage(lang);
 		endingDate.setLanguage(lang);
+		endingDate.addClickHandler(event -> endingDate.open());
 	}
 }
