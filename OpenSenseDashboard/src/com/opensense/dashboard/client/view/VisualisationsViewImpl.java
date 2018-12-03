@@ -11,7 +11,6 @@ import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
 import org.pepstock.charba.client.Defaults;
 import org.pepstock.charba.client.LineChart;
-import org.pepstock.charba.client.colors.Color;
 import org.pepstock.charba.client.data.DataPoint;
 import org.pepstock.charba.client.data.Dataset;
 import org.pepstock.charba.client.data.LineDataset;
@@ -33,7 +32,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -54,8 +52,8 @@ import com.opensense.dashboard.shared.Value;
 import gwt.material.design.client.constants.DatePickerLanguage;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialDatePicker;
+import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialPreLoader;
-import gwt.material.design.client.ui.MaterialToast;
 
 public class VisualisationsViewImpl extends DataPanelPageView implements VisualisationsView {
 	
@@ -111,6 +109,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@UiField
 	MaterialButton selectAllButton;
 	
+	@UiField
+	MaterialLabel noDatasetsLabel;
+	
 //	@UiField
 //	MaterialTimePicker startingTime;
 //	
@@ -122,7 +123,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	protected Presenter presenter;
 	
 	private List<Sensor> sensors;
-	private Map<Integer, VisSensorItemCard> sensorMap = new HashMap<>();
+	private Map<Integer, VisSensorItemCard> sensorCardMap = new HashMap<>();
 	private Map<Sensor, LineDataset> datasetMap = new HashMap<>();
 	
 	private static final DateRange DEFAULT_RANGE = DateRange.PAST_WEEK;
@@ -160,46 +161,57 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void initView() {
 		createChart();
 		setDatePickerOptions();
+		highlightDateRange();
 	}
 	
 	@UiHandler("customRange")
 	public void onCustomRangeButtonClicked(ClickEvent e) {
 		if(startingDate.getDate()==null || endingDate.getDate()==null) return;
 		resetChart();
+		resetDatasets();
 		showAllLoadingIndicators();
 		setDateRange(DateRange.CUSTOM);
+		highlightDateRange();
 		presenter.valueRequestForSensorList(selectedSensors, DateRange.CUSTOM, startingDate.getDate(), endingDate.getDate());
 	}
 	
 	@UiHandler("pastYear")
 	public void onPastYearButtonClicked(ClickEvent e) {
 		resetChart();
+		resetDatasets();
 		showAllLoadingIndicators();
 		setDateRange(DateRange.PAST_YEAR);
+		highlightDateRange();
 		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_YEAR, null, null);
 	}
 	
 	@UiHandler("pastMonth")
 	public void onPastMonthButtonClicked(ClickEvent e) {
 		resetChart();
+		resetDatasets();
 		showAllLoadingIndicators();
 		setDateRange(DateRange.PAST_MONTH);
+		highlightDateRange();
 		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_MONTH, null, null);
 	}
 	
 	@UiHandler("pastWeek")
 	public void onPastWeekButtonClicked(ClickEvent e) {
 		resetChart();
+		resetDatasets();
 		showAllLoadingIndicators();
 		setDateRange(DateRange.PAST_WEEK);
+		highlightDateRange();
 		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_WEEK, null, null);
 	}
 	
 	@UiHandler("past24Hours")
 	public void onPast24HoursButtonClicked(ClickEvent e) {
 		resetChart();
+		resetDatasets();
 		showAllLoadingIndicators();
 		setDateRange(DateRange.PAST_24HOURS);
+		highlightDateRange();
 		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_24HOURS, null, null);
 	}
 	
@@ -222,14 +234,14 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		
 		Date earliest = valueHandler.getEarliest().getTimestamp();
 		Date latest = valueHandler.getLatest().getTimestamp();
-		Double lowest = valueHandler.getMin().getNumberValue();
-		Double highest = valueHandler.getMax().getNumberValue();
 		if(minTimestamp==null || minTimestamp.compareTo(earliest)>0) minTimestamp = earliest;
 		if(maxTimestamp==null || maxTimestamp.compareTo(latest)<0) maxTimestamp = latest;
-		if(minValue > lowest) minValue = lowest;
-		if(maxValue < highest) maxValue = highest;
 		
 		LineDataset dataset = createCrunchedDataset(filteredValues);
+		Double lowest = ValueHandler.getMinOfDataset(dataset);
+		Double highest = ValueHandler.getMaxOfDataset(dataset);
+		if(minValue > lowest) minValue = lowest;
+		if(maxValue < highest) maxValue = highest;
 		Sensor oldSensor = datasetsContainId(sensor.getSensorId());
 		if(oldSensor != null) datasetMap.remove(oldSensor);
 		datasetMap.put(sensor, dataset);
@@ -336,8 +348,12 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public boolean showChart() {
-		if(sensors==null || sensors.isEmpty()) return false;
-		showNoDataIndicator(false);
+		hideLoadingIndicator();
+		if(sensors==null || sensors.isEmpty() || datasetMap==null || datasetMap.isEmpty()) {
+			showNoDatasetsIndicator(true);
+			return false;
+		}
+		showNoDatasetsIndicator(false);
 		TimeUnit tu = calculateTimeUnit();
 		xAxis.getTime().setMin(minTimestamp);
 		xAxis.getTime().setMax(maxTimestamp);
@@ -388,7 +404,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void setSensorCard(Sensor sensor) {
-		final VisSensorItemCard card = sensorMap.get(sensor.getSensorId());
+		final VisSensorItemCard card = sensorCardMap.get(sensor.getSensorId());
 		card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 		card.setIconTitle(sensor.getMeasurand().getDisplayName());
 		card.getMiddleHeader().clear();
@@ -399,7 +415,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void removeSensorCard(Integer id) {
-		sensorContainer.remove(sensorMap.get(id));
+		sensorContainer.remove(sensorCardMap.get(id));
 	}
 	
 	private String getIconUrlFromType(MeasurandType measurandType) {
@@ -451,7 +467,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void onSelectAllButtonClicked(ClickEvent e) {
 		if(Languages.selectAllSensors().equals(selectAllButton.getText())) {
 			while(!unselectedSensors.isEmpty()) {
-				sensorMap.get(unselectedSensors.get(0)).setActive(true);
+				sensorCardMap.get(unselectedSensors.get(0)).setActive(true);
 				selectedSensors.add(unselectedSensors.get(0));
 				unselectedSensors.remove(0);
 			}
@@ -459,7 +475,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 			addAllDatasets();
 		}else {
 			while(!selectedSensors.isEmpty()) {
-				sensorMap.get(selectedSensors.get(0)).setActive(false);
+				sensorCardMap.get(selectedSensors.get(0)).setActive(false);
 				unselectedSensors.add(selectedSensors.get(0));
 				selectedSensors.remove(0);
 			}
@@ -476,6 +492,14 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		}
 	}
 	
+	public void showNoDatasetsIndicator(boolean show) {
+		if(show) {
+			noDatasetsLabel.getElement().getStyle().clearDisplay();
+		}else {
+			noDatasetsLabel.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+	
 	public void removeSensorDatasetFromChart(Integer sensorId) {
 		Sensor sensor = getSensorFromId(sensorId);
 		LineDataset dataset = datasetMap.remove(sensor);
@@ -489,7 +513,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void addSensorDatasetToChart(Integer sensorId) {
-		sensorMap.get(sensorId).showLoadingIndicator();
+		sensorCardMap.get(sensorId).showLoadingIndicator();
 		presenter.buildValueRequestAndSend(sensorId, getDateRange(), minTimestamp, maxTimestamp);
 	}
 
@@ -570,12 +594,12 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	@Override
 	public void addEmptySensorItemCard(Integer sensorId) {
-		if(sensorMap.containsKey(sensorId)) return;
+		if(sensorCardMap.containsKey(sensorId)) return;
 		final VisSensorItemCard card = new VisSensorItemCard();
 		card.setHeader(Languages.sensorId() + sensorId);
 		selectedSensors.add(sensorId);
 		selectedSensors.sort((a,b) -> (a-b));
-		sensorMap.put(sensorId, card);
+		sensorCardMap.put(sensorId, card);
 		card.addValueChangeHandler(event -> {
 			if(event.getValue()) {
 				unselectedSensors.remove(sensorId);
@@ -595,7 +619,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	public void showAllLoadingIndicators() {
 		for(Integer id : selectedSensors) {
-			sensorMap.get(id).showLoadingIndicator();
+			sensorCardMap.get(id).showLoadingIndicator();
 		}
 	}
 	
@@ -609,5 +633,45 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		startingDate.setLanguage(lang);
 		endingDate.setLanguage(lang);
 		endingDate.addClickHandler(event -> endingDate.open());
+	}
+	
+	@Override
+	public void showSensorCardFailure(Integer sensorId) {
+		VisSensorItemCard card = sensorCardMap.get(sensorId);
+		card.getMiddleHeader().add(new Span("Error"));
+		card.hideLoadingIndicator();
+	}
+	
+	public void resetDatasets() {
+		datasetMap = new HashMap<>();
+	}
+	
+	
+	public void highlightDateRange() {
+		customRange.getElement().removeClassName("active");
+		past24Hours.getElement().removeClassName("active");
+		pastMonth.getElement().removeClassName("active");
+		pastWeek.getElement().removeClassName("active");
+		pastYear.getElement().removeClassName("active");
+		switch(dateRange) {
+		case CUSTOM:
+			customRange.getElement().addClassName("active");
+			break;
+		case PAST_24HOURS:
+			past24Hours.getElement().addClassName("active");
+			break;
+		case PAST_MONTH:
+			pastMonth.getElement().addClassName("active");
+			break;
+		case PAST_WEEK:
+			pastWeek.getElement().addClassName("active");
+			break;
+		case PAST_YEAR:
+			pastYear.getElement().addClassName("active");
+			break;
+		default:
+			break;
+		
+		}
 	}
 }

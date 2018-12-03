@@ -33,4 +33,5 @@ public interface VisualisationsView extends IDataPanelPageView {
 	public List<Sensor> getSensors();
 	public void showNoDataIndicator(boolean show);
 	public void addEmptySensorItemCard(Integer sensorId);
+	public void showSensorCardFailure(Integer sensorId);
 }

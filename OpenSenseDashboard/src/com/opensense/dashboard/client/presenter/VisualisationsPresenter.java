@@ -66,17 +66,20 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	
 	@Override
 	public void handleIds(List<Integer> ids) {
+		if(ids==null || ids.isEmpty()) {
+			view.showNoDataIndicator(true);
+			return;
+		}
 		view.showLoadingIndicator();
+		view.showNoDataIndicator(false);
 		view.setSensors(new LinkedList<>());
 		for(Integer id : ids) {
 			view.addEmptySensorItemCard(id);
 		}
-		if(ids!=null && !ids.isEmpty()) {
-			for(Integer id : ids) {
-				buildValueRequestAndSend(id, view.getDefaultRange(), null, null);
-			}
-			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, false, ids));
+		for(Integer id : ids) {
+			buildValueRequestAndSend(id, view.getDefaultRange(), null, null);
 		}
+		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, false, ids));
 	}
 
 
@@ -104,13 +107,14 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getValues() != null) {
 				view.addSensorValues(result.getSensors().get(0), result.getValues());
-				view.hideLoadingIndicator();
 				view.showChart();
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
 			}
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the values.");
+			view.showSensorCardFailure(request.getIds().get(0));
+			view.hideLoadingIndicator();
 		}, false));
 	}
 	

@@ -113,6 +113,7 @@
 	<m:MaterialPreLoader ui:field="viewSpinner" display="NONE" addStyleNames="spinner">
 		<m:MaterialSpinner/>
 	</m:MaterialPreLoader>
+	<m:MaterialLabel ui:field="noDatasetsLabel" textColor="WHITE" text="{lang.noData}" display="NONE"/>
 	<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>
 	
 </bh:Div>
