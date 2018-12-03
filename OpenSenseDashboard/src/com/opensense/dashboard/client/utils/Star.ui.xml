@@ -9,16 +9,16 @@
 <ui:style>
 .star-five {
   transform: scale(0.15) rotate(35deg);
-  color: yellow;
+  color: rgba(255, 220, 0);
   width: 0px;
   height: 0px;
   border-right: 100px solid transparent;
-  border-bottom: 70px solid yellow;
+  border-bottom: 70px solid rgba(255, 220, 0);
   border-left: 100px solid transparent;
   z-index: 3;
 }
 .star-five:before {
-  border-bottom: 80px solid yellow;
+  border-bottom: 80px solid rgba(255, 220, 0);
   border-left: 30px solid transparent;
   border-right: 30px solid transparent;
   position: absolute;
@@ -33,13 +33,13 @@
 .star-five:after {
   position: absolute;
   display: block;
-  color: yellow;
+  color: rgba(255, 220, 0);
   top: 3px;
   left: -105px;
   width: 0px;
   height: 0px;
   border-right: 100px solid transparent;
-  border-bottom: 70px solid yellow;
+  border-bottom: 70px solid rgba(255, 220, 0);
   border-left: 100px solid transparent;
   transform: rotate(-70deg);
   content: '';

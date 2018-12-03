@@ -2,36 +2,36 @@ package com.opensense.dashboard.server.util;
 
 import com.opensense.dashboard.shared.MeasurandType;
 
-public class ServerLanguages{ 
-	
+public class ServerLanguages{
+
 	/**
 	 * German or english
 	 */
 	private static boolean de = true;
 	private static boolean en = false;
-	
+
 	private ServerLanguages() {
-	    // Empty private constructor to hide the implicit public one.
+		// Empty private constructor to hide the implicit public one.
 	}
-	
+
 	public static boolean isGerman() {
 		return de;
 	}
-	
+
 	public static boolean isEnglish() {
 		return en;
 	}
-	
+
 	public static void setGerman() {
 		de = true;
 		en = false;
 	}
-	
+
 	public static void setEnglish() {
 		de = false;
 		en = true;
 	}
-	
+
 	public static String getMeasurandName(MeasurandType measurandType) {
 		String measurandName = null;
 		switch(measurandType) {
@@ -161,24 +161,24 @@ public class ServerLanguages{
 		}
 		return measurandName;
 	}
-	
+
 	public static String getUnitName(UnitType unitType) {
 		String unitName = null;
 		switch(unitType) {
 		case CELSIUS:
-			unitName = "°C";
+			unitName = "Â°C";
 			break;
 		case DECIBEL:
 			unitName = "dB";
 			break;
 		case DEGREES:
-			unitName = "°";
+			unitName = "Â°";
 			break;
 		case ENUM:
 			unitName = "";
 			break;
 		case FAHRENHEIT:
-			unitName = "°F";
+			unitName = "Â°F";
 			break;
 		case HPA:
 			unitName = "hPa";
