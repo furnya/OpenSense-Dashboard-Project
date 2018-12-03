@@ -5,6 +5,7 @@ import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -19,6 +20,7 @@ import com.opensense.dashboard.client.gui.GUIImageBundle;
 
 import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialLabel;
+import gwt.material.design.client.ui.MaterialPreLoader;
 
 public class VisSensorItemCard extends Composite{
 	
@@ -45,6 +47,9 @@ public class VisSensorItemCard extends Composite{
 	
 	@UiField
 	Button favButton;
+	
+	@UiField
+	MaterialPreLoader cardSpinner;
 	
 	public VisSensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -104,5 +109,17 @@ public class VisSensorItemCard extends Composite{
 			event.stopPropagation();
 		});
 	}-*/;
-
+	
+	public void showLoadingIndicator() {
+		if(checkbox.getValue()) {
+			cardSpinner.getElement().addClassName("spinner-active");
+		}else {
+			cardSpinner.getElement().removeClassName("spinner-active");
+		}
+		cardSpinner.getElement().getStyle().clearDisplay();
+	}
+	
+	public void hideLoadingIndicator() {
+		cardSpinner.getElement().getStyle().setDisplay(Display.NONE);
+	}
 }

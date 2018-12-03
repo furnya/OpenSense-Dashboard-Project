@@ -315,6 +315,14 @@ public static String seletedShowOnMap() {
 		}
 	}
 	
+	public static String selectedShowInSearch() {
+		if(de) {
+			return "IN SUCHE ANZEIGEN";
+		}else {
+			return "";
+		}
+	}
+	
 	public static String selectedAddToList() {
 		if(de) {
 			return "Zur Liste hinzufügen";

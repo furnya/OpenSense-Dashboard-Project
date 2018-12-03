@@ -284,6 +284,17 @@ input:focus+label{
 .spinner > Div {
 	 border-color: #42DCA3;
 }
+.spinner-active {
+	top: 10px;
+    position: absolute !important;
+    height: 25px !important;
+    width: 25px !important;
+    left: 20px;
+}
+
+.spinner-active > Div{
+	border-color: white;
+}
 
 @keyframes color-marked {
     from {background-color: #fff;}
@@ -328,4 +339,18 @@ input:focus+label{
 
 .value-sensor{
 	font-size: medium;
+}
+.visPanel > * {
+	width: calc(14% - 10px);
+}
+.visPanel > *:first-child {
+	width: auto !important;
+}
+.visPanel > button {
+	font-size: 0.9vw;
+	line-height: 2em;
+	padding-left: 1rem;
+	padding-right: 1rem; 
+	height: 5vh;
+	margin: auto 10px auto 10px;
 }
