@@ -7,6 +7,8 @@ import com.opensense.dashboard.client.model.DataPanelPage;
 public interface NavigationPanelView {
 	public interface Presenter{
 		HandlerManager getEventBus();
+		boolean isGuest();
+		void onLogoutButtonClicked();
 	}
 
 	void setPresenter(Presenter presenter);

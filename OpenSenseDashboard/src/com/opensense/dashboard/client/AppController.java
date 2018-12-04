@@ -23,6 +23,8 @@ import com.opensense.dashboard.client.presenter.DataPanelPresenter;
 import com.opensense.dashboard.client.presenter.FooterPresenter;
 import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.presenter.NavigationPanelPresenter;
+import com.opensense.dashboard.client.presenter.UserPresenter;
+import com.opensense.dashboard.client.services.AuthenticationService;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
@@ -30,7 +32,11 @@ import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
 import com.opensense.dashboard.client.view.FooterViewImpl;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
+import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Parameter;
+
+import gwt.material.design.client.ui.MaterialToast;
 
 public class AppController implements IPresenter, ValueChangeHandler<String> {
 	
@@ -67,6 +73,9 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 private NavigationPanelViewImpl navigationPanelView = null;
 	 private FooterViewImpl footerView = null;
 	 
+	 
+	 private boolean isGuest = true;
+	 
 	 /**
 	 * Constructs the application controller (main presenter).
 	 * 
@@ -74,13 +83,18 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	 */
 	 public AppController(final HandlerManager eventBus) {
 		this.eventBus = eventBus;
+		AuthenticationService.Util.getInstance().createUserInSession(new DefaultAsyncCallback<Boolean>(result -> {
+			if(result != null && result) {
+				userLoggedIn(false);
+			}
+		}));
 		bindHandler();
 		setLanguageFromCookies();
 		go(RootPanel.get());
 		handleStart();
 	}
-	
-	private void handleStart() {
+
+	 private void handleStart() {
 		if(History.getToken() != null && History.getToken().isEmpty()) {
 			History.newItem(DataPanelPage.HOME.name(), true);
 		}else {
@@ -276,5 +290,26 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		}
 		// Sets the correct serverLanguage.
 		GeneralService.Util.getInstance().setServerLanguage(Languages.getActualLanguageString(), new DefaultAsyncCallback<Void>(result -> {}));
+	}
+	
+	public boolean isGuest() {
+		return isGuest;
+	}
+
+	public void logout() {
+		AuthenticationService.Util.getInstance().userLoggedOut(new DefaultAsyncCallback<ActionResult>(result -> {
+			if(result != null && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
+				isGuest = true;
+				MaterialToast.fireToast("Logged out");
+			}
+		}));
+	}
+
+	public void userLoggedIn(boolean goToHOme) {
+		isGuest = false;
+		if(goToHOme || dataPanelPresenter.getActiveDataPanelPagePresenter() instanceof UserPresenter) {
+			eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
+		}
+		MaterialToast.fireToast("Logged in");
 	}
 }

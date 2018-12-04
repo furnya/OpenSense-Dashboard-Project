@@ -8,13 +8,21 @@ import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.model.DataPanelPage;
+
+import gwt.material.design.client.ui.MaterialButton;
 
 public class NavigationPanelViewImpl extends Composite implements NavigationPanelView {
 
@@ -30,13 +38,27 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 	ButtonGroup buttonGroup;
 	
 	@UiField
-	Div lastButtonCon;
+	Div logoutContainer;
+	
+	@UiField
+	Button lastButton;
+	
+	@UiField
+	MaterialButton logout;
 	
 	private final EnumMap<DataPanelPage, Button> navElements = new EnumMap<>(DataPanelPage.class);
 	
+	private HandlerRegistration clickHandler;
+	
 	public NavigationPanelViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		logoutContainer.getElement().getStyle().setDisplay(Display.NONE);
 		buildNavButtons();
+	}
+	
+	@UiHandler("logout")
+	public void onLogoutButtonClicked(ClickEvent e) {
+		presenter.onLogoutButtonClicked();
 	}
 	
 	@Override
@@ -49,16 +71,43 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 			Button navButton = new Button();
 			navButton.addStyleName("nav-button");
 			navButton.add(new Image(page.iconImagePath()));
-			navButton.addClickHandler(event -> presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(page, true)));
-			if(!page.hasBottomButton()) {
+			if(!page.logoutButton()) {
+				navButton.addClickHandler(event -> {
+					showLogoutButton(false);
+					presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(page, true));
+				});
 				buttonGroup.add(navButton);
+				navElements.put(page, navButton);
 			}else {
-				lastButtonCon.add(navButton);
+				lastButton.add(new Image(page.iconImagePath()));
+				lastButton.addClickHandler(event -> {
+					if(presenter.isGuest()){
+						presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(page, true));
+					}else {
+						showLogoutButton(true);
+					}
+				});
+				navElements.put(page, lastButton);
 			}
-			navElements.put(page, navButton);
 		}
 	}
 	
+	public void showLogoutButton(boolean show) {
+		if(clickHandler != null) {
+			clickHandler.removeHandler();
+		}
+		if(show) {
+			new Timer() {@Override public void run() {
+				clickHandler = RootPanel.get().addDomHandler(event -> showLogoutButton(false), ClickEvent.getType());
+			}}.schedule(100);
+			lastButton.addStyleName("remove-hover");
+			logoutContainer.getElement().getStyle().clearDisplay();
+		}else {
+			lastButton.removeStyleName("remove-hover");
+			logoutContainer.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+
 	@Override
 	public void setActiveDataPanelPage(DataPanelPage page) {
 		navElements.entrySet().forEach(entry -> entry.getValue().setActive(entry.getKey().equals(page)));

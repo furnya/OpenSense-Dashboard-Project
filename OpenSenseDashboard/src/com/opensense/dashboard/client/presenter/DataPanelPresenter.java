@@ -93,4 +93,7 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 		}
 	}
 
+	public DataPanelPagePresenter getActiveDataPanelPagePresenter() {
+		return activeDataPanelPagePresenter;
+	}
 }

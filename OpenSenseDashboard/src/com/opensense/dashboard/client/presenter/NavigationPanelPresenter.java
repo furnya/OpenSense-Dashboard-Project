@@ -39,4 +39,14 @@ public class NavigationPanelPresenter implements IPresenter, NavigationPanelView
 	public void setActiveDataPanelPage(DataPanelPage page) {
 		view.setActiveDataPanelPage(page);
 	}
+
+	@Override
+	public boolean isGuest() {
+		return appController.isGuest();
+	}
+
+	@Override
+	public void onLogoutButtonClicked() {
+		appController.logout();
+	}
 }

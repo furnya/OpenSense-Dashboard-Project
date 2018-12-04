@@ -7,7 +7,8 @@ public class ActionResult implements IsSerializable{
 	private ActionResultType actionResultType;
 	private String errorMessage;
 	
-	public ActionResult() {
+	@SuppressWarnings("unused")
+	private ActionResult() {
 		// Empty default constructor for GWT serialization.
 	}
 	

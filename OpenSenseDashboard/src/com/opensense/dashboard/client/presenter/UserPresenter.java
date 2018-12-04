@@ -13,8 +13,7 @@ import com.opensense.dashboard.client.services.AuthenticationService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.view.UserView;
 import com.opensense.dashboard.shared.ActionResult;
-
-import gwt.material.design.client.ui.MaterialToast;
+import com.opensense.dashboard.shared.ActionResultType;
 
 public class UserPresenter extends DataPanelPagePresenter implements IPresenter, UserView.Presenter{
 	
@@ -45,7 +44,7 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 
 	@Override
 	public void onPageLeave() {
-		// TODO Auto-generated method stub
+		view.resetViewElements();
 	}
 	
 	@Override
@@ -67,13 +66,21 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	
 	@Override
 	public void sendLoginRequest(String username, String password) {
-//		String salt = BCrypt.gensalt();
-//        String hash1 = BCrypt.hashpw(password, salt);
 		AuthenticationService.Util.getInstance().userLoginRequest(username, password, new DefaultAsyncCallback<ActionResult>(result -> {
-			MaterialToast.fireToast(result!=null? result.getErrorMessage() : "Null");
-//			if(result!=null) Cookies.setCookie("access_token", result);
+			if(result != null && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())){
+				appController.userLoggedIn(true);
+			}else{
+				view.showLoginNotValid();
+			}
 		},caught -> {
+			view.showLoginNotValid();
+			//TODO:show failure message
 			LOGGER.log(Level.WARNING, "Failure requesting the login.");
 		}, false));
+	}
+	
+	@Override
+	public boolean isUserLoggedIn() {
+		return !appController.isGuest();
 	}
 }

@@ -35,7 +35,7 @@ public enum DataPanelPage {
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return HomePresenter.class;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new HomePresenter(eventBus, appController, (HomeView) view);}
 		@Override public DataPanelPageView createViewInstance() {return new HomeViewImpl();}
-		@Override public boolean hasBottomButton() {return false;}
+		@Override public boolean logoutButton() {return false;}
 		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.homeIconSvg().getSafeUri();}
 	},
 	SEARCH{
@@ -44,7 +44,7 @@ public enum DataPanelPage {
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return SearchPresenter.class;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new SearchPresenter(eventBus, appController, (SearchView) view);}
 		@Override public DataPanelPageView createViewInstance() {return new SearchViewImpl();}
-		@Override public boolean hasBottomButton() {return false;}
+		@Override public boolean logoutButton() {return false;}
 		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri();}
 	},
 	MAP{
@@ -53,7 +53,7 @@ public enum DataPanelPage {
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return MapPresenter.class;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new MapPresenter(eventBus, appController, (MapView) view);}
 		@Override public DataPanelPageView createViewInstance() {return new MapViewImpl();}
-		@Override public boolean hasBottomButton() {return false;}
+		@Override public boolean logoutButton() {return false;}
 		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.mapIconSvg().getSafeUri();}
 	},
 	VISUALISATIONS{
@@ -62,7 +62,7 @@ public enum DataPanelPage {
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return VisualisationsPresenter.class;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new VisualisationsPresenter(eventBus, appController, (VisualisationsView) view);}
 		@Override public DataPanelPageView createViewInstance() {return new VisualisationsViewImpl();}
-		@Override public boolean hasBottomButton() {return false;}
+		@Override public boolean logoutButton() {return false;}
 		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.diagramIconSvg().getSafeUri();}
 	},
 	LISTS{
@@ -71,7 +71,7 @@ public enum DataPanelPage {
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return ListsPresenter.class;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new ListsPresenter(eventBus, appController, (ListsView) view);}
 		@Override public DataPanelPageView createViewInstance() {return new ListsViewImpl();}
-		@Override public boolean hasBottomButton() {return false;}
+		@Override public boolean logoutButton() {return false;}
 		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.listIconSvg().getSafeUri();}
 	},
 	USER{
@@ -80,7 +80,7 @@ public enum DataPanelPage {
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return UserPresenter.class;}
 		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new UserPresenter(eventBus, appController, (UserView) view);} 
 		@Override public DataPanelPageView createViewInstance() {return new UserViewImpl();}
-		@Override public boolean hasBottomButton() {return true;}
+		@Override public boolean logoutButton() {return true;}
 		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.userIconSvg().getSafeUri();}
 	};
 	
@@ -118,7 +118,7 @@ public enum DataPanelPage {
 	 * If the page button is in the navigation at the bottom this should be true
 	 * @return
 	 */
-	public abstract boolean hasBottomButton();
+	public abstract boolean logoutButton();
 	
 	/**
 	 * @return the icon imagePath

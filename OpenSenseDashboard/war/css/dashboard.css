@@ -144,8 +144,8 @@
 #data-panel{
 	position: absolute;
 	left: 90px;
-	width: 100%;
-	height: 96.5%;
+	width: calc(100% - 90px);
+	height: calc(100% - 25px);
     z-index: 0;
 }
 
@@ -162,20 +162,21 @@
     position: absolute;
     bottom: 0px;
     width: 100%;
-    height: 3.5%;
+    height: 25px;
     background-color: #202020;
     z-index: 1;
 }
 
 #map {
-     height: 77vh !important;
-     width: 65vw !important;
+     height: 455px;
+     width: 800px;
      margin: 0;
      padding: 0;
 }
 
 .btn.d-btn, .btn.d-btn:active, .btn.d-btn:focus, .btn.d-btn:visited{
 	 background-color: #606060;
+	 overflow: hidden;
 }
 .btn.d-btn:hover, .btn.d-btn.active{
 	background-color: #42DCA3;
@@ -194,6 +195,7 @@ input:focus+label{
 	background-color: #606060;
 	width: 100%;
 	height: 100%;
+	position: relative;
 }
 
 .btn.nav-button, .btn.nav-button:active, .btn.nav-button:focus, .btn.nav-button:visited{
@@ -228,21 +230,27 @@ input:focus+label{
     border-bottom-left-radius: 6px;
 }
 
-.gm-ui-hover-effect > img{ 
-	filter: invert(100%) !important;
+.gm-style img{ 
+	max-width: none;
+	filter: invert(100%) background(200) !important !important;
 }
 
 .gm-style .gm-style-iw {
 	background-color: #606060 !important;
-	top: 0 !important;
+    top: 0 !important;
     left: 0 !important;
-    min-height: 100% !important;
-    min-width: 100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 120px !important;
+    padding-top: 10px;
     display: block !important;
 }    
-
 .flex{
 	display: flex;
+}
+
+.position-relative{
+	position: relative;
 }
 
 .caret{
@@ -276,6 +284,17 @@ input:focus+label{
 .spinner > Div {
 	 border-color: #42DCA3;
 }
+.spinner-active {
+	top: 10px;
+    position: absolute !important;
+    height: 25px !important;
+    width: 25px !important;
+    left: 20px;
+}
+
+.spinner-active > Div{
+	border-color: white;
+}
 
 @keyframes color-marked {
     from {background-color: #fff;}
@@ -302,42 +321,36 @@ input:focus+label{
 	place-items: center;
 }
 
-.recenter-icon > img{
-	filter: invert(30%);   
-	width: 40px !important;
-    height: 40px !important;
-	min-width: 40px !important;
+.remove-hover:hover{
+	background-color: #606060 !important;
+	min-width: 0px;
 }
-.search-icon > img{
-	filter: invert(35%);   
-	width: 25px;
-    height: 25px;
-	min-width: 25px;
+
+.search-action-btn{
+	width: calc(25% - 11.25px);
+	min-width: 0px;
 }
-.visual-icon > img{
-	filter: invert(35%);   
-	width: 25px;
-    height: 25px;
-	min-width: 25px;
+
+.title-sensor{
+	font-weight: 900;
+	font-size: medium;
+	margin-right: 10px;
 }
-.recenter-icon{
-    margin-right: 10px;
+
+.value-sensor{
+	font-size: medium;
 }
-.m-btn{
-	margin-top: 10px;	
-	width: 40px !important;
-    height: 40px !important;
-    max-width: 40px !important;
-    max-height: 40px !important;
-    margin-left: 10px;
-    margin-bottom: 4px;
-    padding: unset !important;
-	background-color: #ffffff !important;
-	color: red;
+.visPanel > * {
+	width: calc(14% - 10px);
 }
-.m-btn:hover{
-	background-color: #42DCA3 !important;
+.visPanel > *:first-child {
+	width: auto !important;
 }
-.m-btn:focus,m-btn:active,m-btn:visited{
-	background-color: #ffffff !important
+.visPanel > button {
+	font-size: 0.9vw;
+	line-height: 2em;
+	padding-left: 1rem;
+	padding-right: 1rem; 
+	height: 5vh;
+	margin: auto 10px auto 10px;
 }

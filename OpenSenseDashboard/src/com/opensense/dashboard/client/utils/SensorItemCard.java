@@ -1,8 +1,10 @@
 package com.opensense.dashboard.client.utils;
 
 import org.gwtbootstrap3.client.ui.html.Div;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -14,8 +16,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
+import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialLabel;
+import gwt.material.design.client.ui.MaterialPreLoader;
 
 public class SensorItemCard extends Composite{
 	
@@ -49,6 +53,21 @@ public class SensorItemCard extends Composite{
 	@UiField
 	Image favButton;
 	
+	@UiField
+	Rating rating;
+	
+	@UiField
+	Span firstValue;
+	
+	@UiField
+	Span lastValue;
+	
+	@UiField
+	MaterialPreLoader firstSpinner;
+	
+	@UiField
+	MaterialPreLoader lastSpinner;
+	
 	public SensorItemCard() {
 		initWidget(uiBinder.createAndBindUi(this));
 		addClickHandler();
@@ -75,12 +94,9 @@ public class SensorItemCard extends Composite{
 		return this.content;
 	}
 	
-	public Div getPreviewContainer() {
-		return this.previewContainer;
-	}
-	
 	private void addClickHandler() {
 		layout.addDomHandler(event -> checkbox.setValue(!checkbox.getValue(), true), ClickEvent.getType());
+		addClickListener(checkbox.getElement());
 	}
 	
 	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
@@ -97,5 +113,52 @@ public class SensorItemCard extends Composite{
 		}else {
 			layout.removeStyleName("card-active");
 		}
+	}
+	
+	public void setValuePreviewConent(String firstText, String lastText) {
+		showPreviewContentSpinner(false);
+		firstValue.setText(firstText);
+		lastValue.setText(lastText);
+	}
+	
+	/**
+	 * shows the preview spinner which indicates that the content will be shown
+	 * clears the content before showing
+	 * @param show
+	 */
+	public void showPreviewContentSpinner(boolean show) {
+		if(show) {
+			firstValue.setText("");
+			lastValue.setText("");
+			firstSpinner.setDisplay(Display.BLOCK);
+			lastSpinner.setDisplay(Display.BLOCK);
+		}else {
+			firstSpinner.setDisplay(Display.NONE);
+			lastSpinner.setDisplay(Display.NONE);
+		}
+	}
+	
+	public void setRating(Double accuracy) {
+		if(accuracy != null) {
+			rating.setRating(accuracy * 10);
+		}
+	}
+	
+	private native void addClickListener(Element elem) /*-{
+		elem.addEventListener("click", function(event){
+			event.stopPropagation();
+		});
+	}-*/;
+
+	public void addContentValue(String titleText, String valueText) {
+		Div valueCon = new Div();
+		valueCon.addStyleName("flex");
+		Span title = new Span(titleText);
+		title.addStyleName("title-sensor");
+		valueCon.add(title);
+		Span value = new Span(valueText);
+		value.addStyleName("value-sensor");
+		valueCon.add(value);
+		content.add(valueCon);
 	}
 }

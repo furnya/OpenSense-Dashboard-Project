@@ -13,7 +13,12 @@ public enum MeasurandType {
 	PRECIPITATION_TYPE("precipitation_type"),
 	PM10("pm10"),
 	PM2_5("pm2_5"),
-	DEFAULT(null);
+	SOLAR_RADIATION("solar_radiation"),
+	CO("CO"),
+	NO2("NO2"),
+	O3("O3"),
+	SO2("SO2"),
+	DEFAULT("");
 
 	private final String nameString;
 	

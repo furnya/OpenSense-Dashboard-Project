@@ -28,4 +28,6 @@ public interface AuthenticationService extends RemoteService {
 	}
 
 	ActionResult userLoginRequest(String userName, String password);
+	Boolean createUserInSession();
+	ActionResult userLoggedOut();
 }

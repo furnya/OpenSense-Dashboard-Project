@@ -80,7 +80,7 @@ public class Languages {
 		if(de) {
 			return "Grafiken";
 		}else {
-			return "Visualisations";
+			return "Visualizations";
 		}
 	}
 	
@@ -94,7 +94,7 @@ public class Languages {
 	
 	public static String user() {
 		if(de) {
-			return "Benutzeverwaltung";
+			return "Benutzerverwaltung";
 		}else {
 			return "User";
 		}
@@ -104,7 +104,7 @@ public class Languages {
 		if(de) {
 			return "Fehler beim laden der Seite";
 		}else {
-			return "Erroe while loading the page";
+			return "Error while loading the page";
 		}
 	}
 	
@@ -112,7 +112,7 @@ public class Languages {
 		if(de) {
 			return "Sensoren Ortsabhängig suchen";
 		}else {
-			return "Sensors ..";
+			return "Search by place";
 		}
 	}
 	
@@ -120,23 +120,23 @@ public class Languages {
 		if(de) {
 			return "Maximale Anzahl von Sensoren";
 		}else {
-			return "";
+			return "Maximum amount of sensors";
 		}
 	}
 	
 	public static String minAccuracy() {
 		if(de) {
-			return "Min Genauigkeit";
+			return "Minimale Genauigkeit";
 		}else {
-			return "";
+			return "Minimal accuracy";
 		}
 	}
 	
 	public static String maxAccuracy() {
 		if(de) {
-			return "Max Genauigkeit";
+			return "Maximale Genauigkeit";
 		}else {
-			return "";
+			return "Maximal accuracy";
 		}
 	}
 	
@@ -144,55 +144,55 @@ public class Languages {
 		if(de) {
 			return "Einheit";
 		}else {
-			return "";
+			return "Unit";
 		}
 	}
 	
 	public static String minValue() {
 		if(de) {
-			return "Min Wert";
+			return "Minimaler Wert";
 		}else {
-			return "";
+			return "Minimal value";
 		}
 	}
 	
 	public static String maxValue() {
 		if(de) {
-			return "Max Wert";
+			return "Maximaler Wert";
 		}else {
-			return "";
+			return "Maximal value";
 		}
 	}
 	
 	public static String minDate() {
 		if(de) {
-			return "Min Datum";
+			return "Minimales Datum";
 		}else {
-			return "";
+			return "Minimal date";
 		}
 	}
 	
 	public static String maxDate() {
 		if(de) {
-			return "Max Datum";
+			return "Maximales Datum";
 		}else {
-			return "";
+			return "Maximal date";
 		}
 	}
 	
 	public static String minTime() {
 		if(de) {
-			return "Min Zeit";
+			return "Minimale Zeit";
 		}else {
-			return "";
+			return "Minimal time";
 		}
 	}
 	
 	public static String maxTime() {
 		if(de) {
-			return "Max Zeit";
+			return "Maximale Zeit";
 		}else {
-			return "";
+			return "Minimale";
 		}
 	}
 	
@@ -200,7 +200,7 @@ public class Languages {
 		if(de) {
 			return "Typ";
 		}else {
-			return "";
+			return "Type";
 		}
 	}
 	
@@ -232,7 +232,7 @@ public class Languages {
 		if(de) {
 			return "Auf Karte zeigen";
 		}else {
-			return "";
+			return "Show on map";
 		}
 	}
 	
@@ -303,13 +303,21 @@ public static String seletedShowOnMap() {
 		if(de) {
 			return "Auf Karte zeigen";
 		}else {
-			return "";
+			return "Show on map";
 		}
 	}
 	
 	public static String selectedShowVisualisations() {
 		if(de) {
 			return "Werte anzeigen";
+		}else {
+			return "Show values";
+		}
+	}
+	
+	public static String selectedShowInSearch() {
+		if(de) {
+			return "IN SUCHE ANZEIGEN";
 		}else {
 			return "";
 		}
@@ -319,7 +327,7 @@ public static String seletedShowOnMap() {
 		if(de) {
 			return "Zur Liste hinzufügen";
 		}else {
-			return "";
+			return "Add to list";
 		}
 	}
 	
@@ -327,7 +335,7 @@ public static String seletedShowOnMap() {
 		if(de) {
 			return "Alle ausgewählten Sensoren:";
 		}else {
-			return "";
+			return "All selected sensors";
 		}
 	}
 	
@@ -335,15 +343,15 @@ public static String seletedShowOnMap() {
 		if(de) {
 			return "Alle Sensoren auswählen";
 		}else {
-			return "";
+			return "Select all sensors";
 		}
 	}
 	
 	public static String deselectAllSensors() {
 		if(de) {
-			return "Alle Sensoren abwählen";
+			return "Keine Sensoren auswählen";
 		}else {
-			return "";
+			return "Deselect all sensors";
 		}
 	}
 	
@@ -351,7 +359,7 @@ public static String seletedShowOnMap() {
 		if(de){
 			return "Zum Anfang";
 		}else{
-			return "To begin";
+			return "Back to start";
 		}
 	}
 	
@@ -359,7 +367,7 @@ public static String seletedShowOnMap() {
 		if(de){
 			return "Zum Ende";
 		}else{
-			return "To end";
+			return "Forward to end";
 		}
 	}
 	
@@ -367,7 +375,7 @@ public static String seletedShowOnMap() {
 		if(de){
 			return "Nächste Seite";
 		}else{
-			return "Next site";
+			return "Next page";
 		}
 	}
 	
@@ -375,7 +383,7 @@ public static String seletedShowOnMap() {
 		if(de){
 			return "Vorherige Seite";
 		}else{
-			return "Privious site";
+			return "Previous page";
 		}
 	}
 
@@ -403,9 +411,9 @@ public static String seletedShowOnMap() {
 	
 	public static String noData(){
 		if(de){
-			return "Es konnten keine Daten zu der gewählten Suchparameter gefunden werden";
+			return "Es konnten keine Daten zu den gewählten Suchparametern gefunden werden";
 		}else{
-			return "";
+			return "No data was found for the chosen parameters";
 		}
 	}
 
@@ -415,18 +423,14 @@ public static String seletedShowOnMap() {
 
 	@SuppressWarnings("deprecation")
 	public static String getDate(Date timestamp) {
-		if(de){
-			return timestamp.toLocaleString();
-		}else{
-			return "";
-		}
+		return timestamp.toLocaleString();
 	}
 	
 	public static String username(){
 		if(de){
-			return "Nutzername";
+			return "Benutzername";
 		}else{
-			return "";
+			return "Username";
 		}
 	}
 	
@@ -434,7 +438,103 @@ public static String seletedShowOnMap() {
 		if(de){
 			return "Passwort";
 		}else{
-			return "";
+			return "Password";
+		}
+	}
+	
+	public static String passwordVerify(){
+		if(de){
+			return "Passwort bestätigen";
+		}else{
+			return "Confirm password";
+		}
+	}
+
+	public static String firstValue() {
+		if(de){
+			return "Erste Messung";
+		}else{
+			return "First measurement";
+		}
+	}
+
+	public static String lastValue() {
+		if(de){
+			return "Letzer Messung";
+		}else{
+			return "Last measurement";
+		}
+	}
+
+	public static String noValuePreviewData() {
+		if(de){
+			return "Keine Messungen vorhanden";
+		}else{
+			return "No measurements available";
+		}
+	}
+	
+	public static String rating(double rating) {
+		if(de){
+			return "Genauigkeit: " + rating + " von 5 Sternen";
+		}else{
+			return "Accuracy: " + rating + " out of 5 stars";
+		}
+	}
+	
+	public static String altitudeAboveGround() {
+		if(de) {
+			return "Höhe über Grund:";
+		}else {
+			return "Altitude above ground:";
+		}
+	}
+	
+	public static String origin() {
+		if(de) {
+			return "Herkunft:";
+		}else {
+			return "Origin:";
+		}
+	}
+	
+	public static String register() {
+		if(de) {
+			return "Registrieren";
+		}else {
+			return "Register";
+		}
+	}
+	
+	public static String forgotPassword() {
+		if(de) {
+			return "Passwort vergessen?";
+		}else {
+			return "Forgot password?";
+		}
+	}
+	
+	public static String login() {
+		if(de) {
+			return "Einloggen";
+		}else {
+			return "Log in";
+		}
+	}
+	
+	public static String logout(){
+		if(de){
+			return "Ausloggen";
+		}else{
+			return "Log out";
+		}
+	}
+
+	public static String loginValidateError() {
+		if(de){
+			return "Ungültige E-Mail-Adresse oder ungültiges Kennwort";
+		}else{
+			return "Not valid E-mail address or not valid passord";
 		}
 	}
 }

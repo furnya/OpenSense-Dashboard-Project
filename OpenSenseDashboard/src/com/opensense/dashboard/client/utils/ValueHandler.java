@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.pepstock.charba.client.data.DataPoint;
+import org.pepstock.charba.client.data.LineDataset;
+
 import com.opensense.dashboard.shared.Value;
 
 public class ValueHandler {
@@ -75,6 +78,28 @@ public class ValueHandler {
 			}
 		}
 		return minValue;
+	}
+	
+	public static double getMinOfDataset(LineDataset dataset) {
+		if(dataset==null || dataset.getDataPoints()==null || dataset.getDataPoints().isEmpty()) return 0.0;
+		double minValue = dataset.getDataPoints().get(0).getY();
+		for(DataPoint dp : dataset.getDataPoints()) {
+			if(dp.getY()<minValue) {
+				minValue = dp.getY();
+			}
+		}
+		return minValue;
+	}
+	
+	public static double getMaxOfDataset(LineDataset dataset) {
+		if(dataset==null || dataset.getDataPoints()==null || dataset.getDataPoints().isEmpty()) return 0.0;
+		double maxValue = dataset.getDataPoints().get(0).getY();
+		for(DataPoint dp : dataset.getDataPoints()) {
+			if(dp.getY()>maxValue) {
+				maxValue = dp.getY();
+			}
+		}
+		return maxValue;
 	}
 	
 	public Value getLatest() {

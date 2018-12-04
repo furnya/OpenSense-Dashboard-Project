@@ -1,5 +1,6 @@
 package com.opensense.dashboard.server.util;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.ibm.icu.util.Calendar;
@@ -28,6 +28,10 @@ public class ClientRequestHandler {
 	
 	private static ClientRequestHandler instance;
 	
+	private static final String MAX_TIMESTAMP = "maxTimestamp";
+	private static final String MIN_TIMESTAMP = "minTimestamp";
+	
+	
 	public static ClientRequestHandler getInstance() {
 		if(instance == null) {
 			instance = new ClientRequestHandler();
@@ -38,7 +42,7 @@ public class ClientRequestHandler {
 	private ClientRequestHandler() {
 	}
 	
-	public Map<Integer, Unit> getUnitMap(){
+	public Map<Integer, Unit> getUnitMap() throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONArray unitArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/units");
 		if(unitArrayJSON==null) {
@@ -58,7 +62,7 @@ public class ClientRequestHandler {
 		return unitMap;
 	}
 	
-	public Map<Integer, Measurand> getMeasurandMap(){
+	public Map<Integer, Measurand> getMeasurandMap() throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONArray measurandArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/measurands");
 		if(measurandArrayJSON==null) {
@@ -78,7 +82,7 @@ public class ClientRequestHandler {
 		return measurandMap;
 	}
 	
-	public List<Sensor> getSensorList(List<Parameter> parameterList, List<Integer> ids){
+	public List<Sensor> getSensorList(List<Parameter> parameterList, List<Integer> ids) throws IOException{
 		LinkedList<Sensor> sensorList = new LinkedList<>();
 		if(ids!=null && !ids.isEmpty()) {
 			for(int id : ids) {
@@ -107,7 +111,7 @@ public class ClientRequestHandler {
 		return sensorList;
 	}
 	
-	public Sensor getSensor(int id){
+	public Sensor getSensor(int id) throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
 		if(sensorJSON==null) {
@@ -118,7 +122,7 @@ public class ClientRequestHandler {
 		return DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
 	}
 	
-	public List<Value> getValueList(int id, List<Parameter> parameterList, DateRange dateRange){
+	public List<Value> getValueList(int id, List<Parameter> parameterList, DateRange dateRange) throws IOException{
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
 		setTimestampParameters(rs, dateRange);
@@ -127,20 +131,8 @@ public class ClientRequestHandler {
 			return null;
 		}
 		LinkedList<Value> valueList = new LinkedList<>();
-		SimpleDateFormat inputFormat;
-		try {
-			inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-		} catch(Exception e) {
-			e.printStackTrace(); //TODO: create logger
-			return valueList;
-		}
-		JSONArray valueArrayJSON;
-		try {
-			valueArrayJSON = sensorJSON.getJSONArray("values");
-		} catch(JSONException e) {
-			e.printStackTrace();
-			return valueList;
-		}
+		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+		JSONArray valueArrayJSON = sensorJSON.getJSONArray("values");
 		for(Object o : valueArrayJSON) {
 			if(!(o instanceof JSONObject)) {
 				continue;
@@ -160,66 +152,60 @@ public class ClientRequestHandler {
 		case CUSTOM:
 			break;
 		case PAST_24HOURS:
-			rs.addParameter("maxTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			rs.addParameter(MAX_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
 			cal.add(Calendar.DATE, -1);
-			rs.addParameter("minTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			rs.addParameter(MIN_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
 			break;
 		case PAST_MONTH:
-			rs.addParameter("maxTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			rs.addParameter(MAX_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
 			cal.add(Calendar.MONTH, -1);
-			rs.addParameter("minTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			rs.addParameter(MIN_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
 			break;
 		case PAST_WEEK:
-			rs.addParameter("maxTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			rs.addParameter(MAX_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
 			cal.add(Calendar.DATE, -7);
-			rs.addParameter("minTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			rs.addParameter(MIN_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
 			break;
 		case PAST_YEAR:
-			rs.addParameter("maxTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			rs.addParameter(MAX_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
 			cal.add(Calendar.YEAR, -1);
-			rs.addParameter("minTimestamp", cal.getTime().toString().replace(" ", "%20"));
+			rs.addParameter(MIN_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
 			break;
 		default:
 			break;
 		}
 	}
 	
-	public String sendLoginRequest(String body) {
+	public String sendLoginRequest(String body) throws IOException {
 		RequestSender rs = new RequestSender();
 		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/users/login", body);
 		if(idJSON==null) {
 			return null;
 		}
-		String id = null;
-		try {
-			id = idJSON.getString("id");
-		} catch(JSONException e) {
-			return null;
-		}
-		return id;
+		return idJSON.getString("id");
 	}
 	
-	public ValuePreview getValuePreview(Integer id) {
+	public ValuePreview getValuePreview(Integer id) throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values/firstlast");
 		if(sensorJSON==null) {
 			return null;
 		}
 		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-		JSONArray valueArrayJSON;
-		try {
-			valueArrayJSON = sensorJSON.getJSONArray("values");
-		} catch(JSONException e) {
-			e.printStackTrace();
+		JSONArray valueArrayJSON = sensorJSON.getJSONArray("values");
+		if(valueArrayJSON.isEmpty()) {
 			return null;
 		}
-		if(valueArrayJSON.isEmpty()) return null;
 		Object firstValueObject = valueArrayJSON.get(0);
 		Object lastValueObject = valueArrayJSON.get(1);
-		if(!(firstValueObject instanceof JSONObject) || !(lastValueObject instanceof JSONObject)) return null;
+		if(!(firstValueObject instanceof JSONObject) || !(lastValueObject instanceof JSONObject)) {
+			return null;
+		}
 		Value firstValue = DataObjectBuilder.buildValue((JSONObject) firstValueObject, inputFormat);
 		Value lastValue = DataObjectBuilder.buildValue((JSONObject) lastValueObject, inputFormat);
-		if(firstValue == null || lastValue == null) return null;
+		if(firstValue == null || lastValue == null) {
+			return null;
+		}
 		return new ValuePreview(firstValue,lastValue);
 	}
 
