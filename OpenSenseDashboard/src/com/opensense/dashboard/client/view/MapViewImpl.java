@@ -248,9 +248,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		infoWindow.setHeader(si.getSensorModel() + " " + si.getSensorId());
 		infoWindow.setInfoWindowRating(si.getAccuracy());
 		ArrayList<String> sensorData = new ArrayList<>();
-		sensorData.add(Languages.measurand() + " " + si.getMeasurand().getMeasurandType().toString());
-		sensorData.add(Languages.sensorTyp()+ " " + si.getSensorModel());
-		sensorData.add(Languages.accuracy()+ " " + si.getAccuracy());
+		sensorData.add(Languages.measurand() + ": " + si.getMeasurand().getMeasurandType().toString());
+		sensorData.add(Languages.sensorTyp()+ ": " + si.getSensorModel());
+		sensorData.add(Languages.accuracy()+ ": " + si.getAccuracy());
 		sensorData.add(Languages.altitudeAboveGround() + " "+ si.getAltitudeAboveGround());
 		sensorData.add(Languages.origin()+ " " + si.getAttributionText());
 		infoWindow.setData(sensorData);

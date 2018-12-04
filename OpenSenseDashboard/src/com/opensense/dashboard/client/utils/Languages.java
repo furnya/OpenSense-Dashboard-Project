@@ -206,7 +206,7 @@ public class Languages {
 	
 	public static String measurand() {
 		if(de) {
-			return "Messgrösse";
+			return "MessgrÃ¶sse";
 		}else {
 			return "Measurand";
 		}
