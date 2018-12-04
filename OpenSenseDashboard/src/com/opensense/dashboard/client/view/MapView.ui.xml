@@ -10,75 +10,16 @@
 <ui:style>
 .sensor-container{
     max-height: 40vh;
+    max-width: 100vw;
     overflow: auto;
-    margin-left: 805px;
-    margin-top: -455px;
+    padding-left: 10px;
+<!--     background: black; -->
 }
-.recenter-icon > img{
-	filter: invert(30%);   
-	width: 40px !important;
-    height: 40px !important;
-	min-width: 40px !important;
-}
-.search-icon > img{
-	filter: invert(35%);   
-	width: 25px;
-    height: 25px;
-	min-width: 25px;
-}
-.visual-icon > img{
-	filter: invert(35%);   
-	width: 25px;
-    height: 25px;
-	min-width: 25px;
-}
-.recenter-icon{
-    margin-right: 10px;
-    width: 40px !important;
-    height: 40px !important;
-    max-width: 40px !important;
-    max-height: 40px !important;
-    padding: unset;
-	background-color: #ffffff;
-}
-.search-icon{
-	margin-top: 10px;	
-	width: 40px !important;
-    height: 40px !important;
-    max-width: 40px !important;
-    max-height: 40px !important;
-    margin-left: 10px;
-    margin-bottom: 4px;
-    padding: unset;
-    background-color: #ffffff;
-}
-.visual-icon{
-	margin-top: 4px;	
-	width: 40px !important;
-    height: 40px !important;
-    max-width: 40px !important;
-    max-height: 40px !important;
-    margin-left: 10px;
-    margin-bottom: 4px;
-    padding: unset;
-    background-color: #ffffff;
-}
-.m-btn:hover{
-	background-color: #42DCA3 !important;
-}
-.m-btn:focus,m-btn:active,m-btn:visited{
-	background-color: #ffffff !important
 
-	}
 </ui:style>
 
-<bh:Div>
-
- <bh:Div ui:field="map" b:id="map"/>
-	<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="600px"/>
-  	<b:Button  ui:field="recenterBtn" title="recenters map to fit bounds" addStyleNames="{style.m-btn} {style.recenter-icon}"/>
-  	<b:Button  ui:field="searchBtn" title="gets all sensors and sends them to searchPage" addStyleNames="{style.m-btn} {style.search-icon}"/>
-  	<b:Button  ui:field="visuBtn" title="gets all sensors and sends them to visuPage" addStyleNames="{style.m-btn} {style.visual-icon}"/>
+<bh:Div addStyleNames="flex">
+ 	<bh:Div ui:field="map" b:id="map"/>
+	<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}"/>
 </bh:Div>
-
 </ui:UiBinder>

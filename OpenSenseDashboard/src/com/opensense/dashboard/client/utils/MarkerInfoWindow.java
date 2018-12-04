@@ -25,12 +25,6 @@ public class MarkerInfoWindow extends Composite {
 	@UiField
 	Div data;
 
-//	@UiField
-//	MaterialButton iwVisuBtn;
-//
-//	@UiField
-//	MaterialButton iwSearchBtn;
-
 	private List<Integer> currentID = new ArrayList<>();
 	
 	// binder der xml in die datei bindet
@@ -76,33 +70,4 @@ public class MarkerInfoWindow extends Composite {
 		String strId = Integer.toString(inId);
 		GWT.log(strId);
 	}
-
-//	@UiHandler("iwVisuBtn")
-//	public void oniwVisuBtnClicked(ClickEvent e) {
-//		getSensorAndShowVisu();
-//	}
-//
-//	public void getSensorAndShowVisu() {
-//		GWT.log("VisuBtn pressed");
-//		if (currentID.isEmpty()) {
-//			GWT.log("ERROR: ID must be set");
-//			GWT.log(" THIS IS " + currentID.size());
-//		}
-//		presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, currentID));
-//	}
-//
-//	@UiHandler("iwSearchBtn")
-//	public void oniwSearchBtnClicked(ClickEvent e) {
-//		getSensorAndShowInSearch();
-//
-//	}
-//
-//	public void getSensorAndShowInSearch() {
-//		GWT.log("SearchBtn pressed");
-//		if (currentID.isEmpty()) {
-//			GWT.log("ERROR: ID must be set");
-//			GWT.log(" THIS IS " + currentID.size());
-//		}
-//		presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, currentID));
-//	}
 }

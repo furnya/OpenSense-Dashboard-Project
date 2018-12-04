@@ -11,7 +11,6 @@ import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapWidget;
@@ -22,13 +21,11 @@ import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
 import com.google.gwt.maps.client.overlays.MarkerImage;
 import com.google.gwt.maps.client.overlays.MarkerOptions;
-import com.google.gwt.maps.utility.markerclustererplus.client.ClusterIconInfo;
 import com.google.gwt.maps.utility.markerclustererplus.client.ClusterIconStyle;
 import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClusterer;
 import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClustererOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -42,8 +39,6 @@ import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.ValuePreview;
 
-import sun.security.krb5.Config;
-
 public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	@UiTemplate("MapView.ui.xml")
@@ -56,19 +51,12 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	@UiField
 	Div sensorContainer;
 
-	@UiField
-	Button recenterBtn;
-
-	@UiField
-	Button visuBtn;
-
-	@UiField
-	Button searchBtn;
-
 	private static MapViewUiBinder uiBinder = GWT.create(MapViewUiBinder.class);
 
 	protected Presenter presenter;
 	private MapWidget mapWidget;
+	
+	private final LatLng defaultCenter = LatLng.newInstance(52.521918, 13.413215);
 
 	// ########################################################################
 	/*
@@ -95,9 +83,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		showThisMap();
-		recenterBtn.add(new Image(GUIImageBundle.INSTANCE.recenter().getSafeUri().asString()));
-		visuBtn.add(new Image(GUIImageBundle.INSTANCE.diagramIconSvg().getSafeUri().asString()));
-		searchBtn.add(new Image(GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString()));
 	}
 
 	@Override
@@ -111,20 +96,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		// init UI Elements if needed
 	}
 
-	@UiHandler("searchBtn")
-	public void goToSearchPage(ClickEvent e) {
-		goToSearchPage();
-	}
-
-	@UiHandler("visuBtn")
-	public void onVisuBtnClicked(ClickEvent e) {
-		goToVisuPage();
-	}
-
-	@UiHandler("recenterBtn")
-	public void onRecenterBtnClicked(ClickEvent e) {
-		recenterMap();
-	}
 	private String getIconUrlFromType(MeasurandType measurandType) {
 		switch (measurandType) {
 		case AIR_PRESSURE:
@@ -158,6 +129,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	public void showSensorData(final List<Sensor> sensors) {
 		sensorContainer.clear();
+		if (sensors.isEmpty()) {
+			return;
+		}
 		if (!listOfSensors.contains(sensors)) {
 			listOfSensors.add(sensors);
 		}
@@ -170,7 +144,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			card.getMiddleHeader().add(new Span(list.get(0).getSensorModel()));
 			card.getMiddleHeader().add(new Span("Sensoren: " + Integer.toString(list.size())));
 			card.addClickHandler(event -> {
-				event.stopPropagation();
 				showMarkers(list);
 			});
 			sensorContainer.add(card);
@@ -191,17 +164,29 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
+		Button recenterBtn = new Button();
+		recenterBtn.add(new Image(GUIImageBundle.INSTANCE.recenter().getSafeUri().asString()));
+		recenterBtn.addStyleName("m-btn recenter-icon");
+		recenterBtn.setTitle("recenters map to fit bounds");
+		recenterBtn.addClickHandler(event -> recenterMap());
+		Button searchBtn = new Button();
+		searchBtn.add(new Image(GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString()));
+		searchBtn.addStyleName("m-btn search-icon");
+		searchBtn.setTitle("gets all sensors and sends them to searchPage");
+		searchBtn.addClickHandler(event -> goToSearchPage());
+		Button visuBtn = new Button();
+		visuBtn.add(new Image(GUIImageBundle.INSTANCE.diagramIconSvg().getSafeUri().asString()));
+		visuBtn.addStyleName("m-btn visual-icon");
+		visuBtn.setTitle("gets all sensors and sends them to visuPage");
+		visuBtn.addClickHandler(event -> goToVisuPage());
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.RIGHT_BOTTOM, recenterBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_LEFT, searchBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_TOP, visuBtn);
 		mapWidget.addDragStartHandler(event -> {
-			for (InfoWindow infoWindow : infoWindows.values()) {
-				infoWindow.close();
-				if (lastOpened != null) {
-					lastOpened.close();
-				}
-				cluster.repaint();
-
+			if (lastOpened != null) {
+				GWT.log("closed 1");
+				lastOpened.close();
+				lastOpened = null;
 			}
 		});
 
@@ -209,21 +194,18 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 //			if (mapWidget.getZoom() == 14) {
 //				checkForNearMarkers();
 //			}
-			for (InfoWindow infoWindow : infoWindows.values()) {
-				infoWindow.close();
-				if (lastOpened != null) {
-					lastOpened.close();
-				}
-				cluster.repaint();
+			if (lastOpened != null) {
+				GWT.log("closed 2");
+				lastOpened.close();
+				lastOpened = null;
 			}
 		});
 
 		mapWidget.addClickHandler(event -> {
-			for (InfoWindow infoWindow : infoWindows.values()) {
-				infoWindow.close();
-				if (lastOpened != null) {
-					lastOpened.close();
-				}
+			if (lastOpened != null) {
+				GWT.log("closed 3");
+				lastOpened.close();
+				lastOpened = null;
 			}
 		});
 	}
@@ -260,6 +242,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		if (marker == null || si.getSensorId() < 0) {
 			return;
 		}
+		GWT.log("NEU");
 		InfoWindowOptions iwOptions = InfoWindowOptions.newInstance();
 		MarkerInfoWindow infoWindow = new MarkerInfoWindow();
 		infoWindow.setHeader(si.getSensorModel() + " " + si.getSensorId());
@@ -271,14 +254,16 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		sensorData.add("Attribution: " + si.getAttributionText());
 		infoWindow.setData(sensorData);
 		iwOptions.setContent(infoWindow);
+		iwOptions.setDisableAutoPan(true);
+		iwOptions.setDisableAutoPan(false);
 		sensorData.clear();
 		InfoWindow iw = InfoWindow.newInstance(iwOptions);
 		if (lastOpened != null) {
+			GWT.log("closed 0");
 			lastOpened.close();
 			lastOpened = null;
 		}
 		lastOpened = iw;
-		infoWindows.put(marker, iw);
 		iwsFromMarkers.put(si.getSensorId(), infoWindow);
 		iw.open(mapWidget, marker);
 	}
@@ -287,8 +272,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		LatLng position = LatLng.newInstance(s.getLocation().getLat(), s.getLocation().getLon());
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
-//		markerOpt.setTitle("Sensor postion is: " + s.getLocation().getLat() + ", " + s.getLocation().getLon()
-//				+ " Sensormodel: " + s.getSensorModel());
 		final Marker markerBasic = Marker.newInstance(markerOpt);
 		MarkerImage icon = MarkerImage.newInstance(getIconUrlFromType(s.getMeasurand().getMeasurandType()),
 				Size.newInstance(30, 30));
@@ -301,6 +284,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 		markerBasic.addClickHandler(event -> {
 			if (!markerHasNearMarkers(presenter.getMarkerSpiderfier(), markerBasic)) {
+				recenterToCenter(markerBasic);
 				drawInfoWindow(markerBasic, s);
 			} else {
 				unspiderfy(presenter.getMarkerSpiderfier());
@@ -360,7 +344,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			cis3.setUrl(GUIImageBundle.INSTANCE.m3().getSafeUri().asString());
 			cis4.setUrl(GUIImageBundle.INSTANCE.m4().getSafeUri().asString());
 			cis5.setUrl(GUIImageBundle.INSTANCE.m5().getSafeUri().asString());
-			cises.forEach(cis-> {
+			cises.forEach(cis -> {
 				cis.setTextColor("WHITE");
 				cis.setAnchor(24, 24);
 				cis.setHeight(90);
@@ -379,10 +363,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	public void resetMarkerAndCluster() {
 		if (!mList.isEmpty() || !markers.isEmpty()) {
-			// DefaultCenter is Berlin Alexanderplatz
-			// 52.521918,13.413215
-			mapWidget.setCenter(LatLng.newInstance(52.521918, 13.413215));
-			mapWidget.setZoom(4);
 			mList.clear();
 			markers.clear();
 			cluster.clearMarkers();
@@ -396,6 +376,13 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			return;
 		}
 		cluster.fitMapToMarkers();
+	}
+
+	public void recenterToCenter(Marker m) {
+		if (markers.isEmpty()) {
+			return;
+		}
+		mapWidget.setCenter(m.getPosition());
 	}
 
 	public void goToVisuPage() {

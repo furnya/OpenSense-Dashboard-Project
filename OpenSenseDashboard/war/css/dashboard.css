@@ -168,8 +168,8 @@
 }
 
 #map {
-     height: 455px;
-     width: 800px;
+     height: 77vh !important;
+     width: 65vw !important;
      margin: 0;
      padding: 0;
 }
@@ -228,21 +228,19 @@ input:focus+label{
     border-bottom-left-radius: 6px;
 }
 
-.gm-style img{ 
-	max-width: none;
-	filter: invert(100%) background(200) !important !important;
+.gm-ui-hover-effect > img{ 
+	filter: invert(100%) !important;
 }
 
 .gm-style .gm-style-iw {
 	background-color: #606060 !important;
-    top: 0 !important;
+	top: 0 !important;
     left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 120px !important;
-    padding-top: 10px;
+    min-height: 100% !important;
+    min-width: 100% !important;
     display: block !important;
 }    
+
 .flex{
 	display: flex;
 }
@@ -302,4 +300,44 @@ input:focus+label{
 .display-grid-center{
 	display: grid;
 	place-items: center;
+}
+
+.recenter-icon > img{
+	filter: invert(30%);   
+	width: 40px !important;
+    height: 40px !important;
+	min-width: 40px !important;
+}
+.search-icon > img{
+	filter: invert(35%);   
+	width: 25px;
+    height: 25px;
+	min-width: 25px;
+}
+.visual-icon > img{
+	filter: invert(35%);   
+	width: 25px;
+    height: 25px;
+	min-width: 25px;
+}
+.recenter-icon{
+    margin-right: 10px;
+}
+.m-btn{
+	margin-top: 10px;	
+	width: 40px !important;
+    height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    margin-left: 10px;
+    margin-bottom: 4px;
+    padding: unset !important;
+	background-color: #ffffff !important;
+	color: red;
+}
+.m-btn:hover{
+	background-color: #42DCA3 !important;
+}
+.m-btn:focus,m-btn:active,m-btn:visited{
+	background-color: #ffffff !important
 }
