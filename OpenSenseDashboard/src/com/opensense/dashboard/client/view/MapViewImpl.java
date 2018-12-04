@@ -351,7 +351,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 				cis.setWidth(90);
 			});
 			//Markers inside Cluster: blue < 10 <= orange < 100 <= red < 1000 <= purple
-			cis1.setAnchor(28, 29);
+			cis1.setAnchor(27, 29);
 			cis2.setAnchor(25, 25);
 			cis3.setAnchor(25, 23);
 			cis4.setAnchor(24, 24);
