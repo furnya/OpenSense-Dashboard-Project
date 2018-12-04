@@ -206,7 +206,7 @@ public class Languages {
 	
 	public static String measurand() {
 		if(de) {
-			return "Messgroesse";
+			return "Messgr�sse";
 		}else {
 			return "Measurand";
 		}
@@ -535,6 +535,22 @@ public static String seletedShowOnMap() {
 			return "Ungültige E-Mail-Adresse oder ungültiges Kennwort";
 		}else{
 			return "Not valid E-mail address or not valid passord";
+		}
+	}
+	
+	public static String accuracy() {
+		if(de) {
+			return "Genauigkeit";
+		}else {
+			return "Accuracy";
+		}
+	}
+	
+	public static String sensorTyp() {
+		if(de) {
+			return "Sensortyp";
+		}else {
+			return "Sensormodel";
 		}
 	}
 }

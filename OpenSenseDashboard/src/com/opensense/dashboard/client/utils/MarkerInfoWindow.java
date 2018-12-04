@@ -21,7 +21,8 @@ public class MarkerInfoWindow extends Composite {
 	Div infoBox;
 	@UiField
 	Heading header;
-
+	@UiField
+	Rating rating;
 	@UiField
 	Div data;
 
@@ -56,6 +57,12 @@ public class MarkerInfoWindow extends Composite {
 		sensorData.forEach(item -> {
 			this.data.add(new Span(item));
 			});
+	}
+	
+	public void setInfoWindowRating(Double accuracy) {
+		if(accuracy != null) {
+			rating.setRating(accuracy * 10);
+		}
 	}
 	
 	public void passID(List<Integer> id) {

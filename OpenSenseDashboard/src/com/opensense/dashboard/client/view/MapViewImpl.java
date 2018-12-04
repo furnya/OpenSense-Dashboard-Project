@@ -246,12 +246,13 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		InfoWindowOptions iwOptions = InfoWindowOptions.newInstance();
 		MarkerInfoWindow infoWindow = new MarkerInfoWindow();
 		infoWindow.setHeader(si.getSensorModel() + " " + si.getSensorId());
+		infoWindow.setInfoWindowRating(si.getAccuracy());
 		ArrayList<String> sensorData = new ArrayList<>();
-		sensorData.add("Messeinheit: " + si.getMeasurand().getMeasurandType().toString());
-		sensorData.add("Sensortyp: " + si.getSensorModel());
-		sensorData.add("Genauigkeit: " + si.getAccuracy());
-		sensorData.add("Hoehe ueber Grund: " + si.getAltitudeAboveGround());
-		sensorData.add("Attribution: " + si.getAttributionText());
+		sensorData.add(Languages.measurand() + " " + si.getMeasurand().getMeasurandType().toString());
+		sensorData.add(Languages.sensorTyp()+ " " + si.getSensorModel());
+		sensorData.add(Languages.accuracy()+ " " + si.getAccuracy());
+		sensorData.add(Languages.altitudeAboveGround() + " "+ si.getAltitudeAboveGround());
+		sensorData.add(Languages.origin()+ " " + si.getAttributionText());
 		infoWindow.setData(sensorData);
 		iwOptions.setContent(infoWindow);
 		iwOptions.setDisableAutoPan(true);
