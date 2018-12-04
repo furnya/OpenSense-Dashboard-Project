@@ -7,35 +7,35 @@ import java.util.Date;
  * @author Roeber
  */
 public class Languages {
-	
+
 	/**
 	 * German or english
 	 */
 	private static boolean de = true;
 	private static boolean en = false;
-	
+
 	private Languages() {
-	    // Empty private constructor to hide the implicit public one.
+		// Empty private constructor to hide the implicit public one.
 	}
-	
+
 	public static boolean isGerman() {
 		return de;
 	}
-	
+
 	public static boolean isEnglish() {
 		return en;
 	}
-	
+
 	public static void setGerman() {
 		de = true;
 		en = false;
 	}
-	
+
 	public static void setEnglish() {
 		de = false;
 		en = true;
 	}
-	
+
 	public static String getActualLanguageString() {
 		if(de) {
 			return "de";
@@ -43,7 +43,7 @@ public class Languages {
 			return "en";
 		}
 	}
-	
+
 	public static String text() {
 		if(de) {
 			return "Das ist der text";
@@ -59,7 +59,7 @@ public class Languages {
 			return "Home";
 		}
 	}
-	
+
 	public static String search() {
 		if(de) {
 			return "Suche";
@@ -67,7 +67,7 @@ public class Languages {
 			return "Search";
 		}
 	}
-	
+
 	public static String map() {
 		if(de) {
 			return "Karte";
@@ -75,7 +75,7 @@ public class Languages {
 			return "Map";
 		}
 	}
-	
+
 	public static String graphics() {
 		if(de) {
 			return "Grafiken";
@@ -83,7 +83,7 @@ public class Languages {
 			return "Visualizations";
 		}
 	}
-	
+
 	public static String list() {
 		if(de) {
 			return "Listen";
@@ -91,7 +91,7 @@ public class Languages {
 			return "Lists";
 		}
 	}
-	
+
 	public static String user() {
 		if(de) {
 			return "Benutzerverwaltung";
@@ -107,7 +107,7 @@ public class Languages {
 			return "Error while loading the page";
 		}
 	}
-	
+
 	public static String searchPlace() {
 		if(de) {
 			return "Sensoren Ortsabhängig suchen";
@@ -115,7 +115,7 @@ public class Languages {
 			return "Search by place";
 		}
 	}
-	
+
 	public static String maxSensors() {
 		if(de) {
 			return "Maximale Anzahl von Sensoren";
@@ -123,7 +123,7 @@ public class Languages {
 			return "Maximum amount of sensors";
 		}
 	}
-	
+
 	public static String minAccuracy() {
 		if(de) {
 			return "Minimale Genauigkeit";
@@ -131,7 +131,7 @@ public class Languages {
 			return "Minimal accuracy";
 		}
 	}
-	
+
 	public static String maxAccuracy() {
 		if(de) {
 			return "Maximale Genauigkeit";
@@ -139,7 +139,7 @@ public class Languages {
 			return "Maximal accuracy";
 		}
 	}
-	
+
 	public static String unit() {
 		if(de) {
 			return "Einheit";
@@ -147,7 +147,7 @@ public class Languages {
 			return "Unit";
 		}
 	}
-	
+
 	public static String minValue() {
 		if(de) {
 			return "Minimaler Wert";
@@ -155,7 +155,7 @@ public class Languages {
 			return "Minimal value";
 		}
 	}
-	
+
 	public static String maxValue() {
 		if(de) {
 			return "Maximaler Wert";
@@ -163,7 +163,7 @@ public class Languages {
 			return "Maximal value";
 		}
 	}
-	
+
 	public static String minDate() {
 		if(de) {
 			return "Minimales Datum";
@@ -171,7 +171,7 @@ public class Languages {
 			return "Minimal date";
 		}
 	}
-	
+
 	public static String maxDate() {
 		if(de) {
 			return "Maximales Datum";
@@ -179,7 +179,7 @@ public class Languages {
 			return "Maximal date";
 		}
 	}
-	
+
 	public static String minTime() {
 		if(de) {
 			return "Minimale Zeit";
@@ -187,7 +187,7 @@ public class Languages {
 			return "Minimal time";
 		}
 	}
-	
+
 	public static String maxTime() {
 		if(de) {
 			return "Maximale Zeit";
@@ -195,7 +195,7 @@ public class Languages {
 			return "Minimale";
 		}
 	}
-	
+
 	public static String type() {
 		if(de) {
 			return "Typ";
@@ -203,7 +203,7 @@ public class Languages {
 			return "Type";
 		}
 	}
-	
+
 	public static String measurand() {
 		if(de) {
 			return "Messgroesse";
@@ -219,7 +219,7 @@ public class Languages {
 			return "All";
 		}
 	}
-	
+
 	public static String languageChange() {
 		if(de) {
 			return "EN";
@@ -227,7 +227,7 @@ public class Languages {
 			return "DE";
 		}
 	}
-	
+
 	public static String showOnMap() {
 		if(de) {
 			return "Auf Karte zeigen";
@@ -235,7 +235,7 @@ public class Languages {
 			return "Show on map";
 		}
 	}
-	
+
 	public static String past24Hours() {
 		if(de) {
 			return "Letzte 24h";
@@ -243,7 +243,7 @@ public class Languages {
 			return "Past 24h";
 		}
 	}
-	
+
 	public static String pastWeek() {
 		if(de) {
 			return "Letzte Woche";
@@ -251,7 +251,7 @@ public class Languages {
 			return "Past week";
 		}
 	}
-	
+
 	public static String pastMonth() {
 		if(de) {
 			return "Letzter Monat";
@@ -259,7 +259,7 @@ public class Languages {
 			return "Past month";
 		}
 	}
-	
+
 	public static String pastYear() {
 		if(de) {
 			return "Letztes Jahr";
@@ -267,7 +267,7 @@ public class Languages {
 			return "Past year";
 		}
 	}
-	
+
 	public static String customRange() {
 		if(de) {
 			return "Benutzerdefiniert";
@@ -275,7 +275,7 @@ public class Languages {
 			return "Custom range";
 		}
 	}
-	
+
 	public static String timespan() {
 		if(de) {
 			return "Zeitspanne";
@@ -283,7 +283,7 @@ public class Languages {
 			return "Timespan";
 		}
 	}
-	
+
 	public static String from() {
 		if(de) {
 			return "Von";
@@ -291,7 +291,7 @@ public class Languages {
 			return "From";
 		}
 	}
-	
+
 	public static String to() {
 		if(de) {
 			return "Bis";
@@ -299,14 +299,14 @@ public class Languages {
 			return "To";
 		}
 	}
-public static String seletedShowOnMap() {
+	public static String seletedShowOnMap() {
 		if(de) {
 			return "Auf Karte zeigen";
 		}else {
 			return "Show on map";
 		}
 	}
-	
+
 	public static String selectedShowVisualisations() {
 		if(de) {
 			return "Werte anzeigen";
@@ -314,7 +314,7 @@ public static String seletedShowOnMap() {
 			return "Show values";
 		}
 	}
-	
+
 	public static String selectedShowInSearch() {
 		if(de) {
 			return "IN SUCHE ANZEIGEN";
@@ -322,7 +322,7 @@ public static String seletedShowOnMap() {
 			return "";
 		}
 	}
-	
+
 	public static String selectedAddToList() {
 		if(de) {
 			return "Zur Liste hinzufügen";
@@ -330,7 +330,7 @@ public static String seletedShowOnMap() {
 			return "Add to list";
 		}
 	}
-	
+
 	public static String allSelectedSensors() {
 		if(de) {
 			return "Alle ausgewählten Sensoren:";
@@ -338,7 +338,7 @@ public static String seletedShowOnMap() {
 			return "All selected sensors";
 		}
 	}
-	
+
 	public static String selectAllSensors() {
 		if(de) {
 			return "Alle Sensoren auswählen";
@@ -346,7 +346,7 @@ public static String seletedShowOnMap() {
 			return "Select all sensors";
 		}
 	}
-	
+
 	public static String deselectAllSensors() {
 		if(de) {
 			return "Keine Sensoren auswählen";
@@ -354,7 +354,7 @@ public static String seletedShowOnMap() {
 			return "Deselect all sensors";
 		}
 	}
-	
+
 	public static String backwards(){
 		if(de){
 			return "Zum Anfang";
@@ -362,7 +362,7 @@ public static String seletedShowOnMap() {
 			return "Back to start";
 		}
 	}
-	
+
 	public static String forwards(){
 		if(de){
 			return "Zum Ende";
@@ -370,7 +370,7 @@ public static String seletedShowOnMap() {
 			return "Forward to end";
 		}
 	}
-	
+
 	public static String forwardsStepByStep(){
 		if(de){
 			return "Nächste Seite";
@@ -378,7 +378,7 @@ public static String seletedShowOnMap() {
 			return "Next page";
 		}
 	}
-	
+
 	public static String backwardsStepByStep(){
 		if(de){
 			return "Vorherige Seite";
@@ -392,15 +392,15 @@ public static String seletedShowOnMap() {
 			if (size == 0) {
 				return "0-0 von 0";
 			}
-			return Integer.toString(page * maxObjectsOnPage + 1) + "-" + ((size > (page + 1) * maxObjectsOnPage) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " von " + Integer.toString(size);
+			return Integer.toString((page * maxObjectsOnPage) + 1) + "-" + ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " von " + Integer.toString(size);
 		}else{
 			if (size == 0) {
 				return "0-0 of 0";
 			}
-			return Integer.toString(page * maxObjectsOnPage + 1) + "-" + ((size > (page + 1) * maxObjectsOnPage) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " of " + Integer.toString(size);
+			return Integer.toString((page * maxObjectsOnPage) + 1) + "-" + ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " of " + Integer.toString(size);
 		}
 	}
-	
+
 	public static String pageConfiguration(){
 		if(de){
 			return "Anzahl von Objekten auf einer Seite";
@@ -408,7 +408,7 @@ public static String seletedShowOnMap() {
 			return "Number of objects on one page";
 		}
 	}
-	
+
 	public static String noData(){
 		if(de){
 			return "Es konnten keine Daten zu den gewählten Suchparametern gefunden werden";
@@ -425,7 +425,7 @@ public static String seletedShowOnMap() {
 	public static String getDate(Date timestamp) {
 		return timestamp.toLocaleString();
 	}
-	
+
 	public static String username(){
 		if(de){
 			return "Benutzername";
@@ -433,7 +433,7 @@ public static String seletedShowOnMap() {
 			return "Username";
 		}
 	}
-	
+
 	public static String password(){
 		if(de){
 			return "Passwort";
@@ -441,7 +441,7 @@ public static String seletedShowOnMap() {
 			return "Password";
 		}
 	}
-	
+
 	public static String passwordVerify(){
 		if(de){
 			return "Passwort bestätigen";
@@ -473,7 +473,7 @@ public static String seletedShowOnMap() {
 			return "No measurements available";
 		}
 	}
-	
+
 	public static String rating(double rating) {
 		if(de){
 			return "Genauigkeit: " + rating + " von 5 Sternen";
@@ -481,7 +481,7 @@ public static String seletedShowOnMap() {
 			return "Accuracy: " + rating + " out of 5 stars";
 		}
 	}
-	
+
 	public static String altitudeAboveGround() {
 		if(de) {
 			return "Höhe über Grund:";
@@ -489,7 +489,7 @@ public static String seletedShowOnMap() {
 			return "Altitude above ground:";
 		}
 	}
-	
+
 	public static String origin() {
 		if(de) {
 			return "Herkunft:";
@@ -497,7 +497,7 @@ public static String seletedShowOnMap() {
 			return "Origin:";
 		}
 	}
-	
+
 	public static String register() {
 		if(de) {
 			return "Registrieren";
@@ -505,7 +505,7 @@ public static String seletedShowOnMap() {
 			return "Register";
 		}
 	}
-	
+
 	public static String forgotPassword() {
 		if(de) {
 			return "Passwort vergessen?";
@@ -513,7 +513,7 @@ public static String seletedShowOnMap() {
 			return "Forgot password?";
 		}
 	}
-	
+
 	public static String login() {
 		if(de) {
 			return "Einloggen";
@@ -521,7 +521,7 @@ public static String seletedShowOnMap() {
 			return "Log in";
 		}
 	}
-	
+
 	public static String logout(){
 		if(de){
 			return "Ausloggen";
@@ -535,6 +535,22 @@ public static String seletedShowOnMap() {
 			return "Ungültige E-Mail-Adresse oder ungültiges Kennwort";
 		}else{
 			return "Not valid E-mail address or not valid passord";
+		}
+	}
+
+	public static String noListData(){
+		if(de){
+			return "Es wurden noch keine Sensoren zur Liste hinzugefügt";
+		}else{
+			return "No sensors existing in this list";
+		}
+	}
+
+	public static String createNewList(){
+		if(de){
+			return "Neue Liste erstellen";
+		}else{
+			return "Create new list";
 		}
 	}
 }
