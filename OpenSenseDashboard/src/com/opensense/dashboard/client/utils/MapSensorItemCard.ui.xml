@@ -22,14 +22,6 @@
 	cursor: pointer;
     border: none;	
 }
-.card-button{
-	float: right;
-    margin-top: 5px;
-}
-.card-button > img {
-	width: 24px;
-	filter: invert(100%);		
-}
 .icon-size{
 	height: 40px;
 	width: 40px;	
