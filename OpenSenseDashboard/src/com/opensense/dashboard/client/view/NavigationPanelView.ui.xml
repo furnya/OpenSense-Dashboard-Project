@@ -15,7 +15,12 @@
 .logout-container{
     position: absolute;
     bottom: 43px;
-    left: 85px;
+    left: 90px;
+}
+.logout-container > button {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;	
 }
 </ui:style>
 

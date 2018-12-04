@@ -13,7 +13,6 @@
     margin-top: -3px;
     background-color: inherit;
     position: relative;
-    overflow: hidden;
 }
 .star-container > Div{
     margin: -15px 0px -10px -170px;

@@ -20,8 +20,8 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 	 */
 	@Override
 	public Boolean createUserInSession() {
-		if(System.getenv("dev_mode") != null && "true".equalsIgnoreCase(System.getenv("dev_mode"))) {
-			ActionResult result = userLoginRequest(System.getenv("username"), System.getenv("password"));
+		if(System.getenv("DEV_MODE") != null && "true".equalsIgnoreCase(System.getenv("DEV_MODE"))) {
+			ActionResult result = userLoginRequest(System.getenv("USERNAME"), System.getenv("PASSWORD"));
 			if(ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
 				return true;
 			}

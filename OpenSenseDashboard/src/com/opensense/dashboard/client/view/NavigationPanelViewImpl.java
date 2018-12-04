@@ -93,6 +93,9 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 	}
 	
 	public void showLogoutButton(boolean show) {
+		if(clickHandler != null) {
+			clickHandler.removeHandler();
+		}
 		if(show) {
 			new Timer() {@Override public void run() {
 				clickHandler = RootPanel.get().addDomHandler(event -> showLogoutButton(false), ClickEvent.getType());
@@ -100,9 +103,6 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 			lastButton.addStyleName("remove-hover");
 			logoutContainer.getElement().getStyle().clearDisplay();
 		}else {
-			if(clickHandler != null) {
-				clickHandler.removeHandler();
-			}
 			lastButton.removeStyleName("remove-hover");
 			logoutContainer.getElement().getStyle().setDisplay(Display.NONE);
 		}
