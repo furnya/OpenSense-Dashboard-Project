@@ -25,6 +25,7 @@
 .center{
 	display: flex;
 	place-content: center;
+	margin-top: 10px;
 }
 .button-spinner{
 	width: 20px;

@@ -13,6 +13,7 @@ import com.opensense.dashboard.client.services.AuthenticationService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.view.UserView;
 import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.ActionResultType;
 
 public class UserPresenter extends DataPanelPagePresenter implements IPresenter, UserView.Presenter{
 	
@@ -66,8 +67,14 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	@Override
 	public void sendLoginRequest(String username, String password) {
 		AuthenticationService.Util.getInstance().userLoginRequest(username, password, new DefaultAsyncCallback<ActionResult>(result -> {
-			appController.userLoggedIn(true);
+			if(result != null && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())){
+				appController.userLoggedIn(true);
+			}else{
+				view.showLoginNotValid();
+			}
 		},caught -> {
+			view.showLoginNotValid();
+			//TODO:show failure message
 			LOGGER.log(Level.WARNING, "Failure requesting the login.");
 		}, false));
 	}

@@ -526,7 +526,15 @@ public static String seletedShowOnMap() {
 		if(de){
 			return "Ausloggen";
 		}else{
-			return "";
+			return "Log out";
+		}
+	}
+
+	public static String loginValidateError() {
+		if(de){
+			return "Ungültige E-Mail-Adresse oder ungültiges Kennwort";
+		}else{
+			return "Not valid E-mail address or not valid passord";
 		}
 	}
 }

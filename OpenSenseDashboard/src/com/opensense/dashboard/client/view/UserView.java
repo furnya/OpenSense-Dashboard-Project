@@ -12,4 +12,5 @@ public interface UserView extends IDataPanelPageView{
 	public Widget asWidget();
 	public void initView();
 	public void resetViewElements();
+	public void showLoginNotValid();
 }
