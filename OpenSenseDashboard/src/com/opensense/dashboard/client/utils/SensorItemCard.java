@@ -6,11 +6,11 @@ import org.gwtbootstrap3.client.ui.html.Span;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -22,105 +22,107 @@ import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialPreLoader;
 
 public class SensorItemCard extends Composite{
-	
+
 	@UiTemplate("SensorItemCard.ui.xml")
 	interface SensorItemCardUiBinder extends UiBinder<Widget, SensorItemCard> {
 	}
-	
+
 	private static SensorItemCardUiBinder uiBinder = GWT.create(SensorItemCardUiBinder.class);
-	
+
 	@UiField
 	Div layout;
-	
+
 	@UiField
 	Div content;
-	
+
 	@UiField
 	Div previewContainer;
-	
+
 	@UiField
 	MaterialLabel header;
-	
+
 	@UiField
 	Image icon;
-	
+
 	@UiField
 	Div midContainer;
-	
+
 	@UiField
 	MaterialCheckBox checkbox;
-	
+
 	@UiField
 	Image favButton;
-	
+
 	@UiField
 	Rating rating;
-	
+
 	@UiField
 	Span firstValue;
-	
+
 	@UiField
 	Span lastValue;
-	
+
 	@UiField
 	MaterialPreLoader firstSpinner;
-	
+
 	@UiField
 	MaterialPreLoader lastSpinner;
-	
+
 	public SensorItemCard() {
-		initWidget(uiBinder.createAndBindUi(this));
-		addClickHandler();
+		this.initWidget(uiBinder.createAndBindUi(this));
+		this.addClickHandler();
 	}
-	
-	@UiHandler("favButton")
-	public void onFavButtonClicked(ClickEvent e) {
-		e.stopPropagation();
+
+	public void addFavButtonClickHandler(ClickHandler handler) {
+		this.favButton.addClickHandler(event -> {
+			event.stopPropagation();
+			handler.onClick(event);
+		});
 	}
-	
+
 	public void setHeader(String text) {
 		this.header.setText(text);
 	}
-	
+
 	public void setIcon(String url) {
 		this.icon.setUrl(url);
 	}
-	
+
 	public void setIconTitle(String title) {
 		this.icon.setTitle(title);
 	}
-	
+
 	public Div getContent() {
 		return this.content;
 	}
-	
+
 	private void addClickHandler() {
-		layout.addDomHandler(event -> checkbox.setValue(!checkbox.getValue(), true), ClickEvent.getType());
-		addClickListener(checkbox.getElement());
+		this.layout.addDomHandler(event -> this.checkbox.setValue(!this.checkbox.getValue(), true), ClickEvent.getType());
+		this.addClickListener(this.checkbox.getElement());
 	}
-	
+
 	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
-		return checkbox.addValueChangeHandler(event -> {
-			setActive(event.getValue());
+		return this.checkbox.addValueChangeHandler(event -> {
+			this.setActive(event.getValue());
 			handler.onValueChange(event);
 		});
 	}
 
 	public void setActive(boolean active) {
-		checkbox.setValue(active);
+		this.checkbox.setValue(active);
 		if(active) {
-			layout.addStyleName("card-active");
+			this.layout.addStyleName("card-active");
 		}else {
-			layout.removeStyleName("card-active");
+			this.layout.removeStyleName("card-active");
 		}
 	}
-	
+
 	public void setValuePreviewConent(String firstText, String lastText) {
-		showPreviewContentSpinner(false);
-		firstValue.setText(firstText);
-		lastValue.setText(lastText);
+		this.showPreviewContentSpinner(false);
+		this.firstValue.setText(firstText);
+		this.lastValue.setText(lastText);
 	}
-	
+
 	/**
 	 * shows the preview spinner which indicates that the content will be shown
 	 * clears the content before showing
@@ -128,22 +130,22 @@ public class SensorItemCard extends Composite{
 	 */
 	public void showPreviewContentSpinner(boolean show) {
 		if(show) {
-			firstValue.setText("");
-			lastValue.setText("");
-			firstSpinner.setDisplay(Display.BLOCK);
-			lastSpinner.setDisplay(Display.BLOCK);
+			this.firstValue.setText("");
+			this.lastValue.setText("");
+			this.firstSpinner.setDisplay(Display.BLOCK);
+			this.lastSpinner.setDisplay(Display.BLOCK);
 		}else {
-			firstSpinner.setDisplay(Display.NONE);
-			lastSpinner.setDisplay(Display.NONE);
+			this.firstSpinner.setDisplay(Display.NONE);
+			this.lastSpinner.setDisplay(Display.NONE);
 		}
 	}
-	
+
 	public void setRating(Double accuracy) {
 		if(accuracy != null) {
-			rating.setRating(accuracy * 10);
+			this.rating.setRating(accuracy * 10);
 		}
 	}
-	
+
 	private native void addClickListener(Element elem) /*-{
 		elem.addEventListener("click", function(event){
 			event.stopPropagation();
@@ -159,6 +161,6 @@ public class SensorItemCard extends Composite{
 		Span value = new Span(valueText);
 		value.addStyleName("value-sensor");
 		valueCon.add(value);
-		content.add(valueCon);
+		this.content.add(valueCon);
 	}
 }

@@ -23,11 +23,22 @@
 .sensor-container > Div:last-child{
 	margin-bottom: 0px !important; 
 }
+.del-icon{
+	    width: 20px
+}
+.float-right{
+	float: right;
+}
 </ui:style>
 
 <m:MaterialCollapsibleItem>
 	<m:MaterialCollapsibleHeader>
-		<m:MaterialLink ui:field="listItemId" text="ID=1234567" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
+		<bh:Div>
+			<m:MaterialLink ui:field="listItemId" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
+			<bh:Div addStyleNames="{style.float-right}">
+				<b:Image ui:field="deleteButton" url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.del-icon} clickable" />
+			</bh:Div>
+		</bh:Div>
 	</m:MaterialCollapsibleHeader>
 	<m:MaterialCollapsibleBody>
 		<m:MaterialPreLoader ui:field="listItemSpinner" display="NONE" addStyleNames="margin-top-10 spinner">

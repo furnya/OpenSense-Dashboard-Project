@@ -17,9 +17,9 @@ import com.opensense.dashboard.shared.ValuePreview;
 
 @SuppressWarnings("serial")
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
-	
+
 	private static final Logger LOGGER = Logger.getLogger(GeneralServlet.class.getName());
-	
+
 	@Override
 	public Response getDataFromRequest(Request searchRequest) {
 		Response response = new Response();
@@ -68,7 +68,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		measurandMap.forEach((id,measurand) -> measurandStringMap.put(id,measurand.getDisplayName()));
 		return measurandStringMap;
 	}
-	
+
 	@Override
 	public void setServerLanguage(String lang) {
 		if("en".equals(lang)) {
@@ -89,5 +89,12 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			}
 		});
 		return previewMap;
+	}
+
+	@Override
+	public Map<Integer, List<Integer>> getUserLists() {
+		// TODO Auto-generated method stub
+		//list of list ids with sensor ids in it
+		return new HashMap<Integer, List<Integer>>();
 	}
 }

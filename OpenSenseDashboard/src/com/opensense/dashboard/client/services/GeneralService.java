@@ -12,18 +12,18 @@ import com.opensense.dashboard.shared.ValuePreview;
 
 @RemoteServiceRelativePath("../general")
 public interface GeneralService extends RemoteService {
-	
+
 	/**
 	 * Utility class for simplifying access to the instance of async service.
 	 */
 	public static class Util {
-	    
+
 		private static GeneralServiceAsync instance;
 
 		private Util() {
-		    // Hides the implicit public constructor when no other constructor is present.
+			// Hides the implicit public constructor when no other constructor is present.
 		}
-		
+
 		public static GeneralServiceAsync getInstance() {
 			if (instance == null) {
 				instance = GWT.create(GeneralService.class);
@@ -31,9 +31,10 @@ public interface GeneralService extends RemoteService {
 			return instance;
 		}
 	}
-	
+
 	Response getDataFromRequest(Request searchRequest);
 	Map<Integer, String> getMeasurands();
 	void setServerLanguage(String lang);
 	Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids);
+	Map<Integer, List<Integer>> getUserLists();
 }
