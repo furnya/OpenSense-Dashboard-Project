@@ -11,11 +11,16 @@ import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.ext.linker.EmittedArtifact.Visibility;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.base.Size;
+import com.google.gwt.maps.client.controls.MapTypeStyle;
+import com.google.gwt.maps.client.maptypes.MapTypeStyleElementType;
+import com.google.gwt.maps.client.maptypes.MapTypeStyleFeatureType;
+import com.google.gwt.maps.client.maptypes.MapTypeStyler;
 import com.google.gwt.maps.client.overlays.InfoWindow;
 import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
@@ -27,6 +32,7 @@ import com.google.gwt.maps.utility.markerclustererplus.client.MarkerClustererOpt
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
@@ -55,7 +61,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	protected Presenter presenter;
 	private MapWidget mapWidget;
-	
+
 	private final LatLng defaultCenter = LatLng.newInstance(52.521918, 13.413215);
 
 	// ########################################################################
@@ -67,6 +73,12 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private List<Integer> sensIds = new ArrayList<>();
 	private List<Marker> mList = new ArrayList<>();
 	private List<List<Sensor>> listOfSensors = new ArrayList<>();
+
+	private Button recenterBtn = new Button();
+
+	private Button searchBtn = new Button();
+
+	private Button visuBtn = new Button();
 
 	private MarkerClusterer cluster;
 	// This should be a HashMap
@@ -161,20 +173,40 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapOptions.setScrollWheel(true);
 		mapOptions.setPanControl(false);
 		mapOptions.setZoomControl(true);
+		MapTypeStyle mapStyle = MapTypeStyle.newInstance();
+		MapTypeStyle mapStyle2 = MapTypeStyle.newInstance();
+		mapStyle.setFeatureType(MapTypeStyleFeatureType.POI);
+		mapStyle2.setFeatureType(MapTypeStyleFeatureType.TRANSIT);
+		mapStyle.setElementType(MapTypeStyleElementType.LABELS);
+		mapStyle2.setElementType(MapTypeStyleElementType.LABELS);
+		
+		String visibility = "off";
+		MapTypeStyler styler = MapTypeStyler.newVisibilityStyler(visibility);
+		MapTypeStyler[] stylers = new MapTypeStyler[1];
+		stylers[0] = styler;
+		mapStyle.setStylers(stylers);
+		mapStyle2.setStylers(stylers);
+		MapTypeStyle[] mapStyleArray = new MapTypeStyle[2];
+		mapStyleArray[0] = mapStyle;
+		mapStyleArray[1] = mapStyle2;
+		mapOptions.setMapTypeStyles(mapStyleArray);
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
-		Button recenterBtn = new Button();
+		
+		if (markers.isEmpty()) {
+			recenterBtn.setEnabled(false);
+			searchBtn.setEnabled(false);
+			visuBtn.setEnabled(false);
+		}
 		recenterBtn.add(new Image(GUIImageBundle.INSTANCE.recenter().getSafeUri().asString()));
 		recenterBtn.addStyleName("m-btn recenter-icon");
 		recenterBtn.setTitle("recenters map to fit bounds");
 		recenterBtn.addClickHandler(event -> recenterMap());
-		Button searchBtn = new Button();
 		searchBtn.add(new Image(GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString()));
 		searchBtn.addStyleName("m-btn search-icon");
 		searchBtn.setTitle("gets all sensors and sends them to searchPage");
 		searchBtn.addClickHandler(event -> goToSearchPage());
-		Button visuBtn = new Button();
 		visuBtn.add(new Image(GUIImageBundle.INSTANCE.diagramIconSvg().getSafeUri().asString()));
 		visuBtn.addStyleName("m-btn visual-icon");
 		visuBtn.setTitle("gets all sensors and sends them to visuPage");
@@ -182,6 +214,15 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.RIGHT_BOTTOM, recenterBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_LEFT, searchBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_TOP, visuBtn);
+
+		Window.addResizeHandler(event -> {
+			GWT.log("resizeHandler 1");
+			if (lastOpened != null) {
+				lastOpened.close();
+				lastOpened = null;
+			}
+		});
+
 		mapWidget.addDragStartHandler(event -> {
 			if (lastOpened != null) {
 				GWT.log("closed 1");
@@ -249,10 +290,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		infoWindow.setInfoWindowRating(si.getAccuracy());
 		ArrayList<String> sensorData = new ArrayList<>();
 		sensorData.add(Languages.measurand() + ": " + si.getMeasurand().getMeasurandType().toString());
-		sensorData.add(Languages.sensorTyp()+ ": " + si.getSensorModel());
-		sensorData.add(Languages.accuracy()+ ": " + si.getAccuracy());
-		sensorData.add(Languages.altitudeAboveGround() + " "+ si.getAltitudeAboveGround());
-		sensorData.add(Languages.origin()+ " " + si.getAttributionText());
+		sensorData.add(Languages.sensorTyp() + ": " + si.getSensorModel());
+		sensorData.add(Languages.accuracy() + ": " + si.getAccuracy());
+		sensorData.add(Languages.altitudeAboveGround() + " " + si.getAltitudeAboveGround());
+		sensorData.add(Languages.origin() + " " + si.getAttributionText());
 		infoWindow.setData(sensorData);
 		iwOptions.setContent(infoWindow);
 		iwOptions.setDisableAutoPan(true);
@@ -295,8 +336,16 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 		markerBasic.addMouseOverHandler(event -> {
 		});
-
+		markersOnMap();
 		addMarkerToSpiderfier(presenter.getMarkerSpiderfier(), mapWidget.getJso(), markerBasic);
+	}
+	
+	private void markersOnMap() {
+		if(!markers.isEmpty()) {
+			recenterBtn.setEnabled(true);
+			searchBtn.setEnabled(true);
+			visuBtn.setEnabled(true);
+		}
 	}
 
 	private native void unspiderfy(JavaScriptObject spiderfier) /*-{
@@ -350,7 +399,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 				cis.setHeight(90);
 				cis.setWidth(90);
 			});
-			//Markers inside Cluster: blue < 10 <= orange < 100 <= red < 1000 <= purple
+			// Markers inside Cluster: blue < 10 <= orange < 100 <= red < 1000 <= purple
 			cis1.setAnchor(27, 29);
 			cis2.setAnchor(25, 25);
 			cis3.setAnchor(25, 23);

@@ -26,13 +26,16 @@
 	.data>Span {
 		font-size: 13px;
 	}
+	.movedown{
+		margin-top: 5px  !important;
+	}
 	</ui:style>
 
 	<bh:Div ui:field="infoBox">
 		<bh:Div addStyleNames="flex">
 			<b:Heading ui:field="header" addStyleNames="{style.header}"
 				size="H5" />
-			<d:Rating ui:field="rating" rating="0" />
+			<d:Rating ui:field="rating" rating="0" addStyleNames="{style.movedown}" />
 		</bh:Div>
 		<bh:Div ui:field="data" addStyleNames="{style.data}" />
 		<!-- <m:MaterialButton ui:field="iwSearchBtn" width="45%" text="search" 
