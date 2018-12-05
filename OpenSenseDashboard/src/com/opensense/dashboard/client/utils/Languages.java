@@ -553,4 +553,20 @@ public static String seletedShowOnMap() {
 			return "Sensormodel";
 		}
 	}
+
+	public static String noListData(){
+		if(de){
+			return "Es wurden noch keine Sensoren zur Liste hinzugefügt";
+		}else{
+			return "No sensors existing in this list";
+		}
+	}
+
+	public static String createNewList(){
+		if(de){
+			return "Neue Liste erstellen";
+		}else{
+			return "Create new list";
+		}
+	}
 }

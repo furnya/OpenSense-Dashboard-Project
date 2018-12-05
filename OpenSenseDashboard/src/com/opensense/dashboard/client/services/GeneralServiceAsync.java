@@ -15,4 +15,5 @@ public interface GeneralServiceAsync {
 	void getMeasurands(AsyncCallback<Map<Integer, String>> asyncCallback);
 	void setServerLanguage(String lang, AsyncCallback<Void> asyncCallback);
 	void getSensorValuePreview(List<Integer> ids, AsyncCallback<Map<Integer, ValuePreview>> asyncCallback);
+	void getUserLists(AsyncCallback<Map<Integer, List<Integer>>> asyncCallback);
 }

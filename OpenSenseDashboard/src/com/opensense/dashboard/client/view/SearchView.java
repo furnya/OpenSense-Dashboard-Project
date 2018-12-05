@@ -15,9 +15,11 @@ public interface SearchView extends IDataPanelPageView{
 		void buildSensorRequestAndSend();
 		HandlerManager getEventBus();
 		void getSensorValuePreviewAndShow(List<Integer> idsOnPage);
+		void addSensorToFavoriteList(int sensorId);
 	}
-	
+
 	public void setPresenter(Presenter presenter);
+	@Override
 	public Widget asWidget();
 	public void initView();
 	public void showSensorData(List<Sensor> sensors);

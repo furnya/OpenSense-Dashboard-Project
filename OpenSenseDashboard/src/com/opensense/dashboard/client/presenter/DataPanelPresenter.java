@@ -16,17 +16,17 @@ import com.opensense.dashboard.client.view.DataPanelPageView;
 import com.opensense.dashboard.client.view.DataPanelView;
 
 public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
-	
+
 	private final HandlerManager eventBus;
 	private final AppController appController;
 	private final DataPanelView view;
 
-	private static final Logger LOGGER = Logger.getLogger(DataPanelPresenter.class.getName());	
-	
+	private static final Logger LOGGER = Logger.getLogger(DataPanelPresenter.class.getName());
+
 	private DataPanelPagePresenter activeDataPanelPagePresenter = null;
 
 	private final EnumMap<DataPanelPage, DataPanelPageView> pageViews = new EnumMap<>(DataPanelPage.class);
-	
+
 	public DataPanelPresenter(HandlerManager eventBus, AppController appController, DataPanelView view) {
 		this.eventBus = eventBus;
 		this.appController = appController;
@@ -37,63 +37,64 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 	@Override
 	public void go(HasWidgets container) {
 		container.clear();
-		container.add(view.asWidget());
+		container.add(this.view.asWidget());
 	}
 
 	public void navigateTo(final DataPanelPage page, final Map<ParamType, String> parameters, final List<Integer> ids) {
 		Runnable openPageRunnable = null;
-		if (activeDataPanelPagePresenter != null) {
-			activeDataPanelPagePresenter.onPageLeave();
+		if (this.activeDataPanelPagePresenter != null) {
+			this.activeDataPanelPagePresenter.onPageLeave();
 		}
 		try {
 			// Creating the view of the new page if the user hasn't used this page yet
-			if (pageViews.get(page) == null)
-				pageViews.put(page, page.createViewInstance());
+			if (this.pageViews.get(page) == null) {
+				this.pageViews.put(page, page.createViewInstance());
+			}
 
 			// Creating the presenter of the new page and assigning the view.
-			activeDataPanelPagePresenter = page.createPresenterInstance(eventBus, appController, pageViews.get(page));
-			
-			if(view != null) {
-				view.setHeading("");
-				view.getContentContainer().clear();
-				view.showLoader();
+			this.activeDataPanelPagePresenter = page.createPresenterInstance(this.eventBus, this.appController, this.pageViews.get(page));
+
+			if(this.view != null) {
+				this.view.setHeading("");
+				this.view.getContentContainer().clear();
+				this.view.showLoader();
 			}
-			
+
 			openPageRunnable = () -> {
-				view.setHeading(page.displayName());
-				
-				activeDataPanelPagePresenter.onPageReturn();
-				
+				this.view.setHeading(page.displayName());
+
+				this.activeDataPanelPagePresenter.onPageReturn();
+
 				// Firing the presenter of the new page.
-				activeDataPanelPagePresenter.go(view.getContentContainer());
-				
+				this.activeDataPanelPagePresenter.go(this.view.getContentContainer());
+
 				//If parameters are not empty give them to the active presenter
-				if(parameters != null && !parameters.isEmpty()) {
-					activeDataPanelPagePresenter.handleParamters(parameters);
+				if((parameters != null) && !parameters.isEmpty()) {
+					this.activeDataPanelPagePresenter.handleParamters(parameters);
 				}
-				
+
 				//If ids are not empty give them to the active presenter
-				if(ids != null && !ids.isEmpty()) {
-					activeDataPanelPagePresenter.handleIds(ids);
+				if((ids != null) && !ids.isEmpty()) {
+					this.activeDataPanelPagePresenter.handleIds(ids);
 				}
-				
-				view.hideLoader();
+
+				this.view.hideLoader();
 			};
 			// Initializing the new page if needed. This will happen only when
 			// using the page for the first time. The runnable is needed to wait until all view elements are initialized
-			activeDataPanelPagePresenter.initIfNeeded(openPageRunnable);
-			
+			this.activeDataPanelPagePresenter.initIfNeeded(openPageRunnable);
+
 		} catch (Exception e) {
 			LOGGER.log(Level.WARNING, "Error while navigating to page " + page, e);
-			if(view != null) {
-				view.getContentContainer().clear();
-				view.setHeading(Languages.errorDataPanelPageLoading());
-				view.hideLoader();
+			if(this.view != null) {
+				this.view.getContentContainer().clear();
+				this.view.setHeading(Languages.errorDataPanelPageLoading());
+				this.view.hideLoader();
 			}
 		}
 	}
 
 	public DataPanelPagePresenter getActiveDataPanelPagePresenter() {
-		return activeDataPanelPagePresenter;
+		return this.activeDataPanelPagePresenter;
 	}
 }

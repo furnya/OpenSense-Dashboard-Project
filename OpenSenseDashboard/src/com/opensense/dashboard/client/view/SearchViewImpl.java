@@ -41,198 +41,199 @@ import gwt.material.design.client.ui.MaterialPreLoader;
 import gwt.material.design.client.ui.MaterialTextBox;
 
 public class SearchViewImpl extends DataPanelPageView implements SearchView {
-	
+
 	@UiTemplate("SearchView.ui.xml")
 	interface SearchViewUiBinder extends UiBinder<Widget, SearchViewImpl> {
 	}
-	
+
 	@UiField
 	Div container;
-	
+
 	@UiField
 	Div sensorContainer;
-	
+
 	@UiField
 	Div noDataIndicator;
-	
+
 	@UiField
 	Div dataContent;
-	
+
 	@UiField
 	MaterialNavBar navBarSearch;
-	
+
 	@UiField
 	Input searchInput;
-	
+
 	@UiField
 	MaterialButton searchButton;
-	
+
 	@UiField
 	MaterialButton showOnMapButton;
-	
+
 	@UiField
 	MaterialButton showVisualizationsButton;
-	
+
 	@UiField
 	MaterialButton addToListButton;
-	
+
 	@UiField
 	MaterialDropDown listDropDown;
-	
+
 	@UiField
 	MaterialTextBox minAccuracy;
-	
+
 	@UiField
 	MaterialTextBox maxAccuracy;
-	
+
 	@UiField
 	MaterialListBox measurandList;
-	
+
 	@UiField
 	MaterialTextBox maxSensors;
-	
+
 	@UiField
 	MaterialPreLoader spinner;
-	
+
 	@UiField
 	MaterialButton selectAllButton;
-	
+
 	@UiField(provided = true)
 	Pager pagerTop = new Pager(this);
-	
-    @UiField(provided = true)
-    Pager pagerBottom = new Pager(this);
-	
+
+	@UiField(provided = true)
+	Pager pagerBottom = new Pager(this);
+
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
 	protected Presenter presenter;
-	
+
 	private Autocomplete autoComplete;
-	
+
 	private static final String AUTO_COMPLETE = "autocomplete";
-	
+
 	private List<Integer> unselectedSensors = new ArrayList<>();
 	private List<Integer> selectedSensors = new ArrayList<>();
-	
+
 	private Map<Integer, Sensor> sensors = new HashMap<>();
-	
+
 	private LinkedList<Integer> shownSensorIds = new LinkedList<>();
 	private Map<Integer, SensorItemCard> sensorViews = new HashMap<>();
 	private int maxSensorsOnPage = 20;
 	private int sensorPage = 0;
-	
+
 	public SearchViewImpl() {
-		initWidget(uiBinder.createAndBindUi(this));
-		showNoDataIndicator(false);
-		showDataContainer(false);
+		this.initWidget(uiBinder.createAndBindUi(this));
+		this.showNoDataIndicator(false);
+		this.showDataContainer(false);
 		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
 		autoOptions.setTypes(AutocompleteType.GEOCODE);
-		autoComplete = Autocomplete.newInstance(searchInput.getElement(), autoOptions);
-		buildValidators();
-		addToListButton.add(new Image(GUIImageBundle.INSTANCE.listIconSvg().getSafeUri().asString()));
+		this.autoComplete = Autocomplete.newInstance(this.searchInput.getElement(), autoOptions);
+		this.buildValidators();
+		this.addToListButton.add(new Image(GUIImageBundle.INSTANCE.listIconSvg().getSafeUri().asString()));
 	}
-	
+
 	@UiHandler("searchButton")
 	public void onSearchButtonClicked(ClickEvent e) {
-		if(minAccuracy.validate() && maxAccuracy.validate() && maxSensors.validate() && searchButton.isEnabled()) {
-			clearSensorData();
-			showDataContainer(true);
-			showLoadingIndicator();
-			presenter.buildSensorRequestAndSend();
+		if(this.minAccuracy.validate() && this.maxAccuracy.validate() && this.maxSensors.validate() && this.searchButton.isEnabled()) {
+			this.clearSensorData();
+			this.showDataContainer(true);
+			this.showLoadingIndicator();
+			this.presenter.buildSensorRequestAndSend();
 		}
 	}
-	
+
 	@UiHandler("showOnMapButton")
 	public void onShowOnMapButtonClicked(ClickEvent e) {
-		if(!selectedSensors.isEmpty()) {
-			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, selectedSensors));
+		if(!this.selectedSensors.isEmpty()) {
+			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, this.selectedSensors));
 		}
 	}
-	
+
 	@UiHandler("showVisualizationsButton")
 	public void onShowVisualizationsButtonClicked(ClickEvent e) {
-		if(!selectedSensors.isEmpty()) {
-			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, selectedSensors));
+		if(!this.selectedSensors.isEmpty()) {
+			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, this.selectedSensors));
 		}
 	}
-	
+
 	@UiHandler("selectAllButton")
 	public void onSelectAllButtonClicked(ClickEvent e) {
-		if(Languages.selectAllSensors().equals(selectAllButton.getText())) {
-			for (int i = unselectedSensors.size() - 1; i >= 0; i --) {
-				sensorViews.get(unselectedSensors.get(i)).setActive(true);
-				selectedSensors.add(unselectedSensors.get(i));
-				unselectedSensors.remove(i);
+		if(Languages.selectAllSensors().equals(this.selectAllButton.getText())) {
+			for (int i = this.unselectedSensors.size() - 1; i >= 0; i --) {
+				this.sensorViews.get(this.unselectedSensors.get(i)).setActive(true);
+				this.selectedSensors.add(this.unselectedSensors.get(i));
+				this.unselectedSensors.remove(i);
 			}
-			selectAllButton.setText(Languages.deselectAllSensors());
+			this.selectAllButton.setText(Languages.deselectAllSensors());
 		}else {
-			for (int i = selectedSensors.size() - 1; i >= 0; i --) {
-				sensorViews.get(selectedSensors.get(i)).setActive(false);
-				unselectedSensors.add(selectedSensors.get(i));
-				selectedSensors.remove(i);
+			for (int i = this.selectedSensors.size() - 1; i >= 0; i --) {
+				this.sensorViews.get(this.selectedSensors.get(i)).setActive(false);
+				this.unselectedSensors.add(this.selectedSensors.get(i));
+				this.selectedSensors.remove(i);
 			}
-			selectAllButton.setText(Languages.selectAllSensors());
+			this.selectAllButton.setText(Languages.selectAllSensors());
 		}
-		onSelectedSensorsChanged();
+		this.onSelectedSensorsChanged();
 	}
-	
+
 	private void onShownSensorsChanged() {
-		selectAllButton.setEnabled(!shownSensorIds.isEmpty());
+		this.selectAllButton.setEnabled(!this.shownSensorIds.isEmpty());
 	}
 
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
-	
+
 	@Override
 	public void initView() {
 		// init UI Elements if needed
 	}
-	
+
 	@Override
 	public void showSensorData(final List<Sensor> sensors) {
-		clearSensorData();
+		this.clearSensorData();
 		sensors.forEach(sensor -> {
 			final SensorItemCard card = new SensorItemCard();
 			final Integer sensorId = sensor.getSensorId();
 			this.sensors.put(sensorId, sensor);
 			card.setHeader(sensor.getMeasurand().getDisplayName() + "   -   " + Languages.sensorId() + sensorId);
-			unselectedSensors.add(sensorId);
-			card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
+			this.unselectedSensors.add(sensorId);
+			card.setIcon(this.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setRating(sensor.getAccuracy()); //TODO:
 			card.addContentValue(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
 			card.addContentValue(Languages.origin(), sensor.getAttributionText());
 			card.addValueChangeHandler(event -> {
 				if(event.getValue()) {
-					unselectedSensors.remove(sensorId);
-					selectedSensors.add(sensorId);
+					this.unselectedSensors.remove(sensorId);
+					this.selectedSensors.add(sensorId);
 				}else {
-					unselectedSensors.add(sensorId);
-					selectedSensors.remove(sensorId);
+					this.unselectedSensors.add(sensorId);
+					this.selectedSensors.remove(sensorId);
 				}
-				onSelectedSensorsChanged();
+				this.onSelectedSensorsChanged();
 			});
-			shownSensorIds.add(sensorId); //can order the list before adding
-			sensorViews.put(sensorId, card);
+			card.addFavButtonClickHandler(event -> this.presenter.addSensorToFavoriteList(sensorId));
+			this.shownSensorIds.add(sensorId); //can order the list before adding
+			this.sensorViews.put(sensorId, card);
 		});
-		if(sensorViews.isEmpty()) {
-			noDataIndicator.getElement().getStyle().clearDisplay();
+		if(this.sensorViews.isEmpty()) {
+			this.noDataIndicator.getElement().getStyle().clearDisplay();
 		}
-		pagination();
-		onShownSensorsChanged();
-		hideLoadingIndicator();
+		this.pagination();
+		this.onShownSensorsChanged();
+		this.hideLoadingIndicator();
 	}
-	
+
 	private void onSelectedSensorsChanged() {
-		if(!selectedSensors.isEmpty()) {
-			showOnMapButton.setEnabled(true);
-			showVisualizationsButton.setEnabled(true);
-			addToListButton.setEnabled(true);
+		if(!this.selectedSensors.isEmpty()) {
+			this.showOnMapButton.setEnabled(true);
+			this.showVisualizationsButton.setEnabled(true);
+			this.addToListButton.setEnabled(true);
 		}else {
-			showOnMapButton.setEnabled(false);
-			showVisualizationsButton.setEnabled(false);
-			addToListButton.setEnabled(false);
+			this.showOnMapButton.setEnabled(false);
+			this.showVisualizationsButton.setEnabled(false);
+			this.addToListButton.setEnabled(false);
 		}
 	}
 
@@ -269,72 +270,72 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	private void buildValidators() {
 		final RegExValidator rgx = new RegExValidator("^(?:[0-9]|0[0-9]|10|)$");
-		minAccuracy.addValidator(rgx);
-		minAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
-		minAccuracy.addValueChangeHandler(event -> {
-			if(!minAccuracy.validate(true)) {
-				searchButton.setEnabled(false);
-			}else if(maxAccuracy.validate(true) && maxSensors.validate(true)) {
-				searchButton.setEnabled(true);
+		this.minAccuracy.addValidator(rgx);
+		this.minAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
+		this.minAccuracy.addValueChangeHandler(event -> {
+			if(!this.minAccuracy.validate(true)) {
+				this.searchButton.setEnabled(false);
+			}else if(this.maxAccuracy.validate(true) && this.maxSensors.validate(true)) {
+				this.searchButton.setEnabled(true);
 			}
 		});
-		maxAccuracy.addValidator(rgx);
-		maxAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
-		maxAccuracy.addValueChangeHandler(event -> {
-			if(!maxAccuracy.validate(true)) {
-				searchButton.setEnabled(false);
-			}else if(minAccuracy.validate(true) && maxSensors.validate(true)) {
-				searchButton.setEnabled(true);
+		this.maxAccuracy.addValidator(rgx);
+		this.maxAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
+		this.maxAccuracy.addValueChangeHandler(event -> {
+			if(!this.maxAccuracy.validate(true)) {
+				this.searchButton.setEnabled(false);
+			}else if(this.minAccuracy.validate(true) && this.maxSensors.validate(true)) {
+				this.searchButton.setEnabled(true);
 			}
 		});
 		final RegExValidator digitrgx = new RegExValidator("^1?\\d{0,4}$");
-		maxSensors.addValidator(digitrgx);
-		maxSensors.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
-		maxSensors.addValueChangeHandler(event -> {
-			if(!maxSensors.validate(true)) {
-				searchButton.setEnabled(false);
-			}else if(minAccuracy.validate(true) && maxAccuracy.validate(true)) {
-				searchButton.setEnabled(true);
+		this.maxSensors.addValidator(digitrgx);
+		this.maxSensors.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
+		this.maxSensors.addValueChangeHandler(event -> {
+			if(!this.maxSensors.validate(true)) {
+				this.searchButton.setEnabled(false);
+			}else if(this.minAccuracy.validate(true) && this.maxAccuracy.validate(true)) {
+				this.searchButton.setEnabled(true);
 			}
 		});
 	}
-	
+
 	@Override
 	public LatLngBounds getBounds() {
-		if(autoComplete.getPlace() != null && autoComplete.getPlace().getGeometry() != null) {
-			return autoComplete.getPlace().getGeometry().getViewPort();
+		if((this.autoComplete.getPlace() != null) && (this.autoComplete.getPlace().getGeometry() != null)) {
+			return this.autoComplete.getPlace().getGeometry().getViewPort();
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String getMinAccuracy() {
-		return minAccuracy.getText();
+		return this.minAccuracy.getText();
 	}
-	
+
 	@Override
 	public String getMaxAccuracy() {
-		return maxAccuracy.getText();
+		return this.maxAccuracy.getText();
 	}
-	
+
 	@Override
 	public void setMeasurandsList(Map<Integer, String> measurands) {
-		measurandList.clear();
-		measurandList.addItem("", Languages.all());
-		measurandList.setSelectedIndex(0);
-		measurands.entrySet().forEach(entry -> measurandList.addItem(entry.getKey().toString(), entry.getValue()));
+		this.measurandList.clear();
+		this.measurandList.addItem("", Languages.all());
+		this.measurandList.setSelectedIndex(0);
+		measurands.entrySet().forEach(entry -> this.measurandList.addItem(entry.getKey().toString(), entry.getValue()));
 	}
-	
+
 	@Override
 	public String getMeasurandId() {
-		return measurandList.getSelectedValue();
+		return this.measurandList.getSelectedValue();
 	}
-	
+
 	@Override
 	public String getMaxSensors() {
-		return maxSensors.getText();
+		return this.maxSensors.getText();
 	}
-	
+
 	@Override
 	public void setMaxSensors(String maxSensors) {
 		this.maxSensors.setValue(maxSensors, true);
@@ -344,7 +345,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public void setMinAccuracy(String minAccuracy) {
 		this.minAccuracy.setValue(minAccuracy, true);
 	}
-	
+
 	@Override
 	public void setMaxAccuracy(String maxAccuracy) {
 		this.maxAccuracy.setValue(maxAccuracy, true);
@@ -357,120 +358,122 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@Override
 	public void showLoadSensorError() {
-		hideLoadingIndicator();
-		noDataIndicator.getElement().getStyle().clearDisplay();
+		this.hideLoadingIndicator();
+		this.noDataIndicator.getElement().getStyle().clearDisplay();
 	}
 
 	@Override
 	public void selectMeasurandId(String value) {
 		this.measurandList.setSelectedIndex(this.measurandList.getIndex(value));
 	}
-	
+
+	@Override
 	public void showLoadingIndicator() {
-		spinner.getElement().getStyle().setDisplay(Display.BLOCK);
+		this.spinner.getElement().getStyle().setDisplay(Display.BLOCK);
 	}
-	
+
 	public void hideLoadingIndicator() {
-		spinner.getElement().getStyle().setDisplay(Display.NONE);
+		this.spinner.getElement().getStyle().setDisplay(Display.NONE);
 	}
 
 	@Override
 	public void setPlaceString(String value) {
-		searchInput.setValue(value);
+		this.searchInput.setValue(value);
 	}
 
 	@Override
 	public void pagination() {
-		sensorContainer.clear();
-		
+		this.sensorContainer.clear();
+
 		List<Integer> idsOnPage = new ArrayList<>();
-		for(int i = sensorPage * maxSensorsOnPage; i < shownSensorIds.size() && i < (sensorPage + 1) * maxSensorsOnPage; i++){
-			sensorContainer.add(sensorViews.get(shownSensorIds.get(i)));
-			idsOnPage.add(shownSensorIds.get(i));
+		for(int i = this.sensorPage * this.maxSensorsOnPage; (i < this.shownSensorIds.size()) && (i < ((this.sensorPage + 1) * this.maxSensorsOnPage)); i++){
+			this.sensorContainer.add(this.sensorViews.get(this.shownSensorIds.get(i)));
+			idsOnPage.add(this.shownSensorIds.get(i));
 		}
-		idsOnPage.forEach(id -> sensorViews.get(id).showPreviewContentSpinner(true));
-		presenter.getSensorValuePreviewAndShow(idsOnPage);
-		
-		pagerTop.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));
-		pagerTop.setForwardsEnabled(sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage)));
-		pagerTop.setBackwardsEnabled(sensorPage > 0);
-		
-		pagerBottom.setPage(Languages.setPageNumber(sensorPage, maxSensorsOnPage, shownSensorIds.size()));
-		pagerBottom.setForwardsEnabled(sensorPage + 1 < ((int) Math.ceil((double) shownSensorIds.size() / (double) maxSensorsOnPage)));
-		pagerBottom.setBackwardsEnabled(sensorPage > 0);
+		idsOnPage.forEach(id -> this.sensorViews.get(id).showPreviewContentSpinner(true));
+		this.presenter.getSensorValuePreviewAndShow(idsOnPage);
+
+		this.pagerTop.setPage(Languages.setPageNumber(this.sensorPage, this.maxSensorsOnPage, this.shownSensorIds.size()));
+		this.pagerTop.setForwardsEnabled((this.sensorPage + 1) < ((int) Math.ceil((double) this.shownSensorIds.size() / (double) this.maxSensorsOnPage)));
+		this.pagerTop.setBackwardsEnabled(this.sensorPage > 0);
+
+		this.pagerBottom.setPage(Languages.setPageNumber(this.sensorPage, this.maxSensorsOnPage, this.shownSensorIds.size()));
+		this.pagerBottom.setForwardsEnabled((this.sensorPage + 1) < ((int) Math.ceil((double) this.shownSensorIds.size() / (double) this.maxSensorsOnPage)));
+		this.pagerBottom.setBackwardsEnabled(this.sensorPage > 0);
 	}
-	
+
 	public void clearPager() {
-		pagerTop.setPage(Languages.setPageNumber(0, 0, 0));
-		pagerTop.setForwardsEnabled(false);
-		pagerTop.setBackwardsEnabled(false);
-		pagerBottom.setPage(Languages.setPageNumber(0, 0, 0));
-		pagerBottom.setForwardsEnabled(false);
-		pagerBottom.setBackwardsEnabled(false);
+		this.pagerTop.setPage(Languages.setPageNumber(0, 0, 0));
+		this.pagerTop.setForwardsEnabled(false);
+		this.pagerTop.setBackwardsEnabled(false);
+		this.pagerBottom.setPage(Languages.setPageNumber(0, 0, 0));
+		this.pagerBottom.setForwardsEnabled(false);
+		this.pagerBottom.setBackwardsEnabled(false);
 	}
 
 	@Override
 	public List<Integer> getShownSensorIds() {
-		return shownSensorIds;
+		return this.shownSensorIds;
 	}
 
 	@Override
 	public double getMaxSensorsOnPage() {
-		return maxSensorsOnPage;
+		return this.maxSensorsOnPage;
 	}
 
 	@Override
 	public int getSensorPage() {
-		return sensorPage;
+		return this.sensorPage;
 	}
 
 	@Override
 	public void setSensorPage(int page) {
 		this.sensorPage = page;
 	}
-	
+
 	@Override
 	public void clearSensorData() {
-		showNoDataIndicator(false);
+		this.showNoDataIndicator(false);
 		this.sensors.clear();
-		sensorContainer.clear();
-		unselectedSensors.clear();
-		selectedSensors.clear();
-		sensorViews.clear();
-		shownSensorIds.clear();
-		clearPager();
-		sensorPage = 0;
-		onShownSensorsChanged();
-		onSelectedSensorsChanged();
+		this.sensorContainer.clear();
+		this.unselectedSensors.clear();
+		this.selectedSensors.clear();
+		this.sensorViews.clear();
+		this.shownSensorIds.clear();
+		this.clearPager();
+		this.sensorPage = 0;
+		this.onShownSensorsChanged();
+		this.onSelectedSensorsChanged();
 	}
 
 	@Override
 	public void showDataContainer(boolean show) {
 		if(show) {
-			dataContent.getElement().getStyle().clearDisplay();
+			this.dataContent.getElement().getStyle().clearDisplay();
 		}else {
-			dataContent.getElement().getStyle().setDisplay(Display.NONE);
+			this.dataContent.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}
-	
+
 	public void showNoDataIndicator(boolean show) {
 		if(show) {
-			noDataIndicator.getElement().getStyle().clearDisplay();
+			this.noDataIndicator.getElement().getStyle().clearDisplay();
 		}else {
-			noDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
+			this.noDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}
-	
+
+	@Override
 	public void showSensorValuePreview(Map<Integer, ValuePreview> preview) {
-		if(!shownSensorIds.isEmpty()) {
+		if(!this.shownSensorIds.isEmpty()) {
 			preview.entrySet().forEach(entry -> {
-				if(shownSensorIds.contains(entry.getKey())){
-					if(sensorViews.containsKey(entry.getKey()) && entry.getValue()!=null) {
-						sensorViews.get(entry.getKey()).setValuePreviewConent(
-						Languages.getDate(entry.getValue().getMinValue().getTimestamp()) + " - " + entry.getValue().getMinValue().getNumberValue() + " " + sensors.get(entry.getKey()).getUnit().getDisplayName(),
-						Languages.getDate(entry.getValue().getMaxValue().getTimestamp()) + " - " + entry.getValue().getMaxValue().getNumberValue() + " " + sensors.get(entry.getKey()).getUnit().getDisplayName());
+				if(this.shownSensorIds.contains(entry.getKey())){
+					if(this.sensorViews.containsKey(entry.getKey()) && (entry.getValue()!=null)) {
+						this.sensorViews.get(entry.getKey()).setValuePreviewConent(
+								Languages.getDate(entry.getValue().getMinValue().getTimestamp()) + " - " + entry.getValue().getMinValue().getNumberValue() + " " + this.sensors.get(entry.getKey()).getUnit().getDisplayName(),
+								Languages.getDate(entry.getValue().getMaxValue().getTimestamp()) + " - " + entry.getValue().getMaxValue().getNumberValue() + " " + this.sensors.get(entry.getKey()).getUnit().getDisplayName());
 					}else {
-						sensorViews.get(entry.getKey()).setValuePreviewConent(Languages.noValuePreviewData(), Languages.noValuePreviewData());
+						this.sensorViews.get(entry.getKey()).setValuePreviewConent(Languages.noValuePreviewData(), Languages.noValuePreviewData());
 					}
 				}
 			});
