@@ -240,6 +240,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		LineDataset dataset = createCrunchedDataset(filteredValues);
 		Double lowest = ValueHandler.getMinOfDataset(dataset);
 		Double highest = ValueHandler.getMaxOfDataset(dataset);
+		GWT.log("added: "+lowest+" | "+highest);
 		if(minValue > lowest) minValue = lowest;
 		if(maxValue < highest) maxValue = highest;
 		Sensor oldSensor = datasetsContainId(sensor.getSensorId());
@@ -349,7 +350,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	public boolean showChart() {
 		hideLoadingIndicator();
+		chartContainer.clear();
 		if(sensors==null || sensors.isEmpty() || datasetMap==null || datasetMap.isEmpty()) {
+			resetMinMax();
 			showNoDatasetsIndicator(true);
 			return false;
 		}
@@ -360,11 +363,11 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		xAxis.getTime().setUnit(tu);
 		xAxis.getTime().setTooltipFormat("DD MMM YYYY, HH:mm");
 		xAxis.getTime().getDisplayFormats().setDisplayFormat(tu, getDisplayFormat(tu));
-		yAxis.getTicks().setMin(Math.floor(minValue));
-		yAxis.getTicks().setMax(Math.ceil(maxValue));
+		yAxis.getTicks().setMin(Math.floor(minValue-(maxValue-minValue)*0.1));
+		yAxis.getTicks().setMax(Math.ceil(maxValue+(maxValue-minValue)*0.1));
+		GWT.log("set to: "+minValue+" | "+maxValue);
 		chart.getOptions().getScales().setXAxes(xAxis);
 		chart.getOptions().getScales().setYAxes(yAxis);
-		chartContainer.clear();
 		chartContainer.add(chart);
 		return true;
 	}
@@ -385,7 +388,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		Dataset[] newDatasets = new Dataset[datasets.size()];
 		newDatasets = datasets.toArray(newDatasets);
 		chart.getData().setDatasets(newDatasets);
-		chart.update();
 	}
 	
 	public void setLineDatasetStyle(LineDataset dataset, int sensorId) {
@@ -509,12 +511,13 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		Dataset[] newDatasets = new Dataset[datasets.size()];
 		newDatasets = datasets.toArray(newDatasets);
 		chart.getData().setDatasets(newDatasets);
-		chart.update();
+		recalculateMinMax();
+		showChart();
 	}
 	
 	public void addSensorDatasetToChart(Integer sensorId) {
 		sensorCardMap.get(sensorId).showLoadingIndicator();
-		presenter.buildValueRequestAndSend(sensorId, getDateRange(), minTimestamp, maxTimestamp);
+		presenter.buildValueRequestAndSend(sensorId, getDateRange(), startingDate.getDate(), endingDate.getDate());
 	}
 
 	/**
@@ -673,5 +676,20 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 			break;
 		
 		}
+	}
+	
+	public void resetMinMax() {
+		minTimestamp = null;
+		maxTimestamp = null;
+	}
+	
+	public void recalculateMinMax() {
+		LinkedList<LineDataset> datasets = new LinkedList<>(datasetMap.values());
+		minValue = ValueHandler.getMinOfDatasets(datasets);
+		maxValue = ValueHandler.getMaxOfDatasets(datasets);
+		GWT.log("removed: "+minValue+" | "+maxValue);
+		yAxis.getTicks().setMin(Math.floor(minValue-(maxValue-minValue)*0.1));
+		yAxis.getTicks().setMax(Math.ceil(maxValue+(maxValue-minValue)*0.1));
+		chart.getOptions().getScales().setYAxes(yAxis);
 	}
 }
