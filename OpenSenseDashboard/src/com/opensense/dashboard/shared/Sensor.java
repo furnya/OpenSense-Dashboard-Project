@@ -19,6 +19,7 @@ public class Sensor implements IsSerializable{
 	private Unit unit;
 	private double accuracy;
 	private LatLng location;
+	private ValuePreview valuePreview;
 	
 	public Sensor() {
 	}
@@ -203,6 +204,20 @@ public class Sensor implements IsSerializable{
 	 */
 	public void setMeasurand(Measurand measurand) {
 		this.measurand = measurand;
+	}
+
+	/**
+	 * @return the valuePreview
+	 */
+	public ValuePreview getValuePreview() {
+		return valuePreview;
+	}
+
+	/**
+	 * @param valuePreview the valuePreview to set
+	 */
+	public void setValuePreview(ValuePreview valuePreview) {
+		this.valuePreview = valuePreview;
 	}
 	
 }

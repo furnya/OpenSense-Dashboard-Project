@@ -12,6 +12,7 @@ import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Unit;
 import com.opensense.dashboard.shared.Value;
+import com.opensense.dashboard.shared.ValuePreview;
 
 public class DataObjectBuilder {
 	
@@ -70,7 +71,7 @@ public class DataObjectBuilder {
 		return m;
 	}
 	
-	public static Sensor buildSensor(JSONObject sensorJSON, Map<Integer, Measurand> measurandMap, Map<Integer, Unit> unitMap) {
+	public static Sensor buildSensor(JSONObject sensorJSON, Map<Integer, Measurand> measurandMap, Map<Integer, Unit> unitMap, ValuePreview valuePreview) {
 		Sensor s = new Sensor();
 		try {
 			s.setSensorId(sensorJSON.getInt(JsonAttributes.ID.getNameString()));
@@ -87,29 +88,7 @@ public class DataObjectBuilder {
 			JSONObject locationJSON = sensorJSON.getJSONObject(JsonAttributes.LOCATION.getNameString());
 			s.setLocation(new LatLng(locationJSON.getDouble(JsonAttributes.LAT.getNameString()), locationJSON.getDouble(JsonAttributes.LNG.getNameString())));
 			s.setUnit(unitMap.get(sensorJSON.getInt(JsonAttributes.UNIT_ID.getNameString())));
-		} catch(JSONException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return s;
-	}
-	
-	//TODO: remove unused
-	public static Sensor buildSensor(JSONObject sensorJSON) {
-		Sensor s = new Sensor();
-		try {
-			s.setSensorId(sensorJSON.getInt(JsonAttributes.ID.getNameString()));
-			s.setAccuracy(sensorJSON.getDouble(JsonAttributes.ACCURACY.getNameString()));
-			s.setUserId(sensorJSON.getInt(JsonAttributes.USER_ID.getNameString()));
-			s.setDirectionHorizontal(sensorJSON.getDouble(JsonAttributes.DIRECTION_HORIZONTAL.getNameString()));
-			s.setDirectionVertical(sensorJSON.getDouble(JsonAttributes.DIRECTION_VERTICAL.getNameString()));
-			s.setAttributionText(sensorJSON.getString(JsonAttributes.ATTRIBUTION_TEXT.getNameString()));
-			s.setLicenseId(sensorJSON.getInt(JsonAttributes.LICENSE_ID.getNameString()));
-			s.setAltitudeAboveGround(sensorJSON.getDouble(JsonAttributes.ALTITUDE_ABOVE_GROUND.getNameString()));
-			s.setAttributionURLString(sensorJSON.getString(JsonAttributes.ATTRIBUTION_URL.getNameString()));
-			s.setSensorModel(sensorJSON.getString(JsonAttributes.SENSOR_MODEL.getNameString()));
-			JSONObject locationJSON = sensorJSON.getJSONObject(JsonAttributes.LOCATION.getNameString());
-			s.setLocation(new LatLng(locationJSON.getDouble(JsonAttributes.LAT.getNameString()), locationJSON.getDouble(JsonAttributes.LNG.getNameString())));
+			s.setValuePreview(valuePreview);
 		} catch(JSONException e) {
 			e.printStackTrace();
 			return null;

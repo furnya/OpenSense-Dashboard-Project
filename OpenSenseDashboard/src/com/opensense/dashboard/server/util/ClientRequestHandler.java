@@ -96,15 +96,14 @@ public class ClientRequestHandler {
 		if(sensorArrayJSON==null) {
 			return sensorList;
 		}
-		Map<Integer, Measurand> measurandMap = getMeasurandMap();
-		Map<Integer, Unit> unitMap = getUnitMap();
 		for(Object o : sensorArrayJSON) {
 			if(!(o instanceof JSONObject)) {
 				continue;
 			}
 			JSONObject sensorJSON = (JSONObject) o;
-			Sensor s = DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
+			Sensor s = DataObjectBuilder.buildSensor(sensorJSON, getMeasurandMap(), getUnitMap(),null);
 			if(s!=null) {
+				s.setValuePreview(getValuePreview(s.getSensorId()));
 				sensorList.add(s);
 			}
 		}
@@ -117,9 +116,7 @@ public class ClientRequestHandler {
 		if(sensorJSON==null) {
 			return null;
 		}
-		Map<Integer, Measurand> measurandMap = getMeasurandMap();
-		Map<Integer, Unit> unitMap = getUnitMap();
-		return DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
+		return DataObjectBuilder.buildSensor(sensorJSON, getMeasurandMap(), getUnitMap(), getValuePreview(id));
 	}
 	
 	public List<Value> getValueList(int id, List<Parameter> parameterList, DateRange dateRange) throws IOException{
