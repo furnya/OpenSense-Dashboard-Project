@@ -141,21 +141,4 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	public void destroyMarkerPopup() {
 		GWT.log("Destroyed");
 	}
-	
-	//FOllowing Functions will handle ValuePreview Objects
-	
-	public void getValuePreviewAndShowOnInfoWindow(List<Integer> ids) {
-		GeneralService.Util.getInstance().getSensorValuePreview(ids, new DefaultAsyncCallback<Map<Integer, ValuePreview>>(result -> {
-			if(result != null) {
-				view.showValuePreviewOnInfoWindow(result);
-			}else {
-				LOGGER.log(Level.WARNING, "SensorValuePreview result is null.");
-				//TODO: show error
-			}
-		},caught -> {
-			LOGGER.log(Level.WARNING, "Failure requesting the sensorValuePreview.");
-			//TODO:showError
-		}, false));
-	}
-	
 }

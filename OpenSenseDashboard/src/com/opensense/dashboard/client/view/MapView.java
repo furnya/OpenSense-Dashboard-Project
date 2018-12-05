@@ -26,5 +26,4 @@ public interface MapView extends IDataPanelPageView{
 	public void resetMarkerAndCluster();
 	public MapWidget getMapWidget();
 	public Map<Integer, Marker> getMarkers();
-	public void showValuePreviewOnInfoWindow(Map<Integer, ValuePreview> result);
 }

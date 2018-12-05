@@ -11,7 +11,6 @@ import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.ext.linker.EmittedArtifact.Visibility;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapWidget;
@@ -467,23 +466,4 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	protected native void triggerClick(JavaScriptObject marker, LatLng position)/*-{
 		$wnd.google.maps.event.trigger(marker, 'spider_click', position);
 	}-*/;
-
-	public void showValuePreviewOnInfoWindow(Map<Integer, ValuePreview> preview) {
-		if (!sensIds.isEmpty()) {
-			preview.entrySet().forEach(entry -> {
-				if (sensIds.contains(entry.getKey())) {
-					if (iwsFromMarkers.containsKey(entry.getKey()) && entry.getValue() != null) {
-						ArrayList<String> valueData = new ArrayList<>();
-						valueData.add("Min Wert am " + Languages.getDate(entry.getValue().getMinValue().getTimestamp())
-								+ ": " + entry.getValue().getMinValue().getNumberValue());
-						valueData.add("Max Wert am " + Languages.getDate(entry.getValue().getMaxValue().getTimestamp())
-								+ ": " + entry.getValue().getMaxValue().getNumberValue());
-						iwsFromMarkers.get(entry.getKey()).setData(valueData);
-					} else {
-						iwsFromMarkers.get(entry.getKey()).getData().add(new Span("Keine Werte vorhanden"));
-					}
-				}
-			});
-		}
-	}
 }
