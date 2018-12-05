@@ -70,7 +70,7 @@ public class ListRenderer extends Composite{
 			favList.forEach(id -> {
 				VisSensorItemCard card = new VisSensorItemCard();
 				card.setHeader("ID " + id);
-				this.favNoDataIndicator.add(card);
+				this.favSensorContainer.add(card);
 			});
 		}
 
