@@ -317,9 +317,9 @@ public static String seletedShowOnMap() {
 	
 	public static String selectedShowInSearch() {
 		if(de) {
-			return "IN SUCHE ANZEIGEN";
+			return "In Suche anzeigen";
 		}else {
-			return "";
+			return "Show in search";
 		}
 	}
 	

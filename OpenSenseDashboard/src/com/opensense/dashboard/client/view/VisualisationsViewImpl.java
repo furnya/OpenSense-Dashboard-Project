@@ -48,6 +48,7 @@ import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
+import com.opensense.dashboard.shared.ValuePreview;
 
 import gwt.material.design.client.constants.DatePickerLanguage;
 import gwt.material.design.client.ui.MaterialButton;
@@ -98,7 +99,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	MaterialDatePicker endingDate;
 	
 	@UiField
-	Div sensorContainer;
+	Div sensorListContainer;
 	
 	@UiField
 	MaterialButton showOnMapButton;
@@ -143,6 +144,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	private List<Integer> selectedSensors = new ArrayList<>();
 	
 	private String[] colors = {"#5899DA","#E8743B","#19A979","#ED4A7B","#945ECF","#13A4B4","#525DF4","#BF399E","#6C8893","#EE6868","#2F6497"};
+	private Map<Integer,String> usedColors = new HashMap<>();
 	private int nextColor = 0;
 	
 	private CartesianTimeAxis xAxis;
@@ -167,52 +169,37 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@UiHandler("customRange")
 	public void onCustomRangeButtonClicked(ClickEvent e) {
 		if(startingDate.getDate()==null || endingDate.getDate()==null) return;
-		resetChart();
-		resetDatasets();
-		showAllLoadingIndicators();
-		setDateRange(DateRange.CUSTOM);
-		highlightDateRange();
-		presenter.valueRequestForSensorList(selectedSensors, DateRange.CUSTOM, startingDate.getDate(), endingDate.getDate());
+		dateRangeButtonClicked(DateRange.CUSTOM, startingDate.getDate(), endingDate.getDate());
 	}
 	
 	@UiHandler("pastYear")
 	public void onPastYearButtonClicked(ClickEvent e) {
-		resetChart();
-		resetDatasets();
-		showAllLoadingIndicators();
-		setDateRange(DateRange.PAST_YEAR);
-		highlightDateRange();
-		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_YEAR, null, null);
+		dateRangeButtonClicked(DateRange.PAST_YEAR, null, null);
 	}
 	
 	@UiHandler("pastMonth")
 	public void onPastMonthButtonClicked(ClickEvent e) {
-		resetChart();
-		resetDatasets();
-		showAllLoadingIndicators();
-		setDateRange(DateRange.PAST_MONTH);
-		highlightDateRange();
-		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_MONTH, null, null);
+		dateRangeButtonClicked(DateRange.PAST_MONTH, null, null);
 	}
 	
 	@UiHandler("pastWeek")
 	public void onPastWeekButtonClicked(ClickEvent e) {
-		resetChart();
-		resetDatasets();
-		showAllLoadingIndicators();
-		setDateRange(DateRange.PAST_WEEK);
-		highlightDateRange();
-		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_WEEK, null, null);
+		dateRangeButtonClicked(DateRange.PAST_WEEK, null, null);
 	}
 	
 	@UiHandler("past24Hours")
 	public void onPast24HoursButtonClicked(ClickEvent e) {
+		dateRangeButtonClicked(DateRange.PAST_24HOURS, null, null);
+	}
+	
+	public void dateRangeButtonClicked(DateRange dr, Date minT, Date maxT) {
+		resetColors();
 		resetChart();
 		resetDatasets();
 		showAllLoadingIndicators();
-		setDateRange(DateRange.PAST_24HOURS);
+		setDateRange(dr);
 		highlightDateRange();
-		presenter.valueRequestForSensorList(selectedSensors, DateRange.PAST_24HOURS, null, null);
+		presenter.valueRequestForSensorList(selectedSensors, dr, minT, maxT);
 	}
 	
 	@Override
@@ -240,7 +227,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		LineDataset dataset = createCrunchedDataset(filteredValues);
 		Double lowest = ValueHandler.getMinOfDataset(dataset);
 		Double highest = ValueHandler.getMaxOfDataset(dataset);
-		GWT.log("added: "+lowest+" | "+highest);
 		if(minValue > lowest) minValue = lowest;
 		if(maxValue < highest) maxValue = highest;
 		Sensor oldSensor = datasetsContainId(sensor.getSensorId());
@@ -365,7 +351,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		xAxis.getTime().getDisplayFormats().setDisplayFormat(tu, getDisplayFormat(tu));
 		yAxis.getTicks().setMin(Math.floor(minValue-(maxValue-minValue)*0.1));
 		yAxis.getTicks().setMax(Math.ceil(maxValue+(maxValue-minValue)*0.1));
-		GWT.log("set to: "+minValue+" | "+maxValue);
 		chart.getOptions().getScales().setXAxes(xAxis);
 		chart.getOptions().getScales().setYAxes(yAxis);
 		chartContainer.add(chart);
@@ -391,13 +376,19 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void setLineDatasetStyle(LineDataset dataset, int sensorId) {
-		String color = getNewColor();
+		String color = getNewColor(sensorId);
 		dataset.setBorderColor(color);
+		setCardColor(color,sensorId);
 		dataset.setPointBackgroundColor(color);
 		dataset.setFill(Fill.nofill);
 		dataset.setLabel(""+sensorId);
 	}
 	
+	private void setCardColor(String color, int sensorId) {
+		VisSensorItemCard card = sensorCardMap.get(sensorId);
+		card.getElement().getStyle().setBackgroundColor(color);		
+	}
+
 	public void firstD3Chart() {
 		Selection s = D3.select(Document.get().getBody());
 		SVG svg = D3.svg();
@@ -407,17 +398,22 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	public void setSensorCard(Sensor sensor) {
 		final VisSensorItemCard card = sensorCardMap.get(sensor.getSensorId());
+		
+		card.setHeader(Languages.sensorId() + sensor.getSensorId() + "   -   " + sensor.getMeasurand().getDisplayName());
+		card.setIcon(this.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
+		card.setRating(sensor.getAccuracy()); //TODO:
+		card.clearContent();
+		card.addContentValue(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
+		card.addContentValue(Languages.origin(), sensor.getAttributionText());
+		card.addFavButtonClickHandler(event -> this.presenter.addSensorToFavoriteList(sensor.getSensorId()));
+		
 		card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 		card.setIconTitle(sensor.getMeasurand().getDisplayName());
-		card.getMiddleHeader().clear();
-		card.getMiddleHeader().add(new Span("Messgroesse: " + sensor.getMeasurand().getDisplayName()+","));
-		card.getMiddleHeader().add(new Span("Genauigkeit: " + sensor.getAccuracy()+","));
-		card.getMiddleHeader().add(new Span(sensor.getAttributionText()));
 		card.hideLoadingIndicator();
 	}
 	
 	public void removeSensorCard(Integer id) {
-		sensorContainer.remove(sensorCardMap.get(id));
+		sensorListContainer.remove(sensorCardMap.get(id));
 	}
 	
 	private String getIconUrlFromType(MeasurandType measurandType) {
@@ -503,6 +499,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void removeSensorDatasetFromChart(Integer sensorId) {
+		usedColors.remove(sensorId);
 		Sensor sensor = getSensorFromId(sensorId);
 		LineDataset dataset = datasetMap.remove(sensor);
 		ArrayList<Dataset> datasets = new ArrayList<>();
@@ -589,8 +586,16 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		}
 	}
 	
-	public String getNewColor() {
+	public String getNewColor(int sensorId) {
+		if(usedColors.size()!=colors.length) {
+			for(int i=0;i<colors.length;i++) {
+				if(!usedColors.values().contains(colors[i])) {
+					nextColor = i;
+				}
+			}
+		}
 		String color = colors[nextColor];
+		usedColors.put(sensorId,color);
 		nextColor = (nextColor+1)%colors.length;
 		return color;
 	}
@@ -617,7 +622,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 			}
 		});
 		card.showLoadingIndicator();
-		sensorContainer.insert(card, selectedSensors.indexOf(sensorId));
+		sensorListContainer.insert(card, selectedSensors.indexOf(sensorId));
 	}
 	
 	public void showAllLoadingIndicators() {
@@ -641,7 +646,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@Override
 	public void showSensorCardFailure(Integer sensorId) {
 		VisSensorItemCard card = sensorCardMap.get(sensorId);
-		card.getMiddleHeader().add(new Span("Error"));
+		card.setHeader("Error");
 		card.hideLoadingIndicator();
 	}
 	
@@ -687,9 +692,13 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		LinkedList<LineDataset> datasets = new LinkedList<>(datasetMap.values());
 		minValue = ValueHandler.getMinOfDatasets(datasets);
 		maxValue = ValueHandler.getMaxOfDatasets(datasets);
-		GWT.log("removed: "+minValue+" | "+maxValue);
 		yAxis.getTicks().setMin(Math.floor(minValue-(maxValue-minValue)*0.1));
 		yAxis.getTicks().setMax(Math.ceil(maxValue+(maxValue-minValue)*0.1));
 		chart.getOptions().getScales().setYAxes(yAxis);
+	}
+	
+	public void resetColors() {
+		usedColors.clear();
+		nextColor = 0;
 	}
 }

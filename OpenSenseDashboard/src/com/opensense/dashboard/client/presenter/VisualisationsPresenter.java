@@ -25,6 +25,7 @@ import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.Sensor;
+import com.opensense.dashboard.shared.ValuePreview;
 
 public class VisualisationsPresenter extends DataPanelPagePresenter implements IPresenter, VisualisationsView.Presenter{
 
@@ -116,6 +117,11 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 			view.showSensorCardFailure(request.getIds().get(0));
 			view.hideLoadingIndicator();
 		}, false));
+	}
+	
+	@Override
+	public void addSensorToFavoriteList(int sensorId) {
+		this.appController.addSensorToFavoriteList(sensorId);
 	}
 	
 }

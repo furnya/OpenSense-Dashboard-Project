@@ -2,6 +2,7 @@ package com.opensense.dashboard.client.view;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.pepstock.charba.client.AbstractChart;
 
@@ -11,6 +12,7 @@ import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
+import com.opensense.dashboard.shared.ValuePreview;
 
 public interface VisualisationsView extends IDataPanelPageView {
 	
@@ -18,6 +20,7 @@ public interface VisualisationsView extends IDataPanelPageView {
 		void valueRequestForSensorList(List<Integer> sensorIds, DateRange dateRange, Date minDate, Date maxDate);
 		void buildValueRequestAndSend(Integer id, DateRange dateRange, Date minDate, Date maxDate);
 		HandlerManager getEventBus();
+		void addSensorToFavoriteList(int sensorId);
 	}
 	
 	public void setPresenter(Presenter presenter);

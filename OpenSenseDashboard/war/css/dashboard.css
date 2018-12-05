@@ -385,7 +385,7 @@ input:focus+label{
 	width: auto !important;
 }
 .visPanel > button {
-	font-size: 0.9vw;
+	font-size: 0.5vw;
 	line-height: 2em;
 	padding-left: 1rem;
 	padding-right: 1rem; 
@@ -424,4 +424,20 @@ input:focus+label{
 	background-color: #202020;
 	border-bottom: none;
 	cursor: auto;
+}
+.card-spinner{
+	top: 10px;
+    height: 25px !important;
+    width: 25px !important;
+    margin-bottom: 10px;
+}
+.card-spinner > Div {
+    height: 25px !important;
+    width: 25px !important;
+}
+.card-spinner-active {
+}
+
+.card-spinner-active > Div{
+	border-color: white;
 }

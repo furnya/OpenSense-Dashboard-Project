@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui" 
 	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html" xmlns:m="urn:import:gwt.material.design.client.ui"
-	xmlns:ma="urn:import:gwt.material.design.addins.client">
+	xmlns:ma="urn:import:gwt.material.design.addins.client" xmlns:d="urn:import:com.opensense.dashboard.client.utils">
 	
 	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
@@ -10,8 +10,8 @@
 <ui:style>
 .content{
 	cursor: pointer;
-	display: flex;
 	background-color: #fff;
+	display: flex;
 }
 .card-button{
 	float: right;
@@ -26,62 +26,90 @@
 	width: 40px;	
 }
 .left{
-	min-width: 20%;
+	width: 5%;
+	min-width: 50px;
 	display: flex;
-	white-space: nowrap;
-	overflow: hidden;
+    place-content: center;
+    place-items: center;
 }
 .mid{
-	min-width: 65%;
-	display: flex;
-	white-space: nowrap;
-    align-items: center;
-    overflow: hidden;
-}
-.mid > Span{
-	margin-right: 10px;
+	width: 95%;
+	padding: 10px;
+   	background-color: inherit;	
 }
 .right{
-	min-width: 15%;
-	position: relative;
+    width: 10%;
+    overflow: hidden;
+    place-content: center;
+    place-items: center;
+    display: flex;
 }
 .font{
 	margin-top: 5px;
 	font-size: 20px;	
 }
 .checkbox{
-	margin-top: auto;
-	margin-left: 10px;
-}
-.fav-icon > img{
-	filter: invert(100%);   
-	width: 30px;
-    height: 30px;
-	min-width: 30px;
-    margin-left: -15px;
+	margin-top: 8px;
 }
 .fav-icon{
-	margin-top: 2px;	
-    float: right;
-    margin-right: 10px;
+    width: 40px;
+    filter: brightness(80%);
+}
+@keyframes trans {
+    0% {transform: scale(1,1);}
+    10% {transform: scale(1.1,1.1);}
+    20% {transform: scale(1.2,1.2);}
+    30% {transform: scale(1.1,1.1);}
+    40% {transform: scale(1,1);}
+    60% {transform: scale(0.9,0.9);}
+    80% {transform: scale(0.8,0.8);}
+    90% {transform: scale(0.9,0.9);}
+    100% {transform: scale(1,1);}
+}
+.fav-icon:hover{
+	animation: 1s trans;
+	animation-iteration-count: infinite;
+}
+.header{
+    display: flex;
+    width: 90%;
+    background-color: inherit;
+}
+.content-container{
+	text-align: left;
+    width: 90%;	
+    display: flex;
+    overflow: hidden;
+}
+.content-container > Div{
+	margin-right: 15px;	
+}
+.inherit-background{
+    background-color: inherit;
 }
 </ui:style>
 
 <bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
 	<bh:Div addStyleNames="{style.left}">
 		<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>
-		<bh:Div addStyleNames="{style.icon-size} margin-right-10">
-			<b:Image ui:field="icon" width="100%" height="100%"/>
-		</bh:Div>
-		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
 	</bh:Div>
-	<bh:Div addStyleNames="{style.mid}" ui:field="midContainer">
-	</bh:Div>
-	<bh:Div addStyleNames="{style.right}">
-		<m:MaterialPreLoader ui:field="cardSpinner" display="NONE" addStyleNames="spinner">
+	<bh:Div addStyleNames="{style.mid}">
+		<m:MaterialPreLoader ui:field="cardSpinner" display="NONE" addStyleNames="card-spinner">
 			<m:MaterialSpinner/>
 		</m:MaterialPreLoader>
-		<b:Button  width="30px" ui:field="favButton" addStyleNames="d-btn {style.fav-icon}" />
+		<bh:Div addStyleNames="flex {style.inherit-background}">
+			<bh:Div addStyleNames="{style.header}" ui:field="midContainer">
+				<bh:Div addStyleNames="{style.icon-size} margin-right-10">
+					<b:Image ui:field="icon" width="100%" height="100%"/>
+				</bh:Div>	
+				<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
+				<d:Rating ui:field="rating" rating="0"/>
+			</bh:Div>
+		</bh:Div>
+		<bh:Div ui:field="content" addStyleNames="{style.content-container}"/>
+	</bh:Div>
+	<bh:Div addStyleNames="{style.right}">
+		<b:Image ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" addStyleNames="{style.fav-icon} clickable" />
 	</bh:Div>
 </bh:Div>
 
