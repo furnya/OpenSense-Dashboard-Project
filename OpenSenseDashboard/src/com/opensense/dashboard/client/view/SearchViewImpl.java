@@ -377,7 +377,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@Override
 	public void showLoadingIndicator() {
-		this.spinner.getElement().getStyle().setDisplay(Display.BLOCK);
+		this.spinner.getElement().getStyle().clearDisplay();
 	}
 
 	public void hideLoadingIndicator() {

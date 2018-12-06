@@ -29,11 +29,12 @@
 .sensor-container > Div:last-child{
 	margin-bottom: 0px !important; 
 }
-.center-text{
-	margin-left: 45px;
+.pager{
+    min-width: 225px;
 }
 .body {
 	text-align: center;	
+	overflow: hidden;
 }
 </ui:style>
 
@@ -45,7 +46,7 @@
 				<b:Image url="{gui.favoriteRed.getSafeUri.asString}" addStyleNames="{style.fav-icon}" />
 			</m:MaterialCollapsibleHeader>
 			<m:MaterialCollapsibleBody  addStyleNames="{style.body}">
-				<d:Pager ui:field="favPagerTop" addStyleNames="{style.center-text}"/>
+				<d:Pager ui:field="favPagerTop" addStyleNames="{style.pager}"/>
 				<m:MaterialPreLoader ui:field="favSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
 					<m:MaterialSpinner/>
 				</m:MaterialPreLoader>
@@ -53,7 +54,7 @@
 					<bh:Span text="{lang.noListData}"/>
 				</bh:Div>
 				<bh:Div ui:field="favSensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
-				<d:Pager ui:field="favPagerBottom" addStyleNames="{style.center-text}"/>
+				<d:Pager ui:field="favPagerBottom" addStyleNames="{style.pager}"/>
 			</m:MaterialCollapsibleBody>
 		</m:MaterialCollapsibleItem>
 		<m:MaterialCollapsibleItem ui:field="selectedSensorsItem" display="NONE">

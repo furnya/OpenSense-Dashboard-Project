@@ -26,13 +26,13 @@
 	width: 40px;	
 }
 .left{
-	min-width: 20%;
+	min-width: 40%;
 	display: flex;
 	white-space: nowrap;
 	overflow: hidden;
 }
 .mid{
-	min-width: 65%;
+	min-width: 20%;
 	display: flex;
 	white-space: nowrap;
     align-items: center;
@@ -42,9 +42,16 @@
 	margin-right: 10px;
 }
 .right{
-	min-width: 15%;
+	min-width: 40%;
 	position: relative;
-	padding-top: 8px;
+	padding-top: 5px;
+}
+.button-container{
+	width: fit-content;
+    float: right;
+}
+.button-container > *{
+	margin-right: 10px;
 }
 .font{
 	margin-top: 5px;
@@ -65,13 +72,18 @@
 		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
 	</bh:Div>
 	<bh:Div addStyleNames="{style.mid}" ui:field="midContainer">
-	</bh:Div>
-	<bh:Div addStyleNames="{style.right}">
 		<m:MaterialPreLoader ui:field="cardSpinner" display="NONE" addStyleNames="spinner">
 			<m:MaterialSpinner/>
 		</m:MaterialPreLoader>
-		<m:MaterialImage display="NONE" ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" width="25px" addStyleNames="clickable"/>
-		<m:MaterialImage display="NONE" ui:field="trashButton" url="{gui.trash.getSafeUri.asString}" width="25px" addStyleNames="clickable"/>
+	</bh:Div>
+	<bh:Div addStyleNames="{style.right}">
+		<bh:Div addStyleNames="{style.button-container}">
+			<m:MaterialImage display="NONE" ui:field="searchButton" url="{gui.searchIconSvg.getSafeUri.asString}" width="28px" addStyleNames="clickable image-button"/>
+			<m:MaterialImage display="NONE" ui:field="mapButton" url="{gui.mapIconSvg.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+			<m:MaterialImage display="NONE" ui:field="visButton" url="{gui.diagramIconSvg.getSafeUri.asString}" width="32px" addStyleNames="clickable image-button"/>
+			<m:MaterialImage display="NONE" ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+			<m:MaterialImage display="NONE" ui:field="trashButton" url="{gui.trash.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+		</bh:Div>
 	</bh:Div>
 </bh:Div>
 

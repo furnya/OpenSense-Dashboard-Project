@@ -56,7 +56,7 @@
 	margin-bottom: 0px !important; 
 }
 .center-text{
-	margin-left: 45px;
+	 min-width: 225px;
 }
 .no-sensor{
 	background-color: #fff;

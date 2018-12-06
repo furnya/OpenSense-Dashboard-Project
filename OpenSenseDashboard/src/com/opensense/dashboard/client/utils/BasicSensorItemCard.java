@@ -51,6 +51,15 @@ public class BasicSensorItemCard extends Composite{
 	MaterialImage trashButton;
 
 	@UiField
+	MaterialImage searchButton;
+
+	@UiField
+	MaterialImage mapButton;
+
+	@UiField
+	MaterialImage visButton;
+
+	@UiField
 	MaterialPreLoader cardSpinner;
 
 	public BasicSensorItemCard() {
@@ -69,6 +78,30 @@ public class BasicSensorItemCard extends Composite{
 	public void addTrashButtonClickHandler(ClickHandler handler) {
 		this.trashButton.getElement().getStyle().clearDisplay();
 		this.trashButton.addClickHandler(event -> {
+			event.stopPropagation();
+			handler.onClick(event);
+		});
+	}
+
+	public void addVisButtonClickHandler(ClickHandler handler) {
+		this.visButton.getElement().getStyle().clearDisplay();
+		this.visButton.addClickHandler(event -> {
+			event.stopPropagation();
+			handler.onClick(event);
+		});
+	}
+
+	public void addSearchButtonClickHandler(ClickHandler handler) {
+		this.searchButton.getElement().getStyle().clearDisplay();
+		this.searchButton.addClickHandler(event -> {
+			event.stopPropagation();
+			handler.onClick(event);
+		});
+	}
+
+	public void addMapButtonClickHandler(ClickHandler handler) {
+		this.mapButton.getElement().getStyle().clearDisplay();
+		this.mapButton.addClickHandler(event -> {
 			event.stopPropagation();
 			handler.onClick(event);
 		});

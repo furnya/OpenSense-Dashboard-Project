@@ -14,6 +14,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.presenter.ListManagerPresenter;
 import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.ListCollapsibleItem;
 import com.opensense.dashboard.client.utils.Pager;
@@ -108,6 +111,8 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		}else {
 			this.favNoDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
 			favList.forEach(id -> {
+				final List<Integer> idList = new ArrayList<>();
+				idList.add(id);
 				BasicSensorItemCard card = new BasicSensorItemCard();
 				card.setHeader("ID " + id);
 				card.addValueChangeHandler(event -> {
@@ -115,6 +120,9 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 				card.addTrashButtonClickHandler(event -> {
 					this.presenter.deleteSensorCardInList(-1, id);
 				});
+				card.addSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, idList)));
+				card.addMapButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, idList)));
+				card.addVisButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, idList)));
 				this.favoriteSensorCards.put(id, card);
 				this.showFavoriteIds.add(id);
 			});

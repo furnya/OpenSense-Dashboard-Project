@@ -321,6 +321,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		if(!favIds.contains(sensorId)) {
 			favIds.add(sensorId);
 			CookieManager.writeFavoriteListCookie(favIds);
+			MaterialToast.fireToast("Added " + sensorId + " to the fav list");
 		}
 	}
 
@@ -329,6 +330,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		if(favIds.contains(sensorId)) {
 			favIds.remove((Object) sensorId);
 			CookieManager.writeFavoriteListCookie(favIds);
+			MaterialToast.fireToast("Removed " + sensorId + " from the fav list");
 		}else {
 			LOGGER.log(Level.WARNING, "This should not happen");
 		}

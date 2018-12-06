@@ -1,25 +1,29 @@
-package com.opensense.dashboard.client.view;
+package com.opensense.dashboard.client.presenter;
 
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
-import com.opensense.dashboard.client.presenter.IPresenter;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
+import com.opensense.dashboard.client.view.ListManagerView;
+import com.opensense.dashboard.client.view.ListManagerViewImpl;
 
 public class ListManagerPresenter implements IPresenter, ListManagerView.Presenter{
 
 	private final ListManagerView view = new ListManagerViewImpl(this);
 
 	private AppController appController;
+	private HandlerManager eventBus;
 
 	int ids = 0;
 
-	public ListManagerPresenter(AppController appController) {
+	public ListManagerPresenter(AppController appController, HandlerManager eventBus) {
 		this.appController = appController;
+		this.eventBus = eventBus;
 	}
 
 
@@ -56,5 +60,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			this.appController.removeSensorFromFavoriteList(sensorCardId);
 			this.updateLists();
 		}
+	}
+
+	@Override
+	public HandlerManager getEventBus() {
+		return this.eventBus;
 	}
 }
