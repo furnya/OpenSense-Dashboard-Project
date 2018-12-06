@@ -10,6 +10,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.view.ListManagerViewImpl;
 
 import gwt.material.design.client.ui.MaterialLink;
 
@@ -19,7 +20,7 @@ public class ListCollapsibleItem extends Composite{
 	interface ListCollapsibleItemUiBinder extends UiBinder<Widget, ListCollapsibleItem> {
 	}
 
-	private ListRenderer view;
+	private ListManagerViewImpl view;
 
 	private Integer listId;
 
@@ -31,7 +32,7 @@ public class ListCollapsibleItem extends Composite{
 
 	private static ListCollapsibleItemUiBinder uiBinder = GWT.create(ListCollapsibleItemUiBinder.class);
 
-	public ListCollapsibleItem(ListRenderer view, int id) {
+	public ListCollapsibleItem(ListManagerViewImpl view, int id) {
 		this.initWidget(uiBinder.createAndBindUi(this));
 		this.view = view;
 		this.listId = id;

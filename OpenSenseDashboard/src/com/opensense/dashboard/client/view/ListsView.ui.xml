@@ -20,9 +20,14 @@
     filter: invert(100%);
     margin-top: -3px;
 }
+.container{
+	max-height: 80vh;
+    overflow: auto; 
+    padding-right: 10px;
+}
 </ui:style>
 
-<bh:Div>
+<bh:Div addStyleNames="{style.container}">
 	<bh:Div addStyleNames="{style.panel} flex round-corners">
 		<m:MaterialButton ui:field="createListButton" text="{lang.createNewList}" textColor="WHITE" addStyleNames="d-btn">
 			<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>

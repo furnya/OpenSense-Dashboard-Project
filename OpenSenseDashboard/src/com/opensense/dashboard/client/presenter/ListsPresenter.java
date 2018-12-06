@@ -31,7 +31,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 
 	@Override
 	public void onPageReturn() {
-		// TODO Auto-generated method stub
+		this.view.getListManager().updateLists();
 	}
 
 	@Override
@@ -54,5 +54,4 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 		this.view.initView();
 		runnable.run();
 	}
-
 }

@@ -9,7 +9,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.utils.ListController;
 
 import gwt.material.design.client.ui.MaterialButton;
 
@@ -23,7 +22,7 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 
 	protected Presenter presenter;
 
-	private ListController listController = new ListController();
+	private ListManagerPresenter listManager;
 
 	@UiField
 	Div listContainer;
@@ -33,12 +32,11 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 
 	public ListsViewImpl() {
 		this.initWidget(uiBinder.createAndBindUi(this));
-		this.listContainer.add(this.listController.getContainer());
 	}
 
 	@UiHandler("createListButton")
 	public void onCreateListButtonClicked(ClickEvent e) {
-		this.listController.createNewList();
+		this.listManager.createNewList();
 	}
 
 	@Override
@@ -48,6 +46,13 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 
 	@Override
 	public void initView() {
-		// init UI Elements if needed
+		this.listManager = new ListManagerPresenter(this.presenter.getAppController());
+		this.listManager.go(this.listContainer);
 	}
+
+	@Override
+	public ListManagerPresenter getListManager() {
+		return this.listManager;
+	}
+
 }

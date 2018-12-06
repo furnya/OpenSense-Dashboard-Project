@@ -52,7 +52,7 @@ public class Pager extends Composite{
 
 	public void onForwardsStepByStepButtonClicked(int showObjectsSize){
 		//If current page is the last do nothing
-		if(((showObjectsSize / this.maxObjectsOnPage) - 1) < (this.page + 1)){
+		if((this.page + 1) > (((int) Math.ceil(showObjectsSize / (double) this.maxObjectsOnPage)) - 1)){
 			return;
 		}
 		this.page = this.page + 1;
@@ -78,7 +78,7 @@ public class Pager extends Composite{
 
 	public void onForwardsButtonClicked(int showObjectsSize){
 		//Goes to the last page
-		this.page = (showObjectsSize / this.maxObjectsOnPage) - 1;
+		this.page = ((int) Math.ceil(showObjectsSize / (double) this.maxObjectsOnPage)) - 1;
 		this.update(showObjectsSize, true);
 	}
 
