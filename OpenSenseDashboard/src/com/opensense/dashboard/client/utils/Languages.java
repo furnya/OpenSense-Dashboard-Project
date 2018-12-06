@@ -569,4 +569,28 @@ public class Languages {
 			return "Create new list";
 		}
 	}
+
+	public static String newList() {
+		if(de){
+			return "Neue Liste ";
+		}else{
+			return "New list ";
+		}
+	}
+
+	public static String selectedSensors() {
+		if(de){
+			return "Ausgewälte Sensoren";
+		}else{
+			return "Selected sensors";
+		}
+	}
+
+	public static String mySensors() {
+		if(de){
+			return "Meine Sensoren";
+		}else{
+			return "My sensors";
+		}
+	}
 }

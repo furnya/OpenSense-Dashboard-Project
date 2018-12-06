@@ -34,7 +34,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 
 	public void updateLists() {
-		this.view.addFavoriteSensors(CookieManager.getFavoriteList());
+		this.view.setSensorsInList(-1, CookieManager.getFavoriteList());
 		if(!this.appController.isGuest()) {
 			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<Map<Integer, List<Integer>>>(result -> {
 

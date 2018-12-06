@@ -423,8 +423,11 @@ input:focus+label{
 	background-color: #202020;
 	border-bottom: none;
 	cursor: auto;
+	text-align: center;
 }
-
+.pager{
+    min-width: 225px;
+}
 .image-button:hover{
 	transform: scale(0.9);
 }

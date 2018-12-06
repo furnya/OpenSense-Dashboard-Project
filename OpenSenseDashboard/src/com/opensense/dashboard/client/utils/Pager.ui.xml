@@ -27,17 +27,17 @@
 	</ui:style>
 		<bh:Div>
 			<bh:Div>
-				<m:MaterialButton ui:field="backwardsButton" addStyleNames="{style.paging-button} d-btn" title="{lang.backwards}">
+				<m:MaterialButton enabled="false" ui:field="backwardsButton" addStyleNames="{style.paging-button} d-btn" title="{lang.backwards}">
 					<m:MaterialImage url="{gui.backwards.getSafeUri.asString}" />
 				</m:MaterialButton>
-				<m:MaterialButton ui:field="backwardsStepByStepButton" addStyleNames="{style.paging-button} d-btn" title="{lang.backwardsStepByStep}">
+				<m:MaterialButton enabled="false" ui:field="backwardsStepByStepButton" addStyleNames="{style.paging-button} d-btn" title="{lang.backwardsStepByStep}">
 					<m:MaterialImage url="{gui.backwardsStepbyStep.getSafeUri.asString}" />
 				</m:MaterialButton>
 				<bh:Span ui:field="pageNumber" text="0-0 of 0" addStyleNames="margin-right-10" title="{lang.pageConfiguration}" color="white"/>
-				<m:MaterialButton ui:field="forwardsStepByStepButton" addStyleNames="{style.paging-button} d-btn" title="{lang.forwardsStepByStep}">
+				<m:MaterialButton enabled="false" ui:field="forwardsStepByStepButton" addStyleNames="{style.paging-button} d-btn" title="{lang.forwardsStepByStep}">
 					<m:MaterialImage url="{gui.forwardsStepByStep.getSafeUri.asString}" />
 				</m:MaterialButton>
-				<m:MaterialButton ui:field="forwardsButton" addStyleNames="{style.paging-button} d-btn" title="{lang.forwards}">
+				<m:MaterialButton enabled="false" ui:field="forwardsButton" addStyleNames="{style.paging-button} d-btn" title="{lang.forwards}">
 					<m:MaterialImage url="{gui.forwards.getSafeUri.asString}" />
 				</m:MaterialButton>
 			</bh:Div>	

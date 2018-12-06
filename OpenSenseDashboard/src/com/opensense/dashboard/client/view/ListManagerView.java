@@ -14,7 +14,7 @@ public interface ListManagerView {
 	}
 
 	public Widget asWidget();
-	public void addFavoriteSensors(List<Integer> favoriteList);
 	public void addNewListItem(int listid);
 	public void removeListItem(int listId);
+	public void setSensorsInList(int listId, List<Integer> sensors);
 }

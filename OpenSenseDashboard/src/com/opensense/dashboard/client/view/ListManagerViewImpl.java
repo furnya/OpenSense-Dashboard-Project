@@ -13,11 +13,13 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.presenter.ListManagerPresenter;
 import com.opensense.dashboard.client.utils.BasicSensorItemCard;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListCollapsibleItem;
 import com.opensense.dashboard.client.utils.Pager;
 
@@ -34,8 +36,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	private static ListManagerViewUiBinder uiBinder = GWT.create(ListManagerViewUiBinder.class);
 
 	protected Presenter presenter;
-
-	private Map<Integer, ListCollapsibleItem> collapsiblesItems = new HashMap<>();
 
 	@UiField
 	MaterialCollapsible collapsible;
@@ -54,6 +54,18 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@UiField
 	Pager favPagerBottom;
+
+	@UiField
+	Pager mySensorsPagerTop;
+
+	@UiField
+	Pager mySensorsPagerBottom;
+
+	@UiField
+	Pager selectedSensorsPagerTop;
+
+	@UiField
+	Pager selectedSensorsPagerBottom;
 
 	@UiField
 	MaterialCollapsibleItem selectedSensorsItem;
@@ -76,20 +88,26 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	@UiField
 	MaterialPreLoader mySensorsSpinner;
 
-	private Map<Integer, BasicSensorItemCard> favoriteSensorCards = new HashMap<>();
-	private List<Integer> showFavoriteIds = new ArrayList<>();
+	private Map<Integer, Map<Integer, BasicSensorItemCard>> sensorCardsInLists = new HashMap<>();
+	private Map<Integer, List<Integer>> showSensorIdsInLists = new HashMap<>();
+
+	private Map<Integer, ListCollapsibleItem> collapsiblesItems = new HashMap<>();
 
 	public ListManagerViewImpl(ListManagerPresenter presenter) {
 		this.initWidget(uiBinder.createAndBindUi(this));
 		this.presenter = presenter;
-		this.initFavoritePager();
+		this.initPager(this.favSensorContainer, this.favPagerTop, this.favPagerBottom, -1);
+		this.initPager(this.selectedSensorsSensorContainer, this.mySensorsPagerTop, this.mySensorsPagerBottom, -2);
+		this.initPager(this.mySensorsSensorContainer, this.selectedSensorsPagerTop, this.selectedSensorsPagerBottom, -3);
 	}
 
 	@Override
-	public void addNewListItem(int id) {
-		ListCollapsibleItem item = new ListCollapsibleItem(this, id);
+	public void addNewListItem(final int listId) {
+		ListCollapsibleItem item = new ListCollapsibleItem();
+		item.setName(Languages.newList() + listId);
+		item.addDeleteButtonClickHandler(event -> this.deleteList(listId));
 		this.collapsible.add(item);
-		this.collapsiblesItems.put(id, item);
+		this.collapsiblesItems.put(listId, item);
 	}
 
 	public void deleteList(int listId) {
@@ -103,58 +121,58 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void addFavoriteSensors(List<Integer> favList) {
-		this.favoriteSensorCards.clear();
-		this.showFavoriteIds.clear();
-		if(favList.isEmpty()) {
+	public void setSensorsInList(final int listId, final List<Integer> sensors) {
+		final Map<Integer, BasicSensorItemCard> sensorCards = new HashMap<>();
+		final List<Integer> showFavoriteIds = new ArrayList<>();
+		if(sensors.isEmpty()) {
 			this.favNoDataIndicator.getElement().getStyle().clearDisplay();
 		}else {
 			this.favNoDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
-			favList.forEach(id -> {
+			sensors.forEach(id -> {
 				final List<Integer> idList = new ArrayList<>();
 				idList.add(id);
 				BasicSensorItemCard card = new BasicSensorItemCard();
 				card.setHeader("ID " + id);
 				card.addValueChangeHandler(event -> {
 				});
-				card.addTrashButtonClickHandler(event -> {
-					this.presenter.deleteSensorCardInList(-1, id);
-				});
+				card.addTrashButtonClickHandler(event -> this.presenter.deleteSensorCardInList(-1, id));
 				card.addSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, idList)));
 				card.addMapButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, idList)));
 				card.addVisButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, idList)));
-				this.favoriteSensorCards.put(id, card);
-				this.showFavoriteIds.add(id);
+				sensorCards.put(id, card);
+				showFavoriteIds.add(id);
 			});
-			this.favPagerTop.update(this.showFavoriteIds.size(), true);
 		}
+		this.sensorCardsInLists.put(listId, sensorCards);
+		this.showSensorIdsInLists.put(listId, showFavoriteIds);
+		this.favPagerTop.update(showFavoriteIds.size(), true);
 	}
 
-	private void initFavoritePager() {
-		this.favPagerTop.setMaxObjectsOnPage(10);
-		this.favPagerTop.addBackwardsButtonClickHandler(event -> this.favPagerTop.onBackwardsButtonClicked(this.showFavoriteIds.size()));
-		this.favPagerTop.addBackwardsStepByStepClickHandler(event -> this.favPagerTop.onBackwardsStepByStepButtonClicked(this.showFavoriteIds.size()));
-		this.favPagerTop.addForwardsStepByStepClickHandler(event -> this.favPagerTop.onForwardsStepByStepButtonClicked(this.showFavoriteIds.size()));
-		this.favPagerTop.addForwardsButtonClickHandler(event -> this.favPagerTop.onForwardsButtonClicked(this.showFavoriteIds.size()));
+	private void initPager(final HasWidgets container, final Pager pagerTop, final Pager pagerBottom, final int listId) {
+		pagerTop.setMaxObjectsOnPage(10);
+		pagerTop.addBackwardsButtonClickHandler(event -> pagerTop.onBackwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
+		pagerTop.addBackwardsStepByStepClickHandler(event -> pagerTop.onBackwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
+		pagerTop.addForwardsStepByStepClickHandler(event -> pagerTop.onForwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
+		pagerTop.addForwardsButtonClickHandler(event -> pagerTop.onForwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 
-		this.favPagerTop.addPaginationEventHandler(event -> this.favoriteListpagination(event.getPage(), event.getMaxObjectsOnPage()));
+		pagerTop.addPaginationEventHandler(event -> this.pagination(container, event.getPage(), event.getMaxObjectsOnPage(), listId));
 
-		this.favPagerBottom.setMaxObjectsOnPage(10);
-		this.favPagerBottom.addBackwardsButtonClickHandler(event -> this.favPagerBottom.onBackwardsButtonClicked(this.showFavoriteIds.size()));
-		this.favPagerBottom.addBackwardsStepByStepClickHandler(event -> this.favPagerBottom.onBackwardsStepByStepButtonClicked(this.showFavoriteIds.size()));
-		this.favPagerBottom.addForwardsStepByStepClickHandler(event -> this.favPagerBottom.onForwardsStepByStepButtonClicked(this.showFavoriteIds.size()));
-		this.favPagerBottom.addForwardsButtonClickHandler(event -> this.favPagerBottom.onForwardsButtonClicked(this.showFavoriteIds.size()));
+		pagerBottom.setMaxObjectsOnPage(10);
+		pagerBottom.addBackwardsButtonClickHandler(event -> pagerBottom.onBackwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
+		pagerBottom.addBackwardsStepByStepClickHandler(event -> pagerBottom.onBackwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
+		pagerBottom.addForwardsStepByStepClickHandler(event -> pagerBottom.onForwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
+		pagerBottom.addForwardsButtonClickHandler(event -> pagerBottom.onForwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 
-		this.favPagerBottom.addPaginationEventHandler(event -> this.favoriteListpagination(event.getPage(), event.getMaxObjectsOnPage()));
+		pagerBottom.addPaginationEventHandler(event -> this.pagination(container, event.getPage(), event.getMaxObjectsOnPage(), listId));
 
-		this.favPagerTop.setDependentPager(this.favPagerBottom);
-		this.favPagerBottom.setDependentPager(this.favPagerTop);
+		pagerTop.setDependentPager(pagerBottom);
+		pagerBottom.setDependentPager(pagerTop);
 	}
 
-	private void favoriteListpagination(int page, int maxObjectsOnPage) {
-		this.favSensorContainer.clear();
-		for(int i = page * maxObjectsOnPage; (i < this.showFavoriteIds.size()) && (i < ((page + 1) * maxObjectsOnPage)); i++){
-			this.favSensorContainer.add(this.favoriteSensorCards.get(this.showFavoriteIds.get(i)));
+	private void pagination(HasWidgets container, int page, int maxObjectsOnPage, int listId) {
+		container.clear();
+		for(int i = page * maxObjectsOnPage; (i < this.showSensorIdsInLists.get(listId).size()) && (i < ((page + 1) * maxObjectsOnPage)); i++){
+			this.favSensorContainer.add(this.sensorCardsInLists.get(listId).get(this.showSensorIdsInLists.get(listId).get(i)));
 		}
 	}
 }

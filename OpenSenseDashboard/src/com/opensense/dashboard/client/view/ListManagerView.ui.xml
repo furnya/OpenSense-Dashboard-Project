@@ -29,9 +29,6 @@
 .sensor-container > Div:last-child{
 	margin-bottom: 0px !important; 
 }
-.pager{
-    min-width: 225px;
-}
 .body {
 	text-align: center;	
 	overflow: hidden;
@@ -46,7 +43,7 @@
 				<b:Image url="{gui.favoriteRed.getSafeUri.asString}" addStyleNames="{style.fav-icon}" />
 			</m:MaterialCollapsibleHeader>
 			<m:MaterialCollapsibleBody  addStyleNames="{style.body}">
-				<d:Pager ui:field="favPagerTop" addStyleNames="{style.pager}"/>
+				<d:Pager ui:field="favPagerTop" addStyleNames="pager"/>
 				<m:MaterialPreLoader ui:field="favSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
 					<m:MaterialSpinner/>
 				</m:MaterialPreLoader>
@@ -54,15 +51,15 @@
 					<bh:Span text="{lang.noListData}"/>
 				</bh:Div>
 				<bh:Div ui:field="favSensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
-				<d:Pager ui:field="favPagerBottom" addStyleNames="{style.pager}"/>
+				<d:Pager ui:field="favPagerBottom" addStyleNames="pager"/>
 			</m:MaterialCollapsibleBody>
 		</m:MaterialCollapsibleItem>
 		<m:MaterialCollapsibleItem ui:field="selectedSensorsItem" display="NONE">
 			<m:MaterialCollapsibleHeader>
-				<m:MaterialLink text="Ausgewälte Sensoren" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
-				<b:Image url="{gui.mySesnors.getSafeUri.asString}" addStyleNames="{style.fav-icon}" />
+				<m:MaterialLink text="{lang.selectedSensors}" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
 			</m:MaterialCollapsibleHeader>
 			<m:MaterialCollapsibleBody>
+				<d:Pager ui:field="selectedSensorsPagerTop" addStyleNames="pager"/>
 				<m:MaterialPreLoader ui:field="selectedSensorsSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
 					<m:MaterialSpinner/>
 				</m:MaterialPreLoader>
@@ -70,14 +67,16 @@
 					<bh:Span text="{lang.noListData}"/>
 				</bh:Div>
 				<bh:Div ui:field="selectedSensorsSensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
+				<d:Pager ui:field="selectedSensorsPagerBottom" addStyleNames="pager"/>
 			</m:MaterialCollapsibleBody>
 		</m:MaterialCollapsibleItem>
 		<m:MaterialCollapsibleItem>
 			<m:MaterialCollapsibleHeader>
-				<m:MaterialLink text="Meine Sensoren" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
+				<m:MaterialLink text="{lang.mySensors}" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
 				<b:Image url="{gui.mySesnors.getSafeUri.asString}" addStyleNames="{style.fav-icon}" />
 			</m:MaterialCollapsibleHeader>
 			<m:MaterialCollapsibleBody>
+				<d:Pager ui:field="mySensorsPagerTop" addStyleNames="pager"/>
 				<m:MaterialPreLoader ui:field="mySensorsSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
 					<m:MaterialSpinner/>
 				</m:MaterialPreLoader>
@@ -85,6 +84,7 @@
 					<bh:Span text="{lang.noListData}"/>
 				</bh:Div>
 				<bh:Div ui:field="mySensorsSensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
+				<d:Pager ui:field="mySensorsPagerBottom" addStyleNames="pager"/>
 			</m:MaterialCollapsibleBody>
 		</m:MaterialCollapsibleItem>
 	 </m:MaterialCollapsible>
