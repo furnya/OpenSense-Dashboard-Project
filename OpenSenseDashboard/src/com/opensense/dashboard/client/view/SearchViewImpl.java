@@ -35,6 +35,7 @@ import com.opensense.dashboard.shared.ValuePreview;
 import gwt.material.design.client.base.validator.RegExValidator;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialDropDown;
+import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialListBox;
 import gwt.material.design.client.ui.MaterialNavBar;
 import gwt.material.design.client.ui.MaterialPreLoader;
@@ -102,6 +103,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@UiField
 	Pager pagerBottom;
+
+	@UiField
+	MaterialLink favoriteButton;
 
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
@@ -173,6 +177,11 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			this.selectAllButton.setText(Languages.selectAllSensors());
 		}
 		this.onSelectedSensorsChanged();
+	}
+
+	@UiHandler("favoriteButton")
+	public void onFavoriteButtonClicked(ClickEvent e) {
+		this.selectedSensors.forEach(id -> this.presenter.addSensorToFavoriteList(id));
 	}
 
 	private void onShownSensorsChanged() {

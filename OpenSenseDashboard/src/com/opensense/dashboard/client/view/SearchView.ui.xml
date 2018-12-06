@@ -72,6 +72,10 @@
 	width: calc(33.3% - 10px);
 	min-width: 0px;
 }
+.fav-img{
+    width: 25px;
+    margin-right: 20px;
+}
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="{style.con}">
@@ -80,7 +84,7 @@
 			<m:MaterialNavBar ui:field="navBarSearch" width="33%" addStyleNames="{style.nav-bar} round-corners"> 
 		 		 <b:Input ui:field="searchInput" type="TEXT" placeholder="{lang.searchPlace}" addStyleNames="{style.input}"/>
 		 	</m:MaterialNavBar>  
-			<m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" width="33%" textColor="WHITE" addStyleNames="{style.max} round-corners"/>
+			<m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" width="33%" textColor="WHITE" addStyleNames="{style.max} round-corners" />
 			<m:MaterialTextBox width="33%" textColor="WHITE" ui:field="maxSensors" label="{lang.maxSensors}"/>
 		</bh:Div>
 		<bh:Div addStyleNames="flex {style.margin}">
@@ -100,8 +104,10 @@
 		<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn" enabled="false" activates="dp-1">
 			<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 		</m:MaterialButton>
-		<m:MaterialDropDown ui:field="listDropDown" activator="dp-1">
-			<m:MaterialLink text="Favoriten" /><m:MaterialLink text="Erste Liste" />
+		<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners">
+			<m:MaterialLink ui:field="favoriteButton" text="Favoriten" >
+				<m:MaterialImage addStyleNames="{style.fav-img}" url="{gui.favoriteRed.getSafeUri.asString}"/>
+			</m:MaterialLink>
 		</m:MaterialDropDown>
 	</bh:Div>
 	<bh:Div ui:field="dataContent" addStyleNames="margin-top-10 {style.panel} round-corners {style.center}"> 
