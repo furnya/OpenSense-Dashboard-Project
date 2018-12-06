@@ -44,6 +44,7 @@
 .right{
 	min-width: 15%;
 	position: relative;
+	padding-top: 8px;
 }
 .font{
 	margin-top: 5px;
@@ -52,18 +53,6 @@
 .checkbox{
 	margin-top: auto;
 	margin-left: 10px;
-}
-.fav-icon > img{
-	filter: invert(100%);   
-	width: 30px;
-    height: 30px;
-	min-width: 30px;
-    margin-left: -15px;
-}
-.fav-icon{
-	margin-top: 2px;	
-    float: right;
-    margin-right: 10px;
 }
 </ui:style>
 
@@ -81,7 +70,8 @@
 		<m:MaterialPreLoader ui:field="cardSpinner" display="NONE" addStyleNames="spinner">
 			<m:MaterialSpinner/>
 		</m:MaterialPreLoader>
-		<b:Button  width="30px" ui:field="favButton" addStyleNames="d-btn {style.fav-icon}" />
+		<m:MaterialImage display="NONE" ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" width="25px" addStyleNames="clickable"/>
+		<m:MaterialImage display="NONE" ui:field="trashButton" url="{gui.trash.getSafeUri.asString}" width="25px" addStyleNames="clickable"/>
 	</bh:Div>
 </bh:Div>
 

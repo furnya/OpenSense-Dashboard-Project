@@ -1,24 +1,23 @@
 package com.opensense.dashboard.client.utils;
 
-import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.gui.GUIImageBundle;
 
 import gwt.material.design.client.ui.MaterialCheckBox;
+import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialPreLoader;
 
@@ -46,7 +45,10 @@ public class BasicSensorItemCard extends Composite{
 	MaterialCheckBox checkbox;
 
 	@UiField
-	Button favButton;
+	MaterialImage favButton;
+
+	@UiField
+	MaterialImage trashButton;
 
 	@UiField
 	MaterialPreLoader cardSpinner;
@@ -54,13 +56,22 @@ public class BasicSensorItemCard extends Composite{
 	public BasicSensorItemCard() {
 		this.initWidget(uiBinder.createAndBindUi(this));
 		this.addClickHandler();
-		this.favButton.add(new Image(GUIImageBundle.INSTANCE.favorite().getSafeUri().asString()));
-		this.setActive(true);
 	}
 
-	@UiHandler("favButton")
-	public void onFavButtonClicked(ClickEvent e) {
-		e.stopPropagation();
+	public void addFavButtonClickHandler(ClickHandler handler) {
+		this.favButton.getElement().getStyle().clearDisplay();
+		this.favButton.addClickHandler(event -> {
+			event.stopPropagation();
+			handler.onClick(event);
+		});
+	}
+
+	public void addTrashButtonClickHandler(ClickHandler handler) {
+		this.trashButton.getElement().getStyle().clearDisplay();
+		this.trashButton.addClickHandler(event -> {
+			event.stopPropagation();
+			handler.onClick(event);
+		});
 	}
 
 	public void setHeader(String text) {
@@ -80,9 +91,7 @@ public class BasicSensorItemCard extends Composite{
 	}
 
 	private void addClickHandler() {
-		this.layout.addDomHandler(event -> {
-			this.checkbox.setValue(!this.checkbox.getValue(), true);
-		}, ClickEvent.getType());
+		this.layout.addDomHandler(event -> this.checkbox.setValue(!this.checkbox.getValue(), true), ClickEvent.getType());
 		this.addClickListener(this.checkbox.getElement());
 	}
 
@@ -97,9 +106,7 @@ public class BasicSensorItemCard extends Composite{
 		this.checkbox.setValue(active);
 		if(active) {
 			this.layout.addStyleName("card-active");
-			this.layout.removeStyleName("card-deactive");
 		}else {
-			this.layout.addStyleName("card-deactive");
 			this.layout.removeStyleName("card-active");
 		}
 	}

@@ -30,7 +30,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	private static ListManagerViewUiBinder uiBinder = GWT.create(ListManagerViewUiBinder.class);
 
-	private ListManagerPresenter presenter;
+	protected Presenter presenter;
 
 	private Map<Integer, ListCollapsibleItem> collapsiblesItems = new HashMap<>();
 
@@ -101,7 +101,8 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@Override
 	public void addFavoriteSensors(List<Integer> favList) {
-		this.favSensorContainer.clear();
+		this.favoriteSensorCards.clear();
+		this.showFavoriteIds.clear();
 		if(favList.isEmpty()) {
 			this.favNoDataIndicator.getElement().getStyle().clearDisplay();
 		}else {
@@ -109,6 +110,11 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			favList.forEach(id -> {
 				BasicSensorItemCard card = new BasicSensorItemCard();
 				card.setHeader("ID " + id);
+				card.addValueChangeHandler(event -> {
+				});
+				card.addTrashButtonClickHandler(event -> {
+					this.presenter.deleteSensorCardInList(-1, id);
+				});
 				this.favoriteSensorCards.put(id, card);
 				this.showFavoriteIds.add(id);
 			});
@@ -143,5 +149,4 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			this.favSensorContainer.add(this.favoriteSensorCards.get(this.showFavoriteIds.get(i)));
 		}
 	}
-
 }

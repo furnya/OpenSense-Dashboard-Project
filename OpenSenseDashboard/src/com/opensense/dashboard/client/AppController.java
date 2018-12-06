@@ -318,7 +318,19 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	public void addSensorToFavoriteList(int sensorId) {
 		//TODO skip if exists
 		List<Integer> favIds = CookieManager.getFavoriteList();//TODO: set a max
-		favIds.add(sensorId);
-		CookieManager.writeFavoriteListCookie(favIds);
+		if(!favIds.contains(sensorId)) {
+			favIds.add(sensorId);
+			CookieManager.writeFavoriteListCookie(favIds);
+		}
+	}
+
+	public void removeSensorFromFavoriteList(int sensorId) {
+		List<Integer> favIds = CookieManager.getFavoriteList();
+		if(favIds.contains(sensorId)) {
+			favIds.remove((Object) sensorId);
+			CookieManager.writeFavoriteListCookie(favIds);
+		}else {
+			LOGGER.log(Level.WARNING, "This should not happen");
+		}
 	}
 }

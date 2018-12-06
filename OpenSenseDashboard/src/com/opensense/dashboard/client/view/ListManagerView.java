@@ -7,7 +7,8 @@ import com.google.gwt.user.client.ui.Widget;
 public interface ListManagerView {
 
 	public interface Presenter {
-
+		void deleteList(int listId);
+		void deleteSensorCardInList(int listId, int sensorCardId);
 	}
 
 	public Widget asWidget();

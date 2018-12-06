@@ -42,8 +42,19 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		this.view.addNewListItem(this.ids++);
 	}
 
+	@Override
 	public void deleteList(final int listId) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stubd
 		this.view.removeListItem(listId);
+	}
+
+
+	@Override
+	public void deleteSensorCardInList(final int listId, final int sensorCardId) {
+		// TODO Auto-generated method stub
+		if(listId == -1) { // -1 fav list, -2 selected sensor list, -3 mysensor list
+			this.appController.removeSensorFromFavoriteList(sensorCardId);
+			this.updateLists();
+		}
 	}
 }
