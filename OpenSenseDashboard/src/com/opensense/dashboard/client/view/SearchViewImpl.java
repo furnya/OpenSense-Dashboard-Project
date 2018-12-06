@@ -97,11 +97,11 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@UiField
 	MaterialButton selectAllButton;
 
-	@UiField(provided = true)
-	Pager pagerTop = new Pager(this);
+	@UiField
+	Pager pagerTop;
 
-	@UiField(provided = true)
-	Pager pagerBottom = new Pager(this);
+	@UiField
+	Pager pagerBottom;
 
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
@@ -118,11 +118,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	private LinkedList<Integer> shownSensorIds = new LinkedList<>();
 	private Map<Integer, SensorItemCard> sensorViews = new HashMap<>();
-	private int maxSensorsOnPage = 20;
-	private int sensorPage = 0;
 
 	public SearchViewImpl() {
 		this.initWidget(uiBinder.createAndBindUi(this));
+		this.initPager();
 		this.showNoDataIndicator(false);
 		this.showDataContainer(false);
 		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
@@ -220,7 +219,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		if(this.sensorViews.isEmpty()) {
 			this.noDataIndicator.getElement().getStyle().clearDisplay();
 		}
-		this.pagination();
+		this.pagerTop.update(this.shownSensorIds.size(), true);
 		this.onShownSensorsChanged();
 		this.hideLoadingIndicator();
 	}
@@ -382,53 +381,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 
 	@Override
-	public void pagination() {
-		this.sensorContainer.clear();
-
-		List<Integer> idsOnPage = new ArrayList<>();
-		for(int i = this.sensorPage * this.maxSensorsOnPage; (i < this.shownSensorIds.size()) && (i < ((this.sensorPage + 1) * this.maxSensorsOnPage)); i++){
-			this.sensorContainer.add(this.sensorViews.get(this.shownSensorIds.get(i)));
-			idsOnPage.add(this.shownSensorIds.get(i));
-		}
-		idsOnPage.forEach(id -> this.sensorViews.get(id).showPreviewContentSpinner(true));
-		this.presenter.getSensorValuePreviewAndShow(idsOnPage);
-
-		this.pagerTop.setPage(Languages.setPageNumber(this.sensorPage, this.maxSensorsOnPage, this.shownSensorIds.size()));
-		this.pagerTop.setForwardsEnabled((this.sensorPage + 1) < ((int) Math.ceil((double) this.shownSensorIds.size() / (double) this.maxSensorsOnPage)));
-		this.pagerTop.setBackwardsEnabled(this.sensorPage > 0);
-
-		this.pagerBottom.setPage(Languages.setPageNumber(this.sensorPage, this.maxSensorsOnPage, this.shownSensorIds.size()));
-		this.pagerBottom.setForwardsEnabled((this.sensorPage + 1) < ((int) Math.ceil((double) this.shownSensorIds.size() / (double) this.maxSensorsOnPage)));
-		this.pagerBottom.setBackwardsEnabled(this.sensorPage > 0);
-	}
-
-	public void clearPager() {
-		this.pagerTop.setPage(Languages.setPageNumber(0, 0, 0));
-		this.pagerTop.setForwardsEnabled(false);
-		this.pagerTop.setBackwardsEnabled(false);
-		this.pagerBottom.setPage(Languages.setPageNumber(0, 0, 0));
-		this.pagerBottom.setForwardsEnabled(false);
-		this.pagerBottom.setBackwardsEnabled(false);
-	}
-
-	@Override
 	public List<Integer> getShownSensorIds() {
 		return this.shownSensorIds;
-	}
-
-	@Override
-	public double getMaxSensorsOnPage() {
-		return this.maxSensorsOnPage;
-	}
-
-	@Override
-	public int getSensorPage() {
-		return this.sensorPage;
-	}
-
-	@Override
-	public void setSensorPage(int page) {
-		this.sensorPage = page;
 	}
 
 	@Override
@@ -440,8 +394,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		this.selectedSensors.clear();
 		this.sensorViews.clear();
 		this.shownSensorIds.clear();
-		this.clearPager();
-		this.sensorPage = 0;
+		this.pagerTop.clearPager();
+		this.pagerBottom.clearPager();
 		this.onShownSensorsChanged();
 		this.onSelectedSensorsChanged();
 	}
@@ -478,5 +432,35 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 				}
 			});
 		}
+	}
+
+	private void initPager() {
+		this.pagerTop.addBackwardsButtonClickHandler(event -> this.pagerTop.onBackwardsButtonClicked(this.shownSensorIds.size()));
+		this.pagerTop.addBackwardsStepByStepClickHandler(event -> this.pagerTop.onBackwardsStepByStepButtonClicked(this.shownSensorIds.size()));
+		this.pagerTop.addForwardsStepByStepClickHandler(event -> this.pagerTop.onForwardsStepByStepButtonClicked(this.shownSensorIds.size()));
+		this.pagerTop.addForwardsButtonClickHandler(event -> this.pagerTop.onForwardsButtonClicked(this.shownSensorIds.size()));
+
+		this.pagerTop.addPaginationEventHandler(event -> this.pagination(event.getPage(), event.getMaxObjectsOnPage()));
+
+		this.pagerBottom.addBackwardsButtonClickHandler(event -> this.pagerBottom.onBackwardsButtonClicked(this.shownSensorIds.size()));
+		this.pagerBottom.addBackwardsStepByStepClickHandler(event -> this.pagerBottom.onBackwardsStepByStepButtonClicked(this.shownSensorIds.size()));
+		this.pagerBottom.addForwardsStepByStepClickHandler(event -> this.pagerBottom.onForwardsStepByStepButtonClicked(this.shownSensorIds.size()));
+		this.pagerBottom.addForwardsButtonClickHandler(event -> this.pagerBottom.onForwardsButtonClicked(this.shownSensorIds.size()));
+
+		this.pagerBottom.addPaginationEventHandler(event -> this.pagination(event.getPage(), event.getMaxObjectsOnPage()));
+
+		this.pagerTop.setDependentPager(this.pagerBottom);
+		this.pagerBottom.setDependentPager(this.pagerTop);
+	}
+
+	private void pagination(int page, int maxObjectsOnPage) {
+		this.sensorContainer.clear();
+		List<Integer> idsOnPage = new ArrayList<>();
+		for(int i = page * maxObjectsOnPage; (i < this.shownSensorIds.size()) && (i < ((page + 1) * maxObjectsOnPage)); i++){
+			SensorItemCard card = this.sensorViews.get(this.shownSensorIds.get(i));
+			card.showPreviewContentSpinner(true);
+			this.sensorContainer.add(card);
+		}
+		this.presenter.getSensorValuePreviewAndShow(idsOnPage);
 	}
 }

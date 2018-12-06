@@ -1,18 +1,17 @@
 package com.opensense.dashboard.client.utils;
 
-import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.gui.GUIImageBundle;
-import com.opensense.dashboard.client.view.SearchView;
+import com.opensense.dashboard.client.event.PaginationEvent;
+import com.opensense.dashboard.client.event.PaginationEventHandler;
+
+import gwt.material.design.client.ui.MaterialButton;
 
 public class Pager extends Composite{
 
@@ -21,64 +20,76 @@ public class Pager extends Composite{
 	interface PagerUiBinder extends UiBinder<Widget, Pager> {
 	}
 
-	private final SearchView view;
+	@UiField
+	MaterialButton backwardsButton;
 
 	@UiField
-	Button backwardsButton;
-
-	@UiField
-	Button forwardsButton;
+	MaterialButton forwardsButton;
 
 	@UiField
 	Span pageNumber;
 
 	@UiField
-	Button backwardsStepByStepButton;
+	MaterialButton backwardsStepByStepButton;
 
 	@UiField
-	Button forwardsStepByStepButton;
+	MaterialButton forwardsStepByStepButton;
 
-	public Pager(SearchView view) {
+	private int maxObjectsOnPage = 20;
+	private int page = 0;
+
+	private Pager dependentPager;
+
+	private PaginationEventHandler paginationEventHandler;
+
+	public Pager() {
 		this.initWidget(uiBinder.createAndBindUi(this));
-		this.view = view;
-
-		this.forwardsButton.add(new Image(GUIImageBundle.INSTANCE.forwards().getSafeUri().asString()));
-		this.forwardsStepByStepButton.add(new Image(GUIImageBundle.INSTANCE.forwardsStepByStep().getSafeUri().asString()));
-		this.backwardsButton.add(new Image(GUIImageBundle.INSTANCE.backwards().getSafeUri().asString()));
-		this.backwardsStepByStepButton.add(new Image(GUIImageBundle.INSTANCE.backwardsStepbyStep().getSafeUri().asString()));
 	}
 
-	@UiHandler("forwardsStepByStepButton")
-	public void onForwardsStepByStepButtonClicked(ClickEvent e){
+	public void addForwardsStepByStepClickHandler(ClickHandler handler) {
+		this.forwardsStepByStepButton.addClickHandler(handler);
+	}
+
+	public void onForwardsStepByStepButtonClicked(int showObjectsSize){
 		//If current page is the last do nothing
-		if((((int) Math.ceil(this.view.getShownSensorIds().size() / this.view.getMaxSensorsOnPage())) - 1) < (this.view.getSensorPage() + 1)){
+		if(((showObjectsSize / this.maxObjectsOnPage) - 1) < (this.page + 1)){
 			return;
 		}
-		this.view.setSensorPage(this.view.getSensorPage() + 1);
-		this.view.pagination();
+		this.page = this.page + 1;
+		this.update(showObjectsSize, true);
 	}
 
-	@UiHandler("backwardsStepByStepButton")
-	public void onBackwardsStepByStepButtonClicked(ClickEvent e){
+	public void addBackwardsStepByStepClickHandler(ClickHandler handler) {
+		this.backwardsStepByStepButton.addClickHandler(handler);
+	}
+
+	public void onBackwardsStepByStepButtonClicked(int showObjectsSize){
 		//If current page is the first do nothing
-		if((this.view.getSensorPage() - 1) < 0){
+		if((this.page - 1) < 0){
 			return;
 		}
-		this.view.setSensorPage(this.view.getSensorPage() - 1);
-		this.view.pagination();
-	}
-	@UiHandler("forwardsButton")
-	public void onForwardsButtonClicked(ClickEvent e){
-		//Goes to the last page
-		this.view.setSensorPage(((int) Math.ceil(this.view.getShownSensorIds().size() / this.view.getMaxSensorsOnPage())) - 1);
-		this.view.pagination();
+		this.page = this.page - 1;
+		this.update(showObjectsSize, true);
 	}
 
-	@UiHandler("backwardsButton")
-	public void onBackwardsButtonClicked(ClickEvent e){
+	public void addForwardsButtonClickHandler(ClickHandler handler) {
+		this.forwardsButton.addClickHandler(handler);
+	}
+
+	public void onForwardsButtonClicked(int showObjectsSize){
+		//Goes to the last page
+		this.page = (showObjectsSize / this.maxObjectsOnPage) - 1;
+		this.update(showObjectsSize, true);
+	}
+
+	public void addBackwardsButtonClickHandler(ClickHandler handler) {
+		this.backwardsButton.addClickHandler(handler);
+	}
+
+	public void onBackwardsButtonClicked(int showObjectsSize){
 		//Goes to the first page
-		this.view.setSensorPage(0);
-		this.view.pagination();
+		this.page = 0;
+		this.update(showObjectsSize, true);
 	}
 
 	public void setForwardsEnabled(boolean enabled) {
@@ -91,7 +102,39 @@ public class Pager extends Composite{
 		this.backwardsStepByStepButton.setEnabled(enabled);
 	}
 
-	public void setPage(String pageNumber){
-		this.pageNumber.setText(pageNumber);
+	public void setPage(int page){
+		this.page = page;
+	}
+
+	public void setMaxObjectsOnPage(int maxObjectsOnPage) {
+		this.maxObjectsOnPage = maxObjectsOnPage;
+	}
+
+	public void addPaginationEventHandler(PaginationEventHandler handler) {
+		this.paginationEventHandler = handler;
+	}
+
+	public void clearPager() {
+		this.pageNumber.setText(Languages.setPageNumber(0, 0, 0));
+		this.setForwardsEnabled(false);
+		this.setBackwardsEnabled(false);
+		this.page = 0;
+	}
+
+	public void update(int showObjectsSize, boolean fireEvent) {
+		this.pageNumber.setText(Languages.setPageNumber(this.page, this.maxObjectsOnPage, showObjectsSize));
+		this.setForwardsEnabled((this.page + 1) < ((int) Math.ceil(showObjectsSize / (double) this.maxObjectsOnPage)));
+		this.setBackwardsEnabled(this.page > 0);
+		if(fireEvent && (this.paginationEventHandler != null)) {
+			if(this.dependentPager != null) {
+				this.dependentPager.setPage(this.page);
+				this.dependentPager.update(showObjectsSize, false);
+			}
+			this.paginationEventHandler.onPagiantionEvent(new PaginationEvent(this.page, this.maxObjectsOnPage));
+		}
+	}
+
+	public void setDependentPager(Pager dependentPager) {
+		this.dependentPager = dependentPager;
 	}
 }

@@ -43,7 +43,7 @@ import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ValueHandler;
-import com.opensense.dashboard.client.utils.VisSensorItemCard;
+import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
@@ -123,7 +123,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	protected Presenter presenter;
 	
 	private List<Sensor> sensors;
-	private Map<Integer, VisSensorItemCard> sensorCardMap = new HashMap<>();
+	private Map<Integer, BasicSensorItemCard> sensorCardMap = new HashMap<>();
 	private Map<Sensor, LineDataset> datasetMap = new HashMap<>();
 	
 	private static final DateRange DEFAULT_RANGE = DateRange.PAST_WEEK;
@@ -404,7 +404,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void setSensorCard(Sensor sensor) {
-		final VisSensorItemCard card = sensorCardMap.get(sensor.getSensorId());
+		final BasicSensorItemCard card = sensorCardMap.get(sensor.getSensorId());
 		card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 		card.setIconTitle(sensor.getMeasurand().getDisplayName());
 		card.getMiddleHeader().clear();
@@ -595,7 +595,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@Override
 	public void addEmptySensorItemCard(Integer sensorId) {
 		if(sensorCardMap.containsKey(sensorId)) return;
-		final VisSensorItemCard card = new VisSensorItemCard();
+		final BasicSensorItemCard card = new BasicSensorItemCard();
 		card.setHeader(Languages.sensorId() + sensorId);
 		selectedSensors.add(sensorId);
 		selectedSensors.sort((a,b) -> (a-b));
@@ -637,7 +637,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	@Override
 	public void showSensorCardFailure(Integer sensorId) {
-		VisSensorItemCard card = sensorCardMap.get(sensorId);
+		BasicSensorItemCard card = sensorCardMap.get(sensorId);
 		card.getMiddleHeader().add(new Span("Error"));
 		card.hideLoadingIndicator();
 	}

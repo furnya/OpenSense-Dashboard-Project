@@ -68,7 +68,7 @@ public class ListRenderer extends Composite{
 		}else {
 			this.favNoDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
 			favList.forEach(id -> {
-				VisSensorItemCard card = new VisSensorItemCard();
+				BasicSensorItemCard card = new BasicSensorItemCard();
 				card.setHeader("ID " + id);
 				this.favSensorContainer.add(card);
 			});
