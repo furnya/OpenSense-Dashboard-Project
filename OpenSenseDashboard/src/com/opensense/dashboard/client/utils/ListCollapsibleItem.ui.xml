@@ -33,13 +33,19 @@
 	text-align: center;	
 	overflow: hidden;
 }
+.list-icon{
+	width: 25px;
+    filter: brightness(80%);
+    margin-left: 10px;
+    margin-bottom: 2px;
+}
 </ui:style>
 
 <m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE">
 	<m:MaterialCollapsibleHeader>
 		<bh:Div>
 			<m:MaterialLink ui:field="listItemName" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
-			<m:MaterialImage ui:field="listIcon" display="NONE"/>
+			<m:MaterialImage ui:field="listIcon" display="NONE" addStyleNames="{style.list-icon}"/>
 			<bh:Div addStyleNames="{style.float-right}">
 				<m:MaterialImage display="NONE" ui:field="deleteButton" url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.del-icon} clickable" />
 			</bh:Div>

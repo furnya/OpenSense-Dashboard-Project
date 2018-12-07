@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.Languages;
@@ -42,15 +43,34 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	public ListManagerViewImpl() {
 		this.initWidget(uiBinder.createAndBindUi(this));
-		this.initDefaultList();
+		this.initDefaultLists();
 	}
 
-	private void initDefaultList() {
-		ListCollapsibleItem item = new ListCollapsibleItem();
-		item.setName(Languages.favorites());
-		this.collapsible.add(item);
-		this.collapsiblesItems.put(-1, item);
-		this.initPager(item.getSensorContainer(), item.getPagerTop(), item.getBottomPager(), -1);
+	/**
+	 * These are the default added lists (favorites-(id = -1), selected-(id = -2), my-(id = -3)sensors)
+	 */
+	private void initDefaultLists() {
+		ListCollapsibleItem favoriteListItem = new ListCollapsibleItem();
+		favoriteListItem.setName(Languages.favorites());
+		favoriteListItem.setListIcon(GUIImageBundle.INSTANCE.favoriteRed().getSafeUri().asString());
+		this.collapsiblesItems.put(-1, favoriteListItem);
+		this.initPager(favoriteListItem.getSensorContainer(), favoriteListItem.getPagerTop(), favoriteListItem.getBottomPager(), -1);
+		this.collapsible.add(favoriteListItem);
+		favoriteListItem.getElement().getStyle().clearDisplay();
+
+		ListCollapsibleItem selectedSensorsListItem = new ListCollapsibleItem();
+		selectedSensorsListItem.setName(Languages.selectedSensors());
+		this.collapsiblesItems.put(-2, selectedSensorsListItem);
+		this.initPager(selectedSensorsListItem.getSensorContainer(), selectedSensorsListItem.getPagerTop(), selectedSensorsListItem.getBottomPager(), -1);
+		this.collapsible.add(selectedSensorsListItem);
+
+		ListCollapsibleItem mySensorListsItem = new ListCollapsibleItem();
+		mySensorListsItem.setName(Languages.mySensors());
+		mySensorListsItem.setListIcon(GUIImageBundle.INSTANCE.mySesnors().getSafeUri().asString());
+		this.collapsiblesItems.put(-3, mySensorListsItem);
+		this.initPager(mySensorListsItem.getSensorContainer(), mySensorListsItem.getPagerTop(), mySensorListsItem.getBottomPager(), -1);
+		this.collapsible.add(mySensorListsItem);
+		mySensorListsItem.getElement().getStyle().clearDisplay();
 	}
 
 	public void setPresenter(Presenter presenter) {
@@ -65,6 +85,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		this.collapsible.add(item);
 		this.collapsiblesItems.put(listId, item);
 		this.setSensorsInList(listId, sensorList);
+		item.getElement().getStyle().clearDisplay();
 	}
 
 	public void deleteList(int listId) {

@@ -431,9 +431,3 @@ input:focus+label{
 .image-button:hover{
 	transform: scale(0.9);
 }
-.fav-icon{
-	width: 25px;
-    filter: brightness(80%);
-    margin-left: 10px;
-    margin-bottom: 2px;
-}

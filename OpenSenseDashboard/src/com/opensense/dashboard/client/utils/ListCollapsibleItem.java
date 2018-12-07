@@ -81,4 +81,9 @@ public class ListCollapsibleItem extends Composite{
 	public Div getNoDataIndicator() {
 		return this.noDataIndicator;
 	}
+
+	public void setListIcon(String url) {
+		this.listIcon.setUrl(url);
+		this.listIcon.getElement().getStyle().clearDisplay();
+	}
 }
