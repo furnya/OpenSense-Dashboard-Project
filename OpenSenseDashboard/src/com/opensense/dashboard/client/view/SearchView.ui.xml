@@ -40,7 +40,7 @@
 	margin-right: 0px !important;
 }
 .max> div > ul {
-    max-height: 190px !important;
+    max-height: 125px!important;
 }
 .center {
 	text-align: center;	

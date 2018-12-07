@@ -3,7 +3,7 @@ package com.opensense.dashboard.client.view;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.AppController;
-import com.opensense.dashboard.client.presenter.ListManagerPresenter;
+import com.opensense.dashboard.client.utils.ListManager;
 
 public interface ListsView extends IDataPanelPageView{
 	public interface Presenter{
@@ -15,5 +15,5 @@ public interface ListsView extends IDataPanelPageView{
 	@Override
 	public Widget asWidget();
 	public void initView();
-	public ListManagerPresenter getListManager();
+	public ListManager getListManager();
 }

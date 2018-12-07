@@ -578,6 +578,14 @@ public class Languages {
 		}
 	}
 
+	public static String favorites() {
+		if(de){
+			return "Favoriten";
+		}else{
+			return "Favorites";
+		}
+	}
+
 	public static String selectedSensors() {
 		if(de){
 			return "Ausgewälte Sensoren";

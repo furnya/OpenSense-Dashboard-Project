@@ -1,5 +1,6 @@
 package com.opensense.dashboard.server.logic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.server.util.ClientRequestHandler;
 import com.opensense.dashboard.server.util.ServerLanguages;
+import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
@@ -91,10 +94,49 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		return previewMap;
 	}
 
+	private final Map<Integer, List<Integer>> lists = new HashMap<>();
+	int idNumber = 0;
+
 	@Override
 	public Map<Integer, List<Integer>> getUserLists() {
+		//checks user is logged in, in all sensible server calls
 		// TODO Auto-generated method stub
 		//list of list ids with sensor ids in it
-		return new HashMap<Integer, List<Integer>>();
+		return this.lists;
+	}
+
+	public ActionResult addSensorsToUserList() {
+		return null;
+
+	}
+
+	public ActionResult addSensorToMySensorsUserList() {
+		return null;
+
+	}
+
+	@Override
+	public ActionResult deleteUserList(int listId) {
+		if(this.lists.containsKey(listId)) {
+			this.lists.remove(listId);
+			return new ActionResult(ActionResultType.SUCCESSFUL);
+		}
+		return new ActionResult(ActionResultType.FAILED);
+	}
+
+	@Override
+	public List<Integer> getMySensorsUserList() {
+		// TODO Auto-generated method stub
+		//list of list ids with sensor ids in it
+		List<Integer> sensorList = new ArrayList<>();
+		return sensorList;
+	}
+
+	@Override
+	public Integer createNewUserList() {
+		// TODO Auto-generated method stub
+		//list of list ids with sensor ids in it
+		this.lists.put(this.idNumber++, new ArrayList<>());
+		return this.idNumber;
 	}
 }

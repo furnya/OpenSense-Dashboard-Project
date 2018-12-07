@@ -29,26 +29,31 @@
 .float-right{
 	float: right;
 }
+.body {
+	text-align: center;	
+	overflow: hidden;
+}
 </ui:style>
 
-<m:MaterialCollapsibleItem>
+<m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE">
 	<m:MaterialCollapsibleHeader>
 		<bh:Div>
-			<m:MaterialLink ui:field="listItemId" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
+			<m:MaterialLink ui:field="listItemName" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
+			<m:MaterialImage ui:field="listIcon" display="NONE"/>
 			<bh:Div addStyleNames="{style.float-right}">
 				<m:MaterialImage display="NONE" ui:field="deleteButton" url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.del-icon} clickable" />
 			</bh:Div>
 		</bh:Div>
 	</m:MaterialCollapsibleHeader>
-	<m:MaterialCollapsibleBody>
+	<m:MaterialCollapsibleBody addStyleNames="{style.body}">
 		<d:Pager ui:field="pagerTop" addStyleNames="pager"/>
 		<m:MaterialPreLoader ui:field="listItemSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
 			<m:MaterialSpinner/>
 		</m:MaterialPreLoader>
-		<bh:Div ui:field="listItemNoDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
+		<bh:Div ui:field="noDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
 			<bh:Span text="{lang.noListData}"/>
 		</bh:Div>
-		<bh:Div ui:field="listItemSensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
+		<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
 		<d:Pager ui:field="pagerBottom" addStyleNames="pager"/>
 	</m:MaterialCollapsibleBody>
 </m:MaterialCollapsibleItem>
