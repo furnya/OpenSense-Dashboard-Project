@@ -48,9 +48,10 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 
 	@Override
 	public void initView() {
-		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(), this.presenter.getAppController(), this.listContainer);
+		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(), this.listContainer);
 		listManagerOptions.setEditingActive(true);
 		this.listManager = ListManager.getInstance(listManagerOptions);
+		this.listManager.addSelectedSensorsChangeHandler(event -> event.getSelectedIds().forEach(id -> GWT.log(id+"")));
 	}
 
 	@Override

@@ -15,7 +15,6 @@ public interface SearchView extends IDataPanelPageView{
 		void buildSensorRequestAndSend();
 		HandlerManager getEventBus();
 		void getSensorValuePreviewAndShow(List<Integer> idsOnPage);
-		void addSensorToFavoriteList(int sensorId);
 	}
 
 	public void setPresenter(Presenter presenter);

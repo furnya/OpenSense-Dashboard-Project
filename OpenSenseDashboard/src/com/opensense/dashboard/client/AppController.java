@@ -15,7 +15,9 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.event.RemoveSensorsFromFavoriteListEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
@@ -116,6 +118,25 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			}else {
 				History.newItem(event.getDataPanelPage().name(), event.isFireEvent());
 			}
+		});
+
+		this.eventBus.addHandler(AddSensorsToFavoriteListEvent.TYPE, event -> {
+			//TODO skip if exists
+			List<Integer> favIds = CookieManager.getFavoriteList();//TODO: set a max
+			event.getIds().stream().filter(sensorId -> !favIds.contains(sensorId)).forEach(sensorId -> {
+				favIds.add(sensorId);
+				MaterialToast.fireToast("Added " + sensorId + " to the fav list");
+			});
+			CookieManager.writeFavoriteListCookie(favIds);
+		});
+
+		this.eventBus.addHandler(RemoveSensorsFromFavoriteListEvent.TYPE, event -> {
+			List<Integer> favIds = CookieManager.getFavoriteList();
+			event.getIds().stream().filter(favIds::contains).forEach(sensorId -> {
+				favIds.remove(sensorId);
+				MaterialToast.fireToast("Removed " + sensorId + " from the fav list");
+			});
+			CookieManager.writeFavoriteListCookie(favIds);
 		});
 	}
 
@@ -313,26 +334,5 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
 		}
 		MaterialToast.fireToast("Logged in");
-	}
-
-	public void addSensorToFavoriteList(int sensorId) {
-		//TODO skip if exists
-		List<Integer> favIds = CookieManager.getFavoriteList();//TODO: set a max
-		if(!favIds.contains(sensorId)) {
-			favIds.add(sensorId);
-			CookieManager.writeFavoriteListCookie(favIds);
-			MaterialToast.fireToast("Added " + sensorId + " to the fav list");
-		}
-	}
-
-	public void removeSensorFromFavoriteList(int sensorId) {
-		List<Integer> favIds = CookieManager.getFavoriteList();
-		if(favIds.contains(sensorId)) {
-			favIds.remove((Object) sensorId);
-			CookieManager.writeFavoriteListCookie(favIds);
-			MaterialToast.fireToast("Removed " + sensorId + " from the fav list");
-		}else {
-			LOGGER.log(Level.WARNING, "This should not happen");
-		}
 	}
 }

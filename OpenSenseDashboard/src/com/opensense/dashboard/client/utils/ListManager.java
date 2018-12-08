@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client.utils;
 
+import com.opensense.dashboard.client.event.SelectedSensorsChangeEvent;
+import com.opensense.dashboard.client.event.SelectedSensorsChangeEventHandler;
 import com.opensense.dashboard.client.presenter.ListManagerPresenter;
 import com.opensense.dashboard.client.view.ListManagerViewImpl;
 
@@ -8,6 +10,10 @@ public class ListManager {
 	private ListManagerOptions options;
 	private ListManagerPresenter presenter;
 	private ListManagerViewImpl view;
+
+	private boolean userLoggedIn = false;
+
+	private SelectedSensorsChangeEventHandler selectedSensorsChangeEventHandler;
 
 	private ListManager(ListManagerOptions options) {
 		this.options = options;
@@ -19,7 +25,7 @@ public class ListManager {
 		if (this.view == null) {
 			this.view = new ListManagerViewImpl();
 		}
-		this.presenter = new ListManagerPresenter(this.options.getEventBus(), this.options.getAppController(), this.view);
+		this.presenter = new ListManagerPresenter(this.options.getEventBus(), this, this.view);
 		this.presenter.go(this.options.getContainer());
 	}
 
@@ -39,4 +45,21 @@ public class ListManager {
 		this.presenter.updateLists();
 	}
 
+	public void setUserLoggedIn(boolean userLoggedIn) {
+		this.userLoggedIn = userLoggedIn;
+	}
+
+	public boolean isUserLoggedIn() {
+		return this.userLoggedIn;
+	}
+
+	public void addSelectedSensorsChangeHandler(SelectedSensorsChangeEventHandler handler) {
+		this.selectedSensorsChangeEventHandler = handler;
+	}
+
+	public void onSelectedSensorsChangeEvent(SelectedSensorsChangeEvent event) {
+		if(this.selectedSensorsChangeEventHandler != null){
+			this.selectedSensorsChangeEventHandler.onSelectedSensorsChangeEvent(event);
+		}
+	}
 }

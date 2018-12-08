@@ -7,10 +7,11 @@ import java.util.Map;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.event.RemoveSensorsFromFavoriteListEvent;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
+import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.view.ListManagerView;
 import com.opensense.dashboard.client.view.ListManagerViewImpl;
 import com.opensense.dashboard.shared.ActionResult;
@@ -18,14 +19,14 @@ import com.opensense.dashboard.shared.ActionResult;
 public class ListManagerPresenter implements IPresenter, ListManagerView.Presenter{
 
 	private ListManagerView view;
-	private AppController appController;
+	private ListManager controller;
 	private HandlerManager eventBus;
 
-	public ListManagerPresenter(AppController appController, HandlerManager eventBus, ListManagerViewImpl view) {
-		this.appController = appController;
+	public ListManagerPresenter(HandlerManager eventBus, ListManager controller, ListManagerViewImpl view) {
+		this.controller = controller;
 		this.eventBus = eventBus;
 		this.view = view;
-		view.setPresenter(this);
+		this.view.setPresenter(this);
 	}
 
 	@Override
@@ -35,9 +36,11 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 
 	public void updateLists() {
-		this.view.clearListContainer();
+		GWT.log("update");
+		this.view.clearLists();
+		this.view.initDefaultLists();
 		this.view.setSensorsInList(-1, CookieManager.getFavoriteList());
-		if(!this.appController.isGuest()) {
+		if(this.controller.isUserLoggedIn()) {
 			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<Map<Integer, List<Integer>>>(result -> {
 				if(result != null) {
 					result.entrySet().forEach(entry -> this.view.addNewUserListItem(entry.getKey(), entry.getValue()));
@@ -49,7 +52,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			},true));
 			GeneralService.Util.getInstance().getMySensorsUserList(new DefaultAsyncCallback<List<Integer>>(result -> {
 				if(result != null) {
-					this.view.addNewUserListItem(-3, result);
+					this.view.setSensorsInList(-3, result);
 				}else {
 					GWT.log("Shit1");
 				}
@@ -86,17 +89,21 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 
 
 	@Override
-	public void deleteSensorInList(final int listId, final int sensorCardId) {
+	public void deleteSensorsInList(final int listId, final List<Integer> sensorCardId) {
 		// TODO Auto-generated method stub
 		if(listId == -1) { // -1 fav list, -2 selected sensor list, -3 mysensor list
-			//			this.view.rem oveSensorInListItem(sensorCardId);
-			this.appController.removeSensorFromFavoriteList(sensorCardId);
-			this.updateLists();
+			this.eventBus.fireEvent(new RemoveSensorsFromFavoriteListEvent(sensorCardId));
+			this.updateLists(); //TODO: fire from event
 		}
 	}
 
 	@Override
 	public HandlerManager getEventBus() {
 		return this.eventBus;
+	}
+
+	@Override
+	public ListManager getController() {
+		return this.controller;
 	}
 }

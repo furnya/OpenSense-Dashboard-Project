@@ -2,37 +2,31 @@ package com.opensense.dashboard.client.utils;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.opensense.dashboard.client.AppController;
 
 public class ListManagerOptions {
 
 	private HasWidgets container;
-	private AppController appController;
 	private HandlerManager eventBus;
 	private boolean editingActive = false;
 	private boolean showSearchButton = true;
 	private boolean showMapButton = true;
 	private boolean showVisualizationButton = true;
+	//	private PagerSize = PagerSize.MEDIUM;
 
-	private ListManagerOptions(HandlerManager eventBus, AppController appController, HasWidgets container) {
+	private ListManagerOptions(HandlerManager eventBus, HasWidgets container) {
 		this.eventBus = eventBus;
-		this.appController = appController;
 		this.container = container;
 	}
 
-	public static ListManagerOptions getInstance(HandlerManager eventBus, AppController appController, HasWidgets container) {
-		return new ListManagerOptions(eventBus, appController, container);
+	public static ListManagerOptions getInstance(HandlerManager eventBus, HasWidgets container) {
+		return new ListManagerOptions(eventBus, container);
 	}
 
 	public HasWidgets getContainer() {
 		return this.container;
 	}
 
-	public AppController getEventBus() {
-		return this.appController;
-	}
-
-	public HandlerManager getAppController() {
+	public HandlerManager getEventBus() {
 		return this.eventBus;
 	}
 

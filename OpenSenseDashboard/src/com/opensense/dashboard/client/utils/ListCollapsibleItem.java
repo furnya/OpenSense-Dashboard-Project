@@ -86,4 +86,8 @@ public class ListCollapsibleItem extends Composite{
 		this.listIcon.setUrl(url);
 		this.listIcon.getElement().getStyle().clearDisplay();
 	}
+
+	public MaterialCollapsibleItem getCollapsibleItem() {
+		return this.sensorItem;
+	}
 }

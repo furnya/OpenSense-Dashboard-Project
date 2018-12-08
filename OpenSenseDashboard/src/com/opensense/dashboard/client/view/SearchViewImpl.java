@@ -22,6 +22,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
@@ -115,7 +116,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	private static final String AUTO_COMPLETE = "autocomplete";
 
-	private List<Integer> unselectedSensors = new ArrayList<>();
+	private List<Integer> unselectedSensors = new ArrayList<>(); //FIX this //TODO: use only one list
 	private List<Integer> selectedSensors = new ArrayList<>();
 
 	private Map<Integer, Sensor> sensors = new HashMap<>();
@@ -181,7 +182,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@UiHandler("favoriteButton")
 	public void onFavoriteButtonClicked(ClickEvent e) {
-		this.selectedSensors.forEach(id -> this.presenter.addSensorToFavoriteList(id));
+		this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(this.selectedSensors));
 	}
 
 	private void onShownSensorsChanged() {
@@ -208,7 +209,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			card.setHeader(sensor.getMeasurand().getDisplayName() + "   -   " + Languages.sensorId() + sensorId);
 			this.unselectedSensors.add(sensorId);
 			card.setIcon(this.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
-			card.setRating(sensor.getAccuracy()); //TODO:
+			card.setRating(sensor.getAccuracy());
 			card.addContentValue(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
 			card.addContentValue(Languages.origin(), sensor.getAttributionText());
 			card.addValueChangeHandler(event -> {
@@ -221,7 +222,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 				}
 				this.onSelectedSensorsChanged();
 			});
-			card.addFavButtonClickHandler(event -> this.presenter.addSensorToFavoriteList(sensorId));
+			final List<Integer> id = new ArrayList<>();
+			id.add(sensorId);
+			card.addFavButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(id)));
 			this.shownSensorIds.add(sensorId); //can order the list before adding
 			this.sensorViews.put(sensorId, card);
 		});
