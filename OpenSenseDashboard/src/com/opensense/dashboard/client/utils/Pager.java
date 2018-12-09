@@ -92,12 +92,12 @@ public class Pager extends Composite{
 		this.update(showObjectsSize, true);
 	}
 
-	public void setForwardsEnabled(boolean enabled) {
+	private void setForwardsEnabled(boolean enabled) {
 		this.forwardsButton.setEnabled(enabled);
 		this.forwardsStepByStepButton.setEnabled(enabled);
 	}
 
-	public void setBackwardsEnabled(boolean enabled) {
+	private void setBackwardsEnabled(boolean enabled) {
 		this.backwardsButton.setEnabled(enabled);
 		this.backwardsStepByStepButton.setEnabled(enabled);
 	}

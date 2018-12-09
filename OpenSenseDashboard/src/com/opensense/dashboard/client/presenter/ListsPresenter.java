@@ -51,8 +51,10 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 
 	@Override
 	public void waitUntilViewInit(final Runnable runnable) {
-		this.view.initView();
-		//		this.view.getListManager().updateLists();
-		runnable.run();
+		this.view.initView(runnable);
+	}
+
+	public void updateFavoriteList() {
+		this.view.getListManager().updateFavoriteList();
 	}
 }

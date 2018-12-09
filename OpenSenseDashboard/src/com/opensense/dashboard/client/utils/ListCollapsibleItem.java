@@ -70,7 +70,7 @@ public class ListCollapsibleItem extends Composite{
 		return this.sensorContainer;
 	}
 
-	public Pager getPagerTop() {
+	public Pager getTopPager() {
 		return this.pagerTop;
 	}
 

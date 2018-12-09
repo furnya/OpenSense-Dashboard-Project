@@ -62,4 +62,12 @@ public class ListManager {
 			this.selectedSensorsChangeEventHandler.onSelectedSensorsChangeEvent(event);
 		}
 	}
+
+	public void updateFavoriteList() {
+		this.presenter.updateFavoriteList();
+	}
+
+	public void waitUntilViewInit(Runnable runnable) {
+		this.presenter.waitUntilViewInit(runnable);
+	}
 }

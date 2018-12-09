@@ -20,6 +20,6 @@ public interface ListManagerView {
 	public void setSensorsInList(int listId, List<Integer> sensors);
 	public void addNewUserListItem(int listId, List<Integer> sensorList);
 	public void clearLists();
-	public void initDefaultLists();
 	public void setPresenter(Presenter listManagerPresenter);
+	public void initDefaultLists(Runnable object);
 }

@@ -36,10 +36,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 
 	public void updateLists() {
-		GWT.log("update");
-		this.view.clearLists();
-		this.view.initDefaultLists();
-		this.view.setSensorsInList(-1, CookieManager.getFavoriteList());
+		this.updateFavoriteList();
 		if(this.controller.isUserLoggedIn()) {
 			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<Map<Integer, List<Integer>>>(result -> {
 				if(result != null) {
@@ -93,7 +90,6 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		// TODO Auto-generated method stub
 		if(listId == -1) { // -1 fav list, -2 selected sensor list, -3 mysensor list
 			this.eventBus.fireEvent(new RemoveSensorsFromFavoriteListEvent(sensorCardId));
-			this.updateLists(); //TODO: fire from event
 		}
 	}
 
@@ -105,5 +101,14 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	@Override
 	public ListManager getController() {
 		return this.controller;
+	}
+
+	public void updateFavoriteList() {
+		this.view.setSensorsInList(-1, CookieManager.getFavoriteList());
+	}
+
+	public void waitUntilViewInit(Runnable runnable) {
+		this.view.initDefaultLists(runnable);
+		this.updateLists();
 	}
 }

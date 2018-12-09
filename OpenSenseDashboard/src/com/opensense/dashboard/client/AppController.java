@@ -128,6 +128,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 				MaterialToast.fireToast("Added " + sensorId + " to the fav list");
 			});
 			CookieManager.writeFavoriteListCookie(favIds);
+			this.dataPanelPresenter.updateFavoriteList();
 		});
 
 		this.eventBus.addHandler(RemoveSensorsFromFavoriteListEvent.TYPE, event -> {
@@ -137,6 +138,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 				MaterialToast.fireToast("Removed " + sensorId + " from the fav list");
 			});
 			CookieManager.writeFavoriteListCookie(favIds);
+			this.dataPanelPresenter.updateFavoriteList();
 		});
 	}
 

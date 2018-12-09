@@ -11,7 +11,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.event.SelectedSensorsChangeEvent;
@@ -52,12 +51,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	 * These are the default added lists (favorites-(id = -1), selected-(id = -2), my-(id = -3)sensors)
 	 */
 	@Override
-	public void initDefaultLists() {
+	public void initDefaultLists(Runnable runnable) {
 		ListCollapsibleItem favoriteListItem = new ListCollapsibleItem();
 		favoriteListItem.setName(Languages.favorites());
 		favoriteListItem.setListIcon(GUIImageBundle.INSTANCE.favoriteRed().getSafeUri().asString());
-		this.initPager(favoriteListItem.getSensorContainer(), favoriteListItem.getPagerTop(), favoriteListItem.getBottomPager(), -1);
 		this.collapsiblesItems.put(-1, favoriteListItem);
+		this.initPager(-1);
 		this.collapsible.add(favoriteListItem);
 		favoriteListItem.getCollapsibleItem().setActive(true);
 		favoriteListItem.getCollapsibleItem().getElement().getStyle().clearDisplay();
@@ -65,16 +64,17 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		ListCollapsibleItem selectedSensorsListItem = new ListCollapsibleItem();
 		selectedSensorsListItem.setName(Languages.selectedSensors());
 		this.collapsiblesItems.put(-2, selectedSensorsListItem);
-		this.initPager(selectedSensorsListItem.getSensorContainer(), selectedSensorsListItem.getPagerTop(), selectedSensorsListItem.getBottomPager(), -1);
+		this.initPager(-2);
 		this.collapsible.add(selectedSensorsListItem);
 
 		ListCollapsibleItem mySensorListsItem = new ListCollapsibleItem();
 		mySensorListsItem.setName(Languages.mySensors());
 		mySensorListsItem.setListIcon(GUIImageBundle.INSTANCE.mySesnors().getSafeUri().asString());
 		this.collapsiblesItems.put(-3, mySensorListsItem);
-		this.initPager(mySensorListsItem.getSensorContainer(), mySensorListsItem.getPagerTop(), mySensorListsItem.getBottomPager(), -1);
+		this.initPager(-3);
 		this.collapsible.add(mySensorListsItem);
 		mySensorListsItem.getCollapsibleItem().getElement().getStyle().clearDisplay();
+		runnable.run();
 	}
 
 	@Override
@@ -135,32 +135,34 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		this.sensorCardsInLists.put(listId, sensorCards);
 		this.selectedSensorIdsInLists.put(listId, new ArrayList<>());
 		this.showSensorIdsInLists.put(listId, showSensorIds);
-		this.collapsiblesItems.get(listId).getPagerTop().update(showSensorIds.size(), true);
+		this.collapsiblesItems.get(listId).getTopPager().update(showSensorIds.size(), true);
 	}
 
-	private void initPager(final HasWidgets container, final Pager pagerTop, final Pager pagerBottom, final int listId) {
+	private void initPager(final int listId) {
+		final Pager pagerTop = this.collapsiblesItems.get(listId).getTopPager();
 		pagerTop.setMaxObjectsOnPage(10);
 		pagerTop.addBackwardsButtonClickHandler(event -> pagerTop.onBackwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerTop.addBackwardsStepByStepClickHandler(event -> pagerTop.onBackwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerTop.addForwardsStepByStepClickHandler(event -> pagerTop.onForwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerTop.addForwardsButtonClickHandler(event -> pagerTop.onForwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 
-		pagerTop.addPaginationEventHandler(event -> this.pagination(container, event.getPage(), event.getMaxObjectsOnPage(), listId));
+		pagerTop.addPaginationEventHandler(event -> this.pagination(event.getPage(), event.getMaxObjectsOnPage(), listId));
 
+		final Pager pagerBottom = this.collapsiblesItems.get(listId).getBottomPager();
 		pagerBottom.setMaxObjectsOnPage(10);
 		pagerBottom.addBackwardsButtonClickHandler(event -> pagerBottom.onBackwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerBottom.addBackwardsStepByStepClickHandler(event -> pagerBottom.onBackwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerBottom.addForwardsStepByStepClickHandler(event -> pagerBottom.onForwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerBottom.addForwardsButtonClickHandler(event -> pagerBottom.onForwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 
-		pagerBottom.addPaginationEventHandler(event -> this.pagination(container, event.getPage(), event.getMaxObjectsOnPage(), listId));
+		pagerBottom.addPaginationEventHandler(event -> this.pagination(event.getPage(), event.getMaxObjectsOnPage(), listId));
 
 		pagerTop.setDependentPager(pagerBottom);
 		pagerBottom.setDependentPager(pagerTop);
 	}
 
-	private void pagination(HasWidgets container, int page, int maxObjectsOnPage, int listId) {
-		container.clear();
+	private void pagination(final int page, final int maxObjectsOnPage, final int listId) {
+		this.collapsiblesItems.get(listId).getSensorContainer().clear();
 		for(int i = page * maxObjectsOnPage; (i < this.showSensorIdsInLists.get(listId).size()) && (i < ((page + 1) * maxObjectsOnPage)); i++){
 			this.collapsiblesItems.get(listId).getSensorContainer().add(this.sensorCardsInLists.get(listId).get(this.showSensorIdsInLists.get(listId).get(i)));
 		}
@@ -168,8 +170,9 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@Override
 	public void clearLists() {
-		GWT.log(this.collapsible.getActive()+"");
 		this.collapsible.clear();
+		this.collapsible.closeAll();
+		this.collapsible.reinitialize();
 		this.selectedSensorIdsInLists.clear(); //TODO: find a better soution that selected senors are still selected on page return
 		this.sensorCardsInLists.clear();
 		this.showSensorIdsInLists.clear();

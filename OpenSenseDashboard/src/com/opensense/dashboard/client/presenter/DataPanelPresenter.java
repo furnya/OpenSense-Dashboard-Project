@@ -97,4 +97,12 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 	public DataPanelPagePresenter getActiveDataPanelPagePresenter() {
 		return this.activeDataPanelPagePresenter;
 	}
+
+
+	public void updateFavoriteList() {
+		if(this.activeDataPanelPagePresenter instanceof ListsPresenter) {
+			ListsPresenter listsPresenter = (ListsPresenter) this.activeDataPanelPagePresenter;
+			listsPresenter.updateFavoriteList();
+		}
+	}
 }
