@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.gwtbootstrap3.client.ui.html.Div;
-import org.gwtbootstrap3.client.ui.html.Span;
 import org.pepstock.charba.client.Defaults;
 import org.pepstock.charba.client.LineChart;
 import org.pepstock.charba.client.data.DataPoint;
@@ -38,6 +37,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
@@ -48,7 +48,6 @@ import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
-import com.opensense.dashboard.shared.ValuePreview;
 
 import gwt.material.design.client.constants.DatePickerLanguage;
 import gwt.material.design.client.ui.MaterialButton;
@@ -112,6 +111,12 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	@UiField
 	MaterialLabel noDatasetsLabel;
+	
+	@UiField
+	Div sensorContent;
+	
+//	@UiField
+//	DateBox newdp;
 	
 //	@UiField
 //	MaterialTimePicker startingTime;

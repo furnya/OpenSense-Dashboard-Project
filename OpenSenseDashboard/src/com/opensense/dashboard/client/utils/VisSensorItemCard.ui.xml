@@ -72,12 +72,12 @@
 }
 .header{
     display: flex;
-    width: 90%;
+    width: 100%;
     background-color: inherit;
 }
 .content-container{
 	text-align: left;
-    width: 90%;	
+    width: 100%;	
     display: flex;
     overflow: hidden;
 }

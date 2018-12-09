@@ -379,18 +379,15 @@ input:focus+label{
 	font-size: medium;
 }
 .visPanel > * {
-	width: calc(14% - 10px);
-}
-.visPanel > *:first-child {
-	width: auto !important;
+	flex: 1 0 21%;
+	width: max-content;
 }
 .visPanel > button {
-	font-size: 0.5vw;
 	line-height: 2em;
 	padding-left: 1rem;
 	padding-right: 1rem; 
 	height: 5vh;
-	margin: auto 10px auto 10px;
+	margin: 10px 10px auto 10px;
 }
 
 
@@ -440,4 +437,10 @@ input:focus+label{
 
 .card-spinner-active > Div{
 	border-color: white;
+}
+.datepicker {
+	background-color: #202020;
+}
+.datebox {
+	color: white;
 }
