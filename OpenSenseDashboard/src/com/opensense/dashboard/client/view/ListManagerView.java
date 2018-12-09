@@ -19,7 +19,9 @@ public interface ListManagerView {
 	public void removeListItem(int listId);
 	public void setSensorsInList(int listId, List<Integer> sensors);
 	public void addNewUserListItem(int listId, List<Integer> sensorList);
-	public void clearLists();
 	public void setPresenter(Presenter listManagerPresenter);
 	public void initDefaultLists(Runnable object);
+	public void showMySensorListsItem(boolean b);
+	public void showSelectedSensorListsItem(boolean b);
+	public void clearUserLists();
 }

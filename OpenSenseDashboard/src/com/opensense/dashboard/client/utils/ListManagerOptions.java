@@ -11,7 +11,8 @@ public class ListManagerOptions {
 	private boolean showSearchButton = true;
 	private boolean showMapButton = true;
 	private boolean showVisualizationButton = true;
-	//	private PagerSize = PagerSize.MEDIUM;
+	private PagerSize pagerSize = PagerSize.MEDIUM;
+	private int maxObjectOnPage = 10;
 
 	private ListManagerOptions(HandlerManager eventBus, HasWidgets container) {
 		this.eventBus = eventBus;
@@ -60,5 +61,21 @@ public class ListManagerOptions {
 
 	public void setEditingActive(boolean editingActive) {
 		this.editingActive = editingActive;
+	}
+
+	public void setPagerSize(PagerSize pagerSize) {
+		this.pagerSize = pagerSize;
+	}
+
+	public PagerSize getPagerSize() {
+		return this.pagerSize;
+	}
+
+	public int getMaxObjectOnPage() {
+		return maxObjectOnPage;
+	}
+
+	public void setMaxObjectOnPage(int maxObjectOnPage) {
+		this.maxObjectOnPage = maxObjectOnPage;
 	}
 }

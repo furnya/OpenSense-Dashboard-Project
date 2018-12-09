@@ -20,6 +20,7 @@ import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListCollapsibleItem;
 import com.opensense.dashboard.client.utils.Pager;
+import com.opensense.dashboard.client.utils.PagerSize;
 
 import gwt.material.design.client.ui.MaterialCollapsible;
 
@@ -73,7 +74,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		this.collapsiblesItems.put(-3, mySensorListsItem);
 		this.initPager(-3);
 		this.collapsible.add(mySensorListsItem);
-		mySensorListsItem.getCollapsibleItem().getElement().getStyle().clearDisplay();
 		runnable.run();
 	}
 
@@ -139,8 +139,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	private void initPager(final int listId) {
+		final PagerSize pagerSize = this.presenter.getController().getOptions().getPagerSize();
+		final int maxObjectOnPage = this.presenter.getController().getOptions().getMaxObjectOnPage();
+
 		final Pager pagerTop = this.collapsiblesItems.get(listId).getTopPager();
-		pagerTop.setMaxObjectsOnPage(10);
+		pagerTop.setPagerSize(pagerSize);
+		pagerTop.setMaxObjectsOnPage(maxObjectOnPage);
 		pagerTop.addBackwardsButtonClickHandler(event -> pagerTop.onBackwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerTop.addBackwardsStepByStepClickHandler(event -> pagerTop.onBackwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerTop.addForwardsStepByStepClickHandler(event -> pagerTop.onForwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
@@ -149,7 +153,8 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		pagerTop.addPaginationEventHandler(event -> this.pagination(event.getPage(), event.getMaxObjectsOnPage(), listId));
 
 		final Pager pagerBottom = this.collapsiblesItems.get(listId).getBottomPager();
-		pagerBottom.setMaxObjectsOnPage(10);
+		pagerBottom.setPagerSize(pagerSize);
+		pagerBottom.setMaxObjectsOnPage(maxObjectOnPage);
 		pagerBottom.addBackwardsButtonClickHandler(event -> pagerBottom.onBackwardsButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerBottom.addBackwardsStepByStepClickHandler(event -> pagerBottom.onBackwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
 		pagerBottom.addForwardsStepByStepClickHandler(event -> pagerBottom.onForwardsStepByStepButtonClicked(this.showSensorIdsInLists.get(listId).size()));
@@ -169,13 +174,33 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void clearLists() {
-		this.collapsible.clear();
-		this.collapsible.closeAll();
-		this.collapsible.reinitialize();
-		this.selectedSensorIdsInLists.clear(); //TODO: find a better soution that selected senors are still selected on page return
-		this.sensorCardsInLists.clear();
-		this.showSensorIdsInLists.clear();
-		this.collapsiblesItems.clear();
+	public void showMySensorListsItem(boolean show) {
+		if(show) {
+			this.collapsiblesItems.get(-3).getCollapsibleItem().getElement().getStyle().clearDisplay();
+		}else {
+			this.collapsiblesItems.get(-3).getCollapsibleItem().getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+
+	@Override
+	public void showSelectedSensorListsItem(boolean show) {
+		if(show) {
+			this.collapsiblesItems.get(-2).getCollapsibleItem().getElement().getStyle().clearDisplay();
+		}else {
+			this.collapsiblesItems.get(-2).getCollapsibleItem().getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+
+	@Override
+	public void clearUserLists() {
+		final List<Integer> idsToRemove = new ArrayList<>();
+		this.collapsiblesItems.keySet().stream().filter(id -> id >= 0).forEach(idsToRemove::add);
+		idsToRemove.forEach(id -> {
+			this.collapsiblesItems.get(id).removeFromParent();
+			this.collapsiblesItems.remove(id);
+			this.showSensorIdsInLists.remove(id);
+			this.sensorCardsInLists.remove(id);
+			this.selectedSensorIdsInLists.remove(id);
+		});
 	}
 }

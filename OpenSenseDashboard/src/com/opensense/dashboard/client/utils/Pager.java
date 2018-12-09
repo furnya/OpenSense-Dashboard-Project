@@ -44,6 +44,7 @@ public class Pager extends Composite{
 
 	public Pager() {
 		this.initWidget(uiBinder.createAndBindUi(this));
+		this.setPagerSize(PagerSize.MEDIUM);
 	}
 
 	public void addForwardsStepByStepClickHandler(ClickHandler handler) {
@@ -132,6 +133,10 @@ public class Pager extends Composite{
 			}
 			this.paginationEventHandler.onPagiantionEvent(new PaginationEvent(this.page, this.maxObjectsOnPage));
 		}
+	}
+
+	public void setPagerSize(PagerSize pagerSize) {
+		this.getElement().setAttribute("size", pagerSize.name().toLowerCase());
 	}
 
 	public void setDependentPager(Pager dependentPager) {

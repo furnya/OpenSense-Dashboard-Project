@@ -68,7 +68,7 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	public void sendLoginRequest(String username, String password) {
 		AuthenticationService.Util.getInstance().userLoginRequest(username, password, new DefaultAsyncCallback<ActionResult>(result -> {
 			if(result != null && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())){
-				appController.userLoggedIn(true);
+				appController.onUserLoggedIn(true);
 			}else{
 				view.showLoginNotValid();
 			}

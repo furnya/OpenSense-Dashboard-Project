@@ -87,7 +87,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		this.eventBus = eventBus;
 		AuthenticationService.Util.getInstance().createUserInSession(new DefaultAsyncCallback<Boolean>(result -> {
 			if((result != null) && result) {
-				this.userLoggedIn(false);
+				this.onUserLoggedIn(false);
 			}
 		}));
 		this.bindHandler();
@@ -324,17 +324,23 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	public void logout() {
 		AuthenticationService.Util.getInstance().userLoggedOut(new DefaultAsyncCallback<ActionResult>(result -> {
 			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-				this.isGuest = true;
-				MaterialToast.fireToast("Logged out");
+				this.onUserLoggedOut();
 			}
 		}));
 	}
 
-	public void userLoggedIn(boolean goToHOme) {
+	public void onUserLoggedIn(boolean goToHOme) {
 		this.isGuest = false;
 		if(goToHOme || (this.dataPanelPresenter.getActiveDataPanelPagePresenter() instanceof UserPresenter)) {
 			this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
 		}
 		MaterialToast.fireToast("Logged in");
+		this.dataPanelPresenter.onUserLoggedIn();
+	}
+
+	public void onUserLoggedOut() {
+		this.isGuest = true;
+		MaterialToast.fireToast("Logged out");
+		this.dataPanelPresenter.onUserLoggedOut();
 	}
 }

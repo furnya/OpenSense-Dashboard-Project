@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client.utils;
 
+import java.util.List;
+
 import com.opensense.dashboard.client.event.SelectedSensorsChangeEvent;
 import com.opensense.dashboard.client.event.SelectedSensorsChangeEventHandler;
 import com.opensense.dashboard.client.presenter.ListManagerPresenter;
@@ -45,8 +47,9 @@ public class ListManager {
 		this.presenter.updateLists();
 	}
 
-	public void setUserLoggedIn(boolean userLoggedIn) {
+	public void setUserLoggedInAndUpdate(boolean userLoggedIn) {
 		this.userLoggedIn = userLoggedIn;
+		this.presenter.updateLists();
 	}
 
 	public boolean isUserLoggedIn() {
@@ -69,5 +72,17 @@ public class ListManager {
 
 	public void waitUntilViewInit(Runnable runnable) {
 		this.presenter.waitUntilViewInit(runnable);
+	}
+
+	public void onUserLoggedIn() {
+		this.setUserLoggedInAndUpdate(true);
+	}
+
+	public void onUserLoggedOut() {
+		this.setUserLoggedInAndUpdate(false);
+	}
+
+	public void updateSelectedSensorsList(List<Integer> ids) {
+		this.presenter.updateSelectedSensorsList(ids);
 	}
 }
