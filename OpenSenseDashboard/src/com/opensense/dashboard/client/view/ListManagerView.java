@@ -13,6 +13,7 @@ public interface ListManagerView {
 		void deleteSensorsInList(int listId, List<Integer> sensorCardId);
 		HandlerManager getEventBus();
 		ListManager getController();
+		void changeListName(int listId, String listName);
 	}
 
 	public Widget asWidget();

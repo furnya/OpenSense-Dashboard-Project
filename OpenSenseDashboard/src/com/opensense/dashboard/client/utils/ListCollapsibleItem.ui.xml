@@ -24,10 +24,15 @@
 	margin-bottom: 0px !important; 
 }
 .del-icon{
-	    width: 20px
+    width: 20px
 }
 .float-right{
-	float: right;
+	margin-left: 15px;
+}
+.header{
+	display: -webkit-box;
+    max-height: 43.8px;
+}	
 }
 .body {
 	text-align: center;	
@@ -39,12 +44,24 @@
     margin-left: 10px;
     margin-bottom: 2px;
 }
+.list-name-input{
+	position: absolute;
+ 	top: -10px;
+	left: 35px;
+    margin-right: -75px;
+    background-color: white;
+    bottom: 0px;
+}
+.list-name-input > input{
+    height: 25px;
+}
 </ui:style>
 
 <m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE">
 	<m:MaterialCollapsibleHeader>
-		<bh:Div>
+		<bh:Div addStyleNames="position-relative {style.header}">
 			<m:MaterialLink ui:field="listItemName" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
+			<m:MaterialTextBox ui:field="listNameInput" addStyleNames="{style.list-name-input}" display="NONE" />
 			<m:MaterialImage ui:field="listIcon" display="NONE" addStyleNames="{style.list-icon}"/>
 			<bh:Div addStyleNames="{style.float-right}">
 				<m:MaterialImage display="NONE" ui:field="deleteButton" url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.del-icon} clickable" />

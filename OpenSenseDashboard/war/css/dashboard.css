@@ -431,3 +431,7 @@ input:focus+label{
 .image-button:hover{
 	transform: scale(0.9);
 }
+
+.list-name:hover{
+    cursor: text;
+} 

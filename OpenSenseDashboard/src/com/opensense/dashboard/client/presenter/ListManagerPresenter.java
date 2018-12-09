@@ -127,4 +127,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		this.view.initDefaultLists(runnable);
 		this.updateLists();
 	}
+
+	@Override
+	public void changeListName(int listId, String listName) {
+		GWT.log(listId + " " + listName);
+		//TODO: serverCall to change the list name
+	}
 }

@@ -86,6 +86,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	public void addNewUserListItem(final int listId, final List<Integer> sensorList) {
 		ListCollapsibleItem item = new ListCollapsibleItem();
 		item.setName(Languages.newList() + listId);
+		item.addListNameInputHandler(event -> this.presenter.changeListName(listId, event.getListName()));
 		item.addDeleteButtonClickHandler(event -> this.deleteList(listId));
 		this.collapsible.add(item);
 		this.collapsiblesItems.put(listId, item);
@@ -114,7 +115,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			sensors.forEach(id -> {
 				final List<Integer> idList = new ArrayList<>();
 				idList.add(id);
-				BasicSensorItemCard card = new BasicSensorItemCard();
+				final BasicSensorItemCard card = new BasicSensorItemCard();
 				card.setHeader("ID " + id);
 				card.addValueChangeHandler(event -> {
 					if(event.getValue()) {
@@ -124,10 +125,18 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 					}
 					this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(this.selectedSensorIdsInLists.get(listId)));
 				});
-				card.addTrashButtonClickHandler(event -> this.presenter.deleteSensorsInList(listId, idList));
-				card.addSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, idList)));
-				card.addMapButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, idList)));
-				card.addVisButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, idList)));
+				if(this.presenter.getController().getOptions().isEditingActive()) {
+					card.addTrashButtonClickHandler(event -> this.presenter.deleteSensorsInList(listId, idList));
+				}
+				if(this.presenter.getController().getOptions().isShowSearchButton()) {
+					card.addSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, idList)));
+				}
+				if(this.presenter.getController().getOptions().isShowMapButton()) {
+					card.addMapButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, idList)));
+				}
+				if(this.presenter.getController().getOptions().isShowVisualizationButton()) {
+					card.addVisButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, idList)));
+				}
 				sensorCards.put(id, card);
 				showSensorIds.add(id);
 			});
