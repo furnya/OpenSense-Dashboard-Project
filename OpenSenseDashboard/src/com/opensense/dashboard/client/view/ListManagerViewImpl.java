@@ -21,6 +21,7 @@ import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListCollapsibleItem;
 import com.opensense.dashboard.client.utils.Pager;
 import com.opensense.dashboard.client.utils.PagerSize;
+import com.opensense.dashboard.shared.UserList;
 
 import gwt.material.design.client.ui.MaterialCollapsible;
 
@@ -83,14 +84,14 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void addNewUserListItem(final int listId, final List<Integer> sensorList) {
+	public void addNewUserListItem(final UserList userList) {
 		ListCollapsibleItem item = new ListCollapsibleItem();
-		item.setName(Languages.newList() + listId);
-		item.addListNameInputHandler(event -> this.presenter.changeListName(listId, event.getListName()));
-		item.addDeleteButtonClickHandler(event -> this.deleteList(listId));
+		item.setName(userList.getListName());
+		item.addListNameInputHandler(event -> this.presenter.changeListName(userList.getListId(), event.getListName()));
+		item.addDeleteButtonClickHandler(event -> this.deleteList(userList.getListId()));
 		this.collapsible.add(item);
-		this.collapsiblesItems.put(listId, item);
-		this.setSensorsInList(listId, sensorList);
+		this.collapsiblesItems.put(userList.getListId(), item);
+		this.setSensorsInList(userList.getListId(), userList.getSensorIds());
 		item.getCollapsibleItem().getElement().getStyle().clearDisplay();
 	}
 

@@ -14,8 +14,10 @@ import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Measurand;
+import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
+import com.opensense.dashboard.shared.UserList;
 import com.opensense.dashboard.shared.ValuePreview;
 
 @SuppressWarnings("serial")
@@ -56,7 +58,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	}
 
 	@Override
-	public Map<Integer, String> getMeasurands() {
+	public Map<Integer, String> getMeasurands() { //TODO: change the way of request  to getDataFromRequest
 		Map<Integer, Measurand> measurandMap;
 		try {
 			measurandMap = ClientRequestHandler.getInstance().getMeasurandMap();
@@ -82,7 +84,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	}
 
 	@Override
-	public Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids) {
+	public Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids) {  //TODO: change the way of request  to getDataFromRequest
 		HashMap<Integer, ValuePreview> previewMap = new HashMap<>();
 		ids.forEach(id -> {
 			try {
@@ -94,23 +96,25 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		return previewMap;
 	}
 
-	private final Map<Integer, List<Integer>> lists = new HashMap<>();
+	private final Map<Integer, UserList> lists = new HashMap<>();
 	int idNumber = 0;
 
 	@Override
-	public Map<Integer, List<Integer>> getUserLists() {
+	public List<UserList> getUserLists() { // this method could be added in the get data from request (LIST)
 		//checks user is logged in, in all sensible server calls
 		// TODO Auto-generated method stub
-		//list of list ids with sensor ids in it
-		return this.lists;
+		//list of list ids with sensor ids in it (yes the ids are duplicated)
+		List<UserList> list = new ArrayList<>();
+		this.lists.values().forEach(list::add);
+		return list;
 	}
 
-	public ActionResult addSensorsToUserList() {
+	public ActionResult addSensorsToUserList() { //TODO:
 		return null;
 
 	}
 
-	public ActionResult addSensorToMySensorsUserList() {
+	public ActionResult addSensorToMySensorsUserList() { //TODO:
 		return null;
 
 	}
@@ -125,18 +129,35 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	}
 
 	@Override
-	public List<Integer> getMySensorsUserList() {
+	public List<Integer> getMySensorsUserList() { // this method could be added in the get data from request (LIST)
 		// TODO Auto-generated method stub
-		//list of list ids with sensor ids in it
+		//list of sensor ids in it
 		List<Integer> sensorList = new ArrayList<>();
 		return sensorList;
 	}
 
 	@Override
-	public Integer createNewUserList() {
+	public UserList createNewUserList() {
 		// TODO Auto-generated method stub
 		//list of list ids with sensor ids in it
-		this.lists.put(this.idNumber++, new ArrayList<>());
-		return this.idNumber;
+		UserList listItem = new UserList();
+		listItem.setListId(this.idNumber++);
+		listItem.setListName("Neue Liste " + listItem.getListId());
+		listItem.setSensorIds(new ArrayList<>());
+		this.lists.put(listItem.getListId(), listItem);
+		return listItem;
+	}
+
+	@Override
+	public ActionResult changeUserListName(int listId, String newListName) {
+		// TODO Auto-generated method stub
+		this.lists.get(listId).setListName(newListName);
+		return new ActionResult(ActionResultType.SUCCESSFUL);
+	}
+
+	@Override
+	public List<MinimalSensor> getMinimalSensorData(List<Integer> sensorIds) { // this method could be added in the get data from request (LIST)
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -1,31 +1,27 @@
 package com.opensense.dashboard.shared;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.json.JSONObject;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class User implements IsSerializable{
 
-	private JSONObject rawJSON;
+	//	private JSONObject rawJSON;
 	private int id;
 	private String username;
 	private String password;
 	private String email;
 	private String emailVerified;
 	private Date created;
-	
+
 	public User() {
 	}
-	
+
 	/**
 	 * @return the id
 	 */
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 
@@ -33,18 +29,14 @@ public class User implements IsSerializable{
 	 * @return the username
 	 */
 	public String getUsername() {
-		return username;
-	}
-	
-	public String toString() {
-		return this.getRawJSON().toString();
+		return this.username;
 	}
 
 	/**
 	 * @return the email
 	 */
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 
@@ -52,7 +44,7 @@ public class User implements IsSerializable{
 	 * @return the emailVerified
 	 */
 	public String getEmailVerified() {
-		return emailVerified;
+		return this.emailVerified;
 	}
 
 
@@ -60,24 +52,9 @@ public class User implements IsSerializable{
 	 * @return the created
 	 */
 	public Date getCreated() {
-		return created;
+		return this.created;
 	}
 
-
-	/**
-	 * @return the rawJSON
-	 */
-	public JSONObject getRawJSON() {
-		return rawJSON;
-	}
-
-
-	/**
-	 * @param rawJSON the rawJSON to set
-	 */
-	public void setRawJSON(JSONObject rawJSON) {
-		this.rawJSON = rawJSON;
-	}
 
 
 	/**
@@ -100,7 +77,7 @@ public class User implements IsSerializable{
 	 * @return the password
 	 */
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
 

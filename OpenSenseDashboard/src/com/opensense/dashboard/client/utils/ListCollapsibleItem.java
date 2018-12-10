@@ -1,12 +1,15 @@
 package com.opensense.dashboard.client.utils;
 
 import org.gwtbootstrap3.client.ui.html.Div;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -17,9 +20,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.ListNameChangedEvent;
 import com.opensense.dashboard.client.event.ListNameChangedEventHandler;
 
+import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialCollapsibleItem;
+import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialImage;
-import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialPreLoader;
 import gwt.material.design.client.ui.MaterialTextBox;
 
@@ -39,7 +43,7 @@ public class ListCollapsibleItem extends Composite{
 	MaterialImage listIcon;
 
 	@UiField
-	MaterialLink listItemName;
+	Span listItemName;
 
 	@UiField
 	Pager pagerTop;
@@ -58,6 +62,21 @@ public class ListCollapsibleItem extends Composite{
 
 	@UiField
 	MaterialTextBox listNameInput;
+
+	@UiField
+	MaterialButton showOnMapButton;
+
+	@UiField
+	MaterialButton showVisualizationsButton;
+
+	@UiField
+	MaterialButton selectAllButton;
+
+	@UiField
+	MaterialButton addToListButton;
+
+	@UiField
+	MaterialDropDown listDropDown;
 
 	private static ListCollapsibleItemUiBinder uiBinder = GWT.create(ListCollapsibleItemUiBinder.class);
 
@@ -82,26 +101,28 @@ public class ListCollapsibleItem extends Composite{
 
 	public void addListNameInputHandler(final ListNameChangedEventHandler handler) {
 		this.listItemName.addStyleName("list-name");
-		this.listItemName.addClickHandler(event -> {
+		this.listItemName.addDomHandler(event -> {
 			event.stopPropagation();
 			this.listNameInput.setValue(this.listItemName.getText());
 			this.listNameInput.setSelectionRange(0, this.listItemName.getText().length());
 			this.deleteButton.getElement().getStyle().setDisplay(Display.NONE);
 			this.listNameInput.getElement().getStyle().clearDisplay();
 			this.focusElement(this.listNameInput.getElement());
-			this.enterHandler = RootPanel.get().addDomHandler(event2 -> {
-				//TODO: add enter key handler
+			this.enterHandler = RootPanel.get().addDomHandler(keyDownEvent -> {
+				if(keyDownEvent.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					this.onListNameChangedEvent(handler);
+				}
+			}, KeyDownEvent.getType());
+			this.clickHandler = RootPanel.get().addDomHandler(domClickEvent -> {
+				domClickEvent.stopPropagation();
 				this.onListNameChangedEvent(handler);
 			}, ClickEvent.getType());
-			this.clickHandler = RootPanel.get().addDomHandler(event3 -> {
-				event3.stopPropagation();
-				this.onListNameChangedEvent(handler);
-			}, ClickEvent.getType());
-		});
+		}, ClickEvent.getType());
 	}
 
 	private void onListNameChangedEvent(ListNameChangedEventHandler handler) {
 		this.clickHandler.removeHandler();
+		this.enterHandler.removeHandler();
 		final String listName = this.listNameInput.getValue();
 		this.listItemName.setText(listName);
 		this.deleteButton.getElement().getStyle().clearDisplay();

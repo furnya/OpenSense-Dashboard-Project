@@ -1,12 +1,11 @@
 package com.opensense.dashboard.client.presenter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.RemoveSensorsFromFavoriteListEvent;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
@@ -15,6 +14,8 @@ import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.view.ListManagerView;
 import com.opensense.dashboard.client.view.ListManagerViewImpl;
 import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.MinimalSensor;
+import com.opensense.dashboard.shared.UserList;
 
 public class ListManagerPresenter implements IPresenter, ListManagerView.Presenter{
 
@@ -43,9 +44,9 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		this.view.clearUserLists();
 		if(this.controller.isUserLoggedIn()) {
 			this.view.showMySensorListsItem(true);
-			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<Map<Integer, List<Integer>>>(result -> {
-				if(result != null) {
-					result.entrySet().forEach(entry -> this.view.addNewUserListItem(entry.getKey(), entry.getValue()));
+			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
+				if((result != null) && !result.isEmpty()) {
+					result.forEach(userList -> this.view.addNewUserListItem(userList));
 				}else {
 					GWT.log("Shit");
 				}
@@ -67,9 +68,9 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 
 	public void createNewList() {
-		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<Integer>(result -> {
+		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<UserList>(result -> {
 			if(result != null) {
-				this.view.addNewUserListItem(result, new ArrayList<>());
+				this.view.addNewUserListItem(result);
 			}else {
 				GWT.log("Shit1");
 			}
@@ -91,12 +92,24 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		},true));
 	}
 
+	/**
+	 * server calls for other list ids
+	 */
+	public void addSensorsToList(final int listId, final List<Integer> sensorIds) {
+		//TODO: Auto-generated method stub
+		if(listId == -1) {
+			this.eventBus.fireEvent(new AddSensorsToFavoriteListEvent(sensorIds));
+		}
+	}
 
+	/**
+	 * server calls for other list ids
+	 */
 	@Override
-	public void deleteSensorsInList(final int listId, final List<Integer> sensorCardId) {
+	public void deleteSensorsInList(final int listId, final List<Integer> sensorIds) {
 		// TODO Auto-generated method stub
 		if(listId == -1) { // -1 fav list, -2 selected sensor list, -3 mysensor list
-			this.eventBus.fireEvent(new RemoveSensorsFromFavoriteListEvent(sensorCardId));
+			this.eventBus.fireEvent(new RemoveSensorsFromFavoriteListEvent(sensorIds));
 		}
 	}
 
@@ -129,8 +142,27 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 
 	@Override
-	public void changeListName(int listId, String listName) {
-		GWT.log(listId + " " + listName);
-		//TODO: serverCall to change the list name
+	public void changeListName(int listId, String newListName) {
+		GeneralService.Util.getInstance().changeUserListName(listId, newListName, new DefaultAsyncCallback<ActionResult>(result -> {
+			if(result != null) {
+				//TODO: the list name should only set in ui if serverCall was successful
+			}else {
+				GWT.log("Shit1");
+			}
+		}, caught -> {
+			GWT.log("Shit3");
+		},true));
+	}
+
+	public void getMinimalSensorData(final int listId, final List<Integer> sensorIds) {
+		GeneralService.Util.getInstance().getMinimalSensorData(sensorIds, new DefaultAsyncCallback<List<MinimalSensor>>(result -> {
+			if(result != null) {
+				//TODO: add the minimalSensor to list with #listId
+			}else {
+				GWT.log("Shit1");
+			}
+		}, caught -> {
+			GWT.log("Shit3");
+		},true));
 	}
 }

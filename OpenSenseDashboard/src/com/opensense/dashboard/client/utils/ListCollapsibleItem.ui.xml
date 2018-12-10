@@ -55,12 +55,29 @@
 .list-name-input > input{
     height: 25px;
 }
+
+.panel{
+    background: #202020;
+    padding: 10px 10px 10px 10px;
+    overflow: hidden;
+}
+.fav-img{
+    width: 25px;
+    margin-right: 20px;
+}
+.btn-image{
+    width: 25px;
+    margin-left: -20px;
+    margin-right: 25px;
+    filter: invert(100%);	
+}
 </ui:style>
 
 <m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE">
 	<m:MaterialCollapsibleHeader>
 		<bh:Div addStyleNames="position-relative {style.header}">
-			<m:MaterialLink ui:field="listItemName" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
+			<m:MaterialLink iconType="ARROW_DROP_DOWN" iconPosition="LEFT"/>
+			<bh:Span ui:field="listItemName" />
 			<m:MaterialTextBox ui:field="listNameInput" addStyleNames="{style.list-name-input}" display="NONE" />
 			<m:MaterialImage ui:field="listIcon" display="NONE" addStyleNames="{style.list-icon}"/>
 			<bh:Div addStyleNames="{style.float-right}">
@@ -69,6 +86,20 @@
 		</bh:Div>
 	</m:MaterialCollapsibleHeader>
 	<m:MaterialCollapsibleBody addStyleNames="{style.body}">
+		<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10">
+			<m:MaterialButton ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false"/>
+			<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false" >
+				<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+			<m:MaterialButton ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false">
+				<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+			<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn" enabled="false" activates="dp-1">
+				<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+			<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners">
+			</m:MaterialDropDown>
+		</bh:Div>
 		<d:Pager ui:field="pagerTop" addStyleNames="pager"/>
 		<m:MaterialPreLoader ui:field="listItemSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
 			<m:MaterialSpinner/>
