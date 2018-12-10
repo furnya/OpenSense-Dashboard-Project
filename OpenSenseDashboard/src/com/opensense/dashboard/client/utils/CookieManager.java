@@ -59,7 +59,7 @@ public class CookieManager {
 		if(Cookies.getCookie(name) != null) {
 			String[] slittedString = Cookies.getCookie(name).split(",");
 			for(String value : slittedString) {
-				if(value.matches("^[0-9]*$")) {
+				if(value.matches("^[0-9]+$")) {
 					idList.add(Integer.valueOf(value));
 				}
 			}
