@@ -20,7 +20,6 @@ import com.opensense.dashboard.client.view.MapView;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
-import com.opensense.dashboard.shared.ValuePreview;
 
 public class MapPresenter extends DataPanelPagePresenter implements IPresenter, MapView.Presenter{
 	
@@ -72,7 +71,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 
 	@Override
 	public void waitUntilViewInit(Runnable runnable) {
-		view.initView();
+		view.initView(runnable);
 		runnable.run();
 	}
 	
@@ -91,7 +90,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 				}else if(request.getIds() != null) {
 					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, request.getIds()));
 				}
-				view.showSensorData(result.getSensors());
+//				view.showSensorData(result.getSensors());
 				view.showMarkers(result.getSensors());
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");

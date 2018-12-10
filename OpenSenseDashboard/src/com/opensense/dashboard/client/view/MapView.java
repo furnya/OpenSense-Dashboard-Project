@@ -9,7 +9,6 @@ import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.overlays.Marker;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.shared.Sensor;
-import com.opensense.dashboard.shared.ValuePreview;
 
 public interface MapView extends IDataPanelPageView{
 	public interface Presenter{
@@ -20,8 +19,8 @@ public interface MapView extends IDataPanelPageView{
 	
 	public void setPresenter(Presenter presenter);
 	public Widget asWidget();
-	public void initView();
-	public void showSensorData(final List<Sensor> sensors);
+	public void initView(Runnable runnable);
+//	public void showSensorData(final List<Sensor> sensors);
 	public void showMarkers(List<Sensor> sensorlist);
 	public void resetMarkerAndCluster();
 	public MapWidget getMapWidget();
