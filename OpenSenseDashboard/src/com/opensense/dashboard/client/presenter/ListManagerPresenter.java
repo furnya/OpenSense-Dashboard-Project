@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.presenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -46,7 +47,11 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			this.view.showMySensorListsItem(true);
 			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
 				if((result != null) && !result.isEmpty()) {
-					result.forEach(userList -> this.view.addNewUserListItem(userList));
+					result.forEach(userList -> {
+						this.view.addNewUserListItem(userList);
+						this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
+					});
+
 				}else {
 					GWT.log("Shit");
 				}
@@ -54,9 +59,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 				GWT.log("Shit2");
 			},true));
 			GeneralService.Util.getInstance().getMySensorsUserList(new DefaultAsyncCallback<List<Integer>>(result -> {
-				if(result != null) {
-					this.view.setSensorsInList(-3, result);
+				if((result != null) && !result.isEmpty()) {
+					this.getMinimalSensorDataAndShow(-3, result, false);
 				}else {
+					this.view.setSensorsInList(-3, new ArrayList<>());
 					GWT.log("Shit1");
 				}
 			}, caught -> {
@@ -124,13 +130,19 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 
 	public void updateFavoriteList() {
-		this.view.setSensorsInList(-1, CookieManager.getFavoriteList());
+		List<Integer> favoriteIds = CookieManager.getFavoriteList();
+		if(!favoriteIds.isEmpty()) {
+			this.getMinimalSensorDataAndShow(-1, favoriteIds, false);
+		}else {
+			this.view.setSensorsInList(-1, new ArrayList<>());
+		}
 	}
 
 	public void updateSelectedSensorsList(List<Integer> idList) {
 		if(!idList.isEmpty()) {
 			this.view.showSelectedSensorListsItem(true);
-			this.view.setSensorsInList(-2, idList);
+			this.view.setCollapsibleListItemSelected(-2);
+			this.getMinimalSensorDataAndShow(-2, idList, true);
 		}else {
 			this.view.showSelectedSensorListsItem(false);
 		}
@@ -154,10 +166,13 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		},true));
 	}
 
-	public void getMinimalSensorData(final int listId, final List<Integer> sensorIds) {
+	public void getMinimalSensorDataAndShow(final int listId, final List<Integer> sensorIds, final boolean selectAll) {
 		GeneralService.Util.getInstance().getMinimalSensorData(sensorIds, new DefaultAsyncCallback<List<MinimalSensor>>(result -> {
 			if(result != null) {
-				//TODO: add the minimalSensor to list with #listId
+				this.view.setSensorsInList(listId, result);
+				if(selectAll) {
+					this.view.selectAllSensorsInList(listId);
+				}
 			}else {
 				GWT.log("Shit1");
 			}

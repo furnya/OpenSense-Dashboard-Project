@@ -69,7 +69,7 @@
 </ui:style>
 
 <m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE">
-	<m:MaterialCollapsibleHeader>
+	<m:MaterialCollapsibleHeader ui:field="header">
 		<bh:Div addStyleNames="position-relative {style.header}">
 			<m:MaterialLink iconType="ARROW_DROP_DOWN" iconPosition="LEFT"/>
 			<bh:Span ui:field="listItemName" />

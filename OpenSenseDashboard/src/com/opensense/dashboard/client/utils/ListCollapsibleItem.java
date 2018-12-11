@@ -19,8 +19,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.ListNameChangedEvent;
 import com.opensense.dashboard.client.event.ListNameChangedEventHandler;
+import com.opensense.dashboard.client.event.SensorSelectionEvent;
+import com.opensense.dashboard.client.event.SensorSelectionEventHandler;
 
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialCollapsibleHeader;
 import gwt.material.design.client.ui.MaterialCollapsibleItem;
 import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialImage;
@@ -78,6 +81,9 @@ public class ListCollapsibleItem extends Composite{
 	@UiField
 	MaterialDropDown listDropDown;
 
+	@UiField
+	MaterialCollapsibleHeader header;
+
 	private static ListCollapsibleItemUiBinder uiBinder = GWT.create(ListCollapsibleItemUiBinder.class);
 
 	private HandlerRegistration clickHandler;
@@ -91,9 +97,17 @@ public class ListCollapsibleItem extends Composite{
 		this.listItemName.setText(name);
 	}
 
-	public void addSelectAllButtonClickHandler(ClickHandler handler) {
+	public void addSelectAllButtonClickHandler(SensorSelectionEventHandler handler) {
 		this.selectAllButton.getElement().getStyle().clearDisplay();
-		this.selectAllButton.addClickHandler(handler);
+		this.selectAllButton.addClickHandler(event -> {
+			if(Languages.selectAllSensors().equals(this.selectAllButton.getText())) {
+				handler.onSensorSelectionEvent(new SensorSelectionEvent(true));
+				this.changeToSelectAll(false);
+			}else {
+				handler.onSensorSelectionEvent(new SensorSelectionEvent(false));
+				this.changeToSelectAll(true);
+			}
+		});
 	}
 
 	public void addShowVisualizationsButtonClickHandler(ClickHandler handler) {
@@ -164,6 +178,10 @@ public class ListCollapsibleItem extends Composite{
 		handler.onListNameChangedEvent(new ListNameChangedEvent(listName));
 	}
 
+	public void addHeaderClickedHandler(ClickHandler handler) {
+		this.header.addClickHandler(handler);
+	}
+
 	private native void focusElement(Element elem) /*-{
 		elem.firstChild.focus()
 	}-*/;
@@ -192,4 +210,21 @@ public class ListCollapsibleItem extends Composite{
 	public MaterialCollapsibleItem getCollapsibleItem() {
 		return this.sensorItem;
 	}
+
+	public boolean isActive() {
+		return this.sensorItem.getElement().getClassName().contains("active");
+	}
+
+	public void setActive() {
+		this.sensorItem.setActive(true);
+	}
+
+	public void changeToSelectAll(boolean selectAll) {
+		if(selectAll) {
+			this.selectAllButton.setText(Languages.selectAllSensors());
+		}else {
+			this.selectAllButton.setText(Languages.deselectAllSensors());
+		}
+	}
+
 }

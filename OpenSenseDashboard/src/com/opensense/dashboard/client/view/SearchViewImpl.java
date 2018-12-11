@@ -27,9 +27,9 @@ import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.client.utils.MeasurandIconHelper;
 import com.opensense.dashboard.client.utils.Pager;
 import com.opensense.dashboard.client.utils.SensorItemCard;
-import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.ValuePreview;
 
@@ -208,7 +208,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			this.sensors.put(sensorId, sensor);
 			card.setHeader(sensor.getMeasurand().getDisplayName() + "   -   " + Languages.sensorId() + sensorId);
 			this.unselectedSensors.add(sensorId);
-			card.setIcon(this.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
+			card.setIcon(MeasurandIconHelper.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setRating(sensor.getAccuracy());
 			card.addContentValue(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
 			card.addContentValue(Languages.origin(), sensor.getAttributionText());
@@ -245,37 +245,6 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			this.showOnMapButton.setEnabled(false);
 			this.showVisualizationsButton.setEnabled(false);
 			this.addToListButton.setEnabled(false);
-		}
-	}
-
-	private String getIconUrlFromType(MeasurandType measurandType) {
-		switch(measurandType) {
-		case AIR_PRESSURE:
-			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString();
-		case BRIGHTNESS:
-			return GUIImageBundle.INSTANCE.sunnyIconSvg().getSafeUri().asString();
-		case CLOUDINESS:
-			return GUIImageBundle.INSTANCE.cloudsIconSvg().getSafeUri().asString();
-		case HUMIDITY:
-			return GUIImageBundle.INSTANCE.humidityIconSvg().getSafeUri().asString();
-		case NOISE:
-			return GUIImageBundle.INSTANCE.noiseIconSvg().getSafeUri().asString();
-		case PM10:
-			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
-		case PM2_5:
-			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
-		case PRECIPITATION_AMOUNT:
-			return GUIImageBundle.INSTANCE.precipitaionIconSvg().getSafeUri().asString();
-		case PRECIPITATION_TYPE:
-			return GUIImageBundle.INSTANCE.precipitationTypeIconSvg().getSafeUri().asString();
-		case TEMPERATURE:
-			return GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString();
-		case WIND_DIRECTION:
-			return GUIImageBundle.INSTANCE.windDirectionIconSvg().getSafeUri().asString();
-		case WIND_SPEED:
-			return GUIImageBundle.INSTANCE.windSpeedIconSvg().getSafeUri().asString();
-		default:
-			return GUIImageBundle.INSTANCE.questionIconSvg().getSafeUri().asString();
 		}
 	}
 
