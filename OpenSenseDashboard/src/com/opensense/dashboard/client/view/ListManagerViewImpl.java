@@ -173,7 +173,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 					if(event.getValue()) {
 						this.selectedSensorIdsInLists.get(listId).add(sensor.getSensorId());
 					}else {
-						this.selectedSensorIdsInLists.get(listId).remove(sensor.getSensorId());
+						this.selectedSensorIdsInLists.get(listId).remove((Integer) sensor.getSensorId());
 					}
 					this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(this.selectedSensorIdsInLists.get(listId)));
 				});
@@ -312,6 +312,11 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	public void selectAllSensorsInList(int listId) {
 		this.collapsiblesItems.get(listId).changeToSelectAll(false);
 		this.selectAllSensorsInList(listId, true);
+	}
+
+	@Override
+	public Map<Integer, BasicSensorItemCard> getSensorCardMap(int listId) {
+		return this.sensorCardsInLists.get(listId);
 	}
 
 

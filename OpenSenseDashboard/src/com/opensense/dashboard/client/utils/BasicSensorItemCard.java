@@ -39,9 +39,6 @@ public class BasicSensorItemCard extends Composite{
 	Image icon;
 
 	@UiField
-	Div midContainer;
-
-	@UiField
 	MaterialCheckBox checkbox;
 
 	@UiField
@@ -58,9 +55,6 @@ public class BasicSensorItemCard extends Composite{
 
 	@UiField
 	MaterialImage visButton;
-
-	@UiField
-	MaterialPreLoader cardSpinner;
 
 	public BasicSensorItemCard() {
 		this.initWidget(uiBinder.createAndBindUi(this));
@@ -119,10 +113,6 @@ public class BasicSensorItemCard extends Composite{
 		this.icon.setTitle(title);
 	}
 
-	public Div getMiddleHeader() {
-		return this.midContainer;
-	}
-
 	private void addClickHandler() {
 		this.layout.addDomHandler(event -> this.checkbox.setValue(!this.checkbox.getValue(), true), ClickEvent.getType());
 		this.addClickListener(this.checkbox.getElement());
@@ -149,17 +139,4 @@ public class BasicSensorItemCard extends Composite{
 			event.stopPropagation();
 		});
 	}-*/;
-
-	public void showLoadingIndicator() {
-		if(this.checkbox.getValue()) {
-			this.cardSpinner.getElement().addClassName("spinner-active");
-		}else {
-			this.cardSpinner.getElement().removeClassName("spinner-active");
-		}
-		this.cardSpinner.getElement().getStyle().clearDisplay();
-	}
-
-	public void hideLoadingIndicator() {
-		this.cardSpinner.getElement().getStyle().setDisplay(Display.NONE);
-	}
 }

@@ -31,9 +31,10 @@ public interface VisualisationsView extends IDataPanelPageView {
 	public DateRange getDefaultRange();
 	public boolean showChart();
 	public void createChart();
-	public void setSensors(List<Sensor> sensors);
-	public List<Sensor> getSensors();
-	public void showNoDataIndicator(boolean show);
-	public void addEmptySensorItemCard(Integer sensorId);
-	public void showSensorCardFailure(Integer sensorId);
+	public List<Integer> getSensorIds();
+	public void setSensorIds(List<Integer> sensorIds);
+	public Date getStartingDate();
+	public Date getEndingDate();
+	public void resetDatasets();
+	public boolean updateNeeded(List<Integer> ids);
 }

@@ -44,6 +44,7 @@ import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
+import com.opensense.dashboard.client.utils.PagerSize;
 import com.opensense.dashboard.client.utils.ValueHandler;
 import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.shared.DateRange;
@@ -64,9 +65,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	@UiField
-	Div noDataIndicator;
-	
-	@UiField
 	Div container;
 	
 	@UiField
@@ -74,9 +72,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	@UiField
 	Div chartContainer;
-	
-	@UiField
-	MaterialButton addToListButton;
 	
 	@UiField
 	MaterialButton customRange;
@@ -100,22 +95,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	MaterialDatePicker endingDate;
 	
 	@UiField
-	Div sensorListContainer;
-	
-	@UiField
-	MaterialButton showOnMapButton;
-	
-	@UiField
-	MaterialButton showInSearchButton;
-	
-	@UiField
-	MaterialButton selectAllButton;
-	
-	@UiField
 	MaterialLabel noDatasetsLabel;
-	
-	@UiField
-	Div sensorContent;
 	
 	@UiField
 	Div listContainer;
@@ -133,9 +113,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	protected Presenter presenter;
 	
-	private List<Sensor> sensors;
-	private Map<Integer, BasicSensorItemCard> sensorCardMap = new HashMap<>();
-	private Map<Sensor, LineDataset> datasetMap = new HashMap<>();
+	private List<Integer> sensorIds = new LinkedList<>();
+	private Map<Integer, LineDataset> datasetMap = new HashMap<>();
 	
 	private static final DateRange DEFAULT_RANGE = DateRange.PAST_WEEK;
 	private DateRange dateRange = DEFAULT_RANGE;
@@ -149,9 +128,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	private Double minValue = Double.POSITIVE_INFINITY;
 	private Double maxValue = Double.NEGATIVE_INFINITY;
-	
-	private List<Integer> unselectedSensors = new ArrayList<>();
-	private List<Integer> selectedSensors = new ArrayList<>();
 	
 	private String[] colors = {"#5899DA","#E8743B","#19A979","#ED4A7B","#945ECF","#13A4B4","#525DF4","#BF399E","#6C8893","#EE6868","#2F6497"};
 	private Map<Integer,String> usedColors = new HashMap<>();
@@ -179,9 +155,15 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		listContainer.clear();
 		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(), this.listContainer);
 		listManagerOptions.setEditingActive(true);
+		listManagerOptions.setPagerSize(PagerSize.SMALL);
+		listManagerOptions.setShowMapButton(true);
+		listManagerOptions.setShowVisualizationButton(false);
+		listManagerOptions.setShowSearchButton(true);
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
-		this.listManager.addSelectedSensorsChangeHandler(event -> event.getSelectedIds().forEach(id -> GWT.log(id+"")));
+		this.listManager.addSelectedSensorsChangeHandler(event -> {
+			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, event.getSelectedIds()));
+		});
 	}
 	
 	@UiHandler("customRange")
@@ -214,10 +196,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		resetColors();
 		resetChart();
 		resetDatasets();
-		showAllLoadingIndicators();
 		setDateRange(dr);
 		highlightDateRange();
-		presenter.valueRequestForSensorList(selectedSensors, dr, minT, maxT);
+		presenter.valueRequestForSensorList(sensorIds, dr, minT, maxT);
 	}
 	
 	@Override
@@ -232,7 +213,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	@Override
 	public void addSensorValues(Sensor sensor, List<Value> values) {
-		addSensor(sensor);
 		if(sensor == null || values == null || values.isEmpty()) return;
 		ValueHandler valueHandler = new ValueHandler(values);
 		List<Value> filteredValues = valueHandler.getValues();
@@ -247,9 +227,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		Double highest = ValueHandler.getMaxOfDataset(dataset);
 		if(minValue > lowest) minValue = lowest;
 		if(maxValue < highest) maxValue = highest;
-		Sensor oldSensor = datasetsContainId(sensor.getSensorId());
-		if(oldSensor != null) datasetMap.remove(oldSensor);
-		datasetMap.put(sensor, dataset);
+		Integer oldSensorId = datasetsContainId(sensor.getSensorId());
+		if(oldSensorId != null) datasetMap.remove(oldSensorId);
+		datasetMap.put(sensor.getSensorId(), dataset);
 		setLineDatasetStyle(dataset, sensor.getSensorId());
 		addDatasetToChart(dataset);
 	}
@@ -299,33 +279,15 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	/**
 	 * @return the sensors
 	 */
-	public List<Sensor> getSensors() {
-		return sensors;
+	public List<Integer> getSensorIds() {
+		return sensorIds;
 	}
 
 	/**
 	 * @param sensors the sensors to set
 	 */
-	public void setSensors(List<Sensor> sensors) {
-		this.sensors = sensors;
-	}
-	
-	public void addSensor(Sensor sensor) {
-		if(sensors==null) setSensors(new LinkedList<>());
-		if(!sensors.contains(sensor)) {
-			if(containsSensorWithId(sensor.getSensorId())) {
-				sensors.removeIf(s -> s.getSensorId()==sensor.getSensorId());
-			}
-			sensors.add(sensor);
-			setSensorCard(sensor);
-		}
-	}
-	
-	public boolean containsSensorWithId(Integer id) {
-		for(Sensor s : sensors) {
-			if(s!= null && s.getSensorId()==id) return true;
-		}
-		return false;
+	public void setSensorIds(List<Integer> sensorIds) {
+		this.sensorIds = sensorIds;
 	}
 
 	/**
@@ -355,7 +317,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public boolean showChart() {
 		hideLoadingIndicator();
 		chartContainer.clear();
-		if(sensors==null || sensors.isEmpty() || datasetMap==null || datasetMap.isEmpty()) {
+		if(sensorIds==null || sensorIds.isEmpty() || datasetMap==null || datasetMap.isEmpty()) {
 			resetMinMax();
 			showNoDatasetsIndicator(true);
 			return false;
@@ -403,8 +365,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	private void setCardColor(String color, int sensorId) {
-		BasicSensorItemCard card = sensorCardMap.get(sensorId);
-		card.getElement().getStyle().setBackgroundColor(color);		
+		BasicSensorItemCard card = this.listManager.getView().getSensorCardMap(-1).get(sensorId);
+		card.getElement().removeClassName("card-active");
+		card.getElement().getStyle().setBackgroundColor(color);
 	}
 
 	public void firstD3Chart() {
@@ -412,91 +375,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		SVG svg = D3.svg();
 		Axis x = svg.axis();
 		s.call(x);
-	}
-	
-	public void setSensorCard(Sensor sensor) {
-		final BasicSensorItemCard card = sensorCardMap.get(sensor.getSensorId());
-		card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
-		card.setIconTitle(sensor.getMeasurand().getDisplayName());
-		card.hideLoadingIndicator();
-	}
-	
-	public void removeSensorCard(Integer id) {
-		sensorListContainer.remove(sensorCardMap.get(id));
-	}
-	
-	private String getIconUrlFromType(MeasurandType measurandType) {
-		switch(measurandType) {
-		case AIR_PRESSURE:
-			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString();
-		case BRIGHTNESS:
-			return GUIImageBundle.INSTANCE.sunnyIconSvg().getSafeUri().asString();
-		case CLOUDINESS:
-			return GUIImageBundle.INSTANCE.cloudsIconSvg().getSafeUri().asString();
-		case HUMIDITY:
-			return GUIImageBundle.INSTANCE.humidityIconSvg().getSafeUri().asString();
-		case NOISE:
-			return GUIImageBundle.INSTANCE.noiseIconSvg().getSafeUri().asString();
-		case PM10:
-			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
-		case PM2_5:
-			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
-		case PRECIPITATION_AMOUNT:
-			return GUIImageBundle.INSTANCE.precipitaionIconSvg().getSafeUri().asString();
-		case PRECIPITATION_TYPE:
-			return GUIImageBundle.INSTANCE.precipitationTypeIconSvg().getSafeUri().asString();
-		case TEMPERATURE:
-			return GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString();
-		case WIND_DIRECTION:
-			return GUIImageBundle.INSTANCE.windDirectionIconSvg().getSafeUri().asString();
-		case WIND_SPEED:
-			return GUIImageBundle.INSTANCE.windSpeedIconSvg().getSafeUri().asString();
-		default:
-			return GUIImageBundle.INSTANCE.questionIconSvg().getSafeUri().asString();
-		}
-	}
-	
-	@UiHandler("showOnMapButton")
-	public void onShowOnMapButtonClicked(ClickEvent e) {
-		if(!selectedSensors.isEmpty()) {
-			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, selectedSensors));
-		}
-	}
-	
-	@UiHandler("showInSearchButton")
-	public void onShowInSearchButtonClicked(ClickEvent e) {
-		if(!selectedSensors.isEmpty()) {
-			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, selectedSensors));
-		}
-	}
-	
-	@UiHandler("selectAllButton")
-	public void onSelectAllButtonClicked(ClickEvent e) {
-		if(Languages.selectAllSensors().equals(selectAllButton.getText())) {
-			while(!unselectedSensors.isEmpty()) {
-				sensorCardMap.get(unselectedSensors.get(0)).setActive(true);
-				selectedSensors.add(unselectedSensors.get(0));
-				unselectedSensors.remove(0);
-			}
-			selectAllButton.setText(Languages.deselectAllSensors());
-			addAllDatasets();
-		}else {
-			while(!selectedSensors.isEmpty()) {
-				sensorCardMap.get(selectedSensors.get(0)).setActive(false);
-				unselectedSensors.add(selectedSensors.get(0));
-				selectedSensors.remove(0);
-			}
-			selectAllButton.setText(Languages.selectAllSensors());
-			removeAllDatasets();
-		}
-	}
-	
-	public void showNoDataIndicator(boolean show) {
-		if(show) {
-			noDataIndicator.getElement().getStyle().clearDisplay();
-		}else {
-			noDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
-		}
 	}
 	
 	public void showNoDatasetsIndicator(boolean show) {
@@ -509,8 +387,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	public void removeSensorDatasetFromChart(Integer sensorId) {
 		usedColors.remove(sensorId);
-		Sensor sensor = getSensorFromId(sensorId);
-		LineDataset dataset = datasetMap.remove(sensor);
+		LineDataset dataset = datasetMap.remove(sensorId);
 		ArrayList<Dataset> datasets = new ArrayList<>();
 		chart.getData().getDatasets().forEach(datasets::add);
 		datasets.remove(dataset);
@@ -522,7 +399,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void addSensorDatasetToChart(Integer sensorId) {
-		sensorCardMap.get(sensorId).showLoadingIndicator();
 		presenter.buildValueRequestAndSend(sensorId, getDateRange(), startingDate.getDate(), endingDate.getDate());
 	}
 
@@ -540,28 +416,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.dateRange = dateRange;
 	}
 	
-	public Sensor datasetsContainId(Integer id) {
-		for(Sensor s : datasetMap.keySet()) {
-			if(s.getSensorId()==id) return s;
-		}
-		return null;
-	}
-	
-	public void removeAllDatasets() {
-		if(datasetMap==null || datasetMap.isEmpty()) return;
-		for(Sensor sensor : sensors) {
-			removeSensorDatasetFromChart(sensor.getSensorId());
-		}
-	}
-	
-	public void addAllDatasets() {
-		if(sensors==null || sensors.isEmpty()) return;
-		sensors.forEach(sensor -> addSensorDatasetToChart(sensor.getSensorId()));
-	}
-	
-	public Sensor getSensorFromId(Integer id) {
-		for(Sensor s : sensors) {
-			if(s.getSensorId()==id) return s;
+	public Integer datasetsContainId(Integer id) {
+		for(Integer sensorId : datasetMap.keySet()) {
+			if(sensorId==id) return sensorId;
 		}
 		return null;
 	}
@@ -609,58 +466,21 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		return color;
 	}
 	
-	@Override
-	public void addEmptySensorItemCard(Integer sensorId) {
-		if(sensorCardMap.containsKey(sensorId)) return;
-		final BasicSensorItemCard card = new BasicSensorItemCard();
-		card.setHeader(Languages.sensorId() + sensorId);
-		selectedSensors.add(sensorId);
-		selectedSensors.sort((a,b) -> (a-b));
-		sensorCardMap.put(sensorId, card);
-		card.addValueChangeHandler(event -> {
-			if(event.getValue()) {
-				unselectedSensors.remove(sensorId);
-				selectedSensors.add(sensorId);
-				if(unselectedSensors.isEmpty()) selectAllButton.setText(Languages.deselectAllSensors());
-				addSensorDatasetToChart(sensorId);
-			}else {
-				unselectedSensors.add(sensorId);
-				selectedSensors.remove(sensorId);
-				if(selectedSensors.isEmpty()) selectAllButton.setText(Languages.selectAllSensors());
-				removeSensorDatasetFromChart(sensorId);
-			}
-		});
-		card.showLoadingIndicator();
-		sensorListContainer.insert(card, selectedSensors.indexOf(sensorId));
-	}
-	
-	public void showAllLoadingIndicators() {
-		for(Integer id : selectedSensors) {
-			sensorCardMap.get(id).showLoadingIndicator();
-		}
-	}
-	
 	public void setDatePickerOptions() {
 		startingDate.setDateMax(new Date());
 		endingDate.setDateMax(new Date());
-		CloseHandler<MaterialDatePicker> ch = event -> selectAllButton.setFocus(true);
+		CloseHandler<MaterialDatePicker> ch = event -> customRange.setFocus(true);
 		startingDate.addCloseHandler(ch);
 		endingDate.addCloseHandler(ch);
 		DatePickerLanguage lang = Languages.isGerman()? DatePickerLanguage.DE : DatePickerLanguage.EN;
 		startingDate.setLanguage(lang);
 		endingDate.setLanguage(lang);
-		endingDate.addClickHandler(event -> endingDate.open());
-	}
-	
-	@Override
-	public void showSensorCardFailure(Integer sensorId) {
-		BasicSensorItemCard card = sensorCardMap.get(sensorId);
-		card.setHeader("ERROR");
-		card.hideLoadingIndicator();
 	}
 	
 	public void resetDatasets() {
 		datasetMap = new HashMap<>();
+		Dataset[] emptyDatasetArray = new Dataset[0];
+		chart.getData().setDatasets(emptyDatasetArray);
 	}
 	
 	
@@ -713,5 +533,28 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	public ListManager getListManager() {
 		return listManager;
+	}
+	
+	public Date getStartingDate() {
+		return startingDate.getDate();
+	}
+	
+	public Date getEndingDate() {
+		return endingDate.getDate();
+	}
+
+	@Override
+	public boolean updateNeeded(List<Integer> ids) {
+		for(Integer id : ids) {
+			if(!sensorIds.contains(id)) {
+				return true;
+			}
+		}
+		for(Integer id : datasetMap.keySet()) {
+			if(!ids.contains(id)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -113,27 +113,7 @@
 			<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 		</bh:Div>	
 	</bh:Div>
-	<bh:Div ui:field="listContainer" addStyleNames="{style.sensor-container}">
-		<bh:Div addStyleNames="{style.selectPanel} {style.panel} flex round-corners {style.margin}">
-			<m:MaterialButton width="265px" ui:field="selectAllButton" text="{lang.deselectAllSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10"/>
-			<bh:Div addStyleNames="display-block"> 
-				<m:MaterialLabel textColor="WHITE" text="{lang.allSelectedSensors}"/>
-				<m:MaterialButton ui:field="showInSearchButton" text="{lang.selectedShowInSearch}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
-				<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
-				<!-- m:MaterialButton  ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/-->
-				<m:MaterialButton  ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn"/>
-			</bh:Div>
-		</bh:Div>
-		<bh:Div ui:field="sensorContent" addStyleNames="margin-top-15 margin-bottom-20 {style.panel} round-corners {style.center}">
-			<m:MaterialPreLoader ui:field="pagerSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
-				<m:MaterialSpinner/>
-			</m:MaterialPreLoader>
-			<bh:Div ui:field="noDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
-				<bh:Span text="{lang.noData}" addStyleNames="{style.center-text}"/>
-			</bh:Div>
-			<bh:Div ui:field="sensorListContainer" addStyleNames="{style.sensor-list-container}" width="100%"/> 
-		</bh:Div>
-	</bh:Div>
+	<bh:Div ui:field="listContainer" />
 </bh:Div>
 
 </ui:UiBinder>

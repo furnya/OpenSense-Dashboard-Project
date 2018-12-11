@@ -66,20 +66,17 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	
 	@Override
 	public void handleIds(List<Integer> ids) {
-		if(ids==null || ids.isEmpty()) {
-			view.showNoDataIndicator(true);
+		if(ids==null || ids.isEmpty() || !view.updateNeeded(ids)) {
 			return;
 		}
+		view.resetDatasets();
 		view.showLoadingIndicator();
-		view.showNoDataIndicator(false);
-		view.setSensors(new LinkedList<>());
+		view.setSensorIds(new LinkedList<>());
+		ids.forEach(view.getSensorIds()::add);
 		for(Integer id : ids) {
-			view.addEmptySensorItemCard(id);
+			buildValueRequestAndSend(id, view.getDefaultRange(), view.getStartingDate(), view.getEndingDate());
 		}
-		for(Integer id : ids) {
-			buildValueRequestAndSend(id, view.getDefaultRange(), null, null);
-		}
-		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, false, ids));
+//		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, false, ids));
 	}
 
 
@@ -113,7 +110,6 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 			}
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the values.");
-			view.showSensorCardFailure(request.getIds().get(0));
 			view.hideLoadingIndicator();
 		}, false));
 	}	
