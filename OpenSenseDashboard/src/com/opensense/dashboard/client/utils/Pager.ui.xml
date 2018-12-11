@@ -25,8 +25,8 @@
     	font-size: 11px;
 	}
 	.pager[size=small] > button > img{
-	    margin-bottom: 19px;
-	    height: 14px
+	    margin-bottom: 14px;
+   		height: 19px;
 	}
 	.pager[size=medium] > button{
 		width: 24px;
@@ -39,7 +39,7 @@
 	}
 	.pager[size=medium] > button > img{
 	    margin-bottom: 13px;
-   	 	height: 20px;
+	    height: 19px;
 	}
 	.pager[size=large] > button{
 	    width: 30px;
