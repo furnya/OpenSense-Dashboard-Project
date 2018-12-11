@@ -174,6 +174,20 @@
      padding: 0;
 }
 
+::-webkit-scrollbar {
+    width: 8px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: white;
+}
+::-webkit-scrollbar-track {
+    background-color: #404040;
+}
+
 .btn.d-btn, .btn.d-btn:active, .btn.d-btn:focus, .btn.d-btn:visited{
 	 background-color: #606060;
 	 overflow: hidden;
@@ -275,11 +289,8 @@ input:focus+label{
     font-size: 16px;
 }
 
-.spinner{
-	left: 50%;
-}
 .spinner > Div {
-	 border-color: #42DCA3;
+	border-color: #42DCA3;
 }
 .spinner-active {
 	top: 10px;
@@ -417,10 +428,14 @@ input:focus+label{
 .list-collapsible > li {
 	border: none;
 }
+.list-collapsible > li > .collapsible-header[class="collapsible-header"] .material-icons{
+    transform: rotate(-90deg);
+}
 .list-collapsible > li .collapsible-body {
 	background-color: #202020;
 	border-bottom: none;
 	cursor: auto;
+	text-align: center;
 }
 .card-spinner{
 	top: 10px;
@@ -443,4 +458,24 @@ input:focus+label{
 }
 .datebox {
 	color: white;
+}
+.pager{
+    min-width: 225px;
+}
+.image-button:hover{
+	transform: scale(0.9);
+}
+
+.list-name:hover{
+    cursor: text;
+} 
+.list-action-btns{
+	overflow: hidden;
+}
+.list-action-btns > button{
+	width: calc(33.33% - 10px);
+	min-width: 0px;
+}
+.list-action-btns > button:not(:first-child) {
+	margin-left: 15px;
 }

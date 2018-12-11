@@ -15,7 +15,9 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.event.RemoveSensorsFromFavoriteListEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
@@ -85,7 +87,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		this.eventBus = eventBus;
 		AuthenticationService.Util.getInstance().createUserInSession(new DefaultAsyncCallback<Boolean>(result -> {
 			if((result != null) && result) {
-				this.userLoggedIn(false);
+				this.onUserLoggedIn(false);
 			}
 		}));
 		this.bindHandler();
@@ -116,6 +118,27 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			}else {
 				History.newItem(event.getDataPanelPage().name(), event.isFireEvent());
 			}
+		});
+
+		this.eventBus.addHandler(AddSensorsToFavoriteListEvent.TYPE, event -> {
+			//TODO skip if exists
+			List<Integer> favIds = CookieManager.getFavoriteList();//TODO: set a max
+			event.getIds().stream().filter(sensorId -> !favIds.contains(sensorId)).forEach(sensorId -> {
+				favIds.add(sensorId);
+				MaterialToast.fireToast("Added " + sensorId + " to the fav list");
+			});
+			CookieManager.writeFavoriteListCookie(favIds);
+			this.dataPanelPresenter.updateFavoriteList();
+		});
+
+		this.eventBus.addHandler(RemoveSensorsFromFavoriteListEvent.TYPE, event -> {
+			List<Integer> favIds = CookieManager.getFavoriteList();
+			event.getIds().stream().filter(favIds::contains).forEach(sensorId -> {
+				favIds.remove(sensorId);
+				MaterialToast.fireToast("Removed " + sensorId + " from the fav list");
+			});
+			CookieManager.writeFavoriteListCookie(favIds);
+			this.dataPanelPresenter.updateFavoriteList();
 		});
 	}
 
@@ -301,24 +324,23 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	public void logout() {
 		AuthenticationService.Util.getInstance().userLoggedOut(new DefaultAsyncCallback<ActionResult>(result -> {
 			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-				this.isGuest = true;
-				MaterialToast.fireToast("Logged out");
+				this.onUserLoggedOut();
 			}
 		}));
 	}
 
-	public void userLoggedIn(boolean goToHOme) {
+	public void onUserLoggedIn(boolean goToHOme) {
 		this.isGuest = false;
 		if(goToHOme || (this.dataPanelPresenter.getActiveDataPanelPagePresenter() instanceof UserPresenter)) {
 			this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
 		}
 		MaterialToast.fireToast("Logged in");
+		this.dataPanelPresenter.onUserLoggedIn();
 	}
 
-	public void addSensorToFavoriteList(int sensorId) {
-		//TODO skip if exists
-		List<Integer> favIds = CookieManager.getFavoriteList();//TODO: set a max
-		favIds.add(sensorId);
-		CookieManager.writeFavoriteListCookie(favIds);
+	public void onUserLoggedOut() {
+		this.isGuest = true;
+		MaterialToast.fireToast("Logged out");
+		this.dataPanelPresenter.onUserLoggedOut();
 	}
 }

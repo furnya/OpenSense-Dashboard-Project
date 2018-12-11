@@ -190,9 +190,4 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			//TODO:showError
 		}, false));
 	}
-
-	@Override
-	public void addSensorToFavoriteList(int sensorId) {
-		this.appController.addSensorToFavoriteList(sensorId);
-	}
 }

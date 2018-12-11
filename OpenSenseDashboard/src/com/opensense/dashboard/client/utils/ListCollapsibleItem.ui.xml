@@ -24,30 +24,86 @@
 	margin-bottom: 0px !important; 
 }
 .del-icon{
-	    width: 20px
+    width: 20px
 }
 .float-right{
-	float: right;
+	margin-left: 15px;
+}
+.header{
+	display: -webkit-box;
+    max-height: 43.8px;
+}	
+}
+.body {
+	text-align: center;	
+	overflow: hidden;
+}
+.list-icon{
+	width: 25px;
+    filter: brightness(80%);
+    margin-left: 10px;
+    margin-bottom: 2px;
+}
+.list-name-input{
+	position: absolute;
+ 	top: -10px;
+	left: 35px;
+    margin-right: -75px;
+    background-color: white;
+    bottom: 0px;
+}
+.list-name-input > input{
+    height: 25px;
+}
+
+.fav-img{
+    width: 25px;
+    margin-right: 20px;
+}
+.btn-image{
+    width: 25px;
+    margin-left: -20px;
+    margin-right: 25px;
+    filter: invert(100%);	
 }
 </ui:style>
 
-<m:MaterialCollapsibleItem>
-	<m:MaterialCollapsibleHeader>
-		<bh:Div>
-			<m:MaterialLink ui:field="listItemId" iconType="ARROW_DROP_DOWN" iconPosition="LEFT" textColor="BLACK"/>
+<m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE">
+	<m:MaterialCollapsibleHeader ui:field="header">
+		<bh:Div addStyleNames="position-relative {style.header}">
+			<m:MaterialLink iconType="ARROW_DROP_DOWN" iconPosition="LEFT"/>
+			<bh:Span ui:field="listItemName" />
+			<m:MaterialTextBox ui:field="listNameInput" addStyleNames="{style.list-name-input}" display="NONE" />
+			<m:MaterialImage ui:field="listIcon" display="NONE" addStyleNames="{style.list-icon}"/>
 			<bh:Div addStyleNames="{style.float-right}">
-				<b:Image ui:field="deleteButton" url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.del-icon} clickable" />
+				<m:MaterialImage display="NONE" ui:field="deleteButton" url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.del-icon} clickable" />
 			</bh:Div>
 		</bh:Div>
 	</m:MaterialCollapsibleHeader>
-	<m:MaterialCollapsibleBody>
+	<m:MaterialCollapsibleBody addStyleNames="{style.body}">
+		<bh:Div addStyleNames="flex margin-bottom-10 list-action-btns">
+			<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false"/>
+			<m:MaterialButton display="NONE" ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn" enabled="false" >
+				<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+			<m:MaterialButton display="NONE" ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
+				<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+			<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn" enabled="false" activates="dp-1">
+				<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+			<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners">
+			</m:MaterialDropDown>
+		</bh:Div>
+		<d:Pager ui:field="pagerTop" addStyleNames="pager"/>
 		<m:MaterialPreLoader ui:field="listItemSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
 			<m:MaterialSpinner/>
 		</m:MaterialPreLoader>
-		<bh:Div ui:field="listItemNoDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
+		<bh:Div ui:field="noDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
 			<bh:Span text="{lang.noListData}"/>
 		</bh:Div>
-		<bh:Div ui:field="listItemSensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
+		<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
+		<d:Pager ui:field="pagerBottom" addStyleNames="pager"/>
 	</m:MaterialCollapsibleBody>
 </m:MaterialCollapsibleItem>
 

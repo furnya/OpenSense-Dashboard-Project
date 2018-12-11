@@ -1,0 +1,90 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui" 
+	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html" xmlns:m="urn:import:gwt.material.design.client.ui"
+	xmlns:ma="urn:import:gwt.material.design.addins.client">
+	
+	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
+	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
+	
+<ui:style>
+.content{
+	cursor: pointer;
+	display: flex;
+	background-color: #fff;
+}
+.card-button{
+	float: right;
+    margin-top: 5px;
+}
+.card-button > img {
+	width: 24px;
+	filter: invert(100%);		
+}
+.icon-size{
+	height: 40px;
+	width: 40px;	
+}
+.left{
+	min-width: 40%;
+	display: flex;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.mid{
+	min-width: 20%;
+	display: flex;
+	white-space: nowrap;
+    align-items: center;
+    overflow: hidden;
+}
+.mid > Span{
+	margin-right: 10px;
+}
+.right{
+	min-width: 40%;
+	position: relative;
+	padding-top: 5px;
+}
+.button-container{
+	width: fit-content;
+    float: right;
+}
+.button-container > *{
+	margin-right: 10px;
+}
+.font{
+	margin-top: 5px;
+	font-size: 20px;	
+}
+.checkbox{
+	margin-top: auto;
+	margin-left: 10px;
+}
+</ui:style>
+
+<bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
+	<bh:Div addStyleNames="{style.left}">
+		<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>
+		<bh:Div addStyleNames="{style.icon-size} margin-right-10">
+			<b:Image ui:field="icon" width="100%" height="100%"/>
+		</bh:Div>
+		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
+	</bh:Div>
+	<bh:Div addStyleNames="{style.mid}" ui:field="midContainer">
+		<m:MaterialPreLoader ui:field="cardSpinner" display="NONE" addStyleNames="spinner">
+			<m:MaterialSpinner/>
+		</m:MaterialPreLoader>
+	</bh:Div>
+	<bh:Div addStyleNames="{style.right}">
+		<bh:Div addStyleNames="{style.button-container}">
+			<m:MaterialImage display="NONE" ui:field="searchButton" url="{gui.searchIconSvg.getSafeUri.asString}" width="28px" addStyleNames="clickable image-button"/>
+			<m:MaterialImage display="NONE" ui:field="mapButton" url="{gui.mapIconSvg.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+			<m:MaterialImage display="NONE" ui:field="visButton" url="{gui.diagramIconSvg.getSafeUri.asString}" width="32px" addStyleNames="clickable image-button"/>
+			<m:MaterialImage display="NONE" ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+			<m:MaterialImage display="NONE" ui:field="trashButton" url="{gui.trash.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+		</bh:Div>
+	</bh:Div>
+</bh:Div>
+
+</ui:UiBinder>

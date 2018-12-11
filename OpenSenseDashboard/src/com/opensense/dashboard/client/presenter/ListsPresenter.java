@@ -31,7 +31,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 
 	@Override
 	public void onPageReturn() {
-		// TODO Auto-generated method stub
+		this.view.getListManager().setUserLoggedInAndUpdate(!this.appController.isGuest());
 	}
 
 	@Override
@@ -46,13 +46,23 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 
 	@Override
 	public void handleIds(List<Integer> ids) {
-		// TODO Auto-generated method stub
+		this.view.getListManager().updateSelectedSensorsList(ids);
 	}
 
 	@Override
 	public void waitUntilViewInit(final Runnable runnable) {
-		this.view.initView();
-		runnable.run();
+		this.view.initView(runnable);
 	}
 
+	public void updateFavoriteList() {
+		this.view.getListManager().updateFavoriteList();
+	}
+
+	public void onUserLoggedIn() {
+		this.view.getListManager().onUserLoggedIn();
+	}
+
+	public void onUserLoggedOut() {
+		this.view.getListManager().onUserLoggedOut();
+	}
 }

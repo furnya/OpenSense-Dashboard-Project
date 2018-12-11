@@ -9,7 +9,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.utils.ListController;
+import com.opensense.dashboard.client.utils.ListManager;
+import com.opensense.dashboard.client.utils.ListManagerOptions;
 
 import gwt.material.design.client.ui.MaterialButton;
 
@@ -23,7 +24,7 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 
 	protected Presenter presenter;
 
-	private ListController listController = new ListController();
+	private ListManager listManager;
 
 	@UiField
 	Div listContainer;
@@ -33,12 +34,11 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 
 	public ListsViewImpl() {
 		this.initWidget(uiBinder.createAndBindUi(this));
-		this.listContainer.add(this.listController.getContainer());
 	}
 
 	@UiHandler("createListButton")
 	public void onCreateListButtonClicked(ClickEvent e) {
-		this.listController.createNewList();
+		this.listManager.createNewList();
 	}
 
 	@Override
@@ -47,7 +47,17 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	}
 
 	@Override
-	public void initView() {
-		// init UI Elements if needed
+	public void initView(Runnable runnable) {
+		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(), this.listContainer);
+		listManagerOptions.setEditingActive(true);
+		this.listManager = ListManager.getInstance(listManagerOptions);
+		this.listManager.waitUntilViewInit(runnable);
+		this.listManager.addSelectedSensorsChangeHandler(event -> event.getSelectedIds().forEach(id -> GWT.log(id+"")));
 	}
+
+	@Override
+	public ListManager getListManager() {
+		return this.listManager;
+	}
+
 }

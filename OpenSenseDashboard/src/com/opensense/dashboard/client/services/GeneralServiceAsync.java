@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
+import com.opensense.dashboard.shared.UserList;
 import com.opensense.dashboard.shared.ValuePreview;
 
 public interface GeneralServiceAsync {
@@ -15,5 +18,10 @@ public interface GeneralServiceAsync {
 	void getMeasurands(AsyncCallback<Map<Integer, String>> asyncCallback);
 	void setServerLanguage(String lang, AsyncCallback<Void> asyncCallback);
 	void getSensorValuePreview(List<Integer> ids, AsyncCallback<Map<Integer, ValuePreview>> asyncCallback);
-	void getUserLists(AsyncCallback<Map<Integer, List<Integer>>> asyncCallback);
+	void getUserLists(AsyncCallback<List<UserList>> asyncCallback);
+	void getMySensorsUserList(AsyncCallback<List<Integer>> asyncCallback);
+	void createNewUserList(AsyncCallback<UserList> asyncCallback);
+	void deleteUserList(int listId, AsyncCallback<ActionResult> asyncCallback);
+	void changeUserListName(int listId, String newListName, AsyncCallback<ActionResult> asyncCallback);
+	void getMinimalSensorData(List<Integer> sensorIds, AsyncCallback<List<MinimalSensor>> asyncCallback);
 }
