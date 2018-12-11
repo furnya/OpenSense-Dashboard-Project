@@ -13,7 +13,7 @@
 
 	<ui:style>
 	.sensor-container {
-		max-height: 100vh !important;
+		max-height: 77vh!important;
 		max-width: 30vw;
 		overflow: auto;
 		padding-left: 10px;
