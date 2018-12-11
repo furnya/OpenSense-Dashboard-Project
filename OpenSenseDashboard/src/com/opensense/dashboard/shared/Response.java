@@ -13,6 +13,9 @@ public class Response implements IsSerializable {
 	private Map<Integer, Measurand> measurands;  // not needed 
 	private Map<Integer, Unit> units;  // not needed 
 	private List<Value> values; //Map<Integer, List<Value>> values
+	private Map<Integer, ValuePreview> valuePreviews;
+	private List<MinimalSensor> minimalSensors;
+	private List<UserList> userLists;
 	
 	public Response() {
 	}
@@ -87,5 +90,29 @@ public class Response implements IsSerializable {
 	 */
 	public void setValues(List<Value> values) {
 		this.values = values;
+	}
+
+	public Map<Integer, ValuePreview> getValuePreviews() {
+		return valuePreviews;
+	}
+
+	public void setValuePreviews(Map<Integer, ValuePreview> valuePreviews) {
+		this.valuePreviews = valuePreviews;
+	}
+
+	public List<MinimalSensor> getMinimalSensors() {
+		return minimalSensors;
+	}
+
+	public void setMinimalSensors(List<MinimalSensor> minimalSensors) {
+		this.minimalSensors = minimalSensors;
+	}
+
+	public List<UserList> getUserLists() {
+		return userLists;
+	}
+
+	public void setUserLists(List<UserList> userLists) {
+		this.userLists = userLists;
 	}
 }

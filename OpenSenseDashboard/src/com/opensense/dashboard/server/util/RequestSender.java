@@ -49,7 +49,7 @@ public class RequestSender implements Serializable{
 		}
 	}
 	
-	public String sendGETRequest(String urlString) throws IOException{
+	public String sendGETRequest(String urlString, String token) throws IOException{
 		buildParameters();
 		urlString += "?"+this.getParameterString();
 		HttpURLConnection con = null;
@@ -60,6 +60,9 @@ public class RequestSender implements Serializable{
 			con.setRequestMethod("GET");
 			
 			con.setRequestProperty("Accept", APP_JSON);
+			if(token!=null && !token.isEmpty()) {
+				con.setRequestProperty("Authorization", token);
+			}
 			con.setDoOutput(true);
 			con.getResponseMessage();
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -79,7 +82,7 @@ public class RequestSender implements Serializable{
 	}
 	
 	public JSONObject objectGETRequest(String urlString) throws IOException {
-		String response = sendGETRequest(urlString);
+		String response = sendGETRequest(urlString, null);
 		if(response==null) {
 			return null;
 		}
@@ -87,7 +90,23 @@ public class RequestSender implements Serializable{
 	}
 	
 	public JSONArray arrayGETRequest(String urlString) throws IOException{
-		String response = sendGETRequest(urlString);
+		String response = sendGETRequest(urlString, null);
+		if(response==null) {
+			return null;
+		}
+		return new JSONArray(response);
+	}
+	
+	public JSONObject objectGETRequest(String urlString, String token) throws IOException {
+		String response = sendGETRequest(urlString, token);
+		if(response==null) {
+			return null;
+		}
+		return new JSONObject(response);
+	}
+	
+	public JSONArray arrayGETRequest(String urlString, String token) throws IOException{
+		String response = sendGETRequest(urlString, token);
 		if(response==null) {
 			return null;
 		}
@@ -156,4 +175,6 @@ public class RequestSender implements Serializable{
 		}
 		return new JSONObject(response);
 	}
+	
+	
 }

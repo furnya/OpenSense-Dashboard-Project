@@ -6,13 +6,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.ibm.icu.util.Calendar;
+import com.opensense.dashboard.server.logic.GeneralServlet;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Measurand;
+import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Unit;
@@ -31,6 +35,7 @@ public class ClientRequestHandler {
 	private static final String MAX_TIMESTAMP = "maxTimestamp";
 	private static final String MIN_TIMESTAMP = "minTimestamp";
 	
+	private static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
 	
 	public static ClientRequestHandler getInstance() {
 		if(instance == null) {
@@ -207,6 +212,95 @@ public class ClientRequestHandler {
 			return null;
 		}
 		return new ValuePreview(firstValue,lastValue);
+	}
+	
+	public Map<Integer,ValuePreview> getValuePreview(List<Integer> ids){
+		HashMap<Integer, ValuePreview> previewMap = new HashMap<>();
+		ids.forEach(id -> {
+			try {
+				previewMap.put(id, getValuePreview(id));
+			} catch (Exception e) {
+				LOGGER.log(Level.WARNING, "Failure", e);
+			}
+		});
+		return previewMap;
+	}
+	
+	public List<Sensor> getMySensors(String token) throws IOException{
+		LinkedList<Sensor> sensorList = new LinkedList<>();
+		RequestSender rs = new RequestSender();
+		JSONArray sensorArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/mysensors", token);
+		if(sensorArrayJSON==null) {
+			return sensorList;
+		}
+		Map<Integer, Measurand> measurandMap = getMeasurandMap();
+		Map<Integer, Unit> unitMap = getUnitMap();
+		for(Object o : sensorArrayJSON) {
+			if(!(o instanceof JSONObject)) {
+				continue;
+			}
+			JSONObject sensorJSON = (JSONObject) o;
+			Sensor s = DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
+			if(s!=null) {
+				sensorList.add(s);
+			}
+		}
+		return sensorList;
+	}
+	
+	public List<Integer> getMySensorIds(String token) throws IOException{
+		LinkedList<Integer> sensorIdList = new LinkedList<>();
+		RequestSender rs = new RequestSender();
+		JSONArray sensorArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/mysensorids", token);
+		if(sensorArrayJSON==null) {
+			return sensorIdList;
+		}
+		for(Object o : sensorArrayJSON) {
+			if(!(o instanceof Integer)) {
+				continue;
+			}
+			Integer sensorId = (Integer) o;
+			sensorIdList.add(sensorId);
+		}
+		return sensorIdList;
+	}
+	
+	public List<MinimalSensor> getMinimalSensorList(List<Parameter> parameterList, List<Integer> ids) throws IOException{
+		LinkedList<MinimalSensor> sensorList = new LinkedList<>();
+		if(ids!=null && !ids.isEmpty()) {
+			for(int id : ids) {
+				sensorList.add(getMinimalSensor(id));
+			}
+			return sensorList;
+		}
+		RequestSender rs = new RequestSender();
+		rs.setParameters(parameterList);
+		JSONArray sensorArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors");
+		if(sensorArrayJSON==null) {
+			return sensorList;
+		}
+		Map<Integer, Measurand> measurandMap = getMeasurandMap();
+		for(Object o : sensorArrayJSON) {
+			if(!(o instanceof JSONObject)) {
+				continue;
+			}
+			JSONObject sensorJSON = (JSONObject) o;
+			MinimalSensor s = DataObjectBuilder.buildMinimalSensor(sensorJSON, measurandMap);
+			if(s!=null) {
+				sensorList.add(s);
+			}
+		}
+		return sensorList;
+	}
+	
+	public MinimalSensor getMinimalSensor(int id) throws IOException{
+		RequestSender rs = new RequestSender();
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
+		if(sensorJSON==null) {
+			return null;
+		}
+		Map<Integer, Measurand> measurandMap = getMeasurandMap();
+		return DataObjectBuilder.buildMinimalSensor(sensorJSON, measurandMap);
 	}
 
 }
