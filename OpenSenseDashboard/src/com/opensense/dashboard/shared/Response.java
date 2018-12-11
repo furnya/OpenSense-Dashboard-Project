@@ -6,22 +6,23 @@ import java.util.Map;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Response implements IsSerializable {
-	
+
 	private ResultType resultType;
-	private Sensor sensor; // not needed 
+	private Sensor sensor; //TODO: not needed
 	private List<Sensor> sensors;
-	private Map<Integer, Measurand> measurands;  // not needed 
-	private Map<Integer, Unit> units;  // not needed 
-	private List<Value> values; //Map<Integer, List<Value>> values
+	private Map<Integer, Measurand> measurands;
+	private Map<Integer, Unit> units;  //TODO: not needed
+	private List<Value> values;
 	private Map<Integer, ValuePreview> valuePreviews;
 	private List<MinimalSensor> minimalSensors;
 	private List<UserList> userLists;
-	
+	private List<Integer> myListSensors;
+
 	public Response() {
 	}
-	
+
 	public ResultType getResultType() {
-		return resultType;
+		return this.resultType;
 	}
 
 	public void setResultType(ResultType resultType) {
@@ -29,7 +30,7 @@ public class Response implements IsSerializable {
 	}
 
 	public List<Sensor> getSensors() {
-		return sensors;
+		return this.sensors;
 	}
 
 	public void setSensors(List<Sensor> sensors) {
@@ -40,7 +41,7 @@ public class Response implements IsSerializable {
 	 * @return the measurands
 	 */
 	public Map<Integer, Measurand> getMeasurands() {
-		return measurands;
+		return this.measurands;
 	}
 
 	/**
@@ -54,7 +55,7 @@ public class Response implements IsSerializable {
 	 * @return the units
 	 */
 	public Map<Integer, Unit> getUnits() {
-		return units;
+		return this.units;
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class Response implements IsSerializable {
 	 * @return the sensor
 	 */
 	public Sensor getSensor() {
-		return sensor;
+		return this.sensor;
 	}
 
 	/**
@@ -82,7 +83,7 @@ public class Response implements IsSerializable {
 	 * @return the values
 	 */
 	public List<Value> getValues() {
-		return values;
+		return this.values;
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class Response implements IsSerializable {
 	}
 
 	public Map<Integer, ValuePreview> getValuePreviews() {
-		return valuePreviews;
+		return this.valuePreviews;
 	}
 
 	public void setValuePreviews(Map<Integer, ValuePreview> valuePreviews) {
@@ -101,7 +102,7 @@ public class Response implements IsSerializable {
 	}
 
 	public List<MinimalSensor> getMinimalSensors() {
-		return minimalSensors;
+		return this.minimalSensors;
 	}
 
 	public void setMinimalSensors(List<MinimalSensor> minimalSensors) {
@@ -109,10 +110,24 @@ public class Response implements IsSerializable {
 	}
 
 	public List<UserList> getUserLists() {
-		return userLists;
+		return this.userLists;
 	}
 
 	public void setUserLists(List<UserList> userLists) {
 		this.userLists = userLists;
+	}
+
+	/**
+	 * @return the myListSensors
+	 */
+	public List<Integer> getMyListSensors() {
+		return myListSensors;
+	}
+
+	/**
+	 * @param myListSensors the myListSensors to set
+	 */
+	public void setMySensors(List<Integer> myListSensors) {
+		this.myListSensors = myListSensors;
 	}
 }

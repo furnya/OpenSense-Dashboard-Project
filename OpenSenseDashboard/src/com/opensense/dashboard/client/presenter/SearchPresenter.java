@@ -19,7 +19,6 @@ import com.opensense.dashboard.client.view.SearchView;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
-import com.opensense.dashboard.shared.ValuePreview;
 
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 
@@ -111,7 +110,6 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		this.view.showDataContainer(true);
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, false);
 		ids.forEach(requestBuilder::addId);
-
 		this.sendSensorRequestAndShow(requestBuilder.getRequest());
 	}
 
@@ -121,9 +119,10 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 
 	private void getMeasurandsAndDispaly(final Runnable runnable) {
-		GeneralService.Util.getInstance().getMeasurands(new DefaultAsyncCallback<Map<Integer, String>>(result -> {
-			if(result != null) {
-				this.view.setMeasurandsList(result);
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MEASURAND, false);
+		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMeasurands() != null)) {
+				this.view.setMeasurandsList(result.getMeasurands());
 			}else {
 				//TODO: show Error
 			}
@@ -178,9 +177,11 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void getSensorValuePreviewAndShow(List<Integer> ids) {
-		GeneralService.Util.getInstance().getSensorValuePreview(ids, new DefaultAsyncCallback<Map<Integer, ValuePreview>>(result -> {
-			if(result != null) {
-				this.view.showSensorValuePreview(result);
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.VALUE_PREVIEW, false);
+		ids.forEach(requestBuilder::addId);
+		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getValuePreviews() != null)) {
+				this.view.showSensorValuePreview(result.getValuePreviews());
 			}else {
 				LOGGER.log(Level.WARNING, "SensorValuePreview result is null.");
 				//TODO: show error
