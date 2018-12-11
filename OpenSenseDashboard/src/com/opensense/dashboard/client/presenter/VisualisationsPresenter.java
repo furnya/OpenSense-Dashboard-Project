@@ -47,7 +47,6 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
-		view.initView();
 	}
 
 	@Override
@@ -86,7 +85,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 
 	@Override
 	public void waitUntilViewInit(final Runnable runnable) {
-		runnable.run();
+		this.view.initView(runnable);
 	}
 	
 	public void valueRequestForSensorList(List<Integer> sensorIds, DateRange dateRange, Date minDate, Date maxDate) {
@@ -117,11 +116,5 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 			view.showSensorCardFailure(request.getIds().get(0));
 			view.hideLoadingIndicator();
 		}, false));
-	}
-	
-	@Override
-	public void addSensorToFavoriteList(int sensorId) {
-		this.appController.addSensorToFavoriteList(sensorId);
-	}
-	
+	}	
 }

@@ -20,12 +20,11 @@ public interface VisualisationsView extends IDataPanelPageView {
 		void valueRequestForSensorList(List<Integer> sensorIds, DateRange dateRange, Date minDate, Date maxDate);
 		void buildValueRequestAndSend(Integer id, DateRange dateRange, Date minDate, Date maxDate);
 		HandlerManager getEventBus();
-		void addSensorToFavoriteList(int sensorId);
 	}
 	
 	public void setPresenter(Presenter presenter);
 	public Widget asWidget();
-	public void initView();
+	public void initView(Runnable runnable);
 	void hideLoadingIndicator();
 	void showLoadingIndicator();
 	public void addSensorValues(Sensor sensor, List<Value> values);

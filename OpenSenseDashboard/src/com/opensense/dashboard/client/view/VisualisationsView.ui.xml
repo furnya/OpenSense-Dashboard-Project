@@ -113,7 +113,7 @@
 			<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 		</bh:Div>	
 	</bh:Div>
-	<bh:Div addStyleNames="{style.sensor-container}">
+	<bh:Div ui:field="listContainer" addStyleNames="{style.sensor-container}">
 		<bh:Div addStyleNames="{style.selectPanel} {style.panel} flex round-corners {style.margin}">
 			<m:MaterialButton width="265px" ui:field="selectAllButton" text="{lang.deselectAllSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10"/>
 			<bh:Div addStyleNames="display-block"> 

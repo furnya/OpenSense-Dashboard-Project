@@ -42,8 +42,10 @@ import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.client.utils.ListManager;
+import com.opensense.dashboard.client.utils.ListManagerOptions;
 import com.opensense.dashboard.client.utils.ValueHandler;
-import com.opensense.dashboard.client.utils.VisSensorItemCard;
+import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
@@ -115,6 +117,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@UiField
 	Div sensorContent;
 	
+	@UiField
+	Div listContainer;
+	
 //	@UiField
 //	DateBox newdp;
 	
@@ -129,7 +134,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	protected Presenter presenter;
 	
 	private List<Sensor> sensors;
-	private Map<Integer, VisSensorItemCard> sensorCardMap = new HashMap<>();
+	private Map<Integer, BasicSensorItemCard> sensorCardMap = new HashMap<>();
 	private Map<Sensor, LineDataset> datasetMap = new HashMap<>();
 	
 	private static final DateRange DEFAULT_RANGE = DateRange.PAST_WEEK;
@@ -155,6 +160,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	private CartesianTimeAxis xAxis;
 	private CartesianLinearAxis yAxis;
 	
+	private ListManager listManager;
+	
 	public VisualisationsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
@@ -165,10 +172,16 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	@Override
-	public void initView() {
+	public void initView(Runnable runnable) {
 		createChart();
 		setDatePickerOptions();
 		highlightDateRange();
+		listContainer.clear();
+		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(), this.listContainer);
+		listManagerOptions.setEditingActive(true);
+		this.listManager = ListManager.getInstance(listManagerOptions);
+		this.listManager.waitUntilViewInit(runnable);
+		this.listManager.addSelectedSensorsChangeHandler(event -> event.getSelectedIds().forEach(id -> GWT.log(id+"")));
 	}
 	
 	@UiHandler("customRange")
@@ -390,7 +403,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	private void setCardColor(String color, int sensorId) {
-		VisSensorItemCard card = sensorCardMap.get(sensorId);
+		BasicSensorItemCard card = sensorCardMap.get(sensorId);
 		card.getElement().getStyle().setBackgroundColor(color);		
 	}
 
@@ -402,16 +415,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void setSensorCard(Sensor sensor) {
-		final VisSensorItemCard card = sensorCardMap.get(sensor.getSensorId());
-		
-		card.setHeader(Languages.sensorId() + sensor.getSensorId() + "   -   " + sensor.getMeasurand().getDisplayName());
-		card.setIcon(this.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
-		card.setRating(sensor.getAccuracy()); //TODO:
-		card.clearContent();
-		card.addContentValue(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
-		card.addContentValue(Languages.origin(), sensor.getAttributionText());
-		card.addFavButtonClickHandler(event -> this.presenter.addSensorToFavoriteList(sensor.getSensorId()));
-		
+		final BasicSensorItemCard card = sensorCardMap.get(sensor.getSensorId());
 		card.setIcon(getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 		card.setIconTitle(sensor.getMeasurand().getDisplayName());
 		card.hideLoadingIndicator();
@@ -608,7 +612,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@Override
 	public void addEmptySensorItemCard(Integer sensorId) {
 		if(sensorCardMap.containsKey(sensorId)) return;
-		final VisSensorItemCard card = new VisSensorItemCard();
+		final BasicSensorItemCard card = new BasicSensorItemCard();
 		card.setHeader(Languages.sensorId() + sensorId);
 		selectedSensors.add(sensorId);
 		selectedSensors.sort((a,b) -> (a-b));
@@ -650,8 +654,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	@Override
 	public void showSensorCardFailure(Integer sensorId) {
-		VisSensorItemCard card = sensorCardMap.get(sensorId);
-		card.setHeader("Error");
+		BasicSensorItemCard card = sensorCardMap.get(sensorId);
+		card.setHeader("ERROR");
 		card.hideLoadingIndicator();
 	}
 	
@@ -705,5 +709,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void resetColors() {
 		usedColors.clear();
 		nextColor = 0;
+	}
+
+	public ListManager getListManager() {
+		return listManager;
 	}
 }
