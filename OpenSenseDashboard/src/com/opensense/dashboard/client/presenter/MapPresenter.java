@@ -48,7 +48,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 
 	@Override
 	public void onPageReturn() {
-		// TODO Auto-generated method stub
+		this.view.getListManager().setUserLoggedInAndUpdate(!this.appController.isGuest());
 	}
 	
 	@Override
@@ -74,6 +74,19 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 		view.initView(runnable);
 		runnable.run();
 	}
+	
+	public void updateFavoriteList() {
+		this.view.getListManager().updateFavoriteList();
+	}
+
+	public void onUserLoggedIn() {
+		this.view.getListManager().onUserLoggedIn();
+	}
+
+	public void onUserLoggedOut() {
+		this.view.getListManager().onUserLoggedOut();
+	}
+	
 	
 	//get Sensor Data from Server
 	public void buildSensorRequestAndShowMarkers(Map<ParamType, String> parameters) {

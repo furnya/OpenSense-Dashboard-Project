@@ -42,7 +42,6 @@ import com.opensense.dashboard.client.utils.ListManagerOptions;
 import com.opensense.dashboard.client.utils.MarkerInfoWindow;
 import com.opensense.dashboard.client.utils.MeasurandIconHelper;
 import com.opensense.dashboard.client.utils.PagerSize;
-import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 
 public class MapViewImpl extends DataPanelPageView implements MapView {
@@ -413,4 +412,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	protected native void triggerClick(JavaScriptObject marker, LatLng position)/*-{
 		$wnd.google.maps.event.trigger(marker, 'spider_click', position);
 	}-*/;
+
+	@Override
+	public ListManager getListManager() {
+		return this.listManager;
+	}
 }
