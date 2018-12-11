@@ -40,6 +40,7 @@ import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
 import com.opensense.dashboard.client.utils.MarkerInfoWindow;
+import com.opensense.dashboard.client.utils.MeasurandIconHelper;
 import com.opensense.dashboard.client.utils.PagerSize;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
@@ -120,37 +121,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> event.getSelectedIds().forEach(id -> GWT.log(id + "")));
-	}
-
-	private String getIconUrlFromType(MeasurandType measurandType) {
-		switch (measurandType) {
-		case AIR_PRESSURE:
-			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString();
-		case BRIGHTNESS:
-			return GUIImageBundle.INSTANCE.sunnyIconSvg().getSafeUri().asString();
-		case CLOUDINESS:
-			return GUIImageBundle.INSTANCE.cloudsIconSvg().getSafeUri().asString();
-		case HUMIDITY:
-			return GUIImageBundle.INSTANCE.humidityIconSvg().getSafeUri().asString();
-		case NOISE:
-			return GUIImageBundle.INSTANCE.noiseIconSvg().getSafeUri().asString();
-		case PM10:
-			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
-		case PM2_5:
-			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
-		case PRECIPITATION_AMOUNT:
-			return GUIImageBundle.INSTANCE.precipitaionIconSvg().getSafeUri().asString();
-		case PRECIPITATION_TYPE:
-			return GUIImageBundle.INSTANCE.precipitationTypeIconSvg().getSafeUri().asString();
-		case TEMPERATURE:
-			return GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString();
-		case WIND_DIRECTION:
-			return GUIImageBundle.INSTANCE.windDirectionIconSvg().getSafeUri().asString();
-		case WIND_SPEED:
-			return GUIImageBundle.INSTANCE.windSpeedIconSvg().getSafeUri().asString();
-		default:
-			return GUIImageBundle.INSTANCE.questionIconSvg().getSafeUri().asString();
-		}
 	}
 
 	private void initMap() {
@@ -292,7 +262,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
 		final Marker markerBasic = Marker.newInstance(markerOpt);
-		MarkerImage icon = MarkerImage.newInstance(getIconUrlFromType(s.getMeasurand().getMeasurandType()),
+		MarkerImage icon = MarkerImage.newInstance(MeasurandIconHelper.getIconUrlFromType(s.getMeasurand().getMeasurandType()),
 				Size.newInstance(30, 30));
 		icon.setScaledSize(Size.newInstance(30, 30));
 		markerBasic.setIcon(icon);
@@ -313,11 +283,11 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 		markerBasic.addMouseOverHandler(event -> {
 		});
-		markersOnMap();
+		markersOnMapButtonEnabler();
 		addMarkerToSpiderfier(presenter.getMarkerSpiderfier(), mapWidget.getJso(), markerBasic);
 	}
 
-	private void markersOnMap() {
+	private void markersOnMapButtonEnabler() {
 		if (!markers.isEmpty()) {
 			recenterBtn.setEnabled(true);
 			searchBtn.setEnabled(true);
