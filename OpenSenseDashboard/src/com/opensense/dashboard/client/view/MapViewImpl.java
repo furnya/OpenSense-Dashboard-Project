@@ -119,7 +119,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		listManagerOptions.setShowVisualizationButton(false);
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
-		this.listManager.addSelectedSensorsChangeHandler(event -> event.getSelectedIds().forEach(id -> GWT.log(id + "")));
+		this.listManager.addSelectedSensorsChangeHandler(event -> {
+			resetMarkerAndCluster();
+			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, event.getSelectedIds()));
+		});
 	}
 
 	private void initMap() {
@@ -261,8 +264,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
 		final Marker markerBasic = Marker.newInstance(markerOpt);
-		MarkerImage icon = MarkerImage.newInstance(MeasurandIconHelper.getIconUrlFromType(s.getMeasurand().getMeasurandType()),
-				Size.newInstance(30, 30));
+		MarkerImage icon = MarkerImage.newInstance(
+				MeasurandIconHelper.getIconUrlFromType(s.getMeasurand().getMeasurandType()), Size.newInstance(30, 30));
 		icon.setScaledSize(Size.newInstance(30, 30));
 		markerBasic.setIcon(icon);
 		markerBasic.setDraggable(false);
