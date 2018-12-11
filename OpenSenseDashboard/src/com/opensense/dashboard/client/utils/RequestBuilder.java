@@ -3,7 +3,6 @@ package com.opensense.dashboard.client.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dev.shell.remoteui.RemoteMessageProto.Message.Request.DevModeRequest.RequestType;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Parameter;

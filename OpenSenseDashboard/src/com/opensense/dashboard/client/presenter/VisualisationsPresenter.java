@@ -18,13 +18,10 @@ import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.VisualisationsView;
-import com.opensense.dashboard.client.view.VisualisationsViewImpl;
 import com.opensense.dashboard.shared.DateRange;
-import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
-import com.opensense.dashboard.shared.Sensor;
 
 public class VisualisationsPresenter extends DataPanelPagePresenter implements IPresenter, VisualisationsView.Presenter{
 
