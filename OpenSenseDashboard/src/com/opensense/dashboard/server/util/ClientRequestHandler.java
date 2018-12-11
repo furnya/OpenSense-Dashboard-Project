@@ -13,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.ibm.icu.util.Calendar;
-import com.opensense.dashboard.server.logic.GeneralServlet;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.MinimalSensor;
@@ -26,27 +25,27 @@ import com.opensense.dashboard.shared.ValuePreview;
 public class ClientRequestHandler {
 
 	private static final boolean USE_DEFAULT_URL = true;
-	
+
 	private static final String BASE_URL = "https://www.opensense.network/beta/api/v1.0";
 	private static final String BASE_URL_DEFAULT = "https://www.opensense.network/progprak/beta/api/v1.0";
-	
+
 	private static ClientRequestHandler instance;
-	
+
 	private static final String MAX_TIMESTAMP = "maxTimestamp";
 	private static final String MIN_TIMESTAMP = "minTimestamp";
-	
+
 	private static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
-	
+
 	public static ClientRequestHandler getInstance() {
 		if(instance == null) {
 			instance = new ClientRequestHandler();
 		}
 		return instance;
 	}
-	
+
 	private ClientRequestHandler() {
 	}
-	
+
 	public Map<Integer, Unit> getUnitMap() throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONArray unitArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/units");
@@ -66,7 +65,7 @@ public class ClientRequestHandler {
 		}
 		return unitMap;
 	}
-	
+
 	public Map<Integer, Measurand> getMeasurandMap() throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONArray measurandArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/measurands");
@@ -86,12 +85,12 @@ public class ClientRequestHandler {
 		}
 		return measurandMap;
 	}
-	
+
 	public List<Sensor> getSensorList(List<Parameter> parameterList, List<Integer> ids) throws IOException{
 		LinkedList<Sensor> sensorList = new LinkedList<>();
-		if(ids!=null && !ids.isEmpty()) {
+		if((ids!=null) && !ids.isEmpty()) {
 			for(int id : ids) {
-				sensorList.add(getSensor(id));
+				sensorList.add(this.getSensor(id));
 			}
 			return sensorList;
 		}
@@ -101,8 +100,8 @@ public class ClientRequestHandler {
 		if(sensorArrayJSON==null) {
 			return sensorList;
 		}
-		Map<Integer, Measurand> measurandMap = getMeasurandMap();
-		Map<Integer, Unit> unitMap = getUnitMap();
+		Map<Integer, Measurand> measurandMap = this.getMeasurandMap();
+		Map<Integer, Unit> unitMap = this.getUnitMap();
 		for(Object o : sensorArrayJSON) {
 			if(!(o instanceof JSONObject)) {
 				continue;
@@ -115,22 +114,22 @@ public class ClientRequestHandler {
 		}
 		return sensorList;
 	}
-	
+
 	public Sensor getSensor(int id) throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
 		if(sensorJSON==null) {
 			return null;
 		}
-		Map<Integer, Measurand> measurandMap = getMeasurandMap();
-		Map<Integer, Unit> unitMap = getUnitMap();
+		Map<Integer, Measurand> measurandMap = this.getMeasurandMap();
+		Map<Integer, Unit> unitMap = this.getUnitMap();
 		return DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
 	}
-	
+
 	public List<Value> getValueList(int id, List<Parameter> parameterList, DateRange dateRange) throws IOException{
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
-		setTimestampParameters(rs, dateRange);
+		this.setTimestampParameters(rs, dateRange);
 		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values");
 		if(sensorJSON==null) {
 			return null;
@@ -150,7 +149,7 @@ public class ClientRequestHandler {
 		}
 		return valueList;
 	}
-	
+
 	private void setTimestampParameters(RequestSender rs, DateRange dateRange) {
 		Calendar cal = Calendar.getInstance();
 		switch(dateRange) {
@@ -180,7 +179,7 @@ public class ClientRequestHandler {
 			break;
 		}
 	}
-	
+
 	public String sendLoginRequest(String body) throws IOException {
 		RequestSender rs = new RequestSender();
 		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/users/login", body);
@@ -189,7 +188,7 @@ public class ClientRequestHandler {
 		}
 		return idJSON.getString("id");
 	}
-	
+
 	public ValuePreview getValuePreview(Integer id) throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values/firstlast");
@@ -208,24 +207,24 @@ public class ClientRequestHandler {
 		}
 		Value firstValue = DataObjectBuilder.buildValue((JSONObject) firstValueObject, inputFormat);
 		Value lastValue = DataObjectBuilder.buildValue((JSONObject) lastValueObject, inputFormat);
-		if(firstValue == null || lastValue == null) {
+		if((firstValue == null) || (lastValue == null)) {
 			return null;
 		}
 		return new ValuePreview(firstValue,lastValue);
 	}
-	
+
 	public Map<Integer,ValuePreview> getValuePreview(List<Integer> ids){
 		HashMap<Integer, ValuePreview> previewMap = new HashMap<>();
 		ids.forEach(id -> {
 			try {
-				previewMap.put(id, getValuePreview(id));
+				previewMap.put(id, this.getValuePreview(id));
 			} catch (Exception e) {
 				LOGGER.log(Level.WARNING, "Failure", e);
 			}
 		});
 		return previewMap;
 	}
-	
+
 	public List<Sensor> getMySensors(String token) throws IOException{
 		LinkedList<Sensor> sensorList = new LinkedList<>();
 		RequestSender rs = new RequestSender();
@@ -233,8 +232,8 @@ public class ClientRequestHandler {
 		if(sensorArrayJSON==null) {
 			return sensorList;
 		}
-		Map<Integer, Measurand> measurandMap = getMeasurandMap();
-		Map<Integer, Unit> unitMap = getUnitMap();
+		Map<Integer, Measurand> measurandMap = this.getMeasurandMap();
+		Map<Integer, Unit> unitMap = this.getUnitMap();
 		for(Object o : sensorArrayJSON) {
 			if(!(o instanceof JSONObject)) {
 				continue;
@@ -247,7 +246,7 @@ public class ClientRequestHandler {
 		}
 		return sensorList;
 	}
-	
+
 	public List<Integer> getMySensorIds(String token) throws IOException{
 		LinkedList<Integer> sensorIdList = new LinkedList<>();
 		RequestSender rs = new RequestSender();
@@ -264,12 +263,12 @@ public class ClientRequestHandler {
 		}
 		return sensorIdList;
 	}
-	
+
 	public List<MinimalSensor> getMinimalSensorList(List<Parameter> parameterList, List<Integer> ids) throws IOException{
 		LinkedList<MinimalSensor> sensorList = new LinkedList<>();
-		if(ids!=null && !ids.isEmpty()) {
+		if((ids!=null) && !ids.isEmpty()) {
 			for(int id : ids) {
-				sensorList.add(getMinimalSensor(id));
+				sensorList.add(this.getMinimalSensor(id));
 			}
 			return sensorList;
 		}
@@ -279,7 +278,7 @@ public class ClientRequestHandler {
 		if(sensorArrayJSON==null) {
 			return sensorList;
 		}
-		Map<Integer, Measurand> measurandMap = getMeasurandMap();
+		Map<Integer, Measurand> measurandMap = this.getMeasurandMap();
 		for(Object o : sensorArrayJSON) {
 			if(!(o instanceof JSONObject)) {
 				continue;
@@ -292,14 +291,14 @@ public class ClientRequestHandler {
 		}
 		return sensorList;
 	}
-	
+
 	public MinimalSensor getMinimalSensor(int id) throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
 		if(sensorJSON==null) {
 			return null;
 		}
-		Map<Integer, Measurand> measurandMap = getMeasurandMap();
+		Map<Integer, Measurand> measurandMap = this.getMeasurandMap();
 		return DataObjectBuilder.buildMinimalSensor(sensorJSON, measurandMap);
 	}
 
