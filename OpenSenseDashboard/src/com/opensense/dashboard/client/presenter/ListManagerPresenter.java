@@ -53,7 +53,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 					});
 
 				}else {
-					GWT.log("Shit");
+					GWT.log("Shit1");
 				}
 			}, caught -> {
 				GWT.log("Shit2");
@@ -63,10 +63,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 					this.getMinimalSensorDataAndShow(-3, result, false);
 				}else {
 					this.view.setSensorsInList(-3, new ArrayList<>());
-					GWT.log("Shit1");
+					GWT.log("Shit3");
 				}
 			}, caught -> {
-				GWT.log("Shit3");
+				GWT.log("Shit4");
 			},true));
 		}else {
 			this.view.showMySensorListsItem(false);
@@ -78,10 +78,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			if(result != null) {
 				this.view.addNewUserListItem(result);
 			}else {
-				GWT.log("Shit1");
+				GWT.log("Shit5");
 			}
 		}, caught -> {
-			GWT.log("Shit3");
+			GWT.log("Shit6");
 		},true));
 	}
 
@@ -91,10 +91,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			if(result != null) {
 				this.view.removeListItem(listId);
 			}else {
-				GWT.log("Shit1");
+				GWT.log("Shit7");
 			}
 		}, caught -> {
-			GWT.log("Shit3");
+			GWT.log("Shit8");
 		},true));
 	}
 
@@ -159,10 +159,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			if(result != null) {
 				//TODO: the list name should only set in ui if serverCall was successful
 			}else {
-				GWT.log("Shit1");
+				GWT.log("Shit9");
 			}
 		}, caught -> {
-			GWT.log("Shit3");
+			GWT.log("Shit10");
 		},true));
 	}
 
@@ -174,10 +174,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 					this.view.selectAllSensorsInList(listId);
 				}
 			}else {
-				GWT.log("Shit1");
+				GWT.log("Shit11");
 			}
 		}, caught -> {
-			GWT.log("Shit3");
+			GWT.log("Shit12");
 		},true));
 	}
 }
