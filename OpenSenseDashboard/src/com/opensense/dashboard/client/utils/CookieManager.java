@@ -56,10 +56,11 @@ public class CookieManager {
 	public static List<Integer> getFavoriteList() {
 		List<Integer> idList = new ArrayList<>();
 		String name = DASHBOARD_COOKIE;
-		if(Cookies.getCookie(name) != null) {
-			String[] slittedString = Cookies.getCookie(name).split(",");
+		String cookieString = Cookies.getCookie(name);
+		if((cookieString != null) && !cookieString.isEmpty()) {
+			String[] slittedString = cookieString.split(",");
 			for(String value : slittedString) {
-				if(value.matches("^[0-9]+$")) {
+				if(value.matches("^[0-9]*$")) {
 					idList.add(Integer.valueOf(value));
 				}
 			}

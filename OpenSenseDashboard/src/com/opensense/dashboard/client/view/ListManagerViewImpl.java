@@ -57,6 +57,18 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		ListCollapsibleItem favoriteListItem = new ListCollapsibleItem();
 		favoriteListItem.setName(Languages.favorites());
 		favoriteListItem.setListIcon(GUIImageBundle.INSTANCE.favoriteRed().getSafeUri().asString());
+		favoriteListItem.addSelectAllButtonClickHandler(event -> {
+
+		});
+		favoriteListItem.addShowOnMapButtonClickHandler(event -> {
+
+		});
+		favoriteListItem.addShowVisualizationsButtonClickHandler(event -> {
+
+		});
+		//		item.addAddToListButtonButtonClickHandler(event -> {
+		//
+		//		});
 		this.collapsiblesItems.put(-1, favoriteListItem);
 		this.initPager(-1);
 		this.collapsible.add(favoriteListItem);
@@ -65,6 +77,18 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 		ListCollapsibleItem selectedSensorsListItem = new ListCollapsibleItem();
 		selectedSensorsListItem.setName(Languages.selectedSensors());
+		selectedSensorsListItem.addSelectAllButtonClickHandler(event -> {
+
+		});
+		selectedSensorsListItem.addShowOnMapButtonClickHandler(event -> {
+
+		});
+		selectedSensorsListItem.addShowVisualizationsButtonClickHandler(event -> {
+
+		});
+		//		item.addAddToListButtonButtonClickHandler(event -> {
+		//
+		//		});
 		this.collapsiblesItems.put(-2, selectedSensorsListItem);
 		this.initPager(-2);
 		this.collapsible.add(selectedSensorsListItem);
@@ -72,6 +96,18 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		ListCollapsibleItem mySensorListsItem = new ListCollapsibleItem();
 		mySensorListsItem.setName(Languages.mySensors());
 		mySensorListsItem.setListIcon(GUIImageBundle.INSTANCE.mySesnors().getSafeUri().asString());
+		mySensorListsItem.addSelectAllButtonClickHandler(event -> {
+
+		});
+		mySensorListsItem.addShowOnMapButtonClickHandler(event -> {
+
+		});
+		mySensorListsItem.addShowVisualizationsButtonClickHandler(event -> {
+
+		});
+		//		item.addAddToListButtonButtonClickHandler(event -> {
+		//
+		//		});
 		this.collapsiblesItems.put(-3, mySensorListsItem);
 		this.initPager(-3);
 		this.collapsible.add(mySensorListsItem);
@@ -89,6 +125,18 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		item.setName(userList.getListName());
 		item.addListNameInputHandler(event -> this.presenter.changeListName(userList.getListId(), event.getListName()));
 		item.addDeleteButtonClickHandler(event -> this.deleteList(userList.getListId()));
+		item.addSelectAllButtonClickHandler(event -> {
+
+		});
+		item.addShowOnMapButtonClickHandler(event -> {
+
+		});
+		item.addShowVisualizationsButtonClickHandler(event -> {
+
+		});
+		//		item.addAddToListButtonButtonClickHandler(event -> {
+		//
+		//		});
 		this.collapsible.add(item);
 		this.collapsiblesItems.put(userList.getListId(), item);
 		this.setSensorsInList(userList.getListId(), userList.getSensorIds());

@@ -56,11 +56,6 @@
     height: 25px;
 }
 
-.panel{
-    background: #202020;
-    padding: 10px 10px 10px 10px;
-    overflow: hidden;
-}
 .fav-img{
     width: 25px;
     margin-right: 20px;
@@ -86,15 +81,15 @@
 		</bh:Div>
 	</m:MaterialCollapsibleHeader>
 	<m:MaterialCollapsibleBody addStyleNames="{style.body}">
-		<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10">
-			<m:MaterialButton ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false"/>
-			<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false" >
+		<bh:Div addStyleNames="flex margin-bottom-10 list-action-btns">
+			<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false"/>
+			<m:MaterialButton display="NONE" ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn" enabled="false" >
 				<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 			</m:MaterialButton>
-			<m:MaterialButton ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false">
+			<m:MaterialButton display="NONE" ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
 				<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 			</m:MaterialButton>
-			<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn" enabled="false" activates="dp-1">
+			<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn" enabled="false" activates="dp-1">
 				<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 			</m:MaterialButton>
 			<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners">

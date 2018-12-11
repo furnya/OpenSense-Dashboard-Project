@@ -91,6 +91,40 @@ public class ListCollapsibleItem extends Composite{
 		this.listItemName.setText(name);
 	}
 
+	public void addSelectAllButtonClickHandler(ClickHandler handler) {
+		this.selectAllButton.getElement().getStyle().clearDisplay();
+		this.selectAllButton.addClickHandler(handler);
+	}
+
+	public void addShowVisualizationsButtonClickHandler(ClickHandler handler) {
+		this.showVisualizationsButton.getElement().getStyle().clearDisplay();
+		this.showVisualizationsButton.addClickHandler(handler);
+	}
+
+	public void addShowSearchButtonClickHandler(ClickHandler handler) {
+		//TODO:
+	}
+
+	public void addShowOnMapButtonClickHandler(ClickHandler handler) {
+		this.showOnMapButton.getElement().getStyle().clearDisplay();
+		this.showOnMapButton.addClickHandler(handler);
+	}
+
+	public void addAddToListButtonButtonClickHandler(ClickHandler handler) {
+		this.addToListButton.getElement().getStyle().clearDisplay();
+		this.addToListButton.addClickHandler(handler);
+	}
+
+	public void setSelectAllButtonEnabled(boolean enabled) {
+		this.selectAllButton.setEnabled(enabled);
+	}
+
+	public void setGoToButtonEnabled(boolean enabled) {
+		this.showVisualizationsButton.setEnabled(enabled);
+		this.showOnMapButton.setEnabled(enabled);
+		this.addToListButton.setEnabled(enabled);
+	}
+
 	public void addDeleteButtonClickHandler(ClickHandler handler) {
 		this.deleteButton.getElement().getStyle().clearDisplay();
 		this.deleteButton.addClickHandler(event -> {

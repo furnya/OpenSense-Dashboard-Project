@@ -20,7 +20,7 @@
 	margin-top: 5px;
 }
 .margin-top-10 {
-	/* margin-top: 10px; */
+	margin-top: 10px;
 }
 .margin-top-15 {
 	margin-top: 15px;
@@ -189,8 +189,8 @@
 }
 
 .btn.d-btn, .btn.d-btn:active, .btn.d-btn:focus, .btn.d-btn:visited{
-	 background-color: #606060;
-	 overflow: hidden;
+ 	background-color: #606060;
+ 	overflow: hidden;
 }
 .btn.d-btn:hover, .btn.d-btn.active{
 	background-color: #42DCA3;
@@ -449,3 +449,13 @@ input:focus+label{
 .list-name:hover{
     cursor: text;
 } 
+.list-action-btns{
+	overflow: hidden;
+}
+.list-action-btns > button{
+	width: calc(33.33% - 10px);
+	min-width: 0px;
+}
+.list-action-btns > button:not(:first-child) {
+	margin-left: 15px;
+}
