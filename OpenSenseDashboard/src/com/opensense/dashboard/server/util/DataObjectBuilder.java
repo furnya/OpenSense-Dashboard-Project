@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import com.opensense.dashboard.shared.LatLng;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.MeasurandType;
+import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Unit;
 import com.opensense.dashboard.shared.Value;
@@ -94,22 +95,11 @@ public class DataObjectBuilder {
 		return s;
 	}
 	
-	//TODO: remove unused
-	public static Sensor buildSensor(JSONObject sensorJSON) {
-		Sensor s = new Sensor();
+	public static MinimalSensor buildMinimalSensor(JSONObject sensorJSON, Map<Integer, Measurand> measurandMap) {
+		MinimalSensor s = new MinimalSensor();
 		try {
 			s.setSensorId(sensorJSON.getInt(JsonAttributes.ID.getNameString()));
-			s.setAccuracy(sensorJSON.getDouble(JsonAttributes.ACCURACY.getNameString()));
-			s.setUserId(sensorJSON.getInt(JsonAttributes.USER_ID.getNameString()));
-			s.setDirectionHorizontal(sensorJSON.getDouble(JsonAttributes.DIRECTION_HORIZONTAL.getNameString()));
-			s.setDirectionVertical(sensorJSON.getDouble(JsonAttributes.DIRECTION_VERTICAL.getNameString()));
-			s.setAttributionText(sensorJSON.getString(JsonAttributes.ATTRIBUTION_TEXT.getNameString()));
-			s.setLicenseId(sensorJSON.getInt(JsonAttributes.LICENSE_ID.getNameString()));
-			s.setAltitudeAboveGround(sensorJSON.getDouble(JsonAttributes.ALTITUDE_ABOVE_GROUND.getNameString()));
-			s.setAttributionURLString(sensorJSON.getString(JsonAttributes.ATTRIBUTION_URL.getNameString()));
-			s.setSensorModel(sensorJSON.getString(JsonAttributes.SENSOR_MODEL.getNameString()));
-			JSONObject locationJSON = sensorJSON.getJSONObject(JsonAttributes.LOCATION.getNameString());
-			s.setLocation(new LatLng(locationJSON.getDouble(JsonAttributes.LAT.getNameString()), locationJSON.getDouble(JsonAttributes.LNG.getNameString())));
+			s.setMeasurand(measurandMap.get(sensorJSON.getInt(JsonAttributes.MEASURAND_ID.getNameString())));
 		} catch(JSONException e) {
 			e.printStackTrace();
 			return null;

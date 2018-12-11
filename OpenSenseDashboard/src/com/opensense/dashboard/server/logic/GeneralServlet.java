@@ -1,7 +1,9 @@
 package com.opensense.dashboard.server.logic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -11,6 +13,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.server.util.ClientRequestHandler;
 import com.opensense.dashboard.server.util.ServerLanguages;
+import com.opensense.dashboard.server.util.SessionUser;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Measurand;
@@ -47,6 +50,15 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 				response.setValues(ClientRequestHandler.getInstance().getValueList(searchRequest.getIds().get(0),searchRequest.getParameters(),searchRequest.getDateRange()));
 				response.setSensors(ClientRequestHandler.getInstance().getSensorList(searchRequest.getParameters(), searchRequest.getIds()));
 				break;
+			case VALUE_PREVIEW:
+				response.setValuePreviews(ClientRequestHandler.getInstance().getValuePreview(searchRequest.getIds()));
+				break;
+			case MINIMAL_SENSOR:
+				response.setMinimalSensors(ClientRequestHandler.getInstance().getMinimalSensorList(searchRequest.getParameters(), searchRequest.getIds()));
+				break;
+			case USER_LIST:
+				response.setUserLists(getUserLists());//TODO implement with request to opensense.network or to database
+				break;
 			default:
 				break;
 			}
@@ -57,6 +69,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		return response;
 	}
 
+	@Deprecated
 	@Override
 	public Map<Integer, String> getMeasurands() { //TODO: change the way of request  to getDataFromRequest
 		Map<Integer, Measurand> measurandMap;
@@ -83,6 +96,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}
 	}
 
+	@Deprecated
 	@Override
 	public Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids) {  //TODO: change the way of request  to getDataFromRequest
 		HashMap<Integer, ValuePreview> previewMap = new HashMap<>();
@@ -101,22 +115,25 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public List<UserList> getUserLists() { // this method could be added in the get data from request (LIST)
-		//checks user is logged in, in all sensible server calls
-		// TODO Auto-generated method stub
-		//list of list ids with sensor ids in it (yes the ids are duplicated)
+		if(SessionUser.getInstance().isGuest()) {
+			return new LinkedList<>();
+		}
 		List<UserList> list = new ArrayList<>();
 		this.lists.values().forEach(list::add);
 		return list;
 	}
 
-	public ActionResult addSensorsToUserList() { //TODO:
-		return null;
-
+	public ActionResult addSensorsToUserList(Integer listId, Integer sensorId) { //TODO:
+		if(this.lists.containsKey(listId)) {
+			UserList list = this.lists.get(listId);
+			list.getSensorIds().add(sensorId);
+			return new ActionResult(ActionResultType.SUCCESSFUL);
+		}
+		return new ActionResult(ActionResultType.FAILED);
 	}
 
 	public ActionResult addSensorToMySensorsUserList() { //TODO:
-		return null;
-
+		return new ActionResult(ActionResultType.FAILED);
 	}
 
 	@Override
@@ -130,15 +147,18 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public List<Integer> getMySensorsUserList() { // this method could be added in the get data from request (LIST)
-		// TODO Auto-generated method stub
-		//list of sensor ids in it
-		List<Integer> sensorList = new ArrayList<>();
-		return sensorList;
+		List<Integer> mySensorIds;
+		try {
+			mySensorIds = ClientRequestHandler.getInstance().getMySensorIds(SessionUser.getInstance().getToken());
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Failure", e);
+			return null;
+		}
+		return mySensorIds;
 	}
 
 	@Override
 	public UserList createNewUserList() {
-		// TODO Auto-generated method stub
 		//list of list ids with sensor ids in it
 		UserList listItem = new UserList();
 		listItem.setListId(this.idNumber++);
@@ -150,14 +170,21 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public ActionResult changeUserListName(int listId, String newListName) {
-		// TODO Auto-generated method stub
-		this.lists.get(listId).setListName(newListName);
-		return new ActionResult(ActionResultType.SUCCESSFUL);
+		if(this.lists.containsKey(listId)) {
+			this.lists.get(listId).setListName(newListName);
+			return new ActionResult(ActionResultType.SUCCESSFUL);
+		}
+		return new ActionResult(ActionResultType.FAILED);
 	}
 
+	@Deprecated
 	@Override
-	public List<MinimalSensor> getMinimalSensorData(List<Integer> sensorIds) { // this method could be added in the get data from request (LIST)
-		// TODO Auto-generated method stub
-		return null;
+	public List<MinimalSensor> getMinimalSensorData(List<Integer> sensorIds) {
+		try{
+			return ClientRequestHandler.getInstance().getMinimalSensorList(null, sensorIds);
+		}catch(IOException e) {
+			LOGGER.log(Level.WARNING, "Failure", e);
+			return new LinkedList<>();
+		}
 	}
 }
