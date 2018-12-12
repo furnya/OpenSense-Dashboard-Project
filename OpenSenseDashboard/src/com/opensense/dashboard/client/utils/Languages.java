@@ -601,4 +601,12 @@ public class Languages {
 			return "My sensors";
 		}
 	}
+
+	public static String hideSensorWIithoutValues() {
+		if(de){
+			return "Sensoren ohne Werte von der Suche ausschließen";
+		}else{
+			return "Sensors without values will not searched";
+		}
+	}
 }

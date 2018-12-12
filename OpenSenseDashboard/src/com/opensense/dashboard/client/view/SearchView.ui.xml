@@ -76,6 +76,12 @@
     width: 25px;
     margin-right: 20px;
 }
+.checkbox > label::before{
+    margin-top: 4px;
+}
+.checkbox > label::after{
+	margin-top: 2px;
+}
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="{style.con}">
@@ -91,6 +97,9 @@
 			<m:MaterialTextBox ui:field="minAccuracy" textColor="WHITE" width="33%" label="{lang.minAccuracy}"/>
 			<m:MaterialTextBox ui:field="maxAccuracy" textColor="WHITE" width="33%" label="{lang.maxAccuracy}"/>
 			<m:MaterialButton  ui:field="searchButton" width="33%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
+		</bh:Div>
+		<bh:Div addStyleNames="text-align: center">
+			<m:MaterialCheckBox ui:field="onlySensorsWithValueBox" text="{lang.hideSensorWIithoutValues}"  type="FILLED" addStyleNames="{style.checkbox} white-checkbox" value="true"/>
 		</bh:Div>
 	</bh:Div>	
 	<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10">

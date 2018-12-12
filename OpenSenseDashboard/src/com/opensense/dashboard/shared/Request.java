@@ -5,32 +5,33 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Request implements IsSerializable{
-	
-	private List<Integer> ids; 
+
+	private List<Integer> ids;
 	private List<Parameter> parameters;
 	private ResultType resultType;
 	private DateRange dateRange;
-	
+	private boolean onlySensorsWithValues;
+
 	public Request() {
 	}
-	
+
 	public Request(List<Integer> ids, List<Parameter> parameters, ResultType requestType) {
 		this.ids = ids;
 		this.parameters = parameters;
 		this.resultType = requestType;
 	}
-	
+
 	public Request(List<Parameter> parameters, ResultType requestType) {
 		this.parameters = parameters;
 		this.resultType = requestType;
 	}
-	
+
 	public Request(ResultType requestType) {
 		this.resultType = requestType;
 	}
-	
+
 	public List<Parameter> getParameters() {
-		return parameters;
+		return this.parameters;
 	}
 
 	public void setParameters(List<Parameter> parameters) {
@@ -38,7 +39,7 @@ public class Request implements IsSerializable{
 	}
 
 	public ResultType getRequestType() {
-		return resultType;
+		return this.resultType;
 	}
 
 	public void setRequestType(ResultType requestType) {
@@ -46,7 +47,7 @@ public class Request implements IsSerializable{
 	}
 
 	public List<Integer> getIds() {
-		return ids;
+		return this.ids;
 	}
 
 	public void setIds(List<Integer> ids) {
@@ -57,7 +58,7 @@ public class Request implements IsSerializable{
 	 * @return the dateRange
 	 */
 	public DateRange getDateRange() {
-		return dateRange;
+		return this.dateRange;
 	}
 
 	/**
@@ -65,5 +66,19 @@ public class Request implements IsSerializable{
 	 */
 	public void setDateRange(DateRange dateRange) {
 		this.dateRange = dateRange;
+	}
+
+	/**
+	 * @return the onlySensorsWithValues
+	 */
+	public boolean isOnlySensorsWithValues() {
+		return this.onlySensorsWithValues;
+	}
+
+	/**
+	 * @param onlySensorsWithValues the onlySensorsWithValues to set
+	 */
+	public void setOnlySensorsWithValues(boolean onlySensorsWithValues) {
+		this.onlySensorsWithValues = onlySensorsWithValues;
 	}
 }
