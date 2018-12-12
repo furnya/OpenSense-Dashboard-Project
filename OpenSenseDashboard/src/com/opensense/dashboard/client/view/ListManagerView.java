@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.UserList;

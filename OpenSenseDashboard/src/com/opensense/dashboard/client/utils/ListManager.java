@@ -93,4 +93,8 @@ public class ListManager {
 	public void setSelectedSensorItemsColor(Map<Integer, String> sensorColors) {
 		this.presenter.setSelectedSensorItemsColor(sensorColors);
 	}
+	
+	public ListManagerViewImpl getView() {
+		return this.view;
+	}
 }

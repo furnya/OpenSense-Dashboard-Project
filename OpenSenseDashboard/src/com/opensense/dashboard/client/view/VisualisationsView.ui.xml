@@ -2,7 +2,8 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui" 
 	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html" xmlns:m="urn:import:gwt.material.design.client.ui"
-	xmlns:ma="urn:import:gwt.material.design.addins.client" xmlns:d="urn:import:com.opensense.dashboard.client.utils">
+	xmlns:ma="urn:import:gwt.material.design.addins.client" xmlns:d="urn:import:com.opensense.dashboard.client.utils"
+	xmlns:dp="urn:import:com.google.gwt.user.datepicker.client">
 	
 	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
@@ -31,7 +32,7 @@
 .panel{
     background: #202020;
     padding: 10px 10px 10px 10px;
-    max-height: 30vh;
+    max-height: 69vh;
     overflow: auto;
 }
 .margin > * {
@@ -47,13 +48,14 @@
 	text-align: center;	
 }
 .sensor-container{
-	margin-top: 10px;
-	margin-bottom: 10px;
+	width: 40%!important;
+	display: block;
+	overflow: auto;
 }
-.sensor-container > Div{
+.sensor-list-container > Div{
 	margin-bottom: 15px;
 }
-.sensor-container > Div:last-child{
+.sensor-list-container > Div:last-child{
 	margin-bottom: 0px !important; 
 }
 .center-text{
@@ -70,52 +72,48 @@
 }
 .visPanel {
 	margin-bottom: 10px;
-	height: 7vh;
 	overflow: auto;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.visPanel > span {
+	font-size: 3vmin;
+}
+.dataContainer {
+	margin-right: 10px;
+	width: 60%!important;
 }
 .chartContainer > *{
 	width:100% !important;
 }
+.selectPanel button{
+	margin-top: 10px;
+}
 </ui:style>
 
-<bh:Div ui:field="container" addStyleNames="{style.con}">
-	<bh:Div addStyleNames="{style.panel} flex round-corners margin-top-10 {style.margin}">
-		<m:MaterialButton width="265px" ui:field="selectAllButton" text="{lang.deselectAllSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10"/>
-		<bh:Div addStyleNames="display-block"> 
-			<m:MaterialLabel textColor="WHITE" text="{lang.allSelectedSensors}"/>
-			<m:MaterialButton ui:field="showInSearchButton" text="{lang.selectedShowInSearch}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
-			<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/>
-			<!-- m:MaterialButton  ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn margin-right-15"/-->
-			<m:MaterialButton  ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn"/>
+<bh:Div ui:field="container" addStyleNames="{style.con} flex">
+	<bh:Div ui:field="dataContainer" addStyleNames="{style.dataContainer}">
+		<bh:Div addStyleNames="{style.panel} {style.visPanel} visPanel round-corners margin-top-10">
+			<m:MaterialLabel textColor="WHITE" text="{lang.timespan}"/>
+			<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+			<!-- >dp:DateBox ui:field="newdp" title="{lang.from}"></dp:DateBox-->
+			<m:MaterialDatePicker ui:field="startingDate" textColor="WHITE" autoClose="true" placeholder="{lang.from}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
+			<!-- ma:timepicker.MaterialTimePicker ui:field="startingTime" placeholder="Time"/-->
+			<m:MaterialDatePicker ui:field="endingDate" textColor="WHITE" autoClose="true" placeholder="{lang.to}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
+			<!-- ma:timepicker.MaterialTimePicker ui:field="endingTime" placeholder="Time"/-->
+			<m:MaterialButton ui:field="pastYear" text="{lang.pastYear}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+			<m:MaterialButton ui:field="pastMonth" text="{lang.pastMonth}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+			<m:MaterialButton ui:field="pastWeek" text="{lang.pastWeek}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+			<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 		</bh:Div>
-	</bh:Div>
-	<bh:Div ui:field="dataContent" addStyleNames="margin-top-20 margin-bottom-20 {style.panel} round-corners {style.center}">
-		<m:MaterialPreLoader ui:field="pagerSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
+		<m:MaterialPreLoader ui:field="viewSpinner" display="NONE" addStyleNames="spinner">
 			<m:MaterialSpinner/>
 		</m:MaterialPreLoader>
-		<bh:Div ui:field="noDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
-			<bh:Span text="{lang.noData}" addStyleNames="{style.center-text}"/>
-		</bh:Div>
-		<bh:Div ui:field="sensorContainer" addStyleNames="{style.sensor-container}" width="100%"/> 
+		<m:MaterialLabel ui:field="noDatasetsLabel" textColor="WHITE" text="{lang.noData}" display="NONE"/>
+		<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>	
 	</bh:Div>
-	<bh:Div addStyleNames="{style.panel} {style.visPanel} visPanel flex round-corners margin-top-10">
-		<m:MaterialLabel textColor="WHITE" text="{lang.timespan}"/>
-		<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
-		<m:MaterialDatePicker ui:field="startingDate" textColor="WHITE" autoClose="true" placeholder="{lang.from}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
-		<!-- ma:timepicker.MaterialTimePicker ui:field="startingTime" placeholder="Time"/-->
-		<m:MaterialDatePicker ui:field="endingDate" textColor="WHITE" autoClose="true" placeholder="{lang.to}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
-		<!-- ma:timepicker.MaterialTimePicker ui:field="endingTime" placeholder="Time"/-->
-		<m:MaterialButton ui:field="pastYear" text="{lang.pastYear}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
-		<m:MaterialButton ui:field="pastMonth" text="{lang.pastMonth}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
-		<m:MaterialButton ui:field="pastWeek" text="{lang.pastWeek}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
-		<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
-	</bh:Div>
-	<m:MaterialPreLoader ui:field="viewSpinner" display="NONE" addStyleNames="spinner">
-		<m:MaterialSpinner/>
-	</m:MaterialPreLoader>
-	<m:MaterialLabel ui:field="noDatasetsLabel" textColor="WHITE" text="{lang.noData}" display="NONE"/>
-	<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>
-	
+	<bh:Div ui:field="listContainer" addStyleNames="{style.sensor-container}"/>
 </bh:Div>
 
 </ui:UiBinder>

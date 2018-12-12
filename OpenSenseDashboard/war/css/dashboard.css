@@ -189,8 +189,8 @@
 }
 
 .btn.d-btn, .btn.d-btn:active, .btn.d-btn:focus, .btn.d-btn:visited{
- 	background-color: #606060;
- 	overflow: hidden;
+	 background-color: #606060;
+	 overflow: hidden;
 }
 .btn.d-btn:hover, .btn.d-btn.active{
 	background-color: #42DCA3;
@@ -398,19 +398,17 @@ input:focus+label{
 	font-size: medium;
 }
 .visPanel > * {
-	width: calc(14% - 10px);
-}
-.visPanel > *:first-child {
-	width: auto !important;
+	flex: 1 0 21%;
+	width: max-content;
 }
 .visPanel > button {
-	font-size: 0.9vw;
 	line-height: 2em;
 	padding-left: 1rem;
 	padding-right: 1rem; 
 	height: 5vh;
-	margin: auto 10px auto 10px;
+	margin: 10px 10px auto 10px;
 }
+
 
 .list-collapsible{
     border: none !important;
@@ -446,6 +444,28 @@ input:focus+label{
 	border-bottom: none;
 	cursor: auto;
 	text-align: center;
+}
+.card-spinner{
+	top: 10px;
+    height: 25px !important;
+    width: 25px !important;
+    margin-bottom: 10px;
+}
+.card-spinner > Div {
+    height: 25px !important;
+    width: 25px !important;
+}
+.card-spinner-active {
+}
+
+.card-spinner-active > Div{
+	border-color: white;
+}
+.datepicker {
+	background-color: #202020;
+}
+.datebox {
+	color: white;
 }
 .pager{
     min-width: 225px;

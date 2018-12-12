@@ -2,12 +2,15 @@ package com.opensense.dashboard.client.view;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
+import com.opensense.dashboard.shared.ValuePreview;
 
 public interface VisualisationsView extends IDataPanelPageView {
 	
@@ -19,16 +22,18 @@ public interface VisualisationsView extends IDataPanelPageView {
 	
 	public void setPresenter(Presenter presenter);
 	public Widget asWidget();
-	public void initView();
+	public void initView(Runnable runnable);
 	void hideLoadingIndicator();
 	void showLoadingIndicator();
 	public void addSensorValues(Sensor sensor, List<Value> values);
 	public DateRange getDefaultRange();
 	public boolean showChart();
 	public void createChart();
-	public void setSensors(List<Sensor> sensors);
-	public List<Sensor> getSensors();
-	public void showNoDataIndicator(boolean show);
-	public void addEmptySensorItemCard(Integer sensorId);
-	public void showSensorCardFailure(Integer sensorId);
+	public List<Integer> getSensorIds();
+	public void setSensorIds(List<Integer> sensorIds);
+	public Date getStartingDate();
+	public Date getEndingDate();
+	public void resetDatasets();
+	public boolean updateNeeded(List<Integer> ids);
+	public ListManager getListManager();
 }

@@ -32,6 +32,7 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
+
 .mid > Span{
 	margin-right: 10px;
 }

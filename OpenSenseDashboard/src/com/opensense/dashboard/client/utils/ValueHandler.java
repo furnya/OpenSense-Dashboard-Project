@@ -81,7 +81,7 @@ public class ValueHandler {
 	}
 	
 	public static double getMinOfDataset(LineDataset dataset) {
-		if(dataset==null || dataset.getDataPoints()==null || dataset.getDataPoints().isEmpty()) return 0.0;
+		if(dataset==null || dataset.getDataPoints()==null || dataset.getDataPoints().isEmpty()) return Double.POSITIVE_INFINITY;
 		double minValue = dataset.getDataPoints().get(0).getY();
 		for(DataPoint dp : dataset.getDataPoints()) {
 			if(dp.getY()<minValue) {
@@ -91,12 +91,36 @@ public class ValueHandler {
 		return minValue;
 	}
 	
+	public static double getMinOfDatasets(List<LineDataset> datasets) {
+		if(datasets==null || datasets.isEmpty()) return Double.POSITIVE_INFINITY;
+		double minValue = getMinOfDataset(datasets.get(0));
+		for(LineDataset dataset : datasets) {
+			double m = getMinOfDataset(dataset);
+			if(m<minValue) {
+				minValue = m;
+			}
+		}
+		return minValue;
+	}
+	
 	public static double getMaxOfDataset(LineDataset dataset) {
-		if(dataset==null || dataset.getDataPoints()==null || dataset.getDataPoints().isEmpty()) return 0.0;
+		if(dataset==null || dataset.getDataPoints()==null || dataset.getDataPoints().isEmpty()) return Double.NEGATIVE_INFINITY;
 		double maxValue = dataset.getDataPoints().get(0).getY();
 		for(DataPoint dp : dataset.getDataPoints()) {
 			if(dp.getY()>maxValue) {
 				maxValue = dp.getY();
+			}
+		}
+		return maxValue;
+	}
+	
+	public static double getMaxOfDatasets(List<LineDataset> datasets) {
+		if(datasets==null || datasets.isEmpty()) return Double.NEGATIVE_INFINITY;
+		double maxValue = getMaxOfDataset(datasets.get(0));
+		for(LineDataset dataset : datasets) {
+			double m = getMaxOfDataset(dataset);
+			if(m>maxValue) {
+				maxValue = m;
 			}
 		}
 		return maxValue;

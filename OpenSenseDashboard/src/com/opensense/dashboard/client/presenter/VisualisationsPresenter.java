@@ -22,6 +22,9 @@ import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.Sensor;
+import com.opensense.dashboard.shared.ValuePreview;
+
 
 public class VisualisationsPresenter extends DataPanelPagePresenter implements IPresenter, VisualisationsView.Presenter{
 
@@ -43,7 +46,6 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
-		view.initView();
 	}
 
 	@Override
@@ -63,26 +65,13 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	
 	@Override
 	public void handleIds(List<Integer> ids) {
-		if(ids==null || ids.isEmpty()) {
-			view.showNoDataIndicator(true);
-			return;
-		}
-		view.showLoadingIndicator();
-		view.showNoDataIndicator(false);
-		view.setSensors(new LinkedList<>());
-		for(Integer id : ids) {
-			view.addEmptySensorItemCard(id);
-		}
-		for(Integer id : ids) {
-			buildValueRequestAndSend(id, view.getDefaultRange(), null, null);
-		}
-		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, false, ids));
+		view.getListManager().updateSelectedSensorsList(ids);
 	}
 
 
 	@Override
 	public void waitUntilViewInit(final Runnable runnable) {
-		runnable.run();
+		this.view.initView(runnable);
 	}
 	
 	public void valueRequestForSensorList(List<Integer> sensorIds, DateRange dateRange, Date minDate, Date maxDate) {
@@ -110,9 +99,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 			}
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the values.");
-			view.showSensorCardFailure(request.getIds().get(0));
 			view.hideLoadingIndicator();
 		}, false));
-	}
-	
+	}	
 }

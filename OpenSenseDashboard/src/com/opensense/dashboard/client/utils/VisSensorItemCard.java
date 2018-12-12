@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client.utils;
 
 import org.gwtbootstrap3.client.ui.html.Div;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -17,20 +18,22 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 import gwt.material.design.client.ui.MaterialCheckBox;
-import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialPreLoader;
 
-public class BasicSensorItemCard extends Composite{
-
-	@UiTemplate("BasicSensorItemCard.ui.xml")
-	interface BasicSensorItemCardUiBinder extends UiBinder<Widget, BasicSensorItemCard> {
+public class VisSensorItemCard extends Composite{
+	
+	@UiTemplate("VisSensorItemCard.ui.xml")
+	interface VisSensorItemCardUiBinder extends UiBinder<Widget, VisSensorItemCard> {
 	}
-
-	private static BasicSensorItemCardUiBinder uiBinder = GWT.create(BasicSensorItemCardUiBinder.class);
-
+	
+	private static VisSensorItemCardUiBinder uiBinder = GWT.create(VisSensorItemCardUiBinder.class);
+	
 	@UiField
 	Div layout;
+
+	@UiField
+	Div content;
 
 	@UiField
 	MaterialLabel header;
@@ -39,68 +42,33 @@ public class BasicSensorItemCard extends Composite{
 	Image icon;
 
 	@UiField
+	Div midContainer;
+
+	@UiField
 	MaterialCheckBox checkbox;
 
 	@UiField
-	MaterialImage favButton;
+	Image favButton;
 
 	@UiField
-	MaterialImage trashButton;
+	Rating rating;
 
 	@UiField
-	MaterialImage searchButton;
-
-	@UiField
-	MaterialImage mapButton;
-
-	@UiField
-	MaterialImage visButton;
-
-	public BasicSensorItemCard() {
-		this.initWidget(uiBinder.createAndBindUi(this));
-		this.addClickHandler();
+	MaterialPreLoader cardSpinner;
+	
+	public VisSensorItemCard() {
+		initWidget(uiBinder.createAndBindUi(this));
+		addClickHandler();
+		this.setActive(true);
 	}
-
+	
 	public void addFavButtonClickHandler(ClickHandler handler) {
-		this.favButton.getElement().getStyle().clearDisplay();
 		this.favButton.addClickHandler(event -> {
 			event.stopPropagation();
 			handler.onClick(event);
 		});
 	}
-
-	public void addTrashButtonClickHandler(ClickHandler handler) {
-		this.trashButton.getElement().getStyle().clearDisplay();
-		this.trashButton.addClickHandler(event -> {
-			event.stopPropagation();
-			handler.onClick(event);
-		});
-	}
-
-	public void addVisButtonClickHandler(ClickHandler handler) {
-		this.visButton.getElement().getStyle().clearDisplay();
-		this.visButton.addClickHandler(event -> {
-			event.stopPropagation();
-			handler.onClick(event);
-		});
-	}
-
-	public void addSearchButtonClickHandler(ClickHandler handler) {
-		this.searchButton.getElement().getStyle().clearDisplay();
-		this.searchButton.addClickHandler(event -> {
-			event.stopPropagation();
-			handler.onClick(event);
-		});
-	}
-
-	public void addMapButtonClickHandler(ClickHandler handler) {
-		this.mapButton.getElement().getStyle().clearDisplay();
-		this.mapButton.addClickHandler(event -> {
-			event.stopPropagation();
-			handler.onClick(event);
-		});
-	}
-
+	
 	public void setHeader(String text) {
 		this.header.setText(text);
 	}
@@ -111,6 +79,10 @@ public class BasicSensorItemCard extends Composite{
 
 	public void setIconTitle(String title) {
 		this.icon.setTitle(title);
+	}
+
+	public Div getContent() {
+		return this.content;
 	}
 
 	private void addClickHandler() {
@@ -128,9 +100,17 @@ public class BasicSensorItemCard extends Composite{
 	public void setActive(boolean active) {
 		this.checkbox.setValue(active);
 		if(active) {
-			this.layout.addStyleName("card-active");
+//			this.layout.addStyleName("card-active");
+			this.getElement().getStyle().setBackgroundColor("#cccccc");
 		}else {
-			this.layout.removeStyleName("card-active");
+//			this.layout.removeStyleName("card-active");
+			this.getElement().getStyle().setBackgroundColor("white");
+		}
+	}	
+
+	public void setRating(Double accuracy) {
+		if(accuracy != null) {
+			this.rating.setRating(accuracy * 10);
 		}
 	}
 
@@ -139,4 +119,33 @@ public class BasicSensorItemCard extends Composite{
 			event.stopPropagation();
 		});
 	}-*/;
+
+	public void addContentValue(String titleText, String valueText) {
+		Div valueCon = new Div();
+		valueCon.addStyleName("flex");
+		Span title = new Span(titleText);
+		title.addStyleName("title-sensor");
+		valueCon.add(title);
+		Span value = new Span(valueText);
+		value.addStyleName("value-sensor");
+		valueCon.add(value);
+		this.content.add(valueCon);
+	}
+	
+	public void showLoadingIndicator() {
+		if(checkbox.getValue()) {
+			cardSpinner.getElement().addClassName("card-spinner-active");
+		}else {
+			cardSpinner.getElement().removeClassName("card-spinner-active");
+		}
+		cardSpinner.getElement().getStyle().clearDisplay();
+	}
+	
+	public void hideLoadingIndicator() {
+		cardSpinner.getElement().getStyle().setDisplay(Display.NONE);
+	}
+	
+	public void clearContent() {
+		this.content.clear();
+	}
 }
