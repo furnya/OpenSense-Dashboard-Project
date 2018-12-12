@@ -59,7 +59,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 
 	@Override
 	public void handleParamters(Map<ParamType, String> parameters) {
-		buildSensorRequestAndShowMarkers(parameters);
+		GWT.log("sorry you can't do that");
 	}
 
 	@Override
@@ -86,13 +86,6 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	}
 
 	// get Sensor Data from Server
-	public void buildSensorRequestAndShowMarkers(Map<ParamType, String> parameters) {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, true);
-		parameters.entrySet().forEach(entry -> requestBuilder.addParameter(entry.getKey(), entry.getValue()));
-		sendRequest(requestBuilder.getRequest());
-	}
-
-	// get Sensor Data from Server
 	public void buildSensorRequestFromIdsAndShowMarkers(List<Integer> markerIds) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, false);
 		markerIds.forEach(requestBuilder::addId);
@@ -108,7 +101,6 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 				} else if (request.getIds() != null) {
 					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, request.getIds()));
 				}
-//				view.showSensorData(result.getSensors());
 				view.showMarkers(result.getSensors());
 			} else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
@@ -139,14 +131,15 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 				.addListener(
 						'spiderfy',
 						function(marker) {
-							that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup(*)();
+							that.@com.opensense.dashboard.client.presenter.MapPresenter::openedSpidifier(*)();
 						});
 
 		oms
 				.addListener(
 						'unspiderfy',
 						function(marker) {
-							that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup(*)();
+							that.@com.opensense.dashboard.client.presenter.MapPresenter::closedSpidifier(*)();
+							that.@com.opensense.dashboard.client.presenter.MapPresenter::triggerViewAddPLusFunction(*)();
 						});
 
 		return oms;
@@ -156,11 +149,16 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	public JavaScriptObject getMarkerSpiderfier() {
 		return markerSpiderfier;
 	}
-
-	/**
-	 * destroys the marker popup
-	 */
-	public void destroyMarkerPopup() {
-		GWT.log("Destroyed");
+	
+	public void openedSpidifier() {
+		GWT.log("opened Spidifier");
+	}
+	
+	public void closedSpidifier() {
+		GWT.log("closed Spidifier");
+	}
+	
+	public void triggerViewAddPLusFunction() {
+		view.addCurrentlyRemovedPlus();
 	}
 }
