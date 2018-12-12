@@ -36,6 +36,7 @@ import com.opensense.dashboard.shared.ValuePreview;
 
 import gwt.material.design.client.base.validator.RegExValidator;
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialListBox;
@@ -108,6 +109,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@UiField
 	MaterialLink favoriteButton;
+
+	@UiField
+	MaterialCheckBox onlySensorsWithValueBox;
 
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
@@ -445,5 +449,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			this.sensorContainer.add(card);
 		}
 		this.presenter.getSensorValuePreviewAndShow(idsOnPage);
+	}
+
+	@Override
+	public boolean getOnlySensorsWithValueBox() {
+		return this.onlySensorsWithValueBox.getValue();
 	}
 }

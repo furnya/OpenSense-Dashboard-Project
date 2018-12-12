@@ -226,6 +226,14 @@ input:focus+label{
     background-color: #000 !important;
 }
 
+.white-checkbox [type="checkbox"].filled-in:checked+label:after{
+    border: 2px solid white !important;
+    background-color: white !important;
+}
+.white-checkbox [type="checkbox"].filled-in:checked+label:before {
+    border-right: 2px solid #000;
+    border-bottom: 2px solid #000;
+}
 
 .nav-button > img{
 	filter: invert(100%);

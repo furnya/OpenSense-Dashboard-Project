@@ -151,6 +151,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		if((this.view.getMaxSensors() != null) && !this.view.getMaxSensors().isEmpty()){
 			requestBuilder.addParameter(ParamType.MAX_SENSORS, this.view.getMaxSensors());
 		}
+		requestBuilder.setOnlySensorsWithValues(this.view.getOnlySensorsWithValueBox());
 		this.sendSensorRequestAndShow(requestBuilder.getRequest());
 	}
 

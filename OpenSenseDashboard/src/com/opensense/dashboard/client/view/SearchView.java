@@ -41,4 +41,5 @@ public interface SearchView extends IDataPanelPageView{
 	public void clearSensorData();
 	public void showDataContainer(boolean show);
 	public void showSensorValuePreview(Map<Integer, ValuePreview> result);
+	public boolean getOnlySensorsWithValueBox();
 }
