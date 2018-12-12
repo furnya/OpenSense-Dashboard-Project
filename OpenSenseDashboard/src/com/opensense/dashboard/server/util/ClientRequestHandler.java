@@ -114,6 +114,18 @@ public class ClientRequestHandler {
 		}
 		return sensorList;
 	}
+	
+	public List<Sensor> getSensorListOnlyWithValues(List<Parameter> parameterList, List<Integer> ids) throws IOException{
+		List<Sensor> sensors = getSensorList(parameterList, ids);
+		List<Sensor> filteredSensors = new LinkedList<>();
+		for(Sensor sensor : sensors) {
+			ValuePreview vp = getValuePreview(sensor.getSensorId());
+			if(vp!=null) {
+				filteredSensors.add(sensor);
+			}
+		}
+		return filteredSensors;
+	}
 
 	public Sensor getSensor(int id) throws IOException{
 		RequestSender rs = new RequestSender();
