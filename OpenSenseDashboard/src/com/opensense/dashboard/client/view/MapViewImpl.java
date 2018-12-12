@@ -74,7 +74,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private List<Integer> sensIds = new ArrayList<>();
 	private List<Marker> mList = new ArrayList<>();
 	private List<List<Sensor>> listOfSensors = new ArrayList<>();
-	MapOptions mapOptions;
+	private MapOptions mapOptions;
+	private Marker plusCluster;
 
 	private Button recenterBtn = new Button();
 
@@ -119,10 +120,11 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		listManagerOptions.setShowVisualizationButton(false);
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
-		this.listManager.addSelectedSensorsChangeHandler(event -> {
+		this.listManager.addSelectedSensorsChangeHandler(event ->{ 
 			resetMarkerAndCluster();
-			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, event.getSelectedIds()));
-		});
+			presenter.buildSensorRequestFromIdsAndShowMarkers(event.getSelectedIds());
+			});
+			
 	}
 
 	private void initMap() {
@@ -272,12 +274,13 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		markers.put(s.getSensorId(), markerBasic);
 		mList.add(markerBasic);
 		String idToString = Integer.toString(s.getSensorId());
-
+//		addPlusCluster(markerBasic);
 		markerBasic.addClickHandler(event -> {
 			if (!markerHasNearMarkers(presenter.getMarkerSpiderfier(), markerBasic)) {
 				recenterToCenter(markerBasic);
 				drawInfoWindow(markerBasic, s);
 			} else {
+				plusCluster.clear();
 				unspiderfy(presenter.getMarkerSpiderfier());
 			}
 			GWT.log("Current id: " + idToString);
@@ -288,6 +291,19 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		markersOnMapButtonEnabler();
 		addMarkerToSpiderfier(presenter.getMarkerSpiderfier(), mapWidget.getJso(), markerBasic);
 	}
+
+//	private void addPlusCluster(Marker marker) {
+//		if (mapWidget.getZoom() == 14 && markerHasNearMarkers(presenter.getMarkerSpiderfier(), marker)) {
+//				MarkerOptions plusOpt = MarkerOptions.newInstance();
+//				plusOpt.setPosition(marker.getPosition());
+//				plusOpt.setZindex(1000000);
+//				plusCluster = Marker.newInstance(plusOpt);
+//				MarkerImage plusIcon = MarkerImage.newInstance(GUIImageBundle.INSTANCE.homeIconSvg().getSafeUri().asString());
+//				plusCluster.setIcon(plusIcon);
+//				plusCluster.setDraggable(false);
+//				addMarkerToSpiderfier(presenter.getMarkerSpiderfier(), mapWidget.getJso(), marker);
+//			}
+//	}
 
 	private void markersOnMapButtonEnabler() {
 		if (!markers.isEmpty()) {
@@ -367,6 +383,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	public void resetMarkerAndCluster() {
 		if (!mList.isEmpty() || !markers.isEmpty()) {
 			mList.clear();
+			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, new ArrayList<>()));
 			markers.clear();
 			cluster.clearMarkers();
 			sensIds.clear();

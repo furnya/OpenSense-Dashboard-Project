@@ -17,6 +17,7 @@ public interface MapView extends IDataPanelPageView{
 		HandlerManager getEventBus();
 		AppController getAppController();
 		JavaScriptObject getMarkerSpiderfier();
+		void buildSensorRequestFromIdsAndShowMarkers(List<Integer> selectedIds);
 	}
 	
 	
