@@ -148,6 +148,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 			}
 			this.resetDatasets();
 			this.setSensorIdsCopy(event.getSelectedIds());
+			this.setAllSensorCardsGrey();
 			if((event.getSelectedIds()==null) || event.getSelectedIds().isEmpty()) {
 				this.showChart();
 			}
@@ -375,10 +376,19 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void setLineDatasetStyle(LineDataset dataset, int sensorId) {
 		String color = this.getNewColor(sensorId);
 		dataset.setBorderColor(color);
+		this.setCardColor(sensorId, color);
 		this.listManager.setSelectedSensorItemsColor(sensorId, color);
 		dataset.setPointBackgroundColor(color);
 		dataset.setFill(Fill.nofill);
 		dataset.setLabel(""+sensorId);
+	}
+	
+	public void setCardColor(int sensorId, String color) {
+		this.listManager.setSelectedSensorItemsColor(sensorId, color);
+	}
+	
+	public void setAllSensorCardsGrey() {
+		sensorIds.forEach(id -> this.setCardColor(id, "#a0a0a0"));
 	}
 
 	public void showNoDatasetsIndicator(boolean show) {

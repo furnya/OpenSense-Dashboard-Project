@@ -1,10 +1,13 @@
 package com.opensense.dashboard.server.util;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +36,8 @@ public class ClientRequestHandler {
 
 	private static final String MAX_TIMESTAMP = "maxTimestamp";
 	private static final String MIN_TIMESTAMP = "minTimestamp";
+	private static final String AGGREGATION_TYPE = "aggregationType";
+	private static final String AGGREGATION_RANGE = "aggregationRange";
 
 	private static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
 
@@ -161,6 +166,32 @@ public class ClientRequestHandler {
 		}
 		return valueList;
 	}
+	
+	public List<Value> getAggregatedValueList(int id, List<Parameter> parameterList, DateRange dateRange) throws IOException{
+		RequestSender rs = new RequestSender();
+		rs.setParameters(parameterList);
+		this.setTimestampParameters(rs, dateRange);
+		this.setAggregationParameters(rs, dateRange, parameterList);
+		
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values");
+		if(sensorJSON==null) {
+			return null;
+		}
+		LinkedList<Value> valueList = new LinkedList<>();
+		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+		JSONArray valueArrayJSON = sensorJSON.getJSONArray("values");
+		for(Object o : valueArrayJSON) {
+			if(!(o instanceof JSONObject)) {
+				continue;
+			}
+			JSONObject valueJSON = (JSONObject) o;
+			Value v = DataObjectBuilder.buildValue(valueJSON, inputFormat);
+			if(v!=null) {
+				valueList.add(v);
+			}
+		}
+		return valueList;
+	}
 
 	private void setTimestampParameters(RequestSender rs, DateRange dateRange) {
 		Calendar cal = Calendar.getInstance();
@@ -186,6 +217,58 @@ public class ClientRequestHandler {
 			rs.addParameter(MAX_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
 			cal.add(Calendar.YEAR, -1);
 			rs.addParameter(MIN_TIMESTAMP, cal.getTime().toString().replace(" ", "%20"));
+			break;
+		default:
+			break;
+		}
+	}
+	
+	private void setAggregationParameters(RequestSender rs, DateRange dateRange, List<Parameter> parameterList) {
+		Calendar cal = Calendar.getInstance();
+		switch(dateRange) {
+		case CUSTOM:
+			SimpleDateFormat inputFormat = new SimpleDateFormat("d MMM yyy HH:mm:ss zzz", Locale.UK);
+			Date from, to;
+			try{
+				String fromString = parameterList.get(0).getValue().replace("%20", " ");
+				String toString = parameterList.get(1).getValue().replace("%20", " ");
+				from = inputFormat.parse(fromString);
+				to = inputFormat.parse(toString);
+			}catch(ParseException e) {
+				break;
+			}
+			cal.setTime(to);
+			int diffDays = Math.abs(cal.fieldDifference(from, Calendar.DATE));
+			if(5<=diffDays && diffDays<=100) {
+				rs.addParameter(AGGREGATION_TYPE, "avg");
+				rs.addParameter(AGGREGATION_RANGE, "hourly");
+			}else if(100<diffDays && diffDays<=700) {
+				rs.addParameter(AGGREGATION_TYPE, "avg");
+				rs.addParameter(AGGREGATION_RANGE, "daily");
+			}else if(700<diffDays && diffDays<=3150) {
+				rs.addParameter(AGGREGATION_TYPE, "avg");
+				rs.addParameter(AGGREGATION_RANGE, "weekly");
+			}else if(3150<diffDays && diffDays<=15000) {
+				rs.addParameter(AGGREGATION_TYPE, "avg");
+				rs.addParameter(AGGREGATION_RANGE, "monthly");
+			}else if(15000<diffDays) {
+				rs.addParameter(AGGREGATION_TYPE, "avg");
+				rs.addParameter(AGGREGATION_RANGE, "yearly");
+			}
+			break;
+		case PAST_24HOURS:
+			break;
+		case PAST_MONTH:
+			rs.addParameter(AGGREGATION_TYPE, "avg");
+			rs.addParameter(AGGREGATION_RANGE, "hourly");
+			break;
+		case PAST_WEEK:
+			rs.addParameter(AGGREGATION_TYPE, "avg");
+			rs.addParameter(AGGREGATION_RANGE, "hourly");
+			break;
+		case PAST_YEAR:
+			rs.addParameter(AGGREGATION_TYPE, "avg");
+			rs.addParameter(AGGREGATION_RANGE, "daily");
 			break;
 		default:
 			break;

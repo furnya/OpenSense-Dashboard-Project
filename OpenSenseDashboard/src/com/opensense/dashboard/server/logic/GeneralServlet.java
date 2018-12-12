@@ -64,6 +64,10 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			case MYSENSORS:
 				response.setMySensors(ClientRequestHandler.getInstance().getMySensorIds(SessionUser.getInstance().getToken()));
 				break;
+			case VALUE_AGGREGATED:
+				response.setValues(ClientRequestHandler.getInstance().getAggregatedValueList(searchRequest.getIds().get(0),searchRequest.getParameters(),searchRequest.getDateRange()));
+				response.setSensors(ClientRequestHandler.getInstance().getSensorList(searchRequest.getParameters(), searchRequest.getIds()));
+				break;
 			default:
 				break;
 			}
