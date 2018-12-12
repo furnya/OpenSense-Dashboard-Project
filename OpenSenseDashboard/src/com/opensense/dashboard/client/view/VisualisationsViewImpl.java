@@ -151,10 +151,14 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
 			if(!updateNeeded(event.getSelectedIds())) {
+				this.setSensorIdsCopy(event.getSelectedIds());
 				return;
 			}
 			this.resetDatasets();
-			this.setSensorIds(event.getSelectedIds());
+			this.setSensorIdsCopy(event.getSelectedIds());
+			if(event.getSelectedIds()==null || event.getSelectedIds().isEmpty()) {
+				showChart();
+			}
 			this.presenter.valueRequestForSensorList(event.getSelectedIds(), this.getDateRange(), this.getStartingDate(), getEndingDate());
 		});
 	}
@@ -281,6 +285,13 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	 */
 	public void setSensorIds(List<Integer> sensorIds) {
 		this.sensorIds = sensorIds;
+	}
+	
+	/**
+	 * @param sensors the sensors to set
+	 */
+	public void setSensorIdsCopy(List<Integer> ids) {
+		this.sensorIds = new ArrayList<Integer>(ids);
 	}
 
 	/**
@@ -528,6 +539,12 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	@Override
 	public boolean updateNeeded(List<Integer> ids) {
+		if((ids==null || ids.isEmpty())) {
+			if(this.sensorIds.isEmpty()) {
+				return false;
+			}
+			return true;
+		}
 		for(Integer id : ids) {
 			if(!sensorIds.contains(id)) {
 				return true;
