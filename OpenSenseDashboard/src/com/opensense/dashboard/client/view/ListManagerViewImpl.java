@@ -1,4 +1,4 @@
- package com.opensense.dashboard.client.view;
+package com.opensense.dashboard.client.view;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -314,7 +314,18 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		this.selectAllSensorsInList(listId, true);
 	}
 
-
-
+	@Override
+	public void setSelectedSensorItemsColor(Map<Integer, String> sensorColors) {
+		if(this.activeItemId == null) {
+			GWT.log("not set colors");
+			return;
+		}
+		sensorColors.entrySet().forEach(entry -> {
+			if((this.selectedSensorIdsInLists.get(this.activeItemId) != null) &&
+					this.selectedSensorIdsInLists.get(this.activeItemId).contains(entry.getKey())){
+				this.sensorCardsInLists.get(this.activeItemId).get(entry.getKey()).getElement().setAttribute("style",  "background-color: " + entry.getValue() + " !important");
+			}
+		});
+	}
 
 }

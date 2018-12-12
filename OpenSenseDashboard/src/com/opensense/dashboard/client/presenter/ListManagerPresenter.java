@@ -2,6 +2,7 @@ package com.opensense.dashboard.client.presenter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
@@ -184,5 +185,9 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		}, caught -> {
 			GWT.log("Shit12");
 		},true));
+	}
+
+	public void setSelectedSensorItemsColor(Map<Integer, String> sensorColors) {
+		this.view.setSelectedSensorItemsColor(sensorColors);
 	}
 }
