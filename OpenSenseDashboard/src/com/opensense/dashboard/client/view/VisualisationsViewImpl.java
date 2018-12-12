@@ -478,6 +478,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	public void resetDatasets() {
+		resetMinMax();
 		datasetMap = new HashMap<>();
 		Dataset[] emptyDatasetArray = new Dataset[0];
 		chart.getData().setDatasets(emptyDatasetArray);
@@ -515,6 +516,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void resetMinMax() {
 		minTimestamp = null;
 		maxTimestamp = null;
+		minValue = Double.POSITIVE_INFINITY;
+		maxValue = Double.NEGATIVE_INFINITY;
 	}
 	
 	public void recalculateMinMax() {

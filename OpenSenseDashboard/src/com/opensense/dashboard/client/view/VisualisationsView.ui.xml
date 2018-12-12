@@ -94,11 +94,6 @@
 
 <bh:Div ui:field="container" addStyleNames="{style.con} flex">
 	<bh:Div ui:field="dataContainer" addStyleNames="{style.dataContainer}">
-		<m:MaterialPreLoader ui:field="viewSpinner" display="NONE" addStyleNames="spinner">
-			<m:MaterialSpinner/>
-		</m:MaterialPreLoader>
-		<m:MaterialLabel ui:field="noDatasetsLabel" textColor="WHITE" text="{lang.noData}" display="NONE"/>
-		<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>
 		<bh:Div addStyleNames="{style.panel} {style.visPanel} visPanel round-corners margin-top-10">
 			<m:MaterialLabel textColor="WHITE" text="{lang.timespan}"/>
 			<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
@@ -111,9 +106,14 @@
 			<m:MaterialButton ui:field="pastMonth" text="{lang.pastMonth}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 			<m:MaterialButton ui:field="pastWeek" text="{lang.pastWeek}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 			<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
-		</bh:Div>	
+		</bh:Div>
+		<m:MaterialPreLoader ui:field="viewSpinner" display="NONE" addStyleNames="spinner">
+			<m:MaterialSpinner/>
+		</m:MaterialPreLoader>
+		<m:MaterialLabel ui:field="noDatasetsLabel" textColor="WHITE" text="{lang.noData}" display="NONE"/>
+		<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>	
 	</bh:Div>
-	<bh:Div ui:field="listContainer" />
+	<bh:Div ui:field="listContainer" addStyleNames="{style.sensor-container}"/>
 </bh:Div>
 
 </ui:UiBinder>
