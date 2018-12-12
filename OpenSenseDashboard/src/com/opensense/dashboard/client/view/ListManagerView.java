@@ -1,11 +1,9 @@
 package com.opensense.dashboard.client.view;
 
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.UserList;
@@ -31,4 +29,5 @@ public interface ListManagerView {
 	public void selectAllSensorsInList(int listId);
 	public void setCollapsibleListItemSelected(int listId);
 	public void setSensorsInList(int listId, List<MinimalSensor> sensors);
+	public void setSelectedSensorItemsColor(int sensorId, String sensorColor);
 }

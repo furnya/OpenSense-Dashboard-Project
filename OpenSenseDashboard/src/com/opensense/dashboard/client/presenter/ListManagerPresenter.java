@@ -185,4 +185,8 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			GWT.log("Shit12");
 		},true));
 	}
+
+	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
+		this.view.setSelectedSensorItemsColor(sensorId, sensorColor);
+	}
 }

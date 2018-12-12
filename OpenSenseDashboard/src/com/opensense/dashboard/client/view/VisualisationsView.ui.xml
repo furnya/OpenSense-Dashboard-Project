@@ -51,6 +51,10 @@
 	width: 40%!important;
 	display: block;
 	overflow: auto;
+    max-height: 77vh;
+    background-color: #202020;
+    padding: 10px 10px;
+    height: 77vh;
 }
 .sensor-list-container > Div{
 	margin-bottom: 15px;
@@ -94,7 +98,7 @@
 
 <bh:Div ui:field="container" addStyleNames="{style.con} flex">
 	<bh:Div ui:field="dataContainer" addStyleNames="{style.dataContainer}">
-		<bh:Div addStyleNames="{style.panel} {style.visPanel} visPanel round-corners margin-top-10">
+		<bh:Div addStyleNames="{style.panel} {style.visPanel} visPanel round-corners">
 			<m:MaterialLabel textColor="WHITE" text="{lang.timespan}"/>
 			<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 			<!-- >dp:DateBox ui:field="newdp" title="{lang.from}"></dp:DateBox-->
@@ -113,7 +117,7 @@
 		<m:MaterialLabel ui:field="noDatasetsLabel" textColor="WHITE" text="{lang.noData}" display="NONE"/>
 		<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>	
 	</bh:Div>
-	<bh:Div ui:field="listContainer" addStyleNames="{style.sensor-container}"/>
+	<bh:Div ui:field="listContainer" addStyleNames="{style.sensor-container} round-corners"/>
 </bh:Div>
 
 </ui:UiBinder>

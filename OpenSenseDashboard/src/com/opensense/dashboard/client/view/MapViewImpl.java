@@ -76,6 +76,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private List<List<Sensor>> listOfSensors = new ArrayList<>();
 	private MapOptions mapOptions;
 	private Marker plusCluster;
+	private List<Marker> plusClusters = new ArrayList<>();
 
 	private Button recenterBtn = new Button();
 
@@ -94,6 +95,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private InfoWindow lastOpened;
 	private Map<Marker, InfoWindow> infoWindows = new HashMap<>();
 	private Map<Integer, MarkerInfoWindow> iwsFromMarkers = new HashMap<>();
+	private LatLng currentPlus;
 
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -120,11 +122,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		listManagerOptions.setShowVisualizationButton(false);
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
-		this.listManager.addSelectedSensorsChangeHandler(event ->{ 
-			resetMarkerAndCluster();
+		this.listManager.addSelectedSensorsChangeHandler(event -> {
 			presenter.buildSensorRequestFromIdsAndShowMarkers(event.getSelectedIds());
-			});
-			
+		});
+
 	}
 
 	private void initMap() {
@@ -188,7 +189,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	private void initMapHandler() {
 		Window.addResizeHandler(event -> {
-			GWT.log("resizeHandler 1");
 			if (lastOpened != null) {
 				lastOpened.close();
 				lastOpened = null;
@@ -197,7 +197,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 		mapWidget.addDragStartHandler(event -> {
 			if (lastOpened != null) {
-				GWT.log("closed 1");
 				lastOpened.close();
 				lastOpened = null;
 			}
@@ -205,15 +204,29 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 		mapWidget.addZoomChangeHandler(event -> {
 			if (lastOpened != null) {
-				GWT.log("closed 2");
 				lastOpened.close();
 				lastOpened = null;
 			}
+			GWT.log("Zoom:" + mapWidget.getZoom());
+			if (mapWidget.getZoom() >= 16) {
+				GWT.log("ADD");
+				addPlusCluster();
+				cluster.repaint();
+			}
+			if (plusCluster != null) {
+				if (mapWidget.getZoom() <= 15) {
+					plusClusters.remove(plusCluster);
+					GWT.log("HIER MAL WIEDER");
+					plusCluster.clear();
+					cluster.removeMarker(plusCluster);
+					cluster.repaint();
+				}
+			}
+
 		});
 
 		mapWidget.addClickHandler(event -> {
 			if (lastOpened != null) {
-				GWT.log("closed 3");
 				lastOpened.close();
 				lastOpened = null;
 			}
@@ -234,7 +247,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		if (marker == null || si.getSensorId() < 0) {
 			return;
 		}
-		GWT.log("NEU");
 		InfoWindowOptions iwOptions = InfoWindowOptions.newInstance();
 		MarkerInfoWindow infoWindow = new MarkerInfoWindow();
 		infoWindow.setHeader(si.getSensorModel() + " " + si.getSensorId());
@@ -252,7 +264,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		sensorData.clear();
 		InfoWindow iw = InfoWindow.newInstance(iwOptions);
 		if (lastOpened != null) {
-			GWT.log("closed 0");
 			lastOpened.close();
 			lastOpened = null;
 		}
@@ -266,21 +277,19 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
 		final Marker markerBasic = Marker.newInstance(markerOpt);
-		MarkerImage icon = MarkerImage.newInstance(
-				MeasurandIconHelper.getIconUrlFromType(s.getMeasurand().getMeasurandType()), Size.newInstance(30, 30));
+		MarkerImage icon = MarkerImage
+				.newInstance(MeasurandIconHelper.getIconUrlFromType(s.getMeasurand().getMeasurandType()));
 		icon.setScaledSize(Size.newInstance(30, 30));
 		markerBasic.setIcon(icon);
 		markerBasic.setDraggable(false);
 		markers.put(s.getSensorId(), markerBasic);
 		mList.add(markerBasic);
 		String idToString = Integer.toString(s.getSensorId());
-//		addPlusCluster(markerBasic);
 		markerBasic.addClickHandler(event -> {
 			if (!markerHasNearMarkers(presenter.getMarkerSpiderfier(), markerBasic)) {
 				recenterToCenter(markerBasic);
 				drawInfoWindow(markerBasic, s);
 			} else {
-				plusCluster.clear();
 				unspiderfy(presenter.getMarkerSpiderfier());
 			}
 			GWT.log("Current id: " + idToString);
@@ -292,18 +301,59 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		addMarkerToSpiderfier(presenter.getMarkerSpiderfier(), mapWidget.getJso(), markerBasic);
 	}
 
-//	private void addPlusCluster(Marker marker) {
-//		if (mapWidget.getZoom() == 14 && markerHasNearMarkers(presenter.getMarkerSpiderfier(), marker)) {
-//				MarkerOptions plusOpt = MarkerOptions.newInstance();
-//				plusOpt.setPosition(marker.getPosition());
-//				plusOpt.setZindex(1000000);
-//				plusCluster = Marker.newInstance(plusOpt);
-//				MarkerImage plusIcon = MarkerImage.newInstance(GUIImageBundle.INSTANCE.homeIconSvg().getSafeUri().asString());
-//				plusCluster.setIcon(plusIcon);
-//				plusCluster.setDraggable(false);
-//				addMarkerToSpiderfier(presenter.getMarkerSpiderfier(), mapWidget.getJso(), marker);
-//			}
-//	}
+	private void addPlusCluster() {
+		markers.values().forEach(marker -> {
+			if (mapWidget.getBounds().contains(marker.getPosition())
+					&& markerHasNearMarkers(presenter.getMarkerSpiderfier(), marker)) {
+				GWT.log("hier");
+				if (plusClusters.stream().noneMatch(pC -> pC.getPosition().equals(marker.getPosition()))) {
+					MarkerOptions plusOpt = MarkerOptions.newInstance();
+					plusOpt.setPosition(marker.getPosition());
+					plusCluster = Marker.newInstance(plusOpt);
+					MarkerImage plusIcon = MarkerImage
+							.newInstance(GUIImageBundle.INSTANCE.m1Plus().getSafeUri().asString());
+					plusIcon.setScaledSize(Size.newInstance(65, 65));
+					plusCluster.setIcon(plusIcon);
+					plusCluster.setDraggable(false);
+					cluster.addMarker(plusCluster);
+					plusClusters.add(plusCluster);
+					plusCluster.addClickHandler(event -> {
+//						unspiderfy(presenter.getMarkerSpiderfier());
+						currentPlus = null;
+						currentPlus = LatLng.newInstance(plusCluster.getPosition().getLatitude(),
+								plusCluster.getPosition().getLongitude());
+						plusClusters.remove(plusCluster);
+						GWT.log("HIER MAL WIEDER");
+						plusCluster.clear();
+						cluster.removeMarker(plusCluster);
+						cluster.repaint();
+					});
+				}
+			}
+		});
+	}
+
+	public void addCurrentlyRemovedPlus() {
+		if (currentPlus != null) {
+			MarkerOptions plusOpt = MarkerOptions.newInstance();
+			plusOpt.setPosition(currentPlus);
+			plusCluster = Marker.newInstance(plusOpt);
+			MarkerImage plusIcon = MarkerImage.newInstance(GUIImageBundle.INSTANCE.m1Plus().getSafeUri().asString());
+			plusIcon.setScaledSize(Size.newInstance(65, 65));
+			plusCluster.setIcon(plusIcon);
+			plusCluster.setDraggable(false);
+			cluster.addMarker(plusCluster);
+			plusClusters.add(plusCluster);
+			plusCluster.addClickHandler(event -> {
+//				unspiderfy(presenter.getMarkerSpiderfier());
+				plusClusters.remove(plusCluster);
+				GWT.log("HIER MAL WIEDER 2");
+				plusCluster.clear();
+				cluster.removeMarker(plusCluster);
+				cluster.repaint();
+			});
+		}
+	}
 
 	private void markersOnMapButtonEnabler() {
 		if (!markers.isEmpty()) {
@@ -315,6 +365,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	private native void unspiderfy(JavaScriptObject spiderfier) /*-{
 		spiderfier.unspiderfy();
+	}-*/;
+
+	private native void spiderfy(JavaScriptObject spiderfier) /*-{
+		spiderfier.spiderfy();
 	}-*/;
 
 	private native void addMarkerToSpiderfier(JavaScriptObject spiderfier, JavaScriptObject mapWidget,

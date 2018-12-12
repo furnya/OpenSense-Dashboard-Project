@@ -85,8 +85,8 @@ public class ListManager {
 	public void updateSelectedSensorsList(List<Integer> ids) {
 		this.presenter.updateSelectedSensorsList(ids);
 	}
-	
-	public ListManagerViewImpl getView() {
-		return this.view;
+
+	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
+		this.presenter.setSelectedSensorItemsColor(sensorId, sensorColor);
 	}
 }
