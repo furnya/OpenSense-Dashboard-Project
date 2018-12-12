@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.maps.client.overlays.Marker;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
@@ -36,19 +37,19 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	}
 
 	public MapView getView() {
-		return view;
+		return this.view;
 	}
 
 	@Override
 	public void go(HasWidgets container) {
 		container.clear();
-		container.add(view.asWidget());
-		initMarkerSpiderfier();
+		container.add(this.view.asWidget());
+		this.initMarkerSpiderfier();
 	}
 
 	@Override
 	public void onPageReturn() {
-		view.resetMarkerAndCluster();
+		this.view.resetMarkerAndCluster();
 		this.view.getListManager().setUserLoggedInAndUpdate(!this.appController.isGuest());
 	}
 
@@ -64,12 +65,12 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 
 	@Override
 	public void handleIds(List<Integer> ids) {
-		view.getListManager().updateSelectedSensorsList(ids);
+		this.view.getListManager().updateSelectedSensorsList(ids);
 	}
 
 	@Override
 	public void waitUntilViewInit(Runnable runnable) {
-		view.initView(runnable);
+		this.view.initView(runnable);
 		runnable.run();
 	}
 
@@ -86,22 +87,23 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	}
 
 	// get Sensor Data from Server
+	@Override
 	public void buildSensorRequestFromIdsAndShowMarkers(List<Integer> markerIds) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, false);
 		markerIds.forEach(requestBuilder::addId);
-		sendRequest(requestBuilder.getRequest());
+		this.sendRequest(requestBuilder.getRequest());
 	}
 
 	private void sendRequest(final Request request) {
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
-			if (result != null && result.getResultType() != null
-					&& request.getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
+			if ((result != null) && (result.getResultType() != null)
+					&& request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
 				if (request.getParameters() != null) {
-					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, request.getParameters(), false));
+					this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, request.getParameters(), false));
 				} else if (request.getIds() != null) {
-					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, request.getIds()));
+					this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, request.getIds()));
 				}
-				view.showMarkers(result.getSensors());
+				this.view.showMarkers(result.getSensors());
 			} else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
 				// TODO: show error
@@ -113,7 +115,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	}
 
 	private void initMarkerSpiderfier() {
-		markerSpiderfier = initMarkerSpiderfierJSNI(view.getMapWidget().getJso());
+		this.markerSpiderfier = this.initMarkerSpiderfierJSNI(this.view.getMapWidget().getJso());
 	}
 
 	private native JavaScriptObject initMarkerSpiderfierJSNI(JavaScriptObject mapWidget) /*-{
@@ -127,38 +129,26 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 		var that = this;
 
 		//destroy MarkerPopup whenever the spiderfier does some action:
-		oms
-				.addListener(
-						'spiderfy',
-						function(marker) {
-							that.@com.opensense.dashboard.client.presenter.MapPresenter::openedSpidifier(*)();
-						});
+		oms.addListener('spiderfy',	function(marker) {
+			console.log("spiderfy");
+		});
 
-		oms
-				.addListener(
-						'unspiderfy',
-						function(marker) {
-							that.@com.opensense.dashboard.client.presenter.MapPresenter::closedSpidifier(*)();
-							that.@com.opensense.dashboard.client.presenter.MapPresenter::triggerViewAddPLusFunction(*)();
-						});
+		oms.addListener('unspiderfy', function(marker) {
+			console.log("unspiderfy");
+			that.@com.opensense.dashboard.client.presenter.MapPresenter::addPlusCluster(*)(marker);
+		});
 
 		return oms;
 	}-*/;
 
 	@Override
 	public JavaScriptObject getMarkerSpiderfier() {
-		return markerSpiderfier;
+		return this.markerSpiderfier;
 	}
-	
-	public void openedSpidifier() {
-		GWT.log("opened Spidifier");
+
+	public void addPlusCluster(Marker marker) {
+		this.view.checkForSpiderfierMarkers();
+		//this.view.addPlusCluster(marker);//TODO: this should work but the marker is not correct
 	}
-	
-	public void closedSpidifier() {
-		GWT.log("closed Spidifier");
-	}
-	
-	public void triggerViewAddPLusFunction() {
-		view.addCurrentlyRemovedPlus();
-	}
+
 }

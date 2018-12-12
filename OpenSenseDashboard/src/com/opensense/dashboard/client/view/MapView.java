@@ -19,15 +19,17 @@ public interface MapView extends IDataPanelPageView{
 		JavaScriptObject getMarkerSpiderfier();
 		void buildSensorRequestFromIdsAndShowMarkers(List<Integer> selectedIds);
 	}
-	
-	
+
+
 	public void setPresenter(Presenter presenter);
+	@Override
 	public Widget asWidget();
 	public void initView(Runnable runnable);
 	public void showMarkers(List<Sensor> sensorlist);
 	public void resetMarkerAndCluster();
 	public MapWidget getMapWidget();
-	public void addCurrentlyRemovedPlus();
 	public Map<Integer, Marker> getMarkers();
 	public ListManager getListManager();
+	public void addPlusCluster(Marker marker);
+	public void checkForSpiderfierMarkers();
 }
