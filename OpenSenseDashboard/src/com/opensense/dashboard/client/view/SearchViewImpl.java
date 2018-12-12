@@ -30,6 +30,7 @@ import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.MeasurandIconHelper;
 import com.opensense.dashboard.client.utils.Pager;
 import com.opensense.dashboard.client.utils.SensorItemCard;
+import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.ValuePreview;
 
@@ -299,11 +300,11 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 
 	@Override
-	public void setMeasurandsList(Map<Integer, String> measurands) {
+	public void setMeasurandsList(Map<Integer, Measurand> measurands) {
 		this.measurandList.clear();
 		this.measurandList.addItem("", Languages.all());
 		this.measurandList.setSelectedIndex(0);
-		measurands.entrySet().forEach(entry -> this.measurandList.addItem(entry.getKey().toString(), entry.getValue()));
+		measurands.entrySet().forEach(entry -> this.measurandList.addItem(entry.getKey().toString(), entry.getValue().getDisplayName()));
 	}
 
 	@Override
@@ -439,6 +440,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		List<Integer> idsOnPage = new ArrayList<>();
 		for(int i = page * maxObjectsOnPage; (i < this.shownSensorIds.size()) && (i < ((page + 1) * maxObjectsOnPage)); i++){
 			SensorItemCard card = this.sensorViews.get(this.shownSensorIds.get(i));
+			idsOnPage.add(this.shownSensorIds.get(i));
 			card.showPreviewContentSpinner(true);
 			this.sensorContainer.add(card);
 		}

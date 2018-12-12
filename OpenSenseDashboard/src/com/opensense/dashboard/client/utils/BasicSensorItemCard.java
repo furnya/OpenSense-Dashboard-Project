@@ -39,9 +39,6 @@ public class BasicSensorItemCard extends Composite{
 	Image icon;
 
 	@UiField
-	Div midContainer;
-
-	@UiField
 	MaterialCheckBox checkbox;
 
 	@UiField
@@ -117,10 +114,6 @@ public class BasicSensorItemCard extends Composite{
 
 	public void setIconTitle(String title) {
 		this.icon.setTitle(title);
-	}
-
-	public Div getMiddleHeader() {
-		return this.midContainer;
 	}
 
 	private void addClickHandler() {
