@@ -20,16 +20,15 @@ import com.opensense.dashboard.client.view.MapView;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
-import com.opensense.dashboard.shared.ValuePreview;
 
-public class MapPresenter extends DataPanelPagePresenter implements IPresenter, MapView.Presenter{
-	
+public class MapPresenter extends DataPanelPagePresenter implements IPresenter, MapView.Presenter {
+
 	private static final Logger LOGGER = Logger.getLogger(MapPresenter.class.getName());
-	
+
 	private final MapView view;
-	
+
 	private JavaScriptObject markerSpiderfier;
-	
+
 	public MapPresenter(HandlerManager eventBus, AppController appController, MapView view) {
 		super(view, eventBus, appController);
 		this.view = view;
@@ -39,7 +38,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	public MapView getView() {
 		return view;
 	}
-	
+
 	@Override
 	public void go(HasWidgets container) {
 		container.clear();
@@ -49,64 +48,82 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 
 	@Override
 	public void onPageReturn() {
-		// TODO Auto-generated method stub
+		view.resetMarkerAndCluster();
+		this.view.getListManager().setUserLoggedInAndUpdate(!this.appController.isGuest());
 	}
-	
+
 	@Override
 	public void onPageLeave() {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public void handleParamters(Map<ParamType, String> parameters) {
 		buildSensorRequestAndShowMarkers(parameters);
 	}
-	
+
 	@Override
 	public void handleIds(List<Integer> ids) {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, false);
-		ids.forEach(requestBuilder::addId);
-		sendRequest(requestBuilder.getRequest());
+		view.getListManager().updateSelectedSensorsList(ids);
 	}
-
 
 	@Override
 	public void waitUntilViewInit(Runnable runnable) {
-		view.initView();
+		view.initView(runnable);
 		runnable.run();
 	}
-	
-	//get Sensor Data from Server
+
+	public void updateFavoriteList() {
+		this.view.getListManager().updateFavoriteList();
+	}
+
+	public void onUserLoggedIn() {
+		this.view.getListManager().onUserLoggedIn();
+	}
+
+	public void onUserLoggedOut() {
+		this.view.getListManager().onUserLoggedOut();
+	}
+
+	// get Sensor Data from Server
 	public void buildSensorRequestAndShowMarkers(Map<ParamType, String> parameters) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, true);
-		parameters.entrySet().forEach(entry -> requestBuilder.addParameter(entry.getKey(),entry.getValue()));
+		parameters.entrySet().forEach(entry -> requestBuilder.addParameter(entry.getKey(), entry.getValue()));
 		sendRequest(requestBuilder.getRequest());
 	}
-	
+
+	// get Sensor Data from Server
+	public void buildSensorRequestFromIdsAndShowMarkers(List<Integer> markerIds) {
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, false);
+		markerIds.forEach(requestBuilder::addId);
+		sendRequest(requestBuilder.getRequest());
+	}
+
 	private void sendRequest(final Request request) {
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
-			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
-				if(request.getParameters() != null) {
+			if (result != null && result.getResultType() != null
+					&& request.getRequestType().equals(result.getResultType()) && result.getSensors() != null) {
+				if (request.getParameters() != null) {
 					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, request.getParameters(), false));
-				}else if(request.getIds() != null) {
+				} else if (request.getIds() != null) {
 					eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, request.getIds()));
 				}
-				view.showSensorData(result.getSensors());
+//				view.showSensorData(result.getSensors());
 				view.showMarkers(result.getSensors());
-			}else {
+			} else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
-				//TODO: show error
+				// TODO: show error
 			}
-		},caught -> {
+		}, caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the sensors.");
-			//TODO: show error
+			// TODO: show error
 		}, false));
 	}
 
 	private void initMarkerSpiderfier() {
 		markerSpiderfier = initMarkerSpiderfierJSNI(view.getMapWidget().getJso());
 	}
-	
+
 	private native JavaScriptObject initMarkerSpiderfierJSNI(JavaScriptObject mapWidget) /*-{
 		var oms = new $wnd.OverlappingMarkerSpiderfier(mapWidget, {
 			nearbyDistance : 10,
@@ -116,20 +133,25 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 			basicFormatEvents : true
 		});
 		var that = this;
-		
+
 		//destroy MarkerPopup whenever the spiderfier does some action:
-		oms.addListener('spiderfy',	function(marker) {
-			that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup(*)();
-		});
-		
-		oms.addListener('unspiderfy', function(marker) {
-			that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup(*)();
-		});
-	
+		oms
+				.addListener(
+						'spiderfy',
+						function(marker) {
+							that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup(*)();
+						});
+
+		oms
+				.addListener(
+						'unspiderfy',
+						function(marker) {
+							that.@com.opensense.dashboard.client.presenter.MapPresenter::destroyMarkerPopup(*)();
+						});
+
 		return oms;
 	}-*/;
-	
-	
+
 	@Override
 	public JavaScriptObject getMarkerSpiderfier() {
 		return markerSpiderfier;

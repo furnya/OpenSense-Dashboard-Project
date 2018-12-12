@@ -18,14 +18,13 @@ import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.VisualisationsView;
-import com.opensense.dashboard.client.view.VisualisationsViewImpl;
 import com.opensense.dashboard.shared.DateRange;
-import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.ValuePreview;
+
 
 public class VisualisationsPresenter extends DataPanelPagePresenter implements IPresenter, VisualisationsView.Presenter{
 
@@ -66,17 +65,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	
 	@Override
 	public void handleIds(List<Integer> ids) {
-		if(ids==null || ids.isEmpty() || !view.updateNeeded(ids)) {
-			return;
-		}
-		view.resetDatasets();
-		view.showLoadingIndicator();
-		view.setSensorIds(new LinkedList<>());
-		ids.forEach(view.getSensorIds()::add);
-		for(Integer id : ids) {
-			buildValueRequestAndSend(id, view.getDefaultRange(), view.getStartingDate(), view.getEndingDate());
-		}
-//		eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, false, ids));
+		view.getListManager().updateSelectedSensorsList(ids);
 	}
 
 

@@ -31,5 +31,4 @@ public interface ListManagerView {
 	public void selectAllSensorsInList(int listId);
 	public void setCollapsibleListItemSelected(int listId);
 	public void setSensorsInList(int listId, List<MinimalSensor> sensors);
-	public Map<Integer, BasicSensorItemCard> getSensorCardMap(int listId);
 }

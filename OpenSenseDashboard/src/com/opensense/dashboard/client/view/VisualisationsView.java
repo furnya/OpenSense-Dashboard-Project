@@ -4,12 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.pepstock.charba.client.AbstractChart;
-
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.shared.DateRange;
-import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
 import com.opensense.dashboard.shared.ValuePreview;
@@ -37,4 +35,5 @@ public interface VisualisationsView extends IDataPanelPageView {
 	public Date getEndingDate();
 	public void resetDatasets();
 	public boolean updateNeeded(List<Integer> ids);
+	public ListManager getListManager();
 }

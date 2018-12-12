@@ -37,9 +37,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.datepicker.client.DateBox;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
-import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListManager;
@@ -48,7 +46,6 @@ import com.opensense.dashboard.client.utils.PagerSize;
 import com.opensense.dashboard.client.utils.ValueHandler;
 import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.shared.DateRange;
-import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Value;
 
@@ -99,15 +96,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	
 	@UiField
 	Div listContainer;
-	
-//	@UiField
-//	DateBox newdp;
-	
-//	@UiField
-//	MaterialTimePicker startingTime;
-//	
-//	@UiField
-//	MaterialTimePicker endingTime;
 	
 	private static VisualisationsViewUiBinder uiBinder = GWT.create(VisualisationsViewUiBinder.class);
 
@@ -162,7 +150,12 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
-			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, event.getSelectedIds()));
+			if(!updateNeeded(event.getSelectedIds())) {
+				return;
+			}
+			this.resetDatasets();
+			this.setSensorIds(event.getSelectedIds());
+			this.presenter.valueRequestForSensorList(event.getSelectedIds(), this.getDateRange(), this.getStartingDate(), getEndingDate());
 		});
 	}
 	
@@ -365,18 +358,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 	
 	private void setCardColor(String color, int sensorId) {
-		BasicSensorItemCard card = this.listManager.getView().getSensorCardMap(-1).get(sensorId);
-		card.getElement().removeClassName("card-active");
-		card.getElement().getStyle().setBackgroundColor(color);
+		//TODO
 	}
 
-	public void firstD3Chart() {
-		Selection s = D3.select(Document.get().getBody());
-		SVG svg = D3.svg();
-		Axis x = svg.axis();
-		s.call(x);
-	}
-	
 	public void showNoDatasetsIndicator(boolean show) {
 		if(show) {
 			noDatasetsLabel.getElement().getStyle().clearDisplay();
@@ -533,10 +517,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		usedColors.clear();
 		nextColor = 0;
 	}
-
-	public ListManager getListManager() {
-		return listManager;
-	}
 	
 	public Date getStartingDate() {
 		return startingDate.getDate();
@@ -559,5 +539,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 			}
 		}
 		return false;
+	}
+	
+	public ListManager getListManager() {
+		return this.listManager;
 	}
 }

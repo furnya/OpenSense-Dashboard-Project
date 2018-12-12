@@ -1,7 +1,5 @@
 package com.opensense.dashboard.shared;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.json.JSONObject;

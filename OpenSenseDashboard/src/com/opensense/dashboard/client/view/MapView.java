@@ -8,22 +8,25 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.overlays.Marker;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.shared.Sensor;
-import com.opensense.dashboard.shared.ValuePreview;
 
 public interface MapView extends IDataPanelPageView{
 	public interface Presenter{
 		HandlerManager getEventBus();
+		AppController getAppController();
 		JavaScriptObject getMarkerSpiderfier();
+		void buildSensorRequestFromIdsAndShowMarkers(List<Integer> selectedIds);
 	}
 	
 	
 	public void setPresenter(Presenter presenter);
 	public Widget asWidget();
-	public void initView();
-	public void showSensorData(final List<Sensor> sensors);
+	public void initView(Runnable runnable);
 	public void showMarkers(List<Sensor> sensorlist);
 	public void resetMarkerAndCluster();
 	public MapWidget getMapWidget();
 	public Map<Integer, Marker> getMarkers();
+	public ListManager getListManager();
 }

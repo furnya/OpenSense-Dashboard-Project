@@ -24,21 +24,28 @@
 .icon-size{
 	height: 40px;
 	width: 40px;	
+    min-width: 40px;
 }
 .left{
-	min-width: 60%;
+	min-width: 80%;
 	display: flex;
 	white-space: nowrap;
 	overflow: hidden;
 }
+
+.mid > Span{
+	margin-right: 10px;
+}
 .right{
-	min-width: 40%;
+	min-width: 20%;
 	position: relative;
-	padding-top: 5px;
 }
 .button-container{
 	width: fit-content;
     float: right;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .button-container > *{
 	margin-right: 10px;
@@ -60,6 +67,9 @@
 			<b:Image ui:field="icon" width="100%" height="100%"/>
 		</bh:Div>
 		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
+		<m:MaterialPreLoader ui:field="cardSpinner" display="NONE" addStyleNames="spinner">
+			<m:MaterialSpinner/>
+		</m:MaterialPreLoader>
 	</bh:Div>
 	<bh:Div addStyleNames="{style.right}">
 		<bh:Div addStyleNames="{style.button-container}">

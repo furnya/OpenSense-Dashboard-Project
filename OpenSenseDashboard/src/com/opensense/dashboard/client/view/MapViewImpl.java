@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Div;
-import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -38,17 +37,20 @@ import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
-import com.opensense.dashboard.client.utils.MapSensorItemCard;
+import com.opensense.dashboard.client.utils.ListManager;
+import com.opensense.dashboard.client.utils.ListManagerOptions;
 import com.opensense.dashboard.client.utils.MarkerInfoWindow;
-import com.opensense.dashboard.shared.MeasurandType;
+import com.opensense.dashboard.client.utils.MeasurandIconHelper;
+import com.opensense.dashboard.client.utils.PagerSize;
 import com.opensense.dashboard.shared.Sensor;
-import com.opensense.dashboard.shared.ValuePreview;
 
 public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	@UiTemplate("MapView.ui.xml")
 	interface MapViewUiBinder extends UiBinder<Widget, MapViewImpl> {
 	}
+
+	private ListManager listManager;
 
 	@UiField
 	Div map;
@@ -72,6 +74,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private List<Integer> sensIds = new ArrayList<>();
 	private List<Marker> mList = new ArrayList<>();
 	private List<List<Sensor>> listOfSensors = new ArrayList<>();
+	private MapOptions mapOptions;
+	private Marker plusCluster;
 
 	private Button recenterBtn = new Button();
 
@@ -93,7 +97,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
-		showThisMap();
 	}
 
 	@Override
@@ -103,68 +106,30 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	// Important do not delete
 	@Override
-	public void initView() {
+	public void initView(Runnable runnable) {
 		// init UI Elements if needed
-	}
-
-	private String getIconUrlFromType(MeasurandType measurandType) {
-		switch (measurandType) {
-		case AIR_PRESSURE:
-			return GUIImageBundle.INSTANCE.pressureIconSvg().getSafeUri().asString();
-		case BRIGHTNESS:
-			return GUIImageBundle.INSTANCE.sunnyIconSvg().getSafeUri().asString();
-		case CLOUDINESS:
-			return GUIImageBundle.INSTANCE.cloudsIconSvg().getSafeUri().asString();
-		case HUMIDITY:
-			return GUIImageBundle.INSTANCE.humidityIconSvg().getSafeUri().asString();
-		case NOISE:
-			return GUIImageBundle.INSTANCE.noiseIconSvg().getSafeUri().asString();
-		case PM10:
-			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
-		case PM2_5:
-			return GUIImageBundle.INSTANCE.particularsIconSvg().getSafeUri().asString();
-		case PRECIPITATION_AMOUNT:
-			return GUIImageBundle.INSTANCE.precipitaionIconSvg().getSafeUri().asString();
-		case PRECIPITATION_TYPE:
-			return GUIImageBundle.INSTANCE.precipitationTypeIconSvg().getSafeUri().asString();
-		case TEMPERATURE:
-			return GUIImageBundle.INSTANCE.tempIconSvg().getSafeUri().asString();
-		case WIND_DIRECTION:
-			return GUIImageBundle.INSTANCE.windDirectionIconSvg().getSafeUri().asString();
-		case WIND_SPEED:
-			return GUIImageBundle.INSTANCE.windSpeedIconSvg().getSafeUri().asString();
-		default:
-			return GUIImageBundle.INSTANCE.questionIconSvg().getSafeUri().asString();
-		}
-	}
-
-	public void showSensorData(final List<Sensor> sensors) {
-		sensorContainer.clear();
-		if (sensors.isEmpty()) {
-			return;
-		}
-		if (!listOfSensors.contains(sensors)) {
-			listOfSensors.add(sensors);
-		}
-		listOfSensors.forEach(list -> {
-			final MapSensorItemCard card = new MapSensorItemCard();
-			card.setHeader("Sensortyp: " + list.get(0).getMeasurand().getMeasurandType());
-			card.setIcon(getIconUrlFromType(list.get(0).getMeasurand().getMeasurandType()));
-			card.setIconTitle(list.get(0).getMeasurand().getDisplayName());
-			card.getMiddleHeader().add(new Span(list.get(0).getAttributionText()));
-			card.getMiddleHeader().add(new Span(list.get(0).getSensorModel()));
-			card.getMiddleHeader().add(new Span("Sensoren: " + Integer.toString(list.size())));
-			card.addClickHandler(event -> {
-				showMarkers(list);
+		initMap();
+		initMapHandler();
+		initMapButtons();
+		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(),
+				this.sensorContainer);
+		listManagerOptions.setEditingActive(true);
+		listManagerOptions.setPagerSize(PagerSize.SMALL);
+		listManagerOptions.setShowMapButton(false);
+		listManagerOptions.setShowSearchButton(false);
+		listManagerOptions.setShowVisualizationButton(false);
+		this.listManager = ListManager.getInstance(listManagerOptions);
+		this.listManager.waitUntilViewInit(runnable);
+		this.listManager.addSelectedSensorsChangeHandler(event ->{ 
+			resetMarkerAndCluster();
+			presenter.buildSensorRequestFromIdsAndShowMarkers(event.getSelectedIds());
 			});
-			sensorContainer.add(card);
-		});
+			
 	}
 
-	private void showThisMap() {
-		MapOptions mapOptions = MapOptions.newInstance();
+	private void initMap() {
+		mapOptions = MapOptions.newInstance();
 		mapOptions.setMinZoom(2);
-		mapOptions.setMaxZoom(18);
 		mapOptions.setDraggable(true);
 		mapOptions.setScaleControl(true);
 		mapOptions.setStreetViewControl(false);
@@ -172,13 +137,17 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapOptions.setScrollWheel(true);
 		mapOptions.setPanControl(false);
 		mapOptions.setZoomControl(true);
+		setMapStyles();
+	}
+
+	private void setMapStyles() {
 		MapTypeStyle mapStyle = MapTypeStyle.newInstance();
 		MapTypeStyle mapStyle2 = MapTypeStyle.newInstance();
 		mapStyle.setFeatureType(MapTypeStyleFeatureType.POI);
 		mapStyle2.setFeatureType(MapTypeStyleFeatureType.TRANSIT);
 		mapStyle.setElementType(MapTypeStyleElementType.LABELS);
 		mapStyle2.setElementType(MapTypeStyleElementType.LABELS);
-		
+
 		String visibility = "off";
 		MapTypeStyler styler = MapTypeStyler.newVisibilityStyler(visibility);
 		MapTypeStyler[] stylers = new MapTypeStyler[1];
@@ -192,7 +161,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		MapImpl mapImpl = MapImpl.newInstance(map.getElement(), mapOptions);
 		mapWidget = MapWidget.newInstance(mapImpl);
 		mapWidget.setVisible(true);
-		
+	}
+
+	private void initMapButtons() {
 		if (markers.isEmpty()) {
 			recenterBtn.setEnabled(false);
 			searchBtn.setEnabled(false);
@@ -213,7 +184,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.RIGHT_BOTTOM, recenterBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.TOP_LEFT, searchBtn);
 		mapWidget.setControls(com.google.gwt.maps.client.controls.ControlPosition.LEFT_TOP, visuBtn);
+	}
 
+	private void initMapHandler() {
 		Window.addResizeHandler(event -> {
 			GWT.log("resizeHandler 1");
 			if (lastOpened != null) {
@@ -231,9 +204,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		});
 
 		mapWidget.addZoomChangeHandler(event -> {
-//			if (mapWidget.getZoom() == 14) {
-//				checkForNearMarkers();
-//			}
 			if (lastOpened != null) {
 				GWT.log("closed 2");
 				lastOpened.close();
@@ -248,26 +218,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 				lastOpened = null;
 			}
 		});
-	}
 
-//	private void checkForNearMarkers() {
-//		mList.forEach(marker -> {
-//			if (mapWidget.getBounds().contains(marker.getPosition()) && !markerHasNearMarkers(presenter.getMarkerSpiderfier(), marker)) {
-//				MarkerOptions plusOptions = MarkerOptions.newInstance();
-//				plusOptions.setMap(mapWidget);
-//				plusOptions.setZindex(10000);
-//				plusOptions.setIcon(GUIImageBundle.INSTANCE.diagramIcon().getSafeUri().asString());
-//				final Marker plus = Marker.newInstance(plusOptions);
-//				plus.setPosition(marker.getPosition());
-//				//addMarkerToSpiderfier
-//				plus.addClickHandler(event-> {
-//					triggerClick(marker, marker.getPosition());
-//					plus.clear();
-//				});
-//			}
-//		});
-//
-//	}
+	}
 
 	// this function will add a basic InfoWindow to the Markers on the Map
 	// Sensor Data:
@@ -314,20 +266,21 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
 		final Marker markerBasic = Marker.newInstance(markerOpt);
-		MarkerImage icon = MarkerImage.newInstance(getIconUrlFromType(s.getMeasurand().getMeasurandType()),
-				Size.newInstance(30, 30));
+		MarkerImage icon = MarkerImage.newInstance(
+				MeasurandIconHelper.getIconUrlFromType(s.getMeasurand().getMeasurandType()), Size.newInstance(30, 30));
 		icon.setScaledSize(Size.newInstance(30, 30));
 		markerBasic.setIcon(icon);
 		markerBasic.setDraggable(false);
 		markers.put(s.getSensorId(), markerBasic);
 		mList.add(markerBasic);
 		String idToString = Integer.toString(s.getSensorId());
-
+//		addPlusCluster(markerBasic);
 		markerBasic.addClickHandler(event -> {
 			if (!markerHasNearMarkers(presenter.getMarkerSpiderfier(), markerBasic)) {
 				recenterToCenter(markerBasic);
 				drawInfoWindow(markerBasic, s);
 			} else {
+				plusCluster.clear();
 				unspiderfy(presenter.getMarkerSpiderfier());
 			}
 			GWT.log("Current id: " + idToString);
@@ -335,12 +288,25 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 		markerBasic.addMouseOverHandler(event -> {
 		});
-		markersOnMap();
+		markersOnMapButtonEnabler();
 		addMarkerToSpiderfier(presenter.getMarkerSpiderfier(), mapWidget.getJso(), markerBasic);
 	}
-	
-	private void markersOnMap() {
-		if(!markers.isEmpty()) {
+
+//	private void addPlusCluster(Marker marker) {
+//		if (mapWidget.getZoom() == 14 && markerHasNearMarkers(presenter.getMarkerSpiderfier(), marker)) {
+//				MarkerOptions plusOpt = MarkerOptions.newInstance();
+//				plusOpt.setPosition(marker.getPosition());
+//				plusOpt.setZindex(1000000);
+//				plusCluster = Marker.newInstance(plusOpt);
+//				MarkerImage plusIcon = MarkerImage.newInstance(GUIImageBundle.INSTANCE.homeIconSvg().getSafeUri().asString());
+//				plusCluster.setIcon(plusIcon);
+//				plusCluster.setDraggable(false);
+//				addMarkerToSpiderfier(presenter.getMarkerSpiderfier(), mapWidget.getJso(), marker);
+//			}
+//	}
+
+	private void markersOnMapButtonEnabler() {
+		if (!markers.isEmpty()) {
 			recenterBtn.setEnabled(true);
 			searchBtn.setEnabled(true);
 			visuBtn.setEnabled(true);
@@ -412,12 +378,12 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		if (sensorList.isEmpty()) {
 			GWT.log("ERROR: Sensorlist is empty");
 		}
-		showSensorData(sensorList);
 	}
 
 	public void resetMarkerAndCluster() {
 		if (!mList.isEmpty() || !markers.isEmpty()) {
 			mList.clear();
+			presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, new ArrayList<>()));
 			markers.clear();
 			cluster.clearMarkers();
 			sensIds.clear();
@@ -466,4 +432,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	protected native void triggerClick(JavaScriptObject marker, LatLng position)/*-{
 		$wnd.google.maps.event.trigger(marker, 'spider_click', position);
 	}-*/;
+
+	@Override
+	public ListManager getListManager() {
+		return this.listManager;
+	}
 }

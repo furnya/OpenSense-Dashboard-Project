@@ -16,12 +16,10 @@ import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.server.util.SessionUser;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
-import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.UserList;
-import com.opensense.dashboard.shared.ValuePreview;
 
 @SuppressWarnings("serial")
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
@@ -57,7 +55,10 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 				response.setMinimalSensors(ClientRequestHandler.getInstance().getMinimalSensorList(searchRequest.getParameters(), searchRequest.getIds()));
 				break;
 			case USER_LIST:
-				response.setUserLists(getUserLists());//TODO implement with request to opensense.network or to database
+				response.setUserLists(this.getUserLists());//TODO implement with request to opensense.network or to database
+				break;
+			case MYSENSORS:
+				response.setMySensors(ClientRequestHandler.getInstance().getMySensorIds(SessionUser.getInstance().getToken()));
 				break;
 			default:
 				break;
@@ -69,24 +70,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		return response;
 	}
 
-	@Deprecated
-	@Override
-	public Map<Integer, String> getMeasurands() { //TODO: change the way of request  to getDataFromRequest
-		Map<Integer, Measurand> measurandMap;
-		try {
-			measurandMap = ClientRequestHandler.getInstance().getMeasurandMap();
-		} catch (Exception e) {
-			LOGGER.log(Level.WARNING, "Failure", e);
-			return null;
-		}
-		if(measurandMap==null) {
-			return null;
-		}
-		Map<Integer, String> measurandStringMap = new HashMap<>();
-		measurandMap.forEach((id,measurand) -> measurandStringMap.put(id,measurand.getDisplayName()));
-		return measurandStringMap;
-	}
-
 	@Override
 	public void setServerLanguage(String lang) {
 		if("en".equals(lang)) {
@@ -94,20 +77,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}else {
 			ServerLanguages.setGerman();
 		}
-	}
-
-	@Deprecated
-	@Override
-	public Map<Integer, ValuePreview> getSensorValuePreview(List<Integer> ids) {  //TODO: change the way of request  to getDataFromRequest
-		HashMap<Integer, ValuePreview> previewMap = new HashMap<>();
-		ids.forEach(id -> {
-			try {
-				previewMap.put(id, ClientRequestHandler.getInstance().getValuePreview(id));
-			} catch (Exception e) {
-				LOGGER.log(Level.WARNING, "Failure", e);
-			}
-		});
-		return previewMap;
 	}
 
 	private final Map<Integer, UserList> lists = new HashMap<>();
@@ -123,10 +92,11 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		return list;
 	}
 
-	public ActionResult addSensorsToUserList(Integer listId, Integer sensorId) { //TODO:
+	@Override
+	public ActionResult addSensorsToUserList(int listId, List<Integer> sensors) {
 		if(this.lists.containsKey(listId)) {
 			UserList list = this.lists.get(listId);
-			list.getSensorIds().add(sensorId);
+			sensors.forEach(list.getSensorIds()::add);
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
 		return new ActionResult(ActionResultType.FAILED);
@@ -143,18 +113,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
 		return new ActionResult(ActionResultType.FAILED);
-	}
-
-	@Override
-	public List<Integer> getMySensorsUserList() { // this method could be added in the get data from request (LIST)
-		List<Integer> mySensorIds;
-		try {
-			mySensorIds = ClientRequestHandler.getInstance().getMySensorIds(SessionUser.getInstance().getToken());
-		} catch (Exception e) {
-			LOGGER.log(Level.WARNING, "Failure", e);
-			return null;
-		}
-		return mySensorIds;
 	}
 
 	@Override
@@ -178,7 +136,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	}
 
 	@Deprecated
-	@Override
 	public List<MinimalSensor> getMinimalSensorData(List<Integer> sensorIds) {
 		try{
 			return ClientRequestHandler.getInstance().getMinimalSensorList(null, sensorIds);

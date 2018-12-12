@@ -12,10 +12,12 @@ import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.ListManager;
+import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.ListManagerView;
 import com.opensense.dashboard.client.view.ListManagerViewImpl;
 import com.opensense.dashboard.shared.ActionResult;
-import com.opensense.dashboard.shared.MinimalSensor;
+import com.opensense.dashboard.shared.Response;
+import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.UserList;
 
 public class ListManagerPresenter implements IPresenter, ListManagerView.Presenter{
@@ -46,27 +48,28 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		if(this.controller.isUserLoggedIn()) {
 			this.view.showMySensorListsItem(true);
 			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
-				if((result != null) && !result.isEmpty()) {
+				if((result != null)) {
 					result.forEach(userList -> {
 						this.view.addNewUserListItem(userList);
 						this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
 					});
 
 				}else {
-					GWT.log("Shit");
+					GWT.log("Shit1");
 				}
 			}, caught -> {
 				GWT.log("Shit2");
 			},true));
-			GeneralService.Util.getInstance().getMySensorsUserList(new DefaultAsyncCallback<List<Integer>>(result -> {
-				if((result != null) && !result.isEmpty()) {
-					this.getMinimalSensorDataAndShow(-3, result, false);
+			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MYSENSORS, false);
+			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMyListSensors() != null)){
+					this.getMinimalSensorDataAndShow(-3, result.getMyListSensors(), false);
 				}else {
 					this.view.setSensorsInList(-3, new ArrayList<>());
-					GWT.log("Shit1");
+					GWT.log("Shit3");
 				}
 			}, caught -> {
-				GWT.log("Shit3");
+				GWT.log("Shit4");
 			},true));
 		}else {
 			this.view.showMySensorListsItem(false);
@@ -78,10 +81,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			if(result != null) {
 				this.view.addNewUserListItem(result);
 			}else {
-				GWT.log("Shit1");
+				GWT.log("Shit5");
 			}
 		}, caught -> {
-			GWT.log("Shit3");
+			GWT.log("Shit6");
 		},true));
 	}
 
@@ -91,10 +94,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			if(result != null) {
 				this.view.removeListItem(listId);
 			}else {
-				GWT.log("Shit1");
+				GWT.log("Shit7");
 			}
 		}, caught -> {
-			GWT.log("Shit3");
+			GWT.log("Shit8");
 		},true));
 	}
 
@@ -159,25 +162,27 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			if(result != null) {
 				//TODO: the list name should only set in ui if serverCall was successful
 			}else {
-				GWT.log("Shit1");
+				GWT.log("Shit9");
 			}
 		}, caught -> {
-			GWT.log("Shit3");
+			GWT.log("Shit10");
 		},true));
 	}
 
 	public void getMinimalSensorDataAndShow(final int listId, final List<Integer> sensorIds, final boolean selectAll) {
-		GeneralService.Util.getInstance().getMinimalSensorData(sensorIds, new DefaultAsyncCallback<List<MinimalSensor>>(result -> {
-			if(result != null) {
-				this.view.setSensorsInList(listId, result);
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MINIMAL_SENSOR, false);
+		sensorIds.forEach(requestBuilder::addId);
+		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMinimalSensors() != null)) {
+				this.view.setSensorsInList(listId, result.getMinimalSensors());
 				if(selectAll) {
 					this.view.selectAllSensorsInList(listId);
 				}
 			}else {
-				GWT.log("Shit1");
+				GWT.log("Shit11");
 			}
 		}, caught -> {
-			GWT.log("Shit3");
+			GWT.log("Shit12");
 		},true));
 	}
 }
