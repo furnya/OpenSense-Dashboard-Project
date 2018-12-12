@@ -1,7 +1,6 @@
 package com.opensense.dashboard.client.utils;
 
 import java.util.List;
-import java.util.Map;
 
 import com.opensense.dashboard.client.event.SelectedSensorsChangeEvent;
 import com.opensense.dashboard.client.event.SelectedSensorsChangeEventHandler;
@@ -87,14 +86,7 @@ public class ListManager {
 		this.presenter.updateSelectedSensorsList(ids);
 	}
 
-	/**
-	 * @param sensorColors map of sensor ids with their new background color
-	 */
-	public void setSelectedSensorItemsColor(Map<Integer, String> sensorColors) {
-		this.presenter.setSelectedSensorItemsColor(sensorColors);
-	}
-	
-	public ListManagerViewImpl getView() {
-		return this.view;
+	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
+		this.presenter.setSelectedSensorItemsColor(sensorId, sensorColor);
 	}
 }
