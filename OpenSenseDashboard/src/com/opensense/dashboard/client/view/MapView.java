@@ -28,7 +28,6 @@ public interface MapView extends IDataPanelPageView{
 	public void showMarkers(List<Sensor> sensorlist);
 	public void resetMarkerAndCluster();
 	public MapWidget getMapWidget();
-//	public Map<Integer, Marker> getMarkers();
 	public ListManager getListManager();
 	public void addPlusCluster(Marker marker);
 	public void checkForSpiderfierMarkers();
