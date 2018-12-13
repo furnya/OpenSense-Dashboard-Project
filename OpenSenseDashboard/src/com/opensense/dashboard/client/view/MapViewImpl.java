@@ -43,7 +43,6 @@ import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
 import com.opensense.dashboard.client.utils.MarkerInfoWindow;
 import com.opensense.dashboard.client.utils.MeasurandIconHelper;
-import com.opensense.dashboard.client.utils.PagerSize;
 import com.opensense.dashboard.shared.Sensor;
 
 public class MapViewImpl extends DataPanelPageView implements MapView {
@@ -116,14 +115,19 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(),
 				this.sensorContainer);
 		listManagerOptions.setEditingActive(true);
-		listManagerOptions.setPagerSize(PagerSize.SMALL);
+		listManagerOptions.setPagerSize(com.opensense.dashboard.client.model.Size.SMALL);
+		listManagerOptions.setSpinnerSize(com.opensense.dashboard.client.model.Size.SMALL);
 		listManagerOptions.setShowMapButton(false);
 		listManagerOptions.setShowSearchButton(false);
 		listManagerOptions.setShowVisualizationButton(false);
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
-			this.presenter.buildSensorRequestFromIdsAndShowMarkers(event.getSelectedIds());
+			if(!event.getSelectedIds().isEmpty()) {
+				this.presenter.buildSensorRequestFromIdsAndShowMarkers(event.getSelectedIds());
+			}else {
+				this.resetMarkerAndCluster();
+			}
 		});
 
 	}

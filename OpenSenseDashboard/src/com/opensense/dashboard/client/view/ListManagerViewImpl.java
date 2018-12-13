@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -17,12 +16,14 @@ import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.event.SelectedSensorsChangeEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.model.DefaultListItem;
+import com.opensense.dashboard.client.model.Size;
 import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListCollapsibleItem;
+import com.opensense.dashboard.client.utils.ListManagerOptions;
 import com.opensense.dashboard.client.utils.MeasurandIconHelper;
 import com.opensense.dashboard.client.utils.Pager;
-import com.opensense.dashboard.client.utils.PagerSize;
 import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.UserList;
 
@@ -59,61 +60,20 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	 */
 	@Override
 	public void initDefaultLists(Runnable runnable) {
-		ListCollapsibleItem favoriteListItem = new ListCollapsibleItem();
-		favoriteListItem.setName(Languages.favorites());
-		favoriteListItem.setListIcon(GUIImageBundle.INSTANCE.favoriteRed().getSafeUri().asString());
-		favoriteListItem.addHeaderClickedHandler(event -> this.onSelectedItemsChanged());
-		favoriteListItem.addSelectAllButtonClickHandler(event -> this.selectAllSensorsInList(-1, event.isSelectAll()));
-		favoriteListItem.addShowOnMapButtonClickHandler(event -> {
+		// Create favorite list
+		this.addNewUserListItem(new UserList(DefaultListItem.FAVORITE_LIST_ID, Languages.favorites()), false);
+		this.collapsiblesItems.get(DefaultListItem.FAVORITE_LIST_ID).setListIcon(GUIImageBundle.INSTANCE.favoriteRed().getSafeUri().asString());
+		//		this.collapsiblesItems.get(DefaultListItem.FAVORITE_LIST_ID).setActive();
+		this.activeItemId = DefaultListItem.FAVORITE_LIST_ID;
 
-		});
-		favoriteListItem.addShowVisualizationsButtonClickHandler(event -> {
 
-		});
-		//		item.addAddToListButtonButtonClickHandler(event -> {
-		//
-		//		});
-		this.collapsiblesItems.put(-1, favoriteListItem);
-		this.initPager(-1);
-		this.collapsible.add(favoriteListItem);
-		this.activeItemId = -1;
-		favoriteListItem.getCollapsibleItem().setActive(true);
-		favoriteListItem.getCollapsibleItem().getElement().getStyle().clearDisplay();
+		// Create selected sensors list
+		this.addNewUserListItem(new UserList(DefaultListItem.SELECTED_LIST_ID, Languages.selectedSensors()), false);
+		this.collapsiblesItems.get(DefaultListItem.SELECTED_LIST_ID).showItem(false);
 
-		ListCollapsibleItem selectedSensorsListItem = new ListCollapsibleItem();
-		selectedSensorsListItem.setName(Languages.selectedSensors());
-		selectedSensorsListItem.addSelectAllButtonClickHandler(event -> this.selectAllSensorsInList(-2, event.isSelectAll()));
-		selectedSensorsListItem.addHeaderClickedHandler(event -> this.onSelectedItemsChanged());
-		selectedSensorsListItem.addShowOnMapButtonClickHandler(event -> {
-
-		});
-		selectedSensorsListItem.addShowVisualizationsButtonClickHandler(event -> {
-
-		});
-		//		item.addAddToListButtonButtonClickHandler(event -> {
-		//
-		//		});
-		this.collapsiblesItems.put(-2, selectedSensorsListItem);
-		this.initPager(-2);
-		this.collapsible.add(selectedSensorsListItem);
-
-		ListCollapsibleItem mySensorListsItem = new ListCollapsibleItem();
-		mySensorListsItem.setName(Languages.mySensors());
-		mySensorListsItem.setListIcon(GUIImageBundle.INSTANCE.mySesnors().getSafeUri().asString());
-		mySensorListsItem.addSelectAllButtonClickHandler(event -> this.selectAllSensorsInList(-3, event.isSelectAll()));
-		mySensorListsItem.addHeaderClickedHandler(event -> this.onSelectedItemsChanged());
-		mySensorListsItem.addShowOnMapButtonClickHandler(event -> {
-
-		});
-		mySensorListsItem.addShowVisualizationsButtonClickHandler(event -> {
-
-		});
-		//		item.addAddToListButtonButtonClickHandler(event -> {
-		//
-		//		});
-		this.collapsiblesItems.put(-3, mySensorListsItem);
-		this.initPager(-3);
-		this.collapsible.add(mySensorListsItem);
+		// Create my sensors list
+		this.addNewUserListItem(new UserList(DefaultListItem.MY_LIST_ID, Languages.mySensors()), false);
+		this.collapsiblesItems.get(DefaultListItem.MY_LIST_ID).setListIcon(GUIImageBundle.INSTANCE.mySesnors().getSafeUri().asString());
 		runnable.run();
 	}
 
@@ -123,46 +83,57 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void addNewUserListItem(final UserList userList) {
+	public void addNewUserListItem(final UserList userList, boolean addDeleteListButton) {
+		final int listId = userList.getListId();
+		final ListManagerOptions options = this.presenter.getController().getOptions();
+
 		ListCollapsibleItem item = new ListCollapsibleItem();
 		item.setName(userList.getListName());
-		item.addListNameInputHandler(event -> this.presenter.changeListName(userList.getListId(), event.getListName()));
-		item.addDeleteButtonClickHandler(event -> this.deleteList(userList.getListId()));
-		item.addSelectAllButtonClickHandler(event -> this.selectAllSensorsInList(userList.getListId(), event.isSelectAll()));
+		item.setSpinnerSize(options.getSpinnerSize());
+		item.addSelectAllButtonClickHandler(event -> this.selectAllSensorsInList(listId, event.isSelectAll()));
 		item.addHeaderClickedHandler(event -> this.onSelectedItemsChanged());
-		item.addShowOnMapButtonClickHandler(event -> {
 
-		});
-		item.addShowVisualizationsButtonClickHandler(event -> {
-
-		});
-		//		item.addAddToListButtonButtonClickHandler(event -> {
-		//
-		//		});
+		if(options.isEditingActive()) {
+			item.addListNameInputHandler(event -> this.presenter.changeListName(listId, event.getListName()));
+		}
+		if(addDeleteListButton && options.isEditingActive()) {
+			item.addDeleteButtonClickHandler(event -> this.deleteList(listId));
+		}
+		if(options.isShowMapButton()) {
+			item.addShowOnMapButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, this.selectedSensorIdsInLists.get(this.activeItemId))));
+		}
+		if(options.isShowVisualizationButton()) {
+			item.addShowVisualizationsButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, this.selectedSensorIdsInLists.get(this.activeItemId))));
+		}
+		if(options.isShowSearchButton()) {
+			item.addShowSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, this.selectedSensorIdsInLists.get(this.activeItemId))));
+		}
+		if(options.isEditingActive()) {
+			//		item.addAddToListButtonButtonClickHandler(event -> {
+			//
+			//		});
+		}
 		this.collapsible.add(item);
-		this.collapsiblesItems.put(userList.getListId(), item);
-		item.getCollapsibleItem().getElement().getStyle().clearDisplay();
+		this.collapsiblesItems.put(listId, item);
+		this.initPager(listId);
+		item.showItem(true);
 	}
 
 	public void deleteList(int listId) {
-		this.presenter.deleteList(listId);
+		this.presenter.deleteUserList(listId);
 	}
 
-	@Override
-	public void removeListItem(int listId) {
-		this.collapsiblesItems.get(listId).removeFromParent();
-		this.collapsiblesItems.remove(listId);
-	}
 
 	@Override
 	public void setSensorsInList(final int listId, final List<MinimalSensor> sensors) {
 		final Map<Integer, BasicSensorItemCard> sensorCards = new HashMap<>();
 		final List<Integer> showSensorIds = new ArrayList<>();
+		this.collapsiblesItems.get(listId).showItemSpinner(false);
 		if(sensors.isEmpty()) {
 			this.collapsiblesItems.get(listId).setSelectAllButtonEnabled(false);
-			this.collapsiblesItems.get(listId).getNoDataIndicator().getElement().getStyle().clearDisplay();
+			this.collapsiblesItems.get(listId).showNoDataIndicator(true);
 		}else {
-			this.collapsiblesItems.get(listId).getNoDataIndicator().getElement().getStyle().setDisplay(Display.NONE);
+			this.collapsiblesItems.get(listId).showNoDataIndicator(false);
 			sensors.forEach(sensor -> {
 				final List<Integer> idList = new ArrayList<>();
 				idList.add(sensor.getSensorId());
@@ -201,7 +172,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	private void initPager(final int listId) {
-		final PagerSize pagerSize = this.presenter.getController().getOptions().getPagerSize();
+		final Size pagerSize = this.presenter.getController().getOptions().getPagerSize();
 		final int maxObjectOnPage = this.presenter.getController().getOptions().getMaxObjectOnPage();
 
 		final Pager pagerTop = this.collapsiblesItems.get(listId).getTopPager();
@@ -237,20 +208,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@Override
 	public void showMySensorListsItem(boolean show) {
-		if(show) {
-			this.collapsiblesItems.get(-3).getCollapsibleItem().getElement().getStyle().clearDisplay();
-		}else {
-			this.collapsiblesItems.get(-3).getCollapsibleItem().getElement().getStyle().setDisplay(Display.NONE);
-		}
+		this.collapsiblesItems.get(DefaultListItem.MY_LIST_ID).showItem(show);
 	}
 
 	@Override
 	public void showSelectedSensorListsItem(boolean show) {
-		if(show) {
-			this.collapsiblesItems.get(-2).getCollapsibleItem().getElement().getStyle().clearDisplay();
-		}else {
-			this.collapsiblesItems.get(-2).getCollapsibleItem().getElement().getStyle().setDisplay(Display.NONE);
-		}
+		this.collapsiblesItems.get(DefaultListItem.SELECTED_LIST_ID).showItem(show);
 	}
 
 	@Override
@@ -278,7 +241,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		}else {
 			this.selectedSensorIdsInLists.get(listId).forEach(id -> this.sensorCardsInLists.get(listId).get(id).setActive(false));
 		}
-		this.selectedSensorIdsInLists.put(listId, selectedSensors);
+		this.selectedSensorIdsInLists.replace(listId, selectedSensors);
 		this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(selectedSensors));
 	}
 
@@ -304,8 +267,10 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@Override
 	public void setCollapsibleListItemSelected(int listId) {
-		//		this.collapsible.setActive(2, true); //TODO:
-		//		this.collapsiblesItems.get(listId).setActive();
+		//		this.collapsible.closeAll();
+		//		this.collapsible.closeAll();
+		//		this.collapsible.open(2);
+		//		this.collapsible.reinitialize();
 	}
 
 	@Override

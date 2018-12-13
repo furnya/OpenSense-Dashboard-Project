@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.PaginationEvent;
 import com.opensense.dashboard.client.event.PaginationEventHandler;
+import com.opensense.dashboard.client.model.Size;
 
 import gwt.material.design.client.ui.MaterialButton;
 
@@ -44,7 +45,7 @@ public class Pager extends Composite{
 
 	public Pager() {
 		this.initWidget(uiBinder.createAndBindUi(this));
-		this.setPagerSize(PagerSize.MEDIUM);
+		this.setPagerSize(Size.MEDIUM);
 	}
 
 	public void addForwardsStepByStepClickHandler(ClickHandler handler) {
@@ -135,7 +136,7 @@ public class Pager extends Composite{
 		}
 	}
 
-	public void setPagerSize(PagerSize pagerSize) {
+	public void setPagerSize(Size pagerSize) {
 		this.getElement().setAttribute("size", pagerSize.name().toLowerCase());
 	}
 

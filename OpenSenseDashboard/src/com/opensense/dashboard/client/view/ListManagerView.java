@@ -11,7 +11,7 @@ import com.opensense.dashboard.shared.UserList;
 public interface ListManagerView {
 
 	public interface Presenter {
-		void deleteList(int listId);
+		void deleteUserList(int listId);
 		void deleteSensorsInList(int listId, List<Integer> sensorCardId);
 		HandlerManager getEventBus();
 		ListManager getController();
@@ -19,15 +19,14 @@ public interface ListManagerView {
 	}
 
 	public Widget asWidget();
-	public void removeListItem(int listId);
 	public void setPresenter(Presenter listManagerPresenter);
 	public void initDefaultLists(Runnable object);
 	public void showMySensorListsItem(boolean b);
 	public void showSelectedSensorListsItem(boolean b);
 	public void clearUserLists();
-	public void addNewUserListItem(UserList result);
 	public void selectAllSensorsInList(int listId);
 	public void setCollapsibleListItemSelected(int listId);
 	public void setSensorsInList(int listId, List<MinimalSensor> sensors);
 	public void setSelectedSensorItemsColor(int sensorId, String sensorColor);
+	public void addNewUserListItem(UserList userList, boolean addDeleteListButton);
 }

@@ -24,7 +24,11 @@
 	margin-bottom: 0px !important; 
 }
 .del-icon{
-    width: 20px
+    width: 20px;
+    position: absolute;
+    right: 0px;
+    top: 10px;
+    filter: invert(20%);
 }
 .float-right{
 	margin-left: 15px;
@@ -83,6 +87,9 @@
 	<m:MaterialCollapsibleBody addStyleNames="{style.body}">
 		<bh:Div addStyleNames="flex margin-bottom-10 list-action-btns">
 			<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false"/>
+			<m:MaterialButton display="NONE" ui:field="showOnSearchButton" text="{lang.seletedShowOnSearch}" textColor="WHITE" addStyleNames="d-btn" enabled="false" >
+				<m:MaterialImage url="{gui.searchIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
 			<m:MaterialButton display="NONE" ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn" enabled="false" >
 				<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 			</m:MaterialButton>
@@ -96,9 +103,7 @@
 			</m:MaterialDropDown>
 		</bh:Div>
 		<d:Pager ui:field="pagerTop" addStyleNames="pager"/>
-		<m:MaterialPreLoader ui:field="listItemSpinner" display="NONE" addStyleNames="margin-top-10 spinner">
-			<m:MaterialSpinner/>
-		</m:MaterialPreLoader>
+		<d:Spinner ui:field="listItemSpinner" addStyleNames="margin-top-10"/>
 		<bh:Div ui:field="noDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
 			<bh:Span text="{lang.noListData}"/>
 		</bh:Div>

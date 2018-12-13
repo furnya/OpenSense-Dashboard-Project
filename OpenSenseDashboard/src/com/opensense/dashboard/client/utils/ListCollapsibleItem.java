@@ -21,13 +21,13 @@ import com.opensense.dashboard.client.event.ListNameChangedEvent;
 import com.opensense.dashboard.client.event.ListNameChangedEventHandler;
 import com.opensense.dashboard.client.event.SensorSelectionEvent;
 import com.opensense.dashboard.client.event.SensorSelectionEventHandler;
+import com.opensense.dashboard.client.model.Size;
 
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialCollapsibleHeader;
 import gwt.material.design.client.ui.MaterialCollapsibleItem;
 import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialImage;
-import gwt.material.design.client.ui.MaterialPreLoader;
 import gwt.material.design.client.ui.MaterialTextBox;
 
 public class ListCollapsibleItem extends Composite{
@@ -55,7 +55,7 @@ public class ListCollapsibleItem extends Composite{
 	Pager pagerBottom;
 
 	@UiField
-	MaterialPreLoader listItemSpinner;
+	Spinner listItemSpinner;
 
 	@UiField
 	Div noDataIndicator;
@@ -68,6 +68,9 @@ public class ListCollapsibleItem extends Composite{
 
 	@UiField
 	MaterialButton showOnMapButton;
+
+	@UiField
+	MaterialButton showOnSearchButton;
 
 	@UiField
 	MaterialButton showVisualizationsButton;
@@ -91,6 +94,11 @@ public class ListCollapsibleItem extends Composite{
 
 	public ListCollapsibleItem() {
 		this.initWidget(uiBinder.createAndBindUi(this));
+		this.showNoDataIndicator(false);
+	}
+
+	public void setSpinnerSize(Size spinnerSize) {
+		this.listItemSpinner.setSize(spinnerSize);
 	}
 
 	public void setName(String name) {
@@ -116,7 +124,8 @@ public class ListCollapsibleItem extends Composite{
 	}
 
 	public void addShowSearchButtonClickHandler(ClickHandler handler) {
-		//TODO:
+		this.showOnSearchButton.getElement().getStyle().clearDisplay();
+		this.showOnSearchButton.addClickHandler(handler);
 	}
 
 	public void addShowOnMapButtonClickHandler(ClickHandler handler) {
@@ -134,6 +143,7 @@ public class ListCollapsibleItem extends Composite{
 	}
 
 	public void setGoToButtonEnabled(boolean enabled) {
+		this.showOnSearchButton.setEnabled(enabled);
 		this.showVisualizationsButton.setEnabled(enabled);
 		this.showOnMapButton.setEnabled(enabled);
 		this.addToListButton.setEnabled(enabled);
@@ -207,10 +217,6 @@ public class ListCollapsibleItem extends Composite{
 		this.listIcon.getElement().getStyle().clearDisplay();
 	}
 
-	public MaterialCollapsibleItem getCollapsibleItem() {
-		return this.sensorItem;
-	}
-
 	public boolean isActive() {
 		return this.sensorItem.getElement().getClassName().contains("active");
 	}
@@ -224,6 +230,30 @@ public class ListCollapsibleItem extends Composite{
 			this.selectAllButton.setText(Languages.selectAllSensors());
 		}else {
 			this.selectAllButton.setText(Languages.deselectAllSensors());
+		}
+	}
+
+	public void showItem(boolean show) {
+		if(show) {
+			this.sensorItem.getElement().getStyle().clearDisplay();
+		}else{
+			this.sensorItem.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+
+	public void showItemSpinner(boolean show) {
+		if(show) {
+			this.listItemSpinner.getElement().getStyle().clearDisplay();
+		}else{
+			this.listItemSpinner.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+
+	public void showNoDataIndicator(boolean show) {
+		if(show) {
+			this.noDataIndicator.getElement().getStyle().clearDisplay();
+		}else{
+			this.noDataIndicator.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}
 

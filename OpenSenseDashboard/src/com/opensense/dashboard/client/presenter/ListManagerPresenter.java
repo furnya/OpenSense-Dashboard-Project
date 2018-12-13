@@ -8,6 +8,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.RemoveSensorsFromFavoriteListEvent;
+import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
@@ -44,16 +45,20 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	 */
 	public void updateLists() {
 		this.updateFavoriteList();
+		//		this.updateSelectedSensorsList(new ArrayList<>());
 		this.view.clearUserLists();
 		if(this.controller.isUserLoggedIn()) {
 			this.view.showMySensorListsItem(true);
 			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
 				if((result != null)) {
 					result.forEach(userList -> {
-						this.view.addNewUserListItem(userList);
-						this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
+						this.view.addNewUserListItem(userList, true);
+						if(!userList.getSensorIds().isEmpty()) {
+							this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
+						}else {
+							this.view.setSensorsInList(userList.getListId(), new ArrayList<>());
+						}
 					});
-
 				}else {
 					GWT.log("Shit1");
 				}
@@ -62,11 +67,11 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			},true));
 			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MYSENSORS, false);
 			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
-				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMyListSensors() != null)){
-					this.getMinimalSensorDataAndShow(-3, result.getMyListSensors(), false);
+				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMyListSensors() != null)
+						&& !result.getMyListSensors().isEmpty()){
+					this.getMinimalSensorDataAndShow(DefaultListItem.MY_LIST_ID, result.getMyListSensors(), false);
 				}else {
-					this.view.setSensorsInList(-3, new ArrayList<>());
-					GWT.log("Shit3");
+					this.view.setSensorsInList(DefaultListItem.MY_LIST_ID, new ArrayList<>());
 				}
 			}, caught -> {
 				GWT.log("Shit4");
@@ -79,7 +84,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	public void createNewList() {
 		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<UserList>(result -> {
 			if(result != null) {
-				this.view.addNewUserListItem(result);
+				this.view.addNewUserListItem(result, true);
 			}else {
 				GWT.log("Shit5");
 			}
@@ -89,10 +94,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 
 	@Override
-	public void deleteList(final int listId) {
+	public void deleteUserList(final int listId) {
 		GeneralService.Util.getInstance().deleteUserList(listId, new DefaultAsyncCallback<ActionResult>(result -> {
 			if(result != null) {
-				this.view.removeListItem(listId);
+				this.updateLists();
 			}else {
 				GWT.log("Shit7");
 			}
@@ -117,7 +122,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	@Override
 	public void deleteSensorsInList(final int listId, final List<Integer> sensorIds) {
 		// TODO Auto-generated method stub
-		if(listId == -1) { // -1 fav list, -2 selected sensor list, -3 mysensor list
+		if(listId == DefaultListItem.FAVORITE_LIST_ID) {
 			this.eventBus.fireEvent(new RemoveSensorsFromFavoriteListEvent(sensorIds));
 		}
 	}
@@ -135,17 +140,17 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	public void updateFavoriteList() {
 		List<Integer> favoriteIds = CookieManager.getFavoriteList();
 		if(!favoriteIds.isEmpty()) {
-			this.getMinimalSensorDataAndShow(-1, favoriteIds, false);
+			this.getMinimalSensorDataAndShow(DefaultListItem.FAVORITE_LIST_ID, favoriteIds, false);
 		}else {
-			this.view.setSensorsInList(-1, new ArrayList<>());
+			this.view.setSensorsInList(DefaultListItem.FAVORITE_LIST_ID, new ArrayList<>());
 		}
 	}
 
 	public void updateSelectedSensorsList(List<Integer> idList) {
 		if(!idList.isEmpty()) {
 			this.view.showSelectedSensorListsItem(true);
-			this.view.setCollapsibleListItemSelected(-2);
-			this.getMinimalSensorDataAndShow(-2, idList, true);
+			this.view.setCollapsibleListItemSelected(DefaultListItem.SELECTED_LIST_ID);
+			this.getMinimalSensorDataAndShow(DefaultListItem.SELECTED_LIST_ID, idList, true);
 		}else {
 			this.view.showSelectedSensorListsItem(false);
 		}
