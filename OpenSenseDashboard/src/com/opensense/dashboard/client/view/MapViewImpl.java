@@ -209,10 +209,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 				this.lastOpened = null;
 			}
 			if (this.mapWidget.getZoom() > 15) {
-				GWT.log("ADD");
-				//				this.fakeClick(this.markers.get(1), this.markers.get(1).getPosition());
-				this.checkForSpiderfierMarkers();
 				this.cluster.repaint();
+				this.checkForSpiderfierMarkers();
 			}
 			if (this.mapWidget.getZoom() <= 15) {
 				this.plusClusterIcons.forEach(Marker::clear);
