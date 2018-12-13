@@ -73,7 +73,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private Map<Integer, Marker> markers = new HashMap<>();
 	private List<Integer> sensIds = new ArrayList<>();
 	private List<Marker> mList = new ArrayList<>();
-	private List<List<Sensor>> listOfSensors = new ArrayList<>();
 	private MapOptions mapOptions;
 	private Marker plusCluster;
 	private List<Marker> plusClusters = new ArrayList<>();
@@ -85,6 +84,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private Button visuBtn = new Button();
 
 	private MarkerClusterer cluster;
+	private LatLng currentPlus;
+	
 	// This should be a HashMap
 	// ########################################################################
 	/*
@@ -95,7 +96,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private InfoWindow lastOpened;
 	private Map<Marker, InfoWindow> infoWindows = new HashMap<>();
 	private Map<Integer, MarkerInfoWindow> iwsFromMarkers = new HashMap<>();
-	private LatLng currentPlus;
+	
 
 	public MapViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));

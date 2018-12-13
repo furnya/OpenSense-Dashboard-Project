@@ -26,6 +26,7 @@
 	.data>Span {
 		font-size: 13px;
 	}
+	
 	.movedown{
 		margin-top: 5px  !important;
 	}
@@ -38,10 +39,6 @@
 			<d:Rating ui:field="rating" rating="0" addStyleNames="{style.movedown}" />
 		</bh:Div>
 		<bh:Div ui:field="data" addStyleNames="{style.data}" />
-		<!-- <m:MaterialButton ui:field="iwSearchBtn" width="45%" text="search" 
-			textColor="WHITE" addStyleNames="d-btn margin-buttom-20"/> <m:MaterialButton 
-			ui:field="iwVisuBtn" width="45%" text="visu" textColor="WHITE" addStyleNames="d-btn 
-			margin-buttom-20"/> -->
 	</bh:Div>
 
 </ui:UiBinder>
