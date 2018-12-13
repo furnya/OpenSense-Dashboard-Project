@@ -11,8 +11,10 @@ import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.maps.client.base.LatLngBounds;
 import com.google.gwt.maps.client.placeslib.Autocomplete;
 import com.google.gwt.maps.client.placeslib.AutocompleteOptions;
@@ -32,6 +34,7 @@ import com.opensense.dashboard.client.utils.Pager;
 import com.opensense.dashboard.client.utils.SensorItemCard;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Sensor;
+import com.opensense.dashboard.shared.UserList;
 import com.opensense.dashboard.shared.ValuePreview;
 
 import gwt.material.design.client.base.validator.RegExValidator;
@@ -113,6 +116,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@UiField
 	MaterialCheckBox onlySensorsWithValueBox;
 
+	@UiField
+	MaterialLink listDropDownSpinner;
+
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
 	protected Presenter presenter;
@@ -139,6 +145,13 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		this.autoComplete = Autocomplete.newInstance(this.searchInput.getElement(), autoOptions);
 		this.buildValidators();
 		this.addToListButton.add(new Image(GUIImageBundle.INSTANCE.listIconSvg().getSafeUri().asString()));
+
+		this.container.addDomHandler(event -> {
+			this.blurElement(this.container.getElement()); //blur listDropDown
+			this.listDropDown.getElement().getStyle().setDisplay(Display.NONE);
+		}, MouseWheelEvent.getType());
+
+		this.listDropDown.addMouseWheelHandler(MouseWheelEvent::stopPropagation);
 	}
 
 	@UiHandler("searchButton")
@@ -149,6 +162,19 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			this.showLoadingIndicator();
 			this.presenter.buildSensorRequestAndSend();
 		}
+	}
+
+	@UiHandler("addToListButton")
+	public void onAddToListButtonClicked(ClickEvent e) {
+		this.clearListsDropDown();
+		this.showListDropDownSpinner(true);
+		this.presenter.getListsAndShow();
+	}
+
+	@UiHandler("listDropDownSpinner")
+	public void onListDropDownSpinnerClicked(ClickEvent e) {
+		e.stopPropagation();
+		e.preventDefault();
 	}
 
 	@UiHandler("showOnMapButton")
@@ -455,4 +481,33 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public boolean getOnlySensorsWithValueBox() {
 		return this.onlySensorsWithValueBox.getValue();
 	}
+
+	public void showListDropDownSpinner(boolean show) {
+		if(show) {
+			this.listDropDownSpinner.getParent().getElement().getStyle().setDisplay(Display.BLOCK);
+		} else {
+			this.listDropDownSpinner.getParent().getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+
+	@Override
+	public void showUserListsInDropDown(List<UserList> userLists) {
+		this.showListDropDownSpinner(false);
+		userLists.forEach(userList -> {
+			MaterialLink link = new MaterialLink();
+			link.setText(userList.getListName());
+			link.addClickHandler(event -> this.presenter.addSelectedSensorsToUserList(userList.getListId(), this.selectedSensors));
+			this.listDropDown.add(link);
+		});
+	}
+
+	private void clearListsDropDown() {
+		for (int i = 2; i < this.listDropDown.getChildren().size(); i++) {
+			this.listDropDown.remove(i);
+		}
+	}
+
+	private native void blurElement(Element elem) /*-{
+		elem.click();
+	}-*/;
 }

@@ -208,11 +208,11 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 				this.lastOpened.close();
 				this.lastOpened = null;
 			}
-			if (this.mapWidget.getZoom() > 15) {
+			if ((this.mapWidget.getZoom() > 15) && (this.cluster != null)) {
 				this.cluster.repaint();
 				this.checkForSpiderfierMarkers();
 			}
-			if (this.mapWidget.getZoom() <= 15) {
+			if ((this.mapWidget.getZoom() <= 15) && (this.cluster != null)) {
 				this.plusClusterIcons.forEach(Marker::clear);
 				this.plusClusterIcons.clear();
 				this.cluster.repaint();

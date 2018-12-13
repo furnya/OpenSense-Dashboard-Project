@@ -1,6 +1,5 @@
 package com.opensense.dashboard.server.logic;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,7 +15,6 @@ import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.server.util.SessionUser;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
-import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.UserList;
@@ -143,13 +141,4 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		return new ActionResult(ActionResultType.FAILED);
 	}
 
-	@Deprecated
-	public List<MinimalSensor> getMinimalSensorData(List<Integer> sensorIds) {
-		try{
-			return ClientRequestHandler.getInstance().getMinimalSensorList(null, sensorIds);
-		}catch(IOException e) {
-			LOGGER.log(Level.WARNING, "Failure", e);
-			return new LinkedList<>();
-		}
-	}
 }
