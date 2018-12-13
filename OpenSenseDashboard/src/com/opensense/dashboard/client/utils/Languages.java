@@ -228,14 +228,6 @@ public class Languages {
 		}
 	}
 
-	public static String showOnMap() {
-		if(de) {
-			return "Auf Karte zeigen";
-		}else {
-			return "Show on map";
-		}
-	}
-
 	public static String past24Hours() {
 		if(de) {
 			return "Letzte 24h";
@@ -299,11 +291,20 @@ public class Languages {
 			return "To";
 		}
 	}
+
 	public static String seletedShowOnMap() {
 		if(de) {
 			return "Auf Karte zeigen";
 		}else {
 			return "Show on map";
+		}
+	}
+
+	public static String seletedShowOnSearch() {
+		if(de) {
+			return "In Suche zeigen";
+		}else {
+			return "Show on search";
 		}
 	}
 

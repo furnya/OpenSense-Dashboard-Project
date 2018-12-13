@@ -103,6 +103,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		if(this.lists.containsKey(listId)) {
 			UserList list = this.lists.get(listId);
 			sensors.forEach(list.getSensorIds()::add);
+			this.lists.replace(listId, list);
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
 		return new ActionResult(ActionResultType.FAILED);

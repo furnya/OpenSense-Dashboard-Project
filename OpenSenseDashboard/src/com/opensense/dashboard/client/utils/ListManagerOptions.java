@@ -2,6 +2,7 @@ package com.opensense.dashboard.client.utils;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.opensense.dashboard.client.model.Size;
 
 public class ListManagerOptions {
 
@@ -11,8 +12,9 @@ public class ListManagerOptions {
 	private boolean showSearchButton = true;
 	private boolean showMapButton = true;
 	private boolean showVisualizationButton = true;
-	private PagerSize pagerSize = PagerSize.MEDIUM;
+	private Size pagerSize = Size.MEDIUM;
 	private int maxObjectOnPage = 10;
+	private Size spinnerSize = Size.MEDIUM;
 
 	private ListManagerOptions(HandlerManager eventBus, HasWidgets container) {
 		this.eventBus = eventBus;
@@ -63,19 +65,27 @@ public class ListManagerOptions {
 		this.editingActive = editingActive;
 	}
 
-	public void setPagerSize(PagerSize pagerSize) {
+	public void setPagerSize(Size pagerSize) {
 		this.pagerSize = pagerSize;
 	}
 
-	public PagerSize getPagerSize() {
+	public Size getPagerSize() {
 		return this.pagerSize;
 	}
 
 	public int getMaxObjectOnPage() {
-		return maxObjectOnPage;
+		return this.maxObjectOnPage;
 	}
 
 	public void setMaxObjectOnPage(int maxObjectOnPage) {
 		this.maxObjectOnPage = maxObjectOnPage;
+	}
+
+	public Size getSpinnerSize() {
+		return spinnerSize;
+	}
+
+	public void setSpinnerSize(Size spinnerSize) {
+		this.spinnerSize = spinnerSize;
 	}
 }
