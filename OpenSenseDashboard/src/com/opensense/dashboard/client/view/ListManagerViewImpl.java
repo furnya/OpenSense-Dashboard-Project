@@ -112,8 +112,14 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			//
 			//		});
 		}
+
+		if(this.collapsiblesItems.containsKey(listId)) {
+			this.collapsiblesItems.get(listId).removeFromParent();
+			this.collapsiblesItems.replace(listId, item);
+		}else {
+			this.collapsiblesItems.put(listId, item);
+		}
 		this.collapsible.add(item);
-		this.collapsiblesItems.put(listId, item);
 		this.initPager(listId);
 		item.showItem(true);
 	}
@@ -155,9 +161,21 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			});
 			this.collapsiblesItems.get(listId).setSelectAllButtonEnabled(true);
 		}
-		this.sensorCardsInLists.put(listId, sensorCards);
-		this.selectedSensorIdsInLists.put(listId, new ArrayList<>());
-		this.showSensorIdsInLists.put(listId, showSensorIds);
+		if(this.sensorCardsInLists.containsKey(listId)) {
+			this.sensorCardsInLists.replace(listId, sensorCards);
+		}else {
+			this.sensorCardsInLists.put(listId, sensorCards);
+		}
+		if(this.selectedSensorIdsInLists.containsKey(listId)) {
+			this.selectedSensorIdsInLists.replace(listId, new ArrayList<>());
+		}else {
+			this.selectedSensorIdsInLists.put(listId, new ArrayList<>());
+		}
+		if(this.showSensorIdsInLists.containsKey(listId)) {
+			this.showSensorIdsInLists.replace(listId, showSensorIds);
+		} else {
+			this.showSensorIdsInLists.put(listId, showSensorIds);
+		}
 		this.collapsiblesItems.get(listId).getTopPager().update(showSensorIds.size(), true);
 	}
 
