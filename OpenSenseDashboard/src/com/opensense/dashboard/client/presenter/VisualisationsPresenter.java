@@ -79,7 +79,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	}
 	
 	public void buildValueRequestAndSend(Integer id, DateRange dateRange, Date minDate, Date maxDate) {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.VALUE, true);
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.VALUE_AGGREGATED, true);
 		requestBuilder.setIds(new LinkedList<Integer>());
 		requestBuilder.addId(id);
 		requestBuilder.setDateRange(dateRange);

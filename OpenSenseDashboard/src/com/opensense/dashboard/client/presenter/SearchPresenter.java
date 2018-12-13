@@ -16,9 +16,14 @@ import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.SearchView;
+import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.UserList;
+
+import gwt.material.design.client.ui.MaterialToast;
 
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 
@@ -189,6 +194,36 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			}
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the sensorValuePreview.");
+			//TODO:showError
+		}, false));
+	}
+
+	@Override
+	public void getListsAndShow() {
+		GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
+			if((result != null)) {
+				this.view.showUserListsInDropDown(result);
+			}else {
+				LOGGER.log(Level.WARNING, "asd");
+				//TODO: show error
+			}
+		},caught -> {
+			LOGGER.log(Level.WARNING, "Failure requesting the user lists.");
+			//TODO:showError
+		}, false));
+	}
+
+	@Override
+	public void addSelectedSensorsToUserList(int listId, List<Integer> selectedSensors) {
+		GeneralService.Util.getInstance().addSensorsToUserList(listId, selectedSensors, new DefaultAsyncCallback<ActionResult>(result -> {
+			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
+				MaterialToast.fireToast("Erfolgreich zur liste hinzugefügt");
+			}else {
+				LOGGER.log(Level.WARNING, "asd");
+				//TODO: show error
+			}
+		},caught -> {
+			LOGGER.log(Level.WARNING, "Failure requesting the user lists.");
 			//TODO:showError
 		}, false));
 	}

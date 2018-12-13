@@ -4,7 +4,6 @@ import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -55,6 +54,9 @@ public class BasicSensorItemCard extends Composite{
 
 	@UiField
 	MaterialImage visButton;
+
+	@UiField
+	MaterialPreLoader cardSpinner;
 
 	public BasicSensorItemCard() {
 		this.initWidget(uiBinder.createAndBindUi(this));
@@ -131,6 +133,7 @@ public class BasicSensorItemCard extends Composite{
 			this.layout.addStyleName("card-active");
 		}else {
 			this.layout.removeStyleName("card-active");
+			this.layout.getElement().removeAttribute("style");
 		}
 	}
 
@@ -139,4 +142,9 @@ public class BasicSensorItemCard extends Composite{
 			event.stopPropagation();
 		});
 	}-*/;
+
+	public void showLoadingIndicator(boolean show) {
+		//TODO:
+	}
+
 }

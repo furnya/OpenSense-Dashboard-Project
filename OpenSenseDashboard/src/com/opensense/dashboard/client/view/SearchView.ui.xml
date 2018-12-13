@@ -74,13 +74,19 @@
 }
 .fav-img{
     width: 25px;
-    margin-right: 20px;
+    margin-right: 5px;
 }
 .checkbox > label::before{
     margin-top: 4px;
 }
 .checkbox > label::after{
 	margin-top: 2px;
+}
+.drop-down-spinner{
+	margin-left: 40%;	
+}
+.drop-down{
+	max-height: 25vh !important;
 }
 </ui:style>
 
@@ -113,9 +119,14 @@
 		<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn" enabled="false" activates="dp-1">
 			<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 		</m:MaterialButton>
-		<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners">
-			<m:MaterialLink ui:field="favoriteButton" text="Favoriten" >
+		<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners {style.drop-down}">
+			<m:MaterialLink ui:field="favoriteButton" text="{lang.favorites}" >
 				<m:MaterialImage addStyleNames="{style.fav-img}" url="{gui.favoriteRed.getSafeUri.asString}"/>
+			</m:MaterialLink>
+			<m:MaterialLink ui:field="listDropDownSpinner">
+				<m:MaterialPreLoader width="20px" height="20px" addStyleNames="spinner {style.drop-down-spinner}">
+					<m:MaterialSpinner/>
+				</m:MaterialPreLoader>
 			</m:MaterialLink>
 		</m:MaterialDropDown>
 	</bh:Div>
