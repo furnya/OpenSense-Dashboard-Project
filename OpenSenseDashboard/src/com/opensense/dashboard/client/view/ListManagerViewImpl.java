@@ -63,9 +63,8 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		// Create favorite list
 		this.addNewUserListItem(new UserList(DefaultListItem.FAVORITE_LIST_ID, Languages.favorites()), false);
 		this.collapsiblesItems.get(DefaultListItem.FAVORITE_LIST_ID).setListIcon(GUIImageBundle.INSTANCE.favoriteRed().getSafeUri().asString());
-		//		this.collapsiblesItems.get(DefaultListItem.FAVORITE_LIST_ID).setActive();
+		this.collapsiblesItems.get(DefaultListItem.FAVORITE_LIST_ID).setActive();
 		this.activeItemId = DefaultListItem.FAVORITE_LIST_ID;
-
 
 		// Create selected sensors list
 		this.addNewUserListItem(new UserList(DefaultListItem.SELECTED_LIST_ID, Languages.selectedSensors()), false);
@@ -83,7 +82,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void addNewUserListItem(final UserList userList, boolean addDeleteListButton) {
+	public void addNewUserListItem(final UserList userList, boolean editable) {
 		final int listId = userList.getListId();
 		final ListManagerOptions options = this.presenter.getController().getOptions();
 
@@ -93,10 +92,10 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		item.addSelectAllButtonClickHandler(event -> this.selectAllSensorsInList(listId, event.isSelectAll()));
 		item.addHeaderClickedHandler(event -> this.onSelectedItemsChanged());
 
-		if(options.isEditingActive()) {
+		if(editable && options.isEditingActive()) {
 			item.addListNameInputHandler(event -> this.presenter.changeListName(listId, event.getListName()));
 		}
-		if(addDeleteListButton && options.isEditingActive()) {
+		if(editable && options.isEditingActive()) {
 			item.addDeleteButtonClickHandler(event -> this.deleteList(listId));
 		}
 		if(options.isShowMapButton()) {
@@ -150,15 +149,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 				});
 				if(this.presenter.getController().getOptions().isEditingActive()) {
 					card.addTrashButtonClickHandler(event -> this.presenter.deleteSensorsInList(listId, idList));
-				}
-				if(this.presenter.getController().getOptions().isShowSearchButton()) {
-					card.addSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, idList)));
-				}
-				if(this.presenter.getController().getOptions().isShowMapButton()) {
-					card.addMapButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, idList)));
-				}
-				if(this.presenter.getController().getOptions().isShowVisualizationButton()) {
-					card.addVisButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, idList)));
 				}
 				sensorCards.put(sensor.getSensorId(), card);
 				showSensorIds.add(sensor.getSensorId());

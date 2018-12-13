@@ -135,4 +135,7 @@ public interface GUIImageBundle extends ClientBundle {
 
 	@Source("icons/mysensor.svg")
 	SVGResource mySesnors();
+
+	@Source("icons/select-all.svg")
+	SVGResource selectAll();
 }
