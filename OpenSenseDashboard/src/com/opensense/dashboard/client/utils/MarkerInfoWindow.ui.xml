@@ -12,33 +12,49 @@
 		type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 
 	<ui:style>
+	.insidewindow {
+		overflow: hidden !important;
+	}
+	
 	.header {
 		color: white;
 		margin-left: 10px;
+		margin-bottom: 0px;
 	}
 	
 	.data {
 		color: white;
 		margin-left: 10px;
-		display: grid;
+		display: grid !important;
 	}
 	
 	.data>Span {
-		font-size: 13px;
+		font-size: medium !important;
 	}
 	
-	.movedown{
-		margin-top: 5px  !important;
+	.datadescriptor {
+		margin-left: 10px;
+		font-size: medium !important;
+		font-weight: bold !important;
+		display: grid !important;
+	}
+	
+	.starstyler {
+		margin-top: 5px !important;
 	}
 	</ui:style>
 
-	<bh:Div ui:field="infoBox">
+	<bh:Div ui:field="infoBox" addStyleNames="{style.insidewindow}">
 		<bh:Div addStyleNames="flex">
 			<b:Heading ui:field="header" addStyleNames="{style.header}"
 				size="H5" />
-			<d:Rating ui:field="rating" rating="0" addStyleNames="{style.movedown}" />
+			<d:Rating ui:field="rating" rating="0" addStyleNames="{style.starstyler}"/>
 		</bh:Div>
-		<bh:Div ui:field="data" addStyleNames="{style.data}" />
+		<bh:Div addStyleNames="flex">
+			<bh:Div ui:field="datadescriptor"
+				addStyleNames="{style.datadescriptor}" />
+			<bh:Div ui:field="data" addStyleNames="{style.data}" />
+		</bh:Div>
 	</bh:Div>
 
 </ui:UiBinder>

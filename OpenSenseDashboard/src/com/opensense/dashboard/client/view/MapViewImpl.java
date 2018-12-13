@@ -114,7 +114,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.initMapButtons();
 		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(),
 				this.sensorContainer);
-		listManagerOptions.setEditingActive(true);
+		listManagerOptions.setEditingActive(false);
 		listManagerOptions.setPagerSize(com.opensense.dashboard.client.model.Size.SMALL);
 		listManagerOptions.setSpinnerSize(com.opensense.dashboard.client.model.Size.SMALL);
 		listManagerOptions.setShowMapButton(false);
@@ -249,11 +249,18 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		infoWindow.setHeader(si.getSensorModel() + " " + si.getSensorId());
 		infoWindow.setInfoWindowRating(si.getAccuracy());
 		ArrayList<String> sensorData = new ArrayList<>();
-		sensorData.add(Languages.measurand() + ": " + si.getMeasurand().getMeasurandType().toString());
-		sensorData.add(Languages.sensorTyp() + ": " + si.getSensorModel());
-		sensorData.add(Languages.accuracy() + ": " + si.getAccuracy());
-		sensorData.add(Languages.altitudeAboveGround() + " " + si.getAltitudeAboveGround());
-		sensorData.add(Languages.origin() + " " + si.getAttributionText());
+		ArrayList<String> dataDesriptors = new ArrayList<>();
+		dataDesriptors.add(Languages.measurand()+ ": ");
+		dataDesriptors.add(Languages.sensorTyp()+ ": ");
+		dataDesriptors.add(Languages.accuracy()+ ": ");
+		dataDesriptors.add(Languages.altitudeAboveGround()+ " ");
+		dataDesriptors.add(Languages.origin()+ " ");
+		infoWindow.setDataDescriptor(dataDesriptors);
+		sensorData.add(si.getMeasurand().getMeasurandType().toString());
+		sensorData.add(si.getSensorModel());
+		sensorData.add(""+si.getAccuracy());
+		sensorData.add(""+si.getAltitudeAboveGround());
+		sensorData.add(si.getAttributionText());
 		infoWindow.setData(sensorData);
 		iwOptions.setContent(infoWindow);
 		iwOptions.setDisableAutoPan(true);
@@ -395,7 +402,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		}
 		if (sensorList.isEmpty()) {
 			GWT.log("ERROR: Sensorlist is empty");
+		}else {
+			recenterMap();
 		}
+		
 	}
 
 	@Override
