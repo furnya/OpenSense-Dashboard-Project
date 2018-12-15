@@ -24,7 +24,7 @@
 	display: none;	
 }
 .con{
-	max-height: 80vh;
+	max-height: 75vh;
     overflow: auto; 
     padding-right: 10px;
 }

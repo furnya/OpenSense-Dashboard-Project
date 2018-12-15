@@ -25,14 +25,13 @@
 	display: none;	
 }
 .con{
-	max-height: 87vh;
+	max-height: 75vh;
     overflow: auto; 
-    padding-right: 10px;
 }
 .panel{
     background: #202020;
     padding: 10px 10px 10px 10px;
-    max-height: 69vh;
+    max-height: 75vh;
     overflow: auto;
 }
 .margin > * {
@@ -51,10 +50,9 @@
 	width: 40%!important;
 	display: block;
 	overflow: auto;
-    max-height: 80vh;
+    max-height: 75vh;
     background-color: #202020;
     padding: 10px 10px;
-    height: 80vh;
 }
 .sensor-list-container > Div{
 	margin-bottom: 15px;
