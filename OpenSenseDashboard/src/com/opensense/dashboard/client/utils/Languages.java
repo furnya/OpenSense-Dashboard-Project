@@ -603,6 +603,14 @@ public class Languages {
 		}
 	}
 
+	public static String createSensor() {
+		if(de){
+			return "Sensor erstellen";
+		}else{
+			return "Create sensor";
+		}
+	}
+
 	public static String hideSensorWIithoutValues() {
 		if(de){
 			return "Sensoren ohne Werte von der Suche ausschließen";

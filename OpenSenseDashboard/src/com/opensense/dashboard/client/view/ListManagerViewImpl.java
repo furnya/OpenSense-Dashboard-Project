@@ -12,6 +12,7 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.event.SelectedSensorsChangeEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
@@ -153,8 +154,11 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 					}
 					this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(this.selectedSensorIdsInLists.get(listId)));
 				});
-				if(this.presenter.getController().getOptions().isEditingActive()) {
+				if(this.presenter.getController().getOptions().isEditingActive() && (listId != DefaultListItem.SELECTED_LIST_ID)) {
 					card.addTrashButtonClickHandler(event -> this.presenter.deleteSensorsInList(listId, idList));
+				}
+				if(listId != DefaultListItem.FAVORITE_LIST_ID) {
+					card.addFavButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(idList)));
 				}
 				sensorCards.put(sensor.getSensorId(), card);
 				showSensorIds.add(sensor.getSensorId());
@@ -264,7 +268,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 						ListManagerViewImpl.this.activeItemId = entry.getKey();
 					}
 				});
-				if(ListManagerViewImpl.this.activeItemId != null) {
+				if((ListManagerViewImpl.this.activeItemId != null) && (ListManagerViewImpl.this.selectedSensorIdsInLists.get(ListManagerViewImpl.this.activeItemId) != null)) {
 					ListManagerViewImpl.this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(ListManagerViewImpl.this.selectedSensorIdsInLists.get(ListManagerViewImpl.this.activeItemId)));
 				}else {
 					ListManagerViewImpl.this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(new ArrayList<>()));

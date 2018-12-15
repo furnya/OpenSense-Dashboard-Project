@@ -72,7 +72,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void onPageLeave() {
-		// TODO Auto-generated method stub
+		this.view.hideListDropDown();
 	}
 
 	@Override
@@ -226,5 +226,10 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			LOGGER.log(Level.WARNING, "Failure requesting the user lists.");
 			//TODO:showError
 		}, false));
+	}
+
+	@Override
+	public boolean isUserLoggedIn() {
+		return !this.appController.isGuest();
 	}
 }

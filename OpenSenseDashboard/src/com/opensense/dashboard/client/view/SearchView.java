@@ -19,6 +19,7 @@ public interface SearchView extends IDataPanelPageView{
 		void getSensorValuePreviewAndShow(List<Integer> idsOnPage);
 		void getListsAndShow();
 		void addSelectedSensorsToUserList(int listId, List<Integer> selectedSensors);
+		boolean isUserLoggedIn();
 	}
 
 	public void setPresenter(Presenter presenter);
@@ -46,4 +47,5 @@ public interface SearchView extends IDataPanelPageView{
 	public void showSensorValuePreview(Map<Integer, ValuePreview> result);
 	public boolean getOnlySensorsWithValueBox();
 	public void showUserListsInDropDown(List<UserList> result);
+	public void hideListDropDown();
 }

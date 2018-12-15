@@ -17,6 +17,7 @@ import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.ListManagerView;
 import com.opensense.dashboard.client.view.ListManagerViewImpl;
 import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.UserList;
@@ -46,25 +47,9 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	public void updateLists() {
 		this.updateFavoriteList();
 		//		this.updateSelectedSensorsList(new ArrayList<>());
-		this.view.clearUserLists();
+		this.updateUserLists();
 		if(this.controller.isUserLoggedIn()) {
 			this.view.showMySensorListsItem(true);
-			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
-				if((result != null)) {
-					result.forEach(userList -> {
-						this.view.addNewUserListItem(userList, true);
-						if(!userList.getSensorIds().isEmpty()) {
-							this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
-						}else {
-							this.view.setSensorsInList(userList.getListId(), new ArrayList<>());
-						}
-					});
-				}else {
-					GWT.log("Shit1");
-				}
-			}, caught -> {
-				GWT.log("Shit2");
-			},true));
 			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MYSENSORS, false);
 			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
 				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMyListSensors() != null)
@@ -82,9 +67,9 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 
 	public void createNewList() {
-		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<UserList>(result -> {
+		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<ActionResult>(result -> {
 			if(result != null) {
-				this.view.addNewUserListItem(result, true);
+				this.updateUserLists();
 			}else {
 				GWT.log("Shit5");
 			}
@@ -121,9 +106,22 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	 */
 	@Override
 	public void deleteSensorsInList(final int listId, final List<Integer> sensorIds) {
-		// TODO Auto-generated method stub
 		if(listId == DefaultListItem.FAVORITE_LIST_ID) {
 			this.eventBus.fireEvent(new RemoveSensorsFromFavoriteListEvent(sensorIds));
+		}else if(listId == DefaultListItem.MY_LIST_ID) {
+			//TODO:
+		}else if(listId == DefaultListItem.SELECTED_LIST_ID) {
+			// Do nothing
+		}else {
+			GeneralService.Util.getInstance().deleteSensorsFromUserList(listId, sensorIds, new DefaultAsyncCallback<ActionResult>(result -> {
+				if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
+					this.updateUserLists();
+				}else {
+					GWT.log("Shit9");
+				}
+			}, caught -> {
+				GWT.log("Shit10");
+			},true));
 		}
 	}
 
@@ -193,5 +191,26 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 
 	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
 		this.view.setSelectedSensorItemsColor(sensorId, sensorColor);
+	}
+	private void updateUserLists() {
+		this.view.clearUserLists();
+		if(this.controller.isUserLoggedIn()) {
+			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
+				if((result != null)) {
+					result.forEach(userList -> {
+						this.view.addNewUserListItem(userList, true);
+						if(!userList.getSensorIds().isEmpty()) {
+							this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
+						}else {
+							this.view.setSensorsInList(userList.getListId(), new ArrayList<>());
+						}
+					});
+				}else {
+					GWT.log("Shit1");
+				}
+			}, caught -> {
+				GWT.log("Shit2");
+			},true));
+		}
 	}
 }

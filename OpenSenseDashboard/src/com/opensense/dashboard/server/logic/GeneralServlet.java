@@ -109,7 +109,14 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		return new ActionResult(ActionResultType.FAILED);
 	}
 
-	public ActionResult addSensorToMySensorsUserList() { //TODO:
+	@Override
+	public ActionResult deleteSensorsFromUserList(int listId, List<Integer> sensors) {
+		if(this.lists.containsKey(listId)) {
+			UserList list = this.lists.get(listId);
+			sensors.forEach(list.getSensorIds()::remove);
+			this.lists.replace(listId, list);
+			return new ActionResult(ActionResultType.SUCCESSFUL);
+		}
 		return new ActionResult(ActionResultType.FAILED);
 	}
 
@@ -123,14 +130,14 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	}
 
 	@Override
-	public UserList createNewUserList() {
+	public ActionResult createNewUserList() {
 		//list of list ids with sensor ids in it
 		UserList listItem = new UserList();
 		listItem.setListId(this.idNumber++);
 		listItem.setListName("Neue Liste " + listItem.getListId());
 		listItem.setSensorIds(new ArrayList<>());
 		this.lists.put(listItem.getListId(), listItem);
-		return listItem;
+		return new ActionResult(ActionResultType.SUCCESSFUL);
 	}
 
 	@Override

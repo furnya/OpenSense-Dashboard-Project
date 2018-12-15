@@ -60,4 +60,9 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 		return this.listManager;
 	}
 
+	@Override
+	public void setCreateListButtonEnabled(boolean enabled) {
+		this.createListButton.setEnabled(enabled);
+	}
+
 }

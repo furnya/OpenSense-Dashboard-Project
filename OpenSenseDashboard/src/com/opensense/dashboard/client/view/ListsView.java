@@ -16,4 +16,5 @@ public interface ListsView extends IDataPanelPageView{
 	public Widget asWidget();
 	public void initView(Runnable runnable);
 	public ListManager getListManager();
+	public void setCreateListButtonEnabled(boolean b);
 }

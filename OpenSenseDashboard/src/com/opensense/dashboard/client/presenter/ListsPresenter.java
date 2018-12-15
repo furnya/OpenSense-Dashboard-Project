@@ -60,9 +60,11 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 
 	public void onUserLoggedIn() {
 		this.view.getListManager().onUserLoggedIn();
+		this.view.setCreateListButtonEnabled(true);
 	}
 
 	public void onUserLoggedOut() {
 		this.view.getListManager().onUserLoggedOut();
+		this.view.setCreateListButtonEnabled(false);
 	}
 }
