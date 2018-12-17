@@ -14,7 +14,7 @@ public interface ListsView extends IDataPanelPageView{
 	public void setPresenter(Presenter presenter);
 	@Override
 	public Widget asWidget();
-	public void initView(Runnable runnable);
+	public void initView(Runnable runnable, boolean b);
 	public ListManager getListManager();
 	public void setCreateListButtonEnabled(boolean b);
 }

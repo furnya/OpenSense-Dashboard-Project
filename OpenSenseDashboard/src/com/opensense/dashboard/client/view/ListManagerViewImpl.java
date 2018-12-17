@@ -242,7 +242,11 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	private void selectAllSensorsInList(int listId, boolean isSelectAll) {
-		final List<Integer> selectedSensors = new ArrayList<>();
+		if(this.selectedSensorIdsInLists.get(listId) == null) {
+			GWT.log("ERROR");
+			return;
+		}
+		final List<Integer> selectedSensors = this.selectedSensorIdsInLists.get(listId);
 		if(isSelectAll) {
 			this.showSensorIdsInLists.get(listId).forEach(id -> {
 				if(!this.selectedSensorIdsInLists.get(listId).contains(id)) {
@@ -250,8 +254,10 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 					this.sensorCardsInLists.get(listId).get(id).setActive(true);
 				}
 			});
+			this.selectedSensorIdsInLists.replace(listId, selectedSensors);
 		}else {
 			this.selectedSensorIdsInLists.get(listId).forEach(id -> this.sensorCardsInLists.get(listId).get(id).setActive(false));
+			selectedSensors.clear();
 		}
 		this.selectedSensorIdsInLists.replace(listId, selectedSensors);
 		this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(selectedSensors));
@@ -279,10 +285,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@Override
 	public void setCollapsibleListItemSelected(int listId) {
-		//		this.collapsible.closeAll();
-		//		this.collapsible.closeAll();
-		//		this.collapsible.open(2);
-		//		this.collapsible.reinitialize();
+		if(this.collapsiblesItems.get(listId) == null) {
+			GWT.log("ERROR");
+		}
+		if((this.activeItemId == null) || (this.activeItemId != listId)) {
+			this.collapsiblesItems.get(listId).open();
+		}
 	}
 
 	@Override

@@ -52,7 +52,8 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 
 	@Override
 	public void waitUntilViewInit(final Runnable runnable) {
-		this.view.initView(runnable);
+		this.view.initView(runnable, !this.appController.isGuest());
+		this.view.setCreateListButtonEnabled(!this.appController.isGuest());
 	}
 
 	public void updateFavoriteList() {

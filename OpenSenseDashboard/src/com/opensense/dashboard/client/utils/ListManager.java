@@ -89,4 +89,8 @@ public class ListManager {
 	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
 		this.presenter.setSelectedSensorItemsColor(sensorId, sensorColor);
 	}
+
+	public void setUserLoggedIn(boolean isUserLoggedIn) {
+		this.userLoggedIn = isUserLoggedIn;
+	}
 }
