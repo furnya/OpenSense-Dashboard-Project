@@ -293,7 +293,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@Override
 	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
-		if((this.activeItemId == null) && (this.selectedSensorIdsInLists.get(this.activeItemId) != null)) {
+		if((this.activeItemId == null) && (this.selectedSensorIdsInLists.get(this.activeItemId) == null)) {
 			GWT.log("not set colors");
 			return;
 		}

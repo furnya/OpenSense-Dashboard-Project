@@ -32,6 +32,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 	@Override
 	public void onPageReturn() {
 		this.view.getListManager().setUserLoggedInAndUpdate(!this.appController.isGuest());
+		this.view.setCreateListButtonEnabled(!this.appController.isGuest());
 	}
 
 	@Override

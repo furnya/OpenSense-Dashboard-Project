@@ -500,7 +500,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 
 	private void clearListsDropDown() {
-		for (int i = 1; i < this.listDropDown.getChildren().size(); i++) {
+		for (int i = this.listDropDown.getChildren().size() - 1; i > 0; i--) {
 			this.listDropDown.remove(i);
 		}
 	}
