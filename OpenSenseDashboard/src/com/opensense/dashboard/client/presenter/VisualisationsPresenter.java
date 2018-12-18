@@ -101,5 +101,17 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 			LOGGER.log(Level.WARNING, "Failure requesting the values.");
 			view.hideLoadingIndicator();
 		}, false));
-	}	
+	}
+	
+	public void updateFavoriteList() {
+		this.view.getListManager().updateFavoriteList();
+	}
+
+	public void onUserLoggedIn() {
+		this.view.getListManager().onUserLoggedIn();
+	}
+
+	public void onUserLoggedOut() {
+		this.view.getListManager().onUserLoggedOut();
+	}
 }

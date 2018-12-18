@@ -108,6 +108,10 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			MapPresenter mapPresenter = (MapPresenter) this.activeDataPanelPagePresenter;
 			mapPresenter.updateFavoriteList();
 		}
+		if(this.activeDataPanelPagePresenter instanceof VisualisationsPresenter) {
+			VisualisationsPresenter visualisationsPresenter = (VisualisationsPresenter) this.activeDataPanelPagePresenter;
+			visualisationsPresenter.updateFavoriteList();
+		}
 		//TODO: add vis
 	}
 
@@ -120,6 +124,10 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			MapPresenter mapPresenter = (MapPresenter) this.activeDataPanelPagePresenter;
 			mapPresenter.onUserLoggedIn();
 		}
+		if(this.activeDataPanelPagePresenter instanceof VisualisationsPresenter) {
+			VisualisationsPresenter visualisationsPresenter = (VisualisationsPresenter) this.activeDataPanelPagePresenter;
+			visualisationsPresenter.onUserLoggedIn();
+		}
 		//TODO: add vis
 	}
 
@@ -131,6 +139,10 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 		if(this.activeDataPanelPagePresenter instanceof MapPresenter) {
 			MapPresenter mapPresenter = (MapPresenter) this.activeDataPanelPagePresenter;
 			mapPresenter.onUserLoggedOut();
+		}
+		if(this.activeDataPanelPagePresenter instanceof VisualisationsPresenter) {
+			VisualisationsPresenter visualisationsPresenter = (VisualisationsPresenter) this.activeDataPanelPagePresenter;
+			visualisationsPresenter.onUserLoggedOut();
 		}
 		//TODO: add vis
 	}
