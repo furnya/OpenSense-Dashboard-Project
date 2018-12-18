@@ -24,10 +24,6 @@
 .nav-bar a {
 	display: none;	
 }
-.con{
-	max-height: 75vh;
-    overflow: auto; 
-}
 .panel{
     background: #202020;
     padding: 10px 10px 10px 10px;
@@ -48,11 +44,12 @@
 }
 .sensor-container{
 	width: 40%!important;
-	display: block;
+	padding-right: 10px;
 	overflow: auto;
-    max-height: 75vh;
-    background-color: #202020;
-    padding: 10px 10px;
+}
+.sensor-container-inner{
+	background-color: black;
+	padding: 5px;
 }
 .sensor-list-container > Div{
 	margin-bottom: 15px;
@@ -94,7 +91,7 @@
 }
 </ui:style>
 
-<bh:Div ui:field="container" addStyleNames="{style.con} flex">
+<bh:Div ui:field="container" addStyleNames="window-height flex">
 	<bh:Div ui:field="dataContainer" addStyleNames="{style.dataContainer}">
 		<bh:Div addStyleNames="{style.panel} {style.visPanel} visPanel round-corners">
 			<m:MaterialLabel textColor="WHITE" text="{lang.timespan}"/>
@@ -115,7 +112,9 @@
 		<m:MaterialLabel ui:field="noDatasetsLabel" textColor="WHITE" text="{lang.noData}" display="NONE"/>
 		<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>	
 	</bh:Div>
-	<bh:Div ui:field="listContainer" addStyleNames="{style.sensor-container} round-corners"/>
+	<bh:Div addStyleNames= "{style.sensor-container}">
+		<bh:Div ui:field="listContainer" addStyleNames="{style.sensor-container-inner} round-corners"/>
+	</bh:Div>
 </bh:Div>
 
 </ui:UiBinder>

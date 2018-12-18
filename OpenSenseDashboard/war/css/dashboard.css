@@ -487,3 +487,7 @@ input:focus+label{
 .list-action-btns > button:not(:first-child) {
 	margin-left: 15px;
 }
+.window-height {
+	max-height: 80vh;
+	height: 80vh;
+}
