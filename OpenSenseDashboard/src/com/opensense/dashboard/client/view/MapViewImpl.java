@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
+
+import org.apache.jasper.runtime.ProtectedFunctionMapper;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Div;
 
@@ -123,9 +126,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
-			if(!event.getSelectedIds().isEmpty()) {
+			if (!event.getSelectedIds().isEmpty()) {
 				this.presenter.buildSensorRequestFromIdsAndShowMarkers(event.getSelectedIds());
-			}else {
+			} else {
 				this.resetMarkerAndCluster();
 			}
 		});
@@ -211,11 +214,11 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 				this.lastOpened.close();
 				this.lastOpened = null;
 			}
-			if ((this.mapWidget.getZoom() > 15) && (this.cluster != null)) {
+			if ((this.mapWidget.getZoom() > 17) && (this.cluster != null)) {
 				this.cluster.repaint();
 				this.checkForSpiderfierMarkers();
 			}
-			if ((this.mapWidget.getZoom() <= 15) && (this.cluster != null)) {
+			if ((this.mapWidget.getZoom() <= 17) && (this.cluster != null)) {
 				this.plusClusterIcons.forEach(Marker::clear);
 				this.plusClusterIcons.clear();
 				this.cluster.repaint();
@@ -250,16 +253,16 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		infoWindow.setInfoWindowRating(si.getAccuracy());
 		ArrayList<String> sensorData = new ArrayList<>();
 		ArrayList<String> dataDesriptors = new ArrayList<>();
-		dataDesriptors.add(Languages.measurand()+ ": ");
-		dataDesriptors.add(Languages.sensorTyp()+ ": ");
-		dataDesriptors.add(Languages.accuracy()+ ": ");
-		dataDesriptors.add(Languages.altitudeAboveGround()+ " ");
-		dataDesriptors.add(Languages.origin()+ " ");
+		dataDesriptors.add(Languages.measurand() + ": ");
+		dataDesriptors.add(Languages.sensorTyp() + ": ");
+		dataDesriptors.add(Languages.accuracy() + ": ");
+		dataDesriptors.add(Languages.altitudeAboveGround() + " ");
+		dataDesriptors.add(Languages.origin() + " ");
 		infoWindow.setDataDescriptor(dataDesriptors);
 		sensorData.add(si.getMeasurand().getMeasurandType().toString());
 		sensorData.add(si.getSensorModel());
-		sensorData.add(""+si.getAccuracy());
-		sensorData.add(""+si.getAltitudeAboveGround());
+		sensorData.add("" + si.getAccuracy());
+		sensorData.add("" + si.getAltitudeAboveGround());
 		sensorData.add(si.getAttributionText());
 		infoWindow.setData(sensorData);
 		iwOptions.setContent(infoWindow);
@@ -301,10 +304,11 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	}
 
 	@Override
-	public void checkForSpiderfierMarkers() { // TODO: bug this should also be called from mapmove event so the event gets updated
+	public void checkForSpiderfierMarkers() {
 		this.mList.forEach(marker -> {
-			if (this.mapWidget.getBounds().contains(marker.getPosition()) && this.markerHasNearMarkers(this.presenter.getMarkerSpiderfier(), marker) &&
-					this.plusClusterIcons.stream().noneMatch(pC -> pC.getPosition().equals(marker.getPosition()))) {
+			if (this.mapWidget.getBounds().contains(marker.getPosition())
+					&& this.markerHasNearMarkers(this.presenter.getMarkerSpiderfier(), marker)
+					&& this.plusClusterIcons.stream().noneMatch(pC -> pC.getPosition().equals(marker.getPosition()))) {
 				this.addPlusCluster(marker);
 			}
 		});
@@ -322,7 +326,9 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		plusMarker.setZindex(10000);
 		plusMarker.setIcon(plusIcon);
 		plusMarker.setDraggable(false);
-		this.plusClusterIcons.add(plusMarker);
+		if (this.plusClusterIcons.stream().noneMatch(pI -> pI.getPosition().equals(plusMarker.getPosition()))) {
+			this.plusClusterIcons.add(plusMarker);
+		}
 		plusMarker.addClickHandler(event -> {
 			plusMarker.clear();
 			this.plusClusterIcons.remove(plusMarker);
@@ -365,7 +371,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			MarkerClustererOptions mCo = MarkerClustererOptions.newInstance();
 			mCo.setGridSize(80);
 			mCo.setMinimumClusterSize(2);
-			mCo.setMaxZoom(15);
+			mCo.setMaxZoom(17);
 			mCo.setZoomOnClick(true);
 			mCo.setAverageCenter(true);
 			List<ClusterIconStyle> cises = new ArrayList<>();
@@ -402,17 +408,18 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		}
 		if (sensorList.isEmpty()) {
 			GWT.log("ERROR: Sensorlist is empty");
-		}else {
+		} else {
 			recenterMap();
 		}
-		
+
 	}
 
 	@Override
 	public void resetMarkerAndCluster() {
 		if (!this.mList.isEmpty()) {
 			this.mList.clear();
-			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, new ArrayList<>()));
+			this.presenter.getEventBus()
+					.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, new ArrayList<>()));
 			this.cluster.clearMarkers();
 			this.sensIds.clear();
 			GWT.log("clearing All clusters & markers");
@@ -437,7 +444,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		if (this.mList.isEmpty()) {
 			GWT.log("User tried to visualize a empty Markerlist");
 		}
-		this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, this.sensIds));
+		this.presenter.getEventBus()
+				.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, this.sensIds));
 	}
 
 	public void goToSearchPage() {

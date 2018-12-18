@@ -1,7 +1,6 @@
 package com.opensense.dashboard.client.view;
 
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerManager;
