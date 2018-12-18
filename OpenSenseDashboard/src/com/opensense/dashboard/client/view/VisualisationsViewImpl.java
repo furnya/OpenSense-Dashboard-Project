@@ -134,8 +134,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.highlightDateRange();
 		this.listContainer.clear();
 		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(), this.listContainer);
-		listManagerOptions.setEditingActive(true);
+		listManagerOptions.setEditingActive(false);
 		listManagerOptions.setPagerSize(Size.SMALL);
+		listManagerOptions.setSpinnerSize(Size.SMALL);
 		listManagerOptions.setShowMapButton(true);
 		listManagerOptions.setShowVisualizationButton(false);
 		listManagerOptions.setShowSearchButton(true);
