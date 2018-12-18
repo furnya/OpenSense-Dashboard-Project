@@ -43,7 +43,7 @@
 .button-container{
 	width: fit-content;
     float: right;
-    margin-top: 5px;
+	margin-top: 7px;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -73,9 +73,6 @@
 	</bh:Div>
 	<bh:Div addStyleNames="{style.right}">
 		<bh:Div addStyleNames="{style.button-container}">
-			<m:MaterialImage display="NONE" ui:field="searchButton" url="{gui.searchIconSvg.getSafeUri.asString}" width="28px" addStyleNames="clickable image-button"/>
-			<m:MaterialImage display="NONE" ui:field="mapButton" url="{gui.mapIconSvg.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
-			<m:MaterialImage display="NONE" ui:field="visButton" url="{gui.diagramIconSvg.getSafeUri.asString}" width="32px" addStyleNames="clickable image-button"/>
 			<m:MaterialImage display="NONE" ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
 			<m:MaterialImage display="NONE" ui:field="trashButton" url="{gui.trash.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
 		</bh:Div>

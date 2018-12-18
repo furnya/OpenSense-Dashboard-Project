@@ -12,6 +12,7 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.event.SelectedSensorsChangeEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
@@ -63,9 +64,8 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		// Create favorite list
 		this.addNewUserListItem(new UserList(DefaultListItem.FAVORITE_LIST_ID, Languages.favorites()), false);
 		this.collapsiblesItems.get(DefaultListItem.FAVORITE_LIST_ID).setListIcon(GUIImageBundle.INSTANCE.favoriteRed().getSafeUri().asString());
-		//		this.collapsiblesItems.get(DefaultListItem.FAVORITE_LIST_ID).setActive();
+		this.collapsiblesItems.get(DefaultListItem.FAVORITE_LIST_ID).setActive();
 		this.activeItemId = DefaultListItem.FAVORITE_LIST_ID;
-
 
 		// Create selected sensors list
 		this.addNewUserListItem(new UserList(DefaultListItem.SELECTED_LIST_ID, Languages.selectedSensors()), false);
@@ -83,7 +83,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void addNewUserListItem(final UserList userList, boolean addDeleteListButton) {
+	public void addNewUserListItem(final UserList userList, boolean editable) {
 		final int listId = userList.getListId();
 		final ListManagerOptions options = this.presenter.getController().getOptions();
 
@@ -93,10 +93,10 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		item.addSelectAllButtonClickHandler(event -> this.selectAllSensorsInList(listId, event.isSelectAll()));
 		item.addHeaderClickedHandler(event -> this.onSelectedItemsChanged());
 
-		if(options.isEditingActive()) {
+		if(editable && options.isEditingActive()) {
 			item.addListNameInputHandler(event -> this.presenter.changeListName(listId, event.getListName()));
 		}
-		if(addDeleteListButton && options.isEditingActive()) {
+		if(editable && options.isEditingActive()) {
 			item.addDeleteButtonClickHandler(event -> this.deleteList(listId));
 		}
 		if(options.isShowMapButton()) {
@@ -113,8 +113,14 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			//
 			//		});
 		}
+
+		if(this.collapsiblesItems.containsKey(listId)) {
+			this.collapsiblesItems.get(listId).removeFromParent();
+			this.collapsiblesItems.replace(listId, item);
+		}else {
+			this.collapsiblesItems.put(listId, item);
+		}
 		this.collapsible.add(item);
-		this.collapsiblesItems.put(listId, item);
 		this.initPager(listId);
 		item.showItem(true);
 	}
@@ -148,26 +154,32 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 					}
 					this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(this.selectedSensorIdsInLists.get(listId)));
 				});
-				if(this.presenter.getController().getOptions().isEditingActive()) {
+				if(this.presenter.getController().getOptions().isEditingActive() && (listId != DefaultListItem.SELECTED_LIST_ID)) {
 					card.addTrashButtonClickHandler(event -> this.presenter.deleteSensorsInList(listId, idList));
 				}
-				if(this.presenter.getController().getOptions().isShowSearchButton()) {
-					card.addSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, idList)));
-				}
-				if(this.presenter.getController().getOptions().isShowMapButton()) {
-					card.addMapButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, idList)));
-				}
-				if(this.presenter.getController().getOptions().isShowVisualizationButton()) {
-					card.addVisButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, idList)));
+				if(listId != DefaultListItem.FAVORITE_LIST_ID) {
+					card.addFavButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(idList)));
 				}
 				sensorCards.put(sensor.getSensorId(), card);
 				showSensorIds.add(sensor.getSensorId());
 			});
 			this.collapsiblesItems.get(listId).setSelectAllButtonEnabled(true);
 		}
-		this.sensorCardsInLists.put(listId, sensorCards);
-		this.selectedSensorIdsInLists.put(listId, new ArrayList<>());
-		this.showSensorIdsInLists.put(listId, showSensorIds);
+		if(this.sensorCardsInLists.containsKey(listId)) {
+			this.sensorCardsInLists.replace(listId, sensorCards);
+		}else {
+			this.sensorCardsInLists.put(listId, sensorCards);
+		}
+		if(this.selectedSensorIdsInLists.containsKey(listId)) {
+			this.selectedSensorIdsInLists.replace(listId, new ArrayList<>());
+		}else {
+			this.selectedSensorIdsInLists.put(listId, new ArrayList<>());
+		}
+		if(this.showSensorIdsInLists.containsKey(listId)) {
+			this.showSensorIdsInLists.replace(listId, showSensorIds);
+		} else {
+			this.showSensorIdsInLists.put(listId, showSensorIds);
+		}
 		this.collapsiblesItems.get(listId).getTopPager().update(showSensorIds.size(), true);
 	}
 
@@ -230,7 +242,11 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	private void selectAllSensorsInList(int listId, boolean isSelectAll) {
-		final List<Integer> selectedSensors = new ArrayList<>();
+		if(this.selectedSensorIdsInLists.get(listId) == null) {
+			GWT.log("ERROR");
+			return;
+		}
+		final List<Integer> selectedSensors = this.selectedSensorIdsInLists.get(listId);
 		if(isSelectAll) {
 			this.showSensorIdsInLists.get(listId).forEach(id -> {
 				if(!this.selectedSensorIdsInLists.get(listId).contains(id)) {
@@ -238,8 +254,10 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 					this.sensorCardsInLists.get(listId).get(id).setActive(true);
 				}
 			});
+			this.selectedSensorIdsInLists.replace(listId, selectedSensors);
 		}else {
 			this.selectedSensorIdsInLists.get(listId).forEach(id -> this.sensorCardsInLists.get(listId).get(id).setActive(false));
+			selectedSensors.clear();
 		}
 		this.selectedSensorIdsInLists.replace(listId, selectedSensors);
 		this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(selectedSensors));
@@ -256,7 +274,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 						ListManagerViewImpl.this.activeItemId = entry.getKey();
 					}
 				});
-				if(ListManagerViewImpl.this.activeItemId != null) {
+				if((ListManagerViewImpl.this.activeItemId != null) && (ListManagerViewImpl.this.selectedSensorIdsInLists.get(ListManagerViewImpl.this.activeItemId) != null)) {
 					ListManagerViewImpl.this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(ListManagerViewImpl.this.selectedSensorIdsInLists.get(ListManagerViewImpl.this.activeItemId)));
 				}else {
 					ListManagerViewImpl.this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(new ArrayList<>()));
@@ -267,10 +285,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@Override
 	public void setCollapsibleListItemSelected(int listId) {
-		//		this.collapsible.closeAll();
-		//		this.collapsible.closeAll();
-		//		this.collapsible.open(2);
-		//		this.collapsible.reinitialize();
+		if(this.collapsiblesItems.get(listId) == null) {
+			GWT.log("ERROR");
+		}
+		if((this.activeItemId == null) || (this.activeItemId != listId)) {
+			this.collapsiblesItems.get(listId).open();
+		}
 	}
 
 	@Override
@@ -281,7 +301,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@Override
 	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
-		if((this.activeItemId == null) && (this.selectedSensorIdsInLists.get(this.activeItemId) != null)) {
+		if((this.activeItemId == null) && (this.selectedSensorIdsInLists.get(this.activeItemId) == null)) {
 			GWT.log("not set colors");
 			return;
 		}

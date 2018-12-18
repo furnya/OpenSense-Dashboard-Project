@@ -33,6 +33,17 @@
     right: 0px;
     margin: unset !important;
     opacity: 0.6;
+    transform: unset !important;
+}
+.star-container[size=small] > Div{
+    transform: scale(0.1) rotate(35deg);
+    margin: -15px 0 -10px -180px;
+}
+.star-container[size=small] > Div:first-child{
+    margin: -15px 0px -10px -75px;
+}
+.star-container[size=small] .last-star {
+	margin: -15px -75px -10px -180px !important;
 }
 </ui:style>
 

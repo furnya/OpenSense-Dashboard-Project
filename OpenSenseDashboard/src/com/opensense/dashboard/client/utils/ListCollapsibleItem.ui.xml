@@ -86,7 +86,9 @@
 	</m:MaterialCollapsibleHeader>
 	<m:MaterialCollapsibleBody addStyleNames="{style.body}">
 		<bh:Div addStyleNames="flex margin-bottom-10 list-action-btns">
-			<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false"/>
+			<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
+				<m:MaterialImage url="{gui.selectAll.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
 			<m:MaterialButton display="NONE" ui:field="showOnSearchButton" text="{lang.seletedShowOnSearch}" textColor="WHITE" addStyleNames="d-btn" enabled="false" >
 				<m:MaterialImage url="{gui.searchIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 			</m:MaterialButton>

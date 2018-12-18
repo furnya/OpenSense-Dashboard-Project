@@ -107,7 +107,7 @@
 					<b:Image ui:field="icon" width="100%" height="100%"/>
 				</bh:Div>	
 				<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
-				<d:Rating ui:field="rating" rating="0"/>
+				<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
 			</bh:Div>
 		</bh:Div>
 		<bh:Div ui:field="content" addStyleNames="{style.content-container}"/>

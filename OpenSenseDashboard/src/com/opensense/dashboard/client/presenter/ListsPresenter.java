@@ -32,6 +32,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 	@Override
 	public void onPageReturn() {
 		this.view.getListManager().setUserLoggedInAndUpdate(!this.appController.isGuest());
+		this.view.setCreateListButtonEnabled(!this.appController.isGuest());
 	}
 
 	@Override
@@ -51,7 +52,8 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 
 	@Override
 	public void waitUntilViewInit(final Runnable runnable) {
-		this.view.initView(runnable);
+		this.view.initView(runnable, !this.appController.isGuest());
+		this.view.setCreateListButtonEnabled(!this.appController.isGuest());
 	}
 
 	public void updateFavoriteList() {
@@ -60,9 +62,11 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 
 	public void onUserLoggedIn() {
 		this.view.getListManager().onUserLoggedIn();
+		this.view.setCreateListButtonEnabled(true);
 	}
 
 	public void onUserLoggedOut() {
 		this.view.getListManager().onUserLoggedOut();
+		this.view.setCreateListButtonEnabled(false);
 	}
 }

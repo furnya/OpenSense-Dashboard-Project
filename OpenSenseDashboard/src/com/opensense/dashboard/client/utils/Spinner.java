@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client.utils;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -44,5 +45,9 @@ public class Spinner extends Composite{
 		default:
 			break;
 		}
+	}
+
+	public void setDisplay(Display display) {
+		this.getElement().getStyle().setDisplay(display);
 	}
 }

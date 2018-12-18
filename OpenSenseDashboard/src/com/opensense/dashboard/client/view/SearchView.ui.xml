@@ -24,7 +24,7 @@
 	display: none;	
 }
 .con{
-	max-height: 80vh;
+	max-height: 75vh;
     overflow: auto; 
     padding-right: 10px;
 }
@@ -82,11 +82,13 @@
 .checkbox > label::after{
 	margin-top: 2px;
 }
-.drop-down-spinner{
-	margin-left: 40%;	
-}
 .drop-down{
 	max-height: 25vh !important;
+}
+.drop-down-spinner{
+	position: absolute;
+    left: 22px;
+    top: 8px;
 }
 </ui:style>
 
@@ -116,17 +118,13 @@
 		<m:MaterialButton ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false">
 			<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 		</m:MaterialButton>
-		<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn" enabled="false" activates="dp-1">
+		<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn position-relative" enabled="false" activates="dp-1">
+			<d:Spinner display="NONE" addStyleNames="{style.drop-down-spinner}" size="SMALL" ui:field="listDropDownSpinner"/>
 			<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 		</m:MaterialButton>
 		<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners {style.drop-down}">
 			<m:MaterialLink ui:field="favoriteButton" text="{lang.favorites}" >
 				<m:MaterialImage addStyleNames="{style.fav-img}" url="{gui.favoriteRed.getSafeUri.asString}"/>
-			</m:MaterialLink>
-			<m:MaterialLink ui:field="listDropDownSpinner">
-				<m:MaterialPreLoader width="20px" height="20px" addStyleNames="spinner {style.drop-down-spinner}">
-					<m:MaterialSpinner/>
-				</m:MaterialPreLoader>
 			</m:MaterialLink>
 		</m:MaterialDropDown>
 	</bh:Div>

@@ -257,4 +257,12 @@ public class ListCollapsibleItem extends Composite{
 		}
 	}
 
+	public void open(){
+		this.clickElement(this.header.getElement());
+	}
+
+
+	private native void clickElement(Element element) /*-{
+		element.click();
+	}-*/;
 }

@@ -47,10 +47,11 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	}
 
 	@Override
-	public void initView(Runnable runnable) {
+	public void initView(Runnable runnable, boolean isUserLoggedIn) {
 		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(), this.listContainer);
 		listManagerOptions.setEditingActive(true);
 		this.listManager = ListManager.getInstance(listManagerOptions);
+		this.listManager.setUserLoggedIn(isUserLoggedIn);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> event.getSelectedIds().forEach(id -> GWT.log(id+"")));
 	}
@@ -58,6 +59,11 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	@Override
 	public ListManager getListManager() {
 		return this.listManager;
+	}
+
+	@Override
+	public void setCreateListButtonEnabled(boolean enabled) {
+		this.createListButton.setEnabled(enabled);
 	}
 
 }

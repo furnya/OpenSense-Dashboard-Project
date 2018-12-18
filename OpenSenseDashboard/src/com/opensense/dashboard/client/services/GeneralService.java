@@ -35,8 +35,9 @@ public interface GeneralService extends RemoteService {
 	Response getDataFromRequest(Request searchRequest);
 	void setServerLanguage(String lang);
 	List<UserList> getUserLists();
-	UserList createNewUserList();
+	ActionResult createNewUserList();
 	ActionResult deleteUserList(int listId);
 	ActionResult changeUserListName(int listId, String newListName);
 	ActionResult addSensorsToUserList(int listId, List<Integer> sensors);
+	ActionResult deleteSensorsFromUserList(int listId, List<Integer> sensors);
 }

@@ -23,6 +23,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
@@ -32,6 +33,7 @@ import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.MeasurandIconHelper;
 import com.opensense.dashboard.client.utils.Pager;
 import com.opensense.dashboard.client.utils.SensorItemCard;
+import com.opensense.dashboard.client.utils.Spinner;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.UserList;
@@ -117,7 +119,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	MaterialCheckBox onlySensorsWithValueBox;
 
 	@UiField
-	MaterialLink listDropDownSpinner;
+	Spinner listDropDownSpinner;
 
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
@@ -146,10 +148,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		this.buildValidators();
 		this.addToListButton.add(new Image(GUIImageBundle.INSTANCE.listIconSvg().getSafeUri().asString()));
 
-		this.container.addDomHandler(event -> {
-			this.blurElement(this.container.getElement()); //blur listDropDown
-			this.listDropDown.getElement().getStyle().setDisplay(Display.NONE);
-		}, MouseWheelEvent.getType());
+		this.container.addDomHandler(event -> this.hideListDropDown(), MouseWheelEvent.getType());
+
+		Window.addResizeHandler(event -> this.hideListDropDown());
 
 		this.listDropDown.addMouseWheelHandler(MouseWheelEvent::stopPropagation);
 	}
@@ -166,15 +167,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@UiHandler("addToListButton")
 	public void onAddToListButtonClicked(ClickEvent e) {
-		this.clearListsDropDown();
 		this.showListDropDownSpinner(true);
+		this.addToListButton.setEnabled(false);
+		this.clearListsDropDown();
 		this.presenter.getListsAndShow();
-	}
-
-	@UiHandler("listDropDownSpinner")
-	public void onListDropDownSpinnerClicked(ClickEvent e) {
-		e.stopPropagation();
-		e.preventDefault();
 	}
 
 	@UiHandler("showOnMapButton")
@@ -484,14 +480,16 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	public void showListDropDownSpinner(boolean show) {
 		if(show) {
-			this.listDropDownSpinner.getParent().getElement().getStyle().setDisplay(Display.BLOCK);
+			this.listDropDownSpinner.getElement().getStyle().setDisplay(Display.BLOCK);
 		} else {
-			this.listDropDownSpinner.getParent().getElement().getStyle().setDisplay(Display.NONE);
+			this.listDropDownSpinner.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}
 
 	@Override
 	public void showUserListsInDropDown(List<UserList> userLists) {
+		this.clearListsDropDown();
+		this.addToListButton.setEnabled(true);
 		this.showListDropDownSpinner(false);
 		userLists.forEach(userList -> {
 			MaterialLink link = new MaterialLink();
@@ -502,7 +500,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 
 	private void clearListsDropDown() {
-		for (int i = 2; i < this.listDropDown.getChildren().size(); i++) {
+		for (int i = this.listDropDown.getChildren().size() - 1; i > 0; i--) {
 			this.listDropDown.remove(i);
 		}
 	}
@@ -510,4 +508,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	private native void blurElement(Element elem) /*-{
 		elem.click();
 	}-*/;
+
+	@Override
+	public void hideListDropDown() {
+		if(this.listDropDown.getElement().getAttribute("style").contains("display: block")){
+			this.listDropDown.getElement().getStyle().setDisplay(Display.NONE);
+			this.blurElement(this.container.getElement()); //blur listDropDown
+		}
+	}
 }
