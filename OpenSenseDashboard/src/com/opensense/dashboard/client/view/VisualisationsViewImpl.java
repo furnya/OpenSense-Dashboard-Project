@@ -33,9 +33,11 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.model.Size;
+import com.opensense.dashboard.client.utils.ColorManager;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
+import com.opensense.dashboard.client.utils.MinMaxValueHandler;
 import com.opensense.dashboard.client.utils.ValueHandler;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Sensor;
@@ -109,14 +111,11 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	private Double minValue = Double.POSITIVE_INFINITY;
 	private Double maxValue = Double.NEGATIVE_INFINITY;
 
-	private String[] colors = {"#5899DA","#E8743B","#19A979","#ED4A7B","#945ECF","#13A4B4","#525DF4","#BF399E","#6C8893","#EE6868","#2F6497"};
-	private Map<Integer,String> usedColors = new HashMap<>();
-	private int nextColor = 0;
-
 	private CartesianTimeAxis xAxis;
 	private CartesianLinearAxis yAxis;
 
 	private ListManager listManager;
+	private MinMaxValueHandler minMaxHandler = new MinMaxValueHandler();
 
 	public VisualisationsViewImpl() {
 		this.initWidget(uiBinder.createAndBindUi(this));
@@ -147,13 +146,15 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 				this.setSensorIdsCopy(event.getSelectedIds());
 				return;
 			}
-			this.resetDatasets();
+			List<Integer> idsToRemove = getListDifference(this.sensorIds, event.getSelectedIds());
+			List<Integer> idsToAdd = getListDifference(event.getSelectedIds(), this.sensorIds);
+			idsToRemove.forEach(id -> removeSensorDatasetFromChart(id));
+			this.setAllSensorCardsGrey(idsToAdd);
 			this.setSensorIdsCopy(event.getSelectedIds());
-			this.setAllSensorCardsGrey();
-			if((event.getSelectedIds()==null) || event.getSelectedIds().isEmpty()) {
+			if(!idsToRemove.isEmpty()) {
 				this.showChart();
 			}
-			this.presenter.valueRequestForSensorList(event.getSelectedIds(), this.getDateRange(), this.getStartingDate(), this.getEndingDate());
+			this.presenter.valueRequestForSensorList(idsToAdd, this.getDateRange(), this.getStartingDate(), this.getEndingDate());
 		});
 	}
 
@@ -186,8 +187,10 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 
 	public void dateRangeButtonClicked(DateRange dr, Date minT, Date maxT) {
-		this.resetColors();
-		this.resetChart();
+		ColorManager.getInstance().resetColors();
+		this.setAllSensorCardsGrey(this.sensorIds);
+		minMaxHandler.reset();
+		this.resetMinMax();
 		this.resetDatasets();
 		this.setDateRange(dr);
 		this.highlightDateRange();
@@ -210,26 +213,19 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 			return;
 		}
 		ValueHandler valueHandler = new ValueHandler(values);
-		List<Value> filteredValues = valueHandler.getValues();
 
-		Date earliest = valueHandler.getEarliest().getTimestamp();
-		Date latest = valueHandler.getLatest().getTimestamp();
-		if((this.minTimestamp==null) || (this.minTimestamp.compareTo(earliest)>0)) {
-			this.minTimestamp = earliest;
-		}
-		if((this.maxTimestamp==null) || (this.maxTimestamp.compareTo(latest)<0)) {
-			this.maxTimestamp = latest;
-		}
+		minMaxHandler.addValueForId(sensor.getSensorId(), valueHandler.getEarliest());
+		minMaxHandler.addValueForId(sensor.getSensorId(), valueHandler.getLatest());
+		this.minTimestamp = minMaxHandler.getEarliest().getTimestamp();
+		this.maxTimestamp = minMaxHandler.getLatest().getTimestamp();
 
-		LineDataset dataset = this.createCrunchedDataset(filteredValues);
-		Double lowest = ValueHandler.getMinOfDataset(dataset);
-		Double highest = ValueHandler.getMaxOfDataset(dataset);
-		if(this.minValue > lowest) {
-			this.minValue = lowest;
-		}
-		if(this.maxValue < highest) {
-			this.maxValue = highest;
-		}
+		LineDataset dataset = this.createCrunchedDataset(values);
+		DataPoint minDP = ValueHandler.getMinOfDataset(dataset);
+		minMaxHandler.addValueForId(sensor.getSensorId(), new Value(minDP.getT(),minDP.getY()));
+		DataPoint maxDP = ValueHandler.getMaxOfDataset(dataset);
+		minMaxHandler.addValueForId(sensor.getSensorId(), new Value(maxDP.getT(),maxDP.getY()));
+		this.minValue = minMaxHandler.getMin().getNumberValue();
+		this.maxValue = minMaxHandler.getMax().getNumberValue();
 		Integer oldSensorId = this.datasetsContainId(sensor.getSensorId());
 		if(oldSensorId != null) {
 			this.datasetMap.remove(oldSensorId);
@@ -303,7 +299,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	 * @param sensors the sensors to set
 	 */
 	public void setSensorIdsCopy(List<Integer> ids) {
-		this.sensorIds = new ArrayList<Integer>(ids);
+		this.sensorIds = new ArrayList<>(ids);
 	}
 
 	/**
@@ -316,6 +312,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	@Override
 	public void createChart() {
+		Defaults.getGlobal().getAnimation().setDuration(0);
 		this.chart = new LineChart();
 		this.chart.getOptions().setShowLines(true);
 		try {
@@ -356,15 +353,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		return true;
 	}
 
-	public void resetChart() {
-		this.chartContainer.clear();
-		this.createChart();
-		this.minTimestamp = null;
-		this.maxTimestamp = null;
-		this.minValue = Double.POSITIVE_INFINITY;
-		this.maxValue = Double.NEGATIVE_INFINITY;
-	}
-
 	public void addDatasetToChart(Dataset dataset) {
 		ArrayList<Dataset> datasets = new ArrayList<>();
 		this.chart.getData().getDatasets().forEach(datasets::add);
@@ -375,7 +363,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 
 	public void setLineDatasetStyle(LineDataset dataset, int sensorId) {
-		String color = this.getNewColor(sensorId);
+		String color = ColorManager.getInstance().getNewColor(sensorId);
 		dataset.setBorderColor(color);
 		this.setCardColor(sensorId, color);
 		this.listManager.setSelectedSensorItemsColor(sensorId, color);
@@ -388,8 +376,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.listManager.setSelectedSensorItemsColor(sensorId, color);
 	}
 	
-	public void setAllSensorCardsGrey() {
-		sensorIds.forEach(id -> this.setCardColor(id, "#a0a0a0"));
+	public void setAllSensorCardsGrey(List<Integer> ids) {
+		ids.forEach(id -> this.setCardColor(id, "#a0a0a0"));
 	}
 
 	public void showNoDatasetsIndicator(boolean show) {
@@ -401,7 +389,13 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 
 	public void removeSensorDatasetFromChart(Integer sensorId) {
-		this.usedColors.remove(sensorId);
+		if(!this.datasetMap.containsKey(sensorId)) {
+			return;
+		}
+		ColorManager.getInstance().removeFromUsedColors(sensorId);
+		if(minMaxHandler.removeValues(sensorId)) {
+			recalculateMinMax();
+		}
 		LineDataset dataset = this.datasetMap.remove(sensorId);
 		ArrayList<Dataset> datasets = new ArrayList<>();
 		this.chart.getData().getDatasets().forEach(datasets::add);
@@ -409,8 +403,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		Dataset[] newDatasets = new Dataset[datasets.size()];
 		newDatasets = datasets.toArray(newDatasets);
 		this.chart.getData().setDatasets(newDatasets);
-		this.recalculateMinMax();
-		this.showChart();
 	}
 
 	public void addSensorDatasetToChart(Integer sensorId) {
@@ -471,20 +463,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		}
 	}
 
-	public String getNewColor(int sensorId) {
-		if(this.usedColors.size()!=this.colors.length) {
-			for(int i=0;i<this.colors.length;i++) {
-				if(!this.usedColors.values().contains(this.colors[i])) {
-					this.nextColor = i;
-				}
-			}
-		}
-		String color = this.colors[this.nextColor];
-		this.usedColors.put(sensorId,color);
-		this.nextColor = (this.nextColor+1)%this.colors.length;
-		return color;
-	}
-
 	public void setDatePickerOptions() {
 		this.startingDate.setDateMax(new Date());
 		this.endingDate.setDateMax(new Date());
@@ -506,26 +484,27 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 
 	public void highlightDateRange() {
-		this.customRange.getElement().removeClassName("active");
-		this.past24Hours.getElement().removeClassName("active");
-		this.pastMonth.getElement().removeClassName("active");
-		this.pastWeek.getElement().removeClassName("active");
-		this.pastYear.getElement().removeClassName("active");
+		String active = "active";
+		this.customRange.getElement().removeClassName(active);
+		this.past24Hours.getElement().removeClassName(active);
+		this.pastMonth.getElement().removeClassName(active);
+		this.pastWeek.getElement().removeClassName(active);
+		this.pastYear.getElement().removeClassName(active);
 		switch(this.dateRange) {
 		case CUSTOM:
-			this.customRange.getElement().addClassName("active");
+			this.customRange.getElement().addClassName(active);
 			break;
 		case PAST_24HOURS:
-			this.past24Hours.getElement().addClassName("active");
+			this.past24Hours.getElement().addClassName(active);
 			break;
 		case PAST_MONTH:
-			this.pastMonth.getElement().addClassName("active");
+			this.pastMonth.getElement().addClassName(active);
 			break;
 		case PAST_WEEK:
-			this.pastWeek.getElement().addClassName("active");
+			this.pastWeek.getElement().addClassName(active);
 			break;
 		case PAST_YEAR:
-			this.pastYear.getElement().addClassName("active");
+			this.pastYear.getElement().addClassName(active);
 			break;
 		default:
 			break;
@@ -541,17 +520,11 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	}
 
 	public void recalculateMinMax() {
-		LinkedList<LineDataset> datasets = new LinkedList<>(this.datasetMap.values());
-		this.minValue = ValueHandler.getMinOfDatasets(datasets);
-		this.maxValue = ValueHandler.getMaxOfDatasets(datasets);
+		this.minValue = minMaxHandler.getMin().getNumberValue();
+		this.maxValue = minMaxHandler.getMax().getNumberValue();
 		this.yAxis.getTicks().setMin(Math.floor(this.minValue-((this.maxValue-this.minValue)*0.1)));
 		this.yAxis.getTicks().setMax(Math.ceil(this.maxValue+((this.maxValue-this.minValue)*0.1)));
 		this.chart.getOptions().getScales().setYAxes(this.yAxis);
-	}
-
-	public void resetColors() {
-		this.usedColors.clear();
-		this.nextColor = 0;
 	}
 
 	@Override
@@ -567,10 +540,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@Override
 	public boolean updateNeeded(List<Integer> ids) {
 		if(((ids==null) || ids.isEmpty())) {
-			if(this.sensorIds.isEmpty()) {
-				return false;
-			}
-			return true;
+			return !this.sensorIds.isEmpty();
 		}
 		for(Integer id : ids) {
 			if(!this.sensorIds.contains(id)) {
@@ -588,5 +558,25 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@Override
 	public ListManager getListManager() {
 		return this.listManager;
+	}
+	
+	public List<Integer> getListDifference(List<Integer> a, List<Integer> b){
+		List<Integer> diff = new LinkedList<>();
+		for(Integer i : a) {
+			if(!b.contains(i)) {
+				diff.add(i);
+			}
+		}
+		return diff;
+	}
+	
+	public List<Integer> getListIntersection(List<Integer> a, List<Integer> b){
+		List<Integer> diff = new LinkedList<>();
+		for(Integer i : a) {
+			if(b.contains(i)) {
+				diff.add(i);
+			}
+		}
+		return diff;
 	}
 }
