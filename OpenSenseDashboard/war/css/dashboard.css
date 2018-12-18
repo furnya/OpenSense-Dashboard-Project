@@ -491,3 +491,7 @@ input:focus+label{
 	max-height: 80vh;
 	height: 80vh;
 }
+
+.filter-none > img{
+    filter: none !important;
+}

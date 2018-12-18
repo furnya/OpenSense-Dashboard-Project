@@ -14,4 +14,5 @@ public interface NavigationPanelView {
 	void setPresenter(Presenter presenter);
 	Widget asWidget();
 	void setActiveDataPanelPage(DataPanelPage page);
+	void setLastButtonActive(boolean b);
 }
