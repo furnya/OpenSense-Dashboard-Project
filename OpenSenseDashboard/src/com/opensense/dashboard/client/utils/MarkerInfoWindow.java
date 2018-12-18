@@ -25,6 +25,8 @@ public class MarkerInfoWindow extends Composite {
 	Rating rating;
 	@UiField
 	Div data;
+	@UiField
+	Div datadescriptor;
 
 	private List<Integer> currentID = new ArrayList<>();
 	
@@ -58,6 +60,13 @@ public class MarkerInfoWindow extends Composite {
 			this.data.add(new Span(item));
 			});
 	}
+	
+	public void setDataDescriptor(List<String> sensorDescriptor) {
+		sensorDescriptor.forEach(item -> {
+			this.datadescriptor.add(new Span(item));
+			});
+	}
+	
 	
 	public void setInfoWindowRating(Double accuracy) {
 		if(accuracy != null) {
