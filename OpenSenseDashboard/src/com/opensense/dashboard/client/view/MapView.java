@@ -1,7 +1,6 @@
 package com.opensense.dashboard.client.view;
 
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerManager;
@@ -28,7 +27,6 @@ public interface MapView extends IDataPanelPageView{
 	public void showMarkers(List<Sensor> sensorlist);
 	public void resetMarkerAndCluster();
 	public MapWidget getMapWidget();
-	public Map<Integer, Marker> getMarkers();
 	public ListManager getListManager();
 	public void addPlusCluster(Marker marker);
 	public void checkForSpiderfierMarkers();

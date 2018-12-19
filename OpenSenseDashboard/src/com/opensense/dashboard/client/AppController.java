@@ -336,11 +336,13 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		}
 		MaterialToast.fireToast("Logged in");
 		this.dataPanelPresenter.onUserLoggedIn();
+		this.navigationPanelPresenter.onUserLoggedIn();
 	}
 
 	public void onUserLoggedOut() {
 		this.isGuest = true;
 		MaterialToast.fireToast("Logged out");
 		this.dataPanelPresenter.onUserLoggedOut();
+		this.navigationPanelPresenter.onUserLoggedOut();
 	}
 }

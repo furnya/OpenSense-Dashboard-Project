@@ -7,11 +7,11 @@ import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.view.NavigationPanelView;
 
 public class NavigationPanelPresenter implements IPresenter, NavigationPanelView.Presenter{
-	
+
 	private final NavigationPanelView view;
 	private final AppController appController;
 	private final HandlerManager eventBus;
-	
+
 	public NavigationPanelPresenter(HandlerManager eventBus, AppController appController, NavigationPanelView view) {
 		this.appController = appController;
 		this.eventBus = eventBus;
@@ -20,33 +20,43 @@ public class NavigationPanelPresenter implements IPresenter, NavigationPanelView
 	}
 
 	public NavigationPanelView getView() {
-		return view;
+		return this.view;
 	}
-	
+
+	@Override
 	public void go(HasWidgets container) {
 		container.clear();
-		container.add(view.asWidget());
+		container.add(this.view.asWidget());
 	}
-	
+
+	@Override
 	public HandlerManager getEventBus() {
 		return this.eventBus;
 	}
-	
+
 	public AppController getAppController() {
 		return this.appController;
 	}
 
 	public void setActiveDataPanelPage(DataPanelPage page) {
-		view.setActiveDataPanelPage(page);
+		this.view.setActiveDataPanelPage(page);
 	}
 
 	@Override
 	public boolean isGuest() {
-		return appController.isGuest();
+		return this.appController.isGuest();
 	}
 
 	@Override
 	public void onLogoutButtonClicked() {
-		appController.logout();
+		this.appController.logout();
+	}
+
+	public void onUserLoggedIn() {
+		this.view.setLastButtonActive(true);
+	}
+
+	public void onUserLoggedOut() {
+		this.view.setLastButtonActive(false);
 	}
 }

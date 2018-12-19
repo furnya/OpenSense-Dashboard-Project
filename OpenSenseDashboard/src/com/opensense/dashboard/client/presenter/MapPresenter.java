@@ -30,6 +30,8 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 
 	private JavaScriptObject markerSpiderfier;
 
+	private boolean spiderStatus = false;
+
 	public MapPresenter(HandlerManager eventBus, AppController appController, MapView view) {
 		super(view, eventBus, appController);
 		this.view = view;
@@ -99,7 +101,8 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 			if ((result != null) && (result.getResultType() != null)
 					&& request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
 				if (request.getParameters() != null) {
-					this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, request.getParameters(), false));
+					this.eventBus
+							.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, request.getParameters(), false));
 				} else if (request.getIds() != null) {
 					this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, request.getIds()));
 				}
@@ -120,23 +123,34 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 
 	private native JavaScriptObject initMarkerSpiderfierJSNI(JavaScriptObject mapWidget) /*-{
 		var oms = new $wnd.OverlappingMarkerSpiderfier(mapWidget, {
-			nearbyDistance : 10,
+			nearbyDistance : 1,
 			markersWontMove : true,
 			keepSpiderfied : true,
+			spiralFootSeparation : 26,
+			spiralLengthStart : 11,
+			spiralLengthFactor : 4,
+			legWeight : 2.5,
 			circleSpiralSwitchover : 30,
 			basicFormatEvents : true
 		});
 		var that = this;
 
 		//destroy MarkerPopup whenever the spiderfier does some action:
-		oms.addListener('spiderfy',	function(marker) {
-			console.log("spiderfy");
-		});
+		oms
+				.addListener(
+						'spiderfy',
+						function(marker) {
+							console.log("spiderfy");
 
-		oms.addListener('unspiderfy', function(marker) {
-			console.log("unspiderfy");
-			that.@com.opensense.dashboard.client.presenter.MapPresenter::addPlusCluster(*)(marker);
-		});
+						});
+
+		oms
+				.addListener(
+						'unspiderfy',
+						function(marker) {
+							console.log("unspiderfy");
+							that.@com.opensense.dashboard.client.presenter.MapPresenter::addPlusCluster(*)(marker);
+						});
 
 		return oms;
 	}-*/;
@@ -144,11 +158,12 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	@Override
 	public JavaScriptObject getMarkerSpiderfier() {
 		return this.markerSpiderfier;
-	}
-
+	}	
+	
 	public void addPlusCluster(Marker marker) {
 		this.view.checkForSpiderfierMarkers();
-		//this.view.addPlusCluster(marker);//TODO: this should work but the marker is not correct
+//		this.view.addPlusCluster(marker);//TODO: this should work but the marker is
+		// not correct
 	}
 
 }
