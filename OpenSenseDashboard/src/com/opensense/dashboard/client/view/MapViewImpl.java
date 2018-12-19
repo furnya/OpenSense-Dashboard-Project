@@ -138,6 +138,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private void initMap() {
 		this.mapOptions = MapOptions.newInstance();
 		this.mapOptions.setMinZoom(2);
+		this.mapOptions.setMaxZoom(18);
 		this.mapOptions.setDraggable(true);
 		this.mapOptions.setScaleControl(true);
 		this.mapOptions.setStreetViewControl(false);
@@ -259,10 +260,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		dataDesriptors.add(Languages.altitudeAboveGround() + " ");
 		dataDesriptors.add(Languages.origin() + " ");
 		infoWindow.setDataDescriptor(dataDesriptors);
-		sensorData.add(si.getMeasurand().getMeasurandType().toString());
+		sensorData.add(si.getMeasurand().getDisplayName());
 		sensorData.add(si.getSensorModel());
 		sensorData.add("" + si.getAccuracy());
-		sensorData.add("" + si.getAltitudeAboveGround());
+		sensorData.add("" + si.getAltitudeAboveGround()+ "m");
 		sensorData.add(si.getAttributionText());
 		infoWindow.setData(sensorData);
 		iwOptions.setContent(infoWindow);
