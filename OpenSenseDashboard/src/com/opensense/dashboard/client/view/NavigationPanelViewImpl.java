@@ -23,7 +23,9 @@ import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 
+import gwt.material.design.client.constants.Position;
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialTooltip;
 
 public class NavigationPanelViewImpl extends Composite implements NavigationPanelView {
 
@@ -46,6 +48,9 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 
 	@UiField
 	MaterialButton logout;
+
+	@UiField
+	MaterialTooltip lastButtonTooltip;
 
 	private final EnumMap<DataPanelPage, Button> navElements = new EnumMap<>(DataPanelPage.class);
 
@@ -77,9 +82,13 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 					this.showLogoutButton(false);
 					this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(page, true));
 				});
-				this.buttonGroup.add(navButton);
+				MaterialTooltip tooltip = new MaterialTooltip(navButton);
+				tooltip.setText(page.displayName());
+				tooltip.setPosition(Position.RIGHT);
+				this.buttonGroup.add(tooltip);
 				this.navElements.put(page, navButton);
 			}else {
+				this.lastButtonTooltip.setText(page.displayName());
 				this.lastButton.add(new Image(GUIImageBundle.INSTANCE.userIconSvg().getSafeUri().asString()));
 				this.lastButton.addClickHandler(event -> {
 					if(this.presenter.isGuest()){
@@ -101,10 +110,12 @@ public class NavigationPanelViewImpl extends Composite implements NavigationPane
 			new Timer() {@Override public void run() {
 				NavigationPanelViewImpl.this.clickHandler = RootPanel.get().addDomHandler(event -> NavigationPanelViewImpl.this.showLogoutButton(false), ClickEvent.getType());
 			}}.schedule(100);
+			this.lastButtonTooltip.remove();
 			this.lastButton.addStyleName("remove-hover");
 			this.logoutContainer.getElement().getStyle().clearDisplay();
 		}else {
 			this.lastButton.removeStyleName("remove-hover");
+			this.lastButtonTooltip.reinitialize();
 			this.logoutContainer.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}

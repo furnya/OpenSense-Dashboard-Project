@@ -23,11 +23,6 @@
 .nav-bar a {
 	display: none;	
 }
-.con{
-	max-height: 75vh;
-    overflow: auto; 
-    padding-right: 10px;
-}
 .panel{
     background: #202020;
     padding: 10px 10px 10px 10px;
@@ -92,7 +87,7 @@
 }
 </ui:style>
 
-<bh:Div ui:field="container" addStyleNames="{style.con}">
+<bh:Div ui:field="container">
 	<bh:Div ui:field="searchPanel" addStyleNames="{style.panel} round-corners">
 		<bh:Div addStyleNames="flex {style.margin}">
 			<m:MaterialNavBar ui:field="navBarSearch" width="33%" addStyleNames="{style.nav-bar} round-corners"> 

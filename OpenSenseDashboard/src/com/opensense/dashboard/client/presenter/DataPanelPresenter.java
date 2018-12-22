@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
-import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.DataPanelPageView;
 import com.opensense.dashboard.client.view.DataPanelView;
 
@@ -55,14 +54,11 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			this.activeDataPanelPagePresenter = page.createPresenterInstance(this.eventBus, this.appController, this.pageViews.get(page));
 
 			if(this.view != null) {
-				this.view.setHeading("");
 				this.view.getContentContainer().clear();
 				this.view.showLoader();
 			}
 
 			openPageRunnable = () -> {
-				this.view.setHeading(page.displayName());
-
 				this.activeDataPanelPagePresenter.onPageReturn();
 
 				// Firing the presenter of the new page.
@@ -88,7 +84,6 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			LOGGER.log(Level.WARNING, "Error while navigating to page " + page, e);
 			if(this.view != null) {
 				this.view.getContentContainer().clear();
-				this.view.setHeading(Languages.errorDataPanelPageLoading());
 				this.view.hideLoader();
 			}
 		}
