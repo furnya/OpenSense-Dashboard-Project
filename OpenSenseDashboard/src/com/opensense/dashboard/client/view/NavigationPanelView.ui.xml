@@ -27,7 +27,9 @@
 <bh:Div addStyleNames="nav-container vertical user-select-none">
 	<b:ButtonGroup ui:field="buttonGroup"/>
 	<bh:Div ui:field="lastButtonCon" addStyleNames="{style.bottom-con}">
-		<b:Button addStyleNames="nav-button" ui:field="lastButton"/>
+		<m:MaterialTooltip ui:field="lastButtonTooltip" position="RIGHT">
+			<b:Button addStyleNames="nav-button" ui:field="lastButton"/>
+ 		</m:MaterialTooltip>
  	</bh:Div>
  	<bh:Div ui:field="logoutContainer" addStyleNames="{style.logout-container}">
 		<m:MaterialButton text="{lang.logout}" ui:field="logout" addStyleNames="d-btn"/>

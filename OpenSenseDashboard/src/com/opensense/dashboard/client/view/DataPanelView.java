@@ -10,7 +10,6 @@ public interface DataPanelView {
 	public void setPresenter(Presenter dataPanelPresenter);
 	public Widget asWidget();
 	HasWidgets getContentContainer();
-	void setHeading(String heading);
 	void showLoader();
 	void hideLoader();
 }

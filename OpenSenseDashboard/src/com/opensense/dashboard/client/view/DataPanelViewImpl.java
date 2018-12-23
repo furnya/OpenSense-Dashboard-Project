@@ -10,90 +10,74 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
-
-import gwt.material.design.client.constants.LoaderSize;
-import gwt.material.design.client.ui.MaterialPreLoader;
-import gwt.material.design.client.ui.MaterialSpinner;
+import com.opensense.dashboard.client.utils.Spinner;
 
 public class DataPanelViewImpl extends Composite implements DataPanelView, HasWidgets {
-	
+
 	@UiTemplate("DataPanelView.ui.xml")
 	interface DataPanelViewUiBinder extends UiBinder<Widget, DataPanelViewImpl> {
 	}
 
 	private static DataPanelViewUiBinder uiBinder = GWT.create(DataPanelViewUiBinder.class);
-	
+
 	@SuppressWarnings("unused")
 	private Presenter presenter;
-	
-	@UiField
-	HasText heading;
 
 	@UiField
 	HasWidgets content;
-	
-	@UiField
-	Div loadingContainer;
-	
-	public DataPanelViewImpl() {
-		initWidget(uiBinder.createAndBindUi(this));
-		buildLoader();
-	}
 
-	private void buildLoader() {
-		MaterialPreLoader materialPreLoader = new MaterialPreLoader(); 
-		materialPreLoader.setSize(LoaderSize.MEDIUM);
-		MaterialSpinner spinner = new MaterialSpinner();
-		materialPreLoader.add(spinner);
-		loadingContainer.add(materialPreLoader);
+	@UiField
+	Spinner spinner;
+
+	@UiField
+	Div spinnerContainer;
+
+	public DataPanelViewImpl() {
+		this.initWidget(uiBinder.createAndBindUi(this));
 	}
 
 	@Override
 	public void add(Widget w) {
-		content.add(w);
+		this.content.add(w);
 	}
 
 	@Override
 	public void clear() {
-		content.clear();
+		this.content.clear();
 	}
 
 	@Override
 	public Iterator<Widget> iterator() {
-		return content.iterator();
+		return this.content.iterator();
 	}
 
 	@Override
 	public boolean remove(Widget w) {
-		return content.remove(w);
+		return this.content.remove(w);
 	}
-	
+
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
-	
+
 	@Override
 	public HasWidgets getContentContainer() {
-		return content;
+		return this.content;
 	}
-	
-	@Override
-	public void setHeading(String heading) {
-		this.heading.setText(heading);
-	}
-	
+
 	@Override
 	public void showLoader() {
-		loadingContainer.getElement().getStyle().clearDisplay();
+		this.spinner.setDisplay(Display.BLOCK);
+		this.spinnerContainer.getElement().getStyle().clearDisplay();
 	}
-	
+
 	@Override
 	public void hideLoader() {
-		loadingContainer.getElement().getStyle().setDisplay(Display.NONE);
+		this.spinner.setDisplay(Display.NONE);
+		this.spinnerContainer.getElement().getStyle().setDisplay(Display.NONE);
 	}
-	
+
 }
