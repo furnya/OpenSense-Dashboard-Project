@@ -2,22 +2,24 @@ package com.opensense.dashboard.client.view;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.gwtbootstrap3.client.ui.html.Div;
+import org.pepstock.charba.client.AbstractChart;
 import org.pepstock.charba.client.Defaults;
 import org.pepstock.charba.client.LineChart;
-import org.pepstock.charba.client.data.DataPoint;
+import org.pepstock.charba.client.callbacks.TooltipLabelCallback;
+import org.pepstock.charba.client.callbacks.TooltipLabelColor;
+import org.pepstock.charba.client.colors.Color;
+import org.pepstock.charba.client.colors.IsColor;
 import org.pepstock.charba.client.data.Dataset;
 import org.pepstock.charba.client.data.LineDataset;
 import org.pepstock.charba.client.enums.CartesianAxisType;
-import org.pepstock.charba.client.enums.Fill;
+import org.pepstock.charba.client.enums.InteractionMode;
 import org.pepstock.charba.client.enums.ScaleBounds;
 import org.pepstock.charba.client.enums.ScaleDistribution;
 import org.pepstock.charba.client.enums.TimeUnit;
+import org.pepstock.charba.client.items.TooltipItem;
 import org.pepstock.charba.client.options.scales.CartesianLinearAxis;
 import org.pepstock.charba.client.options.scales.CartesianTimeAxis;
 import org.pepstock.charba.client.plugins.InvalidPluginIdException;
@@ -38,11 +40,7 @@ import com.opensense.dashboard.client.utils.ColorManager;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
-import com.opensense.dashboard.client.utils.MinMaxValueHandler;
-import com.opensense.dashboard.client.utils.ValueHandler;
 import com.opensense.dashboard.shared.DateRange;
-import com.opensense.dashboard.shared.Sensor;
-import com.opensense.dashboard.shared.Value;
 
 import gwt.material.design.client.constants.DatePickerLanguage;
 import gwt.material.design.client.ui.MaterialButton;
@@ -181,6 +179,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		Defaults.getGlobal().getAnimation().setDuration(0);
 		this.chart = new LineChart();
 		this.chart.getOptions().setShowLines(true);
+		chart.getOptions().getTooltips().setIntersect(false);
+		chart.getOptions().getTooltips().setMode(InteractionMode.index);
 		try {
 			Defaults.getPlugins().register(new ChartBackgroundColor());
 		} catch (InvalidPluginIdException e) {
@@ -190,6 +190,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.xAxis.setDistribution(ScaleDistribution.linear);
 		this.xAxis.setBounds(ScaleBounds.ticks);
 		this.xAxis.getTime().setStepSize(1);
+		this.xAxis.getTime().setTooltipFormat("DD MMM YYYY, HH:mm");
 		this.yAxis = new CartesianLinearAxis(this.chart, CartesianAxisType.y);
 		this.chart.getOptions().getScales().setXAxes(this.xAxis);
 		this.chart.getOptions().getScales().setYAxes(this.yAxis);
@@ -204,16 +205,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 			return false;
 		}
 		this.showNoDatasetsIndicator(false);
-		TimeUnit tu = this.calculateTimeUnit(chartBounds);
-		this.xAxis.getTime().setMin(chartBounds.getMinTimestamp());
-		this.xAxis.getTime().setMax(chartBounds.getMaxTimestamp());
-		this.xAxis.getTime().setUnit(tu);
-		this.xAxis.getTime().setTooltipFormat("DD MMM YYYY, HH:mm");
-		this.xAxis.getTime().getDisplayFormats().setDisplayFormat(tu, this.getDisplayFormat(tu));
-		this.yAxis.getTicks().setMin(Math.floor(chartBounds.getMinValue()-((chartBounds.getMaxValue()-chartBounds.getMinValue())*0.1)));
-		this.yAxis.getTicks().setMax(Math.ceil(chartBounds.getMaxValue()+((chartBounds.getMaxValue()-chartBounds.getMinValue())*0.1)));
-		this.chart.getOptions().getScales().setXAxes(this.xAxis);
-		this.chart.getOptions().getScales().setYAxes(this.yAxis);
+		this.setChartAxisX(chartBounds.getMinTimestamp(), chartBounds.getMaxTimestamp());
+		this.setChartAxisY(chartBounds.getMinValue(), chartBounds.getMaxValue());
 		this.chartContainer.add(this.chart);
 		return true;
 	}
@@ -343,7 +336,19 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void setChartAxisY(Double minValue, Double maxValue) {
 		this.yAxis.getTicks().setMin(Math.floor(minValue-((maxValue-minValue)*0.1)));
 		this.yAxis.getTicks().setMax(Math.ceil(maxValue+((maxValue-minValue)*0.1)));
+		this.yAxis.getScaleLabel().setDisplay(true);
+		this.yAxis.getScaleLabel().setLabelString("Temperature");
 		this.chart.getOptions().getScales().setYAxes(this.yAxis);
+	}
+	
+	@Override
+	public void setChartAxisX(Date minTimestamp, Date maxTimestamp) {
+		TimeUnit tu = this.calculateTimeUnit(new ChartBounds(0.0, 0.0, minTimestamp, maxTimestamp));
+		this.xAxis.getTime().setMin(minTimestamp);
+		this.xAxis.getTime().setMax(maxTimestamp);
+		this.xAxis.getTime().setUnit(tu);
+		this.xAxis.getTime().getDisplayFormats().setDisplayFormat(tu, this.getDisplayFormat(tu));
+		this.chart.getOptions().getScales().setXAxes(this.xAxis);
 	}
 
 	@Override

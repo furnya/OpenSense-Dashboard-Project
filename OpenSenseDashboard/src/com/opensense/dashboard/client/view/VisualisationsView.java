@@ -14,14 +14,13 @@ import com.opensense.dashboard.client.utils.ChartBounds;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Sensor;
+import com.opensense.dashboard.shared.Unit;
 import com.opensense.dashboard.shared.Value;
 import com.opensense.dashboard.shared.ValuePreview;
 
 public interface VisualisationsView extends IDataPanelPageView {
 	
 	public interface Presenter{
-		void valueRequestForSensorList(List<Integer> sensorIds, DateRange dateRange, Date minDate, Date maxDate);
-		void buildValueRequestAndSend(Integer id, DateRange dateRange, Date minDate, Date maxDate);
 		HandlerManager getEventBus();
 		void onSelectedSensorsChange(List<Integer> newIds);
 		void setListManager(ListManager listManager);
@@ -29,6 +28,7 @@ public interface VisualisationsView extends IDataPanelPageView {
 		DateRange getDateRange();
 		List<Integer> getsensorIds();
 		Map<Integer, LineDataset> getDatasetMap();
+		Unit getUnit(Integer sensorId);
 	}
 	
 	void setPresenter(Presenter presenter);
@@ -47,4 +47,5 @@ public interface VisualisationsView extends IDataPanelPageView {
 	void setChartDatasets(LineDataset[] datasets);
 	void highlightDateRange(DateRange dateRange);
 	void addDatasetToChart(Dataset dataset);
+	void setChartAxisX(Date minTimestamp, Date maxTimestamp);
 }

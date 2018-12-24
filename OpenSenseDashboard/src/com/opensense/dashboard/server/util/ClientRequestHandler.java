@@ -93,9 +93,11 @@ public class ClientRequestHandler {
 
 	public List<Sensor> getSensorList(List<Parameter> parameterList, List<Integer> ids) throws IOException{
 		LinkedList<Sensor> sensorList = new LinkedList<>();
+		Map<Integer, Measurand> measurandMap = this.getMeasurandMap();
+		Map<Integer, Unit> unitMap = this.getUnitMap();
 		if((ids!=null) && !ids.isEmpty()) {
 			for(int id : ids) {
-				sensorList.add(this.getSensor(id));
+				sensorList.add(this.getSensor(id,measurandMap,unitMap));
 			}
 			return sensorList;
 		}
@@ -105,8 +107,6 @@ public class ClientRequestHandler {
 		if(sensorArrayJSON==null) {
 			return sensorList;
 		}
-		Map<Integer, Measurand> measurandMap = this.getMeasurandMap();
-		Map<Integer, Unit> unitMap = this.getUnitMap();
 		for(Object o : sensorArrayJSON) {
 			if(!(o instanceof JSONObject)) {
 				continue;
@@ -132,14 +132,12 @@ public class ClientRequestHandler {
 		return filteredSensors;
 	}
 
-	public Sensor getSensor(int id) throws IOException{
+	public Sensor getSensor(int id, Map<Integer, Measurand> measurandMap, Map<Integer, Unit> unitMap) throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
 		if(sensorJSON==null) {
 			return null;
 		}
-		Map<Integer, Measurand> measurandMap = this.getMeasurandMap();
-		Map<Integer, Unit> unitMap = this.getUnitMap();
 		return DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
 	}
 

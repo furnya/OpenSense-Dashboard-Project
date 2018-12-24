@@ -35,6 +35,7 @@ import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.Sensor;
+import com.opensense.dashboard.shared.Unit;
 import com.opensense.dashboard.shared.Value;
 import com.opensense.dashboard.shared.ValuePreview;
 
@@ -48,6 +49,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	private static final int MAX_POINTS = 100;
 	
 	private List<Integer> sensorIds = new LinkedList<>();
+	private Map<Integer, Unit> unitMap = new HashMap<>();
 	private Map<Integer, LineDataset> datasetMap = new HashMap<>();
 	
 	private Date maxTimestamp = null;
@@ -166,7 +168,10 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	public void recalculateMinMax() {
 		this.minValue = minMaxHandler.getMin().getNumberValue();
 		this.maxValue = minMaxHandler.getMax().getNumberValue();
+		this.minTimestamp = minMaxHandler.getEarliest().getTimestamp();
+		this.maxTimestamp = minMaxHandler.getLatest().getTimestamp();
 		view.setChartAxisY(minValue, maxValue);
+		view.setChartAxisX(minTimestamp, maxTimestamp);		
 	}
 	
 	/**
@@ -220,30 +225,30 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		return false;
 	}
 	
-	public void addSensorValues(Sensor sensor, List<Value> values) {
-		if((sensor == null) || (values == null) || values.isEmpty()) {
+	public void addSensorValues(Integer sensorId, List<Value> values) {
+		if((values == null) || values.isEmpty()) {
 			return;
 		}
 		ValueHandler valueHandler = new ValueHandler(values);
 
-		minMaxHandler.addValueForId(sensor.getSensorId(), valueHandler.getEarliest());
-		minMaxHandler.addValueForId(sensor.getSensorId(), valueHandler.getLatest());
+		minMaxHandler.addValueForId(sensorId, valueHandler.getEarliest());
+		minMaxHandler.addValueForId(sensorId, valueHandler.getLatest());
 		this.minTimestamp = minMaxHandler.getEarliest().getTimestamp();
 		this.maxTimestamp = minMaxHandler.getLatest().getTimestamp();
 
 		LineDataset dataset = this.createCrunchedDataset(values);
 		DataPoint minDP = ValueHandler.getMinOfDataset(dataset);
-		minMaxHandler.addValueForId(sensor.getSensorId(), new Value(minDP.getT(),minDP.getY()));
+		minMaxHandler.addValueForId(sensorId, new Value(minDP.getT(),minDP.getY()));
 		DataPoint maxDP = ValueHandler.getMaxOfDataset(dataset);
-		minMaxHandler.addValueForId(sensor.getSensorId(), new Value(maxDP.getT(),maxDP.getY()));
+		minMaxHandler.addValueForId(sensorId, new Value(maxDP.getT(),maxDP.getY()));
 		this.minValue = minMaxHandler.getMin().getNumberValue();
 		this.maxValue = minMaxHandler.getMax().getNumberValue();
-		Integer oldSensorId = this.datasetsContainId(sensor.getSensorId());
+		Integer oldSensorId = this.datasetsContainId(sensorId);
 		if(oldSensorId != null) {
 			this.datasetMap.remove(oldSensorId);
 		}
-		this.datasetMap.put(sensor.getSensorId(), dataset);
-		this.setLineDatasetStyle(dataset, sensor.getSensorId());
+		this.datasetMap.put(sensorId, dataset);
+		this.setLineDatasetStyle(dataset, sensorId);
 		view.addDatasetToChart(dataset);
 	}
 	
@@ -311,8 +316,9 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	
 	private void sendRequest(final Request request) {
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
-			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getValues() != null) {
-				this.addSensorValues(result.getSensors().get(0), result.getValues());
+			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getValues() != null && result.getSensors() != null) {
+				this.unitMap.put(result.getSensors().get(0).getSensorId(), result.getSensors().get(0).getUnit());
+				this.addSensorValues(result.getSensors().get(0).getSensorId(), result.getValues());
 				view.showChart(this.getDatasetMap(),this.getChartBounds());
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
@@ -382,6 +388,11 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	@Override
 	public Map<Integer, LineDataset> getDatasetMap() {
 		return this.datasetMap;
+	}
+
+	@Override
+	public Unit getUnit(Integer sensorId) {
+		return this.unitMap.get(sensorId);
 	}
 
 }

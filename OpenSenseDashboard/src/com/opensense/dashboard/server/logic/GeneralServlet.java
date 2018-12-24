@@ -36,7 +36,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			case MEASURAND:
 				response.setMeasurands(ClientRequestHandler.getInstance().getMeasurandMap());
 				break;
-			case SENSOR: //TODO: add searchRequest.isOnlySensorsWithValues();
+			case SENSOR:
 				if(searchRequest.isOnlySensorsWithValues()) {
 					response.setSensors(ClientRequestHandler.getInstance().getSensorListOnlyWithValues(searchRequest.getParameters(), searchRequest.getIds()));
 				}else {
