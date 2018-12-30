@@ -94,6 +94,7 @@ public class ListCollapsibleItem extends Composite{
 
 	public ListCollapsibleItem() {
 		this.initWidget(uiBinder.createAndBindUi(this));
+		this.setSize(Size.MEDIUM);
 		this.showNoDataIndicator(false);
 	}
 
@@ -258,11 +259,23 @@ public class ListCollapsibleItem extends Composite{
 	}
 
 	public void open(){
-		this.clickElement(this.header.getElement());
+		if(!this.header.getElement().getClassName().contains("active")) {
+			this.clickElement(this.header.getElement());
+		}
 	}
 
 
 	private native void clickElement(Element element) /*-{
 		element.click();
 	}-*/;
+
+	public void setSize(Size size) {
+		this.sensorItem.getElement().setAttribute("size", size.name().toLowerCase());
+	}
+
+	public void close() {
+		if(this.header.getElement().getClassName().contains("active")) {
+			this.clickElement(this.header.getElement());
+		}
+	}
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -45,6 +46,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(this.view.asWidget());
+		Document.get().getElementById("content").addClassName("padding-right-10");
 	}
 
 	@Override
@@ -73,6 +75,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	@Override
 	public void onPageLeave() {
 		this.view.hideListDropDown();
+		Document.get().getElementById("content").removeClassName("padding-right-10");
 	}
 
 	@Override

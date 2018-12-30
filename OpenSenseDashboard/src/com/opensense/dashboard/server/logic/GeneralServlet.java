@@ -91,6 +91,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	@Override
 	public List<UserList> getUserLists() { // this method could be added in the get data from request (LIST)
 		if(SessionUser.getInstance().isGuest()) {
+			System.out.println("GUEST MODE DETECTED");
 			return new LinkedList<>();
 		}
 		List<UserList> list = new ArrayList<>();
@@ -130,14 +131,14 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	}
 
 	@Override
-	public ActionResult createNewUserList() {
+	public Integer createNewUserList() {
 		//list of list ids with sensor ids in it
 		UserList listItem = new UserList();
 		listItem.setListId(this.idNumber++);
 		listItem.setListName("Neue Liste " + listItem.getListId());
 		listItem.setSensorIds(new ArrayList<>());
 		this.lists.put(listItem.getListId(), listItem);
-		return new ActionResult(ActionResultType.SUCCESSFUL);
+		return listItem.getListId();
 	}
 
 	@Override

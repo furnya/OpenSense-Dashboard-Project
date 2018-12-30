@@ -3,6 +3,7 @@ package com.opensense.dashboard.client.presenter;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -27,6 +28,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(this.view.asWidget());
+		Document.get().getElementById("content").addClassName("padding-right-10");
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 
 	@Override
 	public void onPageLeave() {
-		// TODO Auto-generated method stub
+		Document.get().getElementById("content").removeClassName("padding-right-10");
 	}
 
 	@Override

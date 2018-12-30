@@ -25,8 +25,12 @@ public interface ListManagerView {
 	public void showSelectedSensorListsItem(boolean b);
 	public void clearUserLists();
 	public void selectAllSensorsInList(int listId);
-	public void setCollapsibleListItemSelected(int listId);
+	public void setCollapsibleListItemSelected(Integer listId);
 	public void setSensorsInList(int listId, List<MinimalSensor> sensors);
 	public void setSelectedSensorItemsColor(int sensorId, String sensorColor);
 	public void addNewUserListItem(UserList userList, boolean addDeleteListButton);
+	public void setOneItemStyle(boolean b);
+	public Integer getActiveItemId();
+	public void setOldSelection();
+	public void setActiveItemId(Integer id);
 }

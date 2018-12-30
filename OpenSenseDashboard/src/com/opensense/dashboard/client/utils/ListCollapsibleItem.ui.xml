@@ -33,11 +33,6 @@
 .float-right{
 	margin-left: 15px;
 }
-.header{
-	display: -webkit-box;
-    max-height: 43.8px;
-}	
-}
 .body {
 	text-align: center;	
 	overflow: hidden;
@@ -59,7 +54,6 @@
 .list-name-input > input{
     height: 25px;
 }
-
 .fav-img{
     width: 25px;
     margin-right: 20px;
@@ -72,9 +66,9 @@
 }
 </ui:style>
 
-<m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE">
+<m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE" addStyleNames="collapsible-item">
 	<m:MaterialCollapsibleHeader ui:field="header">
-		<bh:Div addStyleNames="position-relative {style.header}">
+		<bh:Div addStyleNames="position-relative header">
 			<m:MaterialLink iconType="ARROW_DROP_DOWN" iconPosition="LEFT"/>
 			<bh:Span ui:field="listItemName" />
 			<m:MaterialTextBox ui:field="listNameInput" addStyleNames="{style.list-name-input}" display="NONE" />

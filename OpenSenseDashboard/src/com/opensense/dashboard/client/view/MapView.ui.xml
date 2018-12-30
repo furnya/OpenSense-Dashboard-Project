@@ -12,22 +12,12 @@
 		type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 
 	<ui:style>
-	.sensor-container {
-		max-height: 75vh !important;
-		max-width: 30vw;
-		overflow: auto;
-		padding-left: 10px;
-		padding-right: 10px;
-		min-width:30vw;
-		margin-left: 10px;
-		margin-right: 10px;
-		background: black;
-	}
 	</ui:style>
 
 	<bh:Div addStyleNames="flex">
 		<bh:Div ui:field="map" b:id="map" addStyleNames="round-corners"/>
-		<bh:Div ui:field="sensorContainer"
-			addStyleNames="{style.sensor-container} round-corners" />
+		<bh:Div>
+			<bh:Div ui:field="sensorContainer" addStyleNames="list-container round-corners" />
+		</bh:Div>
 	</bh:Div>
 </ui:UiBinder>

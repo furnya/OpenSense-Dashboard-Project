@@ -22,9 +22,6 @@
 }
 .container{
 	user-select: none;
-	max-height: 80vh;
-    overflow: auto; 
-    padding-right: 10px;
 }
 </ui:style>
 

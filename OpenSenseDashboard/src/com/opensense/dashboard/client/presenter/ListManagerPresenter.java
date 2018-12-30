@@ -46,10 +46,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	 */
 	public void updateLists() {
 		this.updateFavoriteList();
-		//		this.updateSelectedSensorsList(new ArrayList<>());
 		this.updateUserLists();
 		if(this.controller.isUserLoggedIn()) {
 			this.view.showMySensorListsItem(true);
+			this.view.setOneItemStyle(false);
 			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MYSENSORS, false);
 			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
 				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMyListSensors() != null)
@@ -58,17 +58,21 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 				}else {
 					this.view.setSensorsInList(DefaultListItem.MY_LIST_ID, new ArrayList<>());
 				}
+				this.view.setOldSelection();
 			}, caught -> {
 				GWT.log("Shit4");
 			},true));
 		}else {
+			this.view.setOneItemStyle(true);
 			this.view.showMySensorListsItem(false);
 		}
 	}
 
 	public void createNewList() {
-		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<ActionResult>(result -> {
+		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<Integer>(result -> {
+			GWT.log("Created new list");
 			if(result != null) {
+				this.view.setActiveItemId(result);
 				this.updateUserLists();
 			}else {
 				GWT.log("Shit5");
@@ -142,6 +146,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		}else {
 			this.view.setSensorsInList(DefaultListItem.FAVORITE_LIST_ID, new ArrayList<>());
 		}
+		this.view.setOldSelection();
 	}
 
 	public void updateSelectedSensorsList(List<Integer> idList) {
@@ -197,6 +202,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		if(this.controller.isUserLoggedIn()) {
 			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
 				if((result != null)) {
+					GWT.log("List length="+result.size());
 					result.forEach(userList -> {
 						this.view.addNewUserListItem(userList, true);
 						if(!userList.getSensorIds().isEmpty()) {
@@ -205,6 +211,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 							this.view.setSensorsInList(userList.getListId(), new ArrayList<>());
 						}
 					});
+					this.view.setOldSelection();
 				}else {
 					GWT.log("Shit1");
 				}
