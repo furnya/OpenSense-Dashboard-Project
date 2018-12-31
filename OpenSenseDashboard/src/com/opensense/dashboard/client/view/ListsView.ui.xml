@@ -26,7 +26,7 @@
 </ui:style>
 
 <bh:Div addStyleNames="{style.container}">
-	<bh:Div addStyleNames="{style.panel} flex round-corners">
+	<bh:Div addStyleNames="{style.panel} flex round-corners margin-bottom-10">
 		<m:MaterialButton enabled="false" ui:field="createListButton" text="{lang.createNewList}" textColor="WHITE" addStyleNames="d-btn margin-right-15">
 			<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 		</m:MaterialButton>

@@ -9,7 +9,7 @@
 	
 <ui:style>
 	.margin{
-		margin: 0.5rem 0 !important;	
+	    margin: 0 0 !important;
 	}
 </ui:style>
 
