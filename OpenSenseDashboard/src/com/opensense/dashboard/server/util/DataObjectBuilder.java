@@ -15,10 +15,10 @@ import com.opensense.dashboard.shared.Unit;
 import com.opensense.dashboard.shared.Value;
 
 public class DataObjectBuilder {
-	
+
 	private DataObjectBuilder() {
 	}
-	
+
 	public static Unit buildUnit(JSONObject unitJSON) {
 		Unit u = new Unit();
 		String nameJSON;
@@ -44,7 +44,7 @@ public class DataObjectBuilder {
 		}
 		return u;
 	}
-	
+
 	public static Measurand buildMeasurand(JSONObject measurandJSON) {
 		Measurand m = new Measurand();
 		String nameJSON;
@@ -70,7 +70,7 @@ public class DataObjectBuilder {
 		}
 		return m;
 	}
-	
+
 	public static Sensor buildSensor(JSONObject sensorJSON, Map<Integer, Measurand> measurandMap, Map<Integer, Unit> unitMap) {
 		Sensor s = new Sensor();
 		try {
@@ -94,7 +94,7 @@ public class DataObjectBuilder {
 		}
 		return s;
 	}
-	
+
 	public static MinimalSensor buildMinimalSensor(JSONObject sensorJSON, Map<Integer, Measurand> measurandMap) {
 		MinimalSensor s = new MinimalSensor();
 		try {
@@ -106,7 +106,7 @@ public class DataObjectBuilder {
 		}
 		return s;
 	}
-	
+
 	public static Value buildValue(JSONObject valueJSON, SimpleDateFormat inputFormat) {
 		Value v = new Value();
 		try {

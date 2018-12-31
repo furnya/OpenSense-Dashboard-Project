@@ -15,6 +15,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.maps.client.base.LatLngBounds;
 import com.google.gwt.maps.client.placeslib.Autocomplete;
 import com.google.gwt.maps.client.placeslib.AutocompleteOptions;
@@ -37,7 +38,6 @@ import com.opensense.dashboard.client.utils.Spinner;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.UserList;
-import com.opensense.dashboard.shared.ValuePreview;
 
 import gwt.material.design.client.base.validator.RegExValidator;
 import gwt.material.design.client.ui.MaterialButton;
@@ -129,12 +129,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	private static final String AUTO_COMPLETE = "autocomplete";
 
-	private List<Integer> unselectedSensors = new ArrayList<>(); //FIX this //TODO: use only one list
 	private List<Integer> selectedSensors = new ArrayList<>();
 
 	private Map<Integer, Sensor> sensors = new HashMap<>();
 
 	private LinkedList<Integer> shownSensorIds = new LinkedList<>();
+
 	private Map<Integer, SensorItemCard> sensorViews = new HashMap<>();
 
 	public SearchViewImpl() {
@@ -189,27 +189,41 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@UiHandler("selectAllButton")
 	public void onSelectAllButtonClicked(ClickEvent e) {
-		if(Languages.selectAllSensors().equals(this.selectAllButton.getText())) {
-			for (int i = this.unselectedSensors.size() - 1; i >= 0; i --) {
-				this.sensorViews.get(this.unselectedSensors.get(i)).setActive(true);
-				this.selectedSensors.add(this.unselectedSensors.get(i));
-				this.unselectedSensors.remove(i);
-			}
-			this.selectAllButton.setText(Languages.deselectAllSensors());
-		}else {
-			for (int i = this.selectedSensors.size() - 1; i >= 0; i --) {
-				this.sensorViews.get(this.selectedSensors.get(i)).setActive(false);
-				this.unselectedSensors.add(this.selectedSensors.get(i));
-				this.selectedSensors.remove(i);
-			}
-			this.selectAllButton.setText(Languages.selectAllSensors());
-		}
-		this.onSelectedSensorsChanged();
+		this.selectAllSensors(Languages.selectAllSensors().equals(this.selectAllButton.getText()));
 	}
 
 	@UiHandler("favoriteButton")
 	public void onFavoriteButtonClicked(ClickEvent e) {
 		this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(this.selectedSensors));
+	}
+
+	@UiHandler("onlySensorsWithValueBox")
+	public void onOnlySensorsWithValueBoxValueChanged(ValueChangeEvent<Boolean> e) {
+		this.shownSensorIds.clear();
+		this.selectAllSensors(false);
+		if(e.getValue()) {
+			this.sensors.values().stream().filter(sensor -> sensor.getValuePreview() != null).forEach(sensor -> this.shownSensorIds.add(sensor.getSensorId()));
+		}else {
+			this.sensors.keySet().forEach(this.shownSensorIds::add);
+		}
+		this.pagerTop.update(this.shownSensorIds.size(), true);
+	}
+
+	private void selectAllSensors(boolean select) {
+		if(select) {
+			for (int i = this.shownSensorIds.size() - 1; i >= 0; i --) {
+				this.sensorViews.get(this.shownSensorIds.get(i)).setActive(true);
+				this.selectedSensors.add(this.shownSensorIds.get(i));
+			}
+			this.selectAllButton.setText(Languages.deselectAllSensors());
+		}else {
+			for (int i = this.selectedSensors.size() - 1; i >= 0; i --) {
+				this.sensorViews.get(this.selectedSensors.get(i)).setActive(false);
+				this.selectedSensors.remove(i);
+			}
+			this.selectAllButton.setText(Languages.selectAllSensors());
+		}
+		this.onSelectedSensorsChanged();
 	}
 
 	private void onShownSensorsChanged() {
@@ -234,17 +248,23 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			final Integer sensorId = sensor.getSensorId();
 			this.sensors.put(sensorId, sensor);
 			card.setHeader(sensor.getMeasurand().getDisplayName() + "   -   " + Languages.sensorId() + sensorId);
-			this.unselectedSensors.add(sensorId);
 			card.setIcon(MeasurandIconHelper.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 			card.setRating(sensor.getAccuracy());
 			card.addContentValue(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
 			card.addContentValue(Languages.origin(), sensor.getAttributionText());
+
+			if((sensor.getValuePreview() != null)) {
+				card.setValuePreviewConent(
+						Languages.getDate(sensor.getValuePreview().getMinValue().getTimestamp()) + " - " + sensor.getValuePreview().getMinValue().getNumberValue() + " " + sensor.getUnit().getDisplayName(),
+						Languages.getDate(sensor.getValuePreview().getMaxValue().getTimestamp()) + " - " + sensor.getValuePreview().getMaxValue().getNumberValue() + " " + sensor.getUnit().getDisplayName());
+			}else {
+				card.setValuePreviewConent(Languages.noValuePreviewData(), Languages.noValuePreviewData());
+			}
+
 			card.addValueChangeHandler(event -> {
 				if(event.getValue()) {
-					this.unselectedSensors.remove(sensorId);
 					this.selectedSensors.add(sensorId);
 				}else {
-					this.unselectedSensors.add(sensorId);
 					this.selectedSensors.remove(sensorId);
 				}
 				this.onSelectedSensorsChanged();
@@ -252,7 +272,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			final List<Integer> id = new ArrayList<>();
 			id.add(sensorId);
 			card.addFavButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(id)));
-			this.shownSensorIds.add(sensorId); //can order the list before adding
+			if(!this.onlySensorsWithValueBox.getValue() || (this.onlySensorsWithValueBox.getValue() && (sensor.getValuePreview() != null))) {
+				this.shownSensorIds.add(sensorId);
+			}
 			this.sensorViews.put(sensorId, card);
 		});
 		if(this.sensorViews.isEmpty()) {
@@ -398,7 +420,6 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		this.showNoDataIndicator(false);
 		this.sensors.clear();
 		this.sensorContainer.clear();
-		this.unselectedSensors.clear();
 		this.selectedSensors.clear();
 		this.sensorViews.clear();
 		this.shownSensorIds.clear();
@@ -425,23 +446,6 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		}
 	}
 
-	@Override
-	public void showSensorValuePreview(Map<Integer, ValuePreview> preview) {
-		if(!this.shownSensorIds.isEmpty()) {
-			preview.entrySet().forEach(entry -> {
-				if(this.shownSensorIds.contains(entry.getKey())){
-					if(this.sensorViews.containsKey(entry.getKey()) && (entry.getValue()!=null)) {
-						this.sensorViews.get(entry.getKey()).setValuePreviewConent(
-								Languages.getDate(entry.getValue().getMinValue().getTimestamp()) + " - " + entry.getValue().getMinValue().getNumberValue() + " " + this.sensors.get(entry.getKey()).getUnit().getDisplayName(),
-								Languages.getDate(entry.getValue().getMaxValue().getTimestamp()) + " - " + entry.getValue().getMaxValue().getNumberValue() + " " + this.sensors.get(entry.getKey()).getUnit().getDisplayName());
-					}else {
-						this.sensorViews.get(entry.getKey()).setValuePreviewConent(Languages.noValuePreviewData(), Languages.noValuePreviewData());
-					}
-				}
-			});
-		}
-	}
-
 	private void initPager() {
 		this.pagerTop.addBackwardsButtonClickHandler(event -> this.pagerTop.onBackwardsButtonClicked(this.shownSensorIds.size()));
 		this.pagerTop.addBackwardsStepByStepClickHandler(event -> this.pagerTop.onBackwardsStepByStepButtonClicked(this.shownSensorIds.size()));
@@ -463,19 +467,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	private void pagination(int page, int maxObjectsOnPage) {
 		this.sensorContainer.clear();
-		List<Integer> idsOnPage = new ArrayList<>();
 		for(int i = page * maxObjectsOnPage; (i < this.shownSensorIds.size()) && (i < ((page + 1) * maxObjectsOnPage)); i++){
 			SensorItemCard card = this.sensorViews.get(this.shownSensorIds.get(i));
-			idsOnPage.add(this.shownSensorIds.get(i));
-			card.showPreviewContentSpinner(true);
 			this.sensorContainer.add(card);
 		}
-		this.presenter.getSensorValuePreviewAndShow(idsOnPage);
-	}
-
-	@Override
-	public boolean getOnlySensorsWithValueBox() {
-		return this.onlySensorsWithValueBox.getValue();
 	}
 
 	public void showListDropDownSpinner(boolean show) {

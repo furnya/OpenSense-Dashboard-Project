@@ -159,7 +159,6 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		if((this.view.getMaxSensors() != null) && !this.view.getMaxSensors().isEmpty()){
 			requestBuilder.addParameter(ParamType.MAX_SENSORS, this.view.getMaxSensors());
 		}
-		requestBuilder.setOnlySensorsWithValues(this.view.getOnlySensorsWithValueBox());
 		this.sendSensorRequestAndShow(requestBuilder.getRequest());
 	}
 
@@ -181,23 +180,6 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the sensors.");
 			this.view.showLoadSensorError();
-		}, false));
-	}
-
-	@Override
-	public void getSensorValuePreviewAndShow(List<Integer> ids) {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.VALUE_PREVIEW, false);
-		ids.forEach(requestBuilder::addId);
-		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
-			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getValuePreviews() != null)) {
-				this.view.showSensorValuePreview(result.getValuePreviews());
-			}else {
-				LOGGER.log(Level.WARNING, "SensorValuePreview result is null.");
-				//TODO: show error
-			}
-		},caught -> {
-			LOGGER.log(Level.WARNING, "Failure requesting the sensorValuePreview.");
-			//TODO:showError
 		}, false));
 	}
 
