@@ -45,10 +45,6 @@ public class RequestBuilder {
 		this.request.setIds(ids);
 	}
 
-	public void setOnlySensorsWithValues(boolean onlySensorsWithValues) {
-		this.request.setOnlySensorsWithValues(onlySensorsWithValues);
-	}
-
 	/**
 	 * checks if the request contains maxSensors -> false the maxSensor param will be set to {@link #MAX_SENSOR_REQUEST}
 	 * @return the builded and checked request

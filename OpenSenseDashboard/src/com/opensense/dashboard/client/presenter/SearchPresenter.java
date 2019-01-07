@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -45,6 +46,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(this.view.asWidget());
+		Document.get().getElementById("content").addClassName("padding-right-10");
 	}
 
 	@Override
@@ -73,6 +75,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	@Override
 	public void onPageLeave() {
 		this.view.hideListDropDown();
+		Document.get().getElementById("content").removeClassName("padding-right-10");
 	}
 
 	@Override
@@ -156,7 +159,6 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		if((this.view.getMaxSensors() != null) && !this.view.getMaxSensors().isEmpty()){
 			requestBuilder.addParameter(ParamType.MAX_SENSORS, this.view.getMaxSensors());
 		}
-		requestBuilder.setOnlySensorsWithValues(this.view.getOnlySensorsWithValueBox());
 		this.sendSensorRequestAndShow(requestBuilder.getRequest());
 	}
 
@@ -178,23 +180,6 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the sensors.");
 			this.view.showLoadSensorError();
-		}, false));
-	}
-
-	@Override
-	public void getSensorValuePreviewAndShow(List<Integer> ids) {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.VALUE_PREVIEW, false);
-		ids.forEach(requestBuilder::addId);
-		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
-			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getValuePreviews() != null)) {
-				this.view.showSensorValuePreview(result.getValuePreviews());
-			}else {
-				LOGGER.log(Level.WARNING, "SensorValuePreview result is null.");
-				//TODO: show error
-			}
-		},caught -> {
-			LOGGER.log(Level.WARNING, "Failure requesting the sensorValuePreview.");
-			//TODO:showError
 		}, false));
 	}
 

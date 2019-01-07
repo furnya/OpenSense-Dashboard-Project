@@ -8,10 +8,13 @@
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
+	.margin{
+	    margin: 0 0 !important;
+	}
 </ui:style>
 
 <bh:Div>
-	<m:MaterialCollapsible ui:field="collapsible" addStyleNames="list-collapsible margin-top-10"/>
+	<m:MaterialCollapsible ui:field="collapsible" addStyleNames="list-collapsible {style.margin}"/>
 </bh:Div>
 
 </ui:UiBinder>

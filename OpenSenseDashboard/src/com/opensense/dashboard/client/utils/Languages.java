@@ -613,9 +613,9 @@ public class Languages {
 
 	public static String hideSensorWIithoutValues() {
 		if(de){
-			return "Sensoren ohne Werte von der Suche ausschließen";
+			return "Sensoren ohne Werte ausblenden";
 		}else{
-			return "Sensors without values will not searched";
+			return "Sensors without values wont be visible";
 		}
 	}
 }

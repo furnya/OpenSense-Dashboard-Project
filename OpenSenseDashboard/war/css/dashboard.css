@@ -176,9 +176,8 @@
     width: 100%;
     height: 100%;
     max-height: calc(100vh - 65px);
-     max-width: calc(100vw - 90px);
+    max-width: calc(100vw - 90px);
     overflow: auto;
-    padding-right: 10px;
 }
 
 ::-webkit-scrollbar {
@@ -420,23 +419,36 @@ input:focus+label{
 .list-collapsible{
     border: none !important;
 }
+.list-collapsible[one] > li:first-child .collapsible-header[class="collapsible-header"]{
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
 .list-collapsible > li:first-child .collapsible-header[class="collapsible-header"]{
 	border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 }
-.list-collapsible > li:first-child[class="active"] .collapsible-header{
+.list-collapsible > li:first-child .collapsible-header[class="collapsible-header active"]{
 	border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+	border-top-right-radius: 6px;
+}
+.list-collapsible > li:first-child .collapsible-header[class="active collapsible-header"]{
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
 }
 .list-collapsible > li:last-child .collapsible-header[class="collapsible-header"]{
 	border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
+
 }
 .list-collapsible > li:last-child .collapsible-header[class="collapsible-header active"]{
 	border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
-.list-collapsible > li:last-child[class="active"] .collapsible-body{
+.list-collapsible > li:last-child[class="collapsible-item active"] .collapsible-body{
+	border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+.list-collapsible[one] > li:first-child[class="collapsible-item active"] .collapsible-body{
 	border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
 }
@@ -494,9 +506,13 @@ input:focus+label{
 .list-action-btns > button:not(:first-child) {
 	margin-left: 15px;
 }
-.window-height {
-	max-height: 93vh;
-	height: 93vh;
+.list-container {
+	max-height: calc(100vh - 65px);
+	max-width: 30vw;
+	overflow: auto;
+	min-width:30vw;
+	margin-left: 10px;
+	padding-right: 10px;
 }
 
 .filter-none > img{

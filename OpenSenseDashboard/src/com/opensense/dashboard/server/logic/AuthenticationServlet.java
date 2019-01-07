@@ -12,16 +12,16 @@ import com.opensense.dashboard.shared.ActionResultType;
 
 @SuppressWarnings("serial")
 public class AuthenticationServlet extends RemoteServiceServlet implements AuthenticationService{
-	
+
 	private static final Logger LOGGER = Logger.getLogger(AuthenticationServlet.class.getName());
-	
+
 	/**
 	 * Returns boolean true if a user logged in, false the user is guest
 	 */
 	@Override
 	public Boolean createUserInSession() {
-		if(System.getenv("DEV_MODE") != null && "true".equalsIgnoreCase(System.getenv("DEV_MODE"))) {
-			ActionResult result = userLoginRequest(System.getenv("USERNAME"), System.getenv("PASSWORD"));
+		if((System.getenv("DEV_MODE") != null) && "true".equalsIgnoreCase(System.getenv("DEV_MODE"))) {
+			ActionResult result = this.userLoginRequest(System.getenv("USERNAME"), System.getenv("PASSWORD"));
 			if(ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
 				return true;
 			}
@@ -29,7 +29,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		SessionUser.getInstance().setGuest(true);
 		return false;
 	}
-	
+
 	@Override
 	public ActionResult userLoginRequest(String username, String password) {
 		String body = "{\"username\":\""+username+"\",\"password\":\""+password+"\"}";
@@ -42,6 +42,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 			LOGGER.log(Level.WARNING, "Failure", e);
 			return new ActionResult(ActionResultType.FAILED);
 		}
+		SessionUser.getInstance().setGuest(false);
 		return new ActionResult(ActionResultType.SUCCESSFUL);
 	}
 

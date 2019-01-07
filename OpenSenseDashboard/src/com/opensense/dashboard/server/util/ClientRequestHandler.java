@@ -38,6 +38,7 @@ public class ClientRequestHandler {
 	private static final String MIN_TIMESTAMP = "minTimestamp";
 	private static final String AGGREGATION_TYPE = "aggregationType";
 	private static final String AGGREGATION_RANGE = "aggregationRange";
+	private static final String SENSORS = "/sensors/";
 
 	private static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
 
@@ -113,18 +114,19 @@ public class ClientRequestHandler {
 			}
 			JSONObject sensorJSON = (JSONObject) o;
 			Sensor s = DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
-			if(s!=null) {
-				sensorList.add(s);
+			if(s == null) {
+				continue;
 			}
+			s.setValuePreview(this.getValuePreview(s.getSensorId()));
+			sensorList.add(s);
 		}
 		return sensorList;
 	}
-	
 	public List<Sensor> getSensorListOnlyWithValues(List<Parameter> parameterList, List<Integer> ids) throws IOException{
-		List<Sensor> sensors = getSensorList(parameterList, ids);
+		List<Sensor> sensors = this.getSensorList(parameterList, ids);
 		List<Sensor> filteredSensors = new LinkedList<>();
 		for(Sensor sensor : sensors) {
-			ValuePreview vp = getValuePreview(sensor.getSensorId());
+			ValuePreview vp = this.getValuePreview(sensor.getSensorId());
 			if(vp!=null) {
 				filteredSensors.add(sensor);
 			}
@@ -134,18 +136,23 @@ public class ClientRequestHandler {
 
 	public Sensor getSensor(int id, Map<Integer, Measurand> measurandMap, Map<Integer, Unit> unitMap) throws IOException{
 		RequestSender rs = new RequestSender();
-		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+ SENSORS +id);
 		if(sensorJSON==null) {
 			return null;
 		}
-		return DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
+		Sensor s = DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
+		if(s == null) {
+			return null;
+		}
+		s.setValuePreview(this.getValuePreview(s.getSensorId()));
+		return s;
 	}
 
 	public List<Value> getValueList(int id, List<Parameter> parameterList, DateRange dateRange) throws IOException{
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
 		this.setTimestampParameters(rs, dateRange);
-		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values");
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+SENSORS+id+"/values");
 		if(sensorJSON==null) {
 			return null;
 		}
@@ -164,14 +171,14 @@ public class ClientRequestHandler {
 		}
 		return valueList;
 	}
-	
+
 	public List<Value> getAggregatedValueList(int id, List<Parameter> parameterList, DateRange dateRange) throws IOException{
 		RequestSender rs = new RequestSender();
 		rs.setParameters(parameterList);
 		this.setTimestampParameters(rs, dateRange);
 		this.setAggregationParameters(rs, dateRange, parameterList);
-		
-		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values");
+
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+SENSORS+id+"/values");
 		if(sensorJSON==null) {
 			return null;
 		}
@@ -220,7 +227,7 @@ public class ClientRequestHandler {
 			break;
 		}
 	}
-	
+
 	private void setAggregationParameters(RequestSender rs, DateRange dateRange, List<Parameter> parameterList) {
 		Calendar cal = Calendar.getInstance();
 		switch(dateRange) {
@@ -237,16 +244,16 @@ public class ClientRequestHandler {
 			}
 			cal.setTime(to);
 			int diffDays = Math.abs(cal.fieldDifference(from, Calendar.DATE));
-			if(5<=diffDays && diffDays<=100) {
+			if((5<=diffDays) && (diffDays<=100)) {
 				rs.addParameter(AGGREGATION_TYPE, "avg");
 				rs.addParameter(AGGREGATION_RANGE, "hourly");
-			}else if(100<diffDays && diffDays<=700) {
+			}else if((100<diffDays) && (diffDays<=700)) {
 				rs.addParameter(AGGREGATION_TYPE, "avg");
 				rs.addParameter(AGGREGATION_RANGE, "daily");
-			}else if(700<diffDays && diffDays<=3150) {
+			}else if((700<diffDays) && (diffDays<=3150)) {
 				rs.addParameter(AGGREGATION_TYPE, "avg");
 				rs.addParameter(AGGREGATION_RANGE, "weekly");
-			}else if(3150<diffDays && diffDays<=15000) {
+			}else if((3150<diffDays) && (diffDays<=15000)) {
 				rs.addParameter(AGGREGATION_TYPE, "avg");
 				rs.addParameter(AGGREGATION_RANGE, "monthly");
 			}else if(15000<diffDays) {
@@ -262,7 +269,7 @@ public class ClientRequestHandler {
 			break;
 		case PAST_WEEK:
 			rs.addParameter(AGGREGATION_TYPE, "avg");
-			rs.addParameter(AGGREGATION_RANGE, "hourly");
+			rs.addParameter(AGGREGATION_RANGE, "hourly"); //? correct
 			break;
 		case PAST_YEAR:
 			rs.addParameter(AGGREGATION_TYPE, "avg");
@@ -284,7 +291,7 @@ public class ClientRequestHandler {
 
 	public ValuePreview getValuePreview(Integer id) throws IOException{
 		RequestSender rs = new RequestSender();
-		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id+"/values/firstlast");
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+SENSORS+id+"/values/firstlast");
 		if(sensorJSON==null) {
 			return null;
 		}
@@ -333,9 +340,11 @@ public class ClientRequestHandler {
 			}
 			JSONObject sensorJSON = (JSONObject) o;
 			Sensor s = DataObjectBuilder.buildSensor(sensorJSON, measurandMap, unitMap);
-			if(s!=null) {
-				sensorList.add(s);
+			if(s == null) {
+				continue;
 			}
+			s.setValuePreview(this.getValuePreview(s.getSensorId()));
+			sensorList.add(s);
 		}
 		return sensorList;
 	}
@@ -387,7 +396,7 @@ public class ClientRequestHandler {
 
 	public MinimalSensor getMinimalSensor(int id) throws IOException{
 		RequestSender rs = new RequestSender();
-		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/"+id);
+		JSONObject sensorJSON = rs.objectGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+SENSORS+id);
 		if(sensorJSON==null) {
 			return null;
 		}

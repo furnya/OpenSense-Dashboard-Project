@@ -10,7 +10,6 @@ public class Request implements IsSerializable{
 	private List<Parameter> parameters;
 	private ResultType resultType;
 	private DateRange dateRange;
-	private boolean onlySensorsWithValues;
 
 	public Request() {
 	}
@@ -66,19 +65,5 @@ public class Request implements IsSerializable{
 	 */
 	public void setDateRange(DateRange dateRange) {
 		this.dateRange = dateRange;
-	}
-
-	/**
-	 * @return the onlySensorsWithValues
-	 */
-	public boolean isOnlySensorsWithValues() {
-		return this.onlySensorsWithValues;
-	}
-
-	/**
-	 * @param onlySensorsWithValues the onlySensorsWithValues to set
-	 */
-	public void setOnlySensorsWithValues(boolean onlySensorsWithValues) {
-		this.onlySensorsWithValues = onlySensorsWithValues;
 	}
 }

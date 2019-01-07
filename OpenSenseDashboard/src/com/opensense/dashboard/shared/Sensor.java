@@ -4,22 +4,23 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Sensor implements IsSerializable{
 	/**
-	 * 
+	 *
 	 */
-	private int userId; 
+	private int userId;
 	private double directionHorizontal;
 	private double directionVertical;
 	private String attributionText;
 	private Measurand measurand;
 	private int licenseId;
 	private double altitudeAboveGround;
-	private int sensorId; 
+	private int sensorId;
 	private String attributionURLString;
 	private String sensorModel;
 	private Unit unit;
 	private double accuracy;
 	private LatLng location;
-	
+	private ValuePreview valuePreview;
+
 	public Sensor() {
 	}
 
@@ -27,70 +28,70 @@ public class Sensor implements IsSerializable{
 	 * @return the userId
 	 */
 	public int getUserId() {
-		return userId;
+		return this.userId;
 	}
 
 	/**
 	 * @return the directionHorizontal
 	 */
 	public double getDirectionHorizontal() {
-		return directionHorizontal;
+		return this.directionHorizontal;
 	}
 
 	/**
 	 * @return the directionVertical
 	 */
 	public double getDirectionVertical() {
-		return directionVertical;
+		return this.directionVertical;
 	}
 
 	/**
 	 * @return the attributionText
 	 */
 	public String getAttributionText() {
-		return attributionText;
+		return this.attributionText;
 	}
 
 	/**
 	 * @return the licenseId
 	 */
 	public int getLicenseId() {
-		return licenseId;
+		return this.licenseId;
 	}
 
 	/**
 	 * @return the altitudeAboveGround
 	 */
 	public double getAltitudeAboveGround() {
-		return altitudeAboveGround;
+		return this.altitudeAboveGround;
 	}
 
 	/**
 	 * @return the id
 	 */
 	public int getSensorId() {
-		return sensorId;
+		return this.sensorId;
 	}
 
 	/**
 	 * @return the attributionURLString
 	 */
 	public String getAttributionURLString() {
-		return attributionURLString;
+		return this.attributionURLString;
 	}
 
 	/**
 	 * @return the sensorModel
 	 */
 	public String getSensorModel() {
-		return sensorModel;
+		return this.sensorModel;
 	}
 
 	/**
 	 * @return the accuracy
 	 */
 	public double getAccuracy() {
-		return accuracy;
+		return this.accuracy;
 	}
 
 	/**
@@ -167,7 +168,7 @@ public class Sensor implements IsSerializable{
 	 * @return the location
 	 */
 	public LatLng getLocation() {
-		return location;
+		return this.location;
 	}
 
 	/**
@@ -181,7 +182,7 @@ public class Sensor implements IsSerializable{
 	 * @return the unit
 	 */
 	public Unit getUnit() {
-		return unit;
+		return this.unit;
 	}
 
 	/**
@@ -195,7 +196,7 @@ public class Sensor implements IsSerializable{
 	 * @return the measurand
 	 */
 	public Measurand getMeasurand() {
-		return measurand;
+		return this.measurand;
 	}
 
 	/**
@@ -204,5 +205,14 @@ public class Sensor implements IsSerializable{
 	public void setMeasurand(Measurand measurand) {
 		this.measurand = measurand;
 	}
-	
+
+	public ValuePreview getValuePreview() {
+		return valuePreview;
+	}
+
+	public void setValuePreview(ValuePreview valuePreview) {
+		this.valuePreview = valuePreview;
+	}
+
+
 }

@@ -9,14 +9,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.UserList;
-import com.opensense.dashboard.shared.ValuePreview;
 
 public interface SearchView extends IDataPanelPageView{
 	public interface Presenter{
 
 		void buildSensorRequestAndSend();
 		HandlerManager getEventBus();
-		void getSensorValuePreviewAndShow(List<Integer> idsOnPage);
 		void getListsAndShow();
 		void addSelectedSensorsToUserList(int listId, List<Integer> selectedSensors);
 		boolean isUserLoggedIn();
@@ -44,8 +42,6 @@ public interface SearchView extends IDataPanelPageView{
 	public List<Integer> getShownSensorIds();
 	public void clearSensorData();
 	public void showDataContainer(boolean show);
-	public void showSensorValuePreview(Map<Integer, ValuePreview> result);
-	public boolean getOnlySensorsWithValueBox();
 	public void showUserListsInDropDown(List<UserList> result);
 	public void hideListDropDown();
 }

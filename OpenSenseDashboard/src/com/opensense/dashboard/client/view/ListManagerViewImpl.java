@@ -284,9 +284,16 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void setCollapsibleListItemSelected(int listId) {
+	public void setCollapsibleListItemSelected(Integer listId) {
+		if(listId == null) {
+			if(this.collapsiblesItems.get(this.activeItemId) != null) {
+				this.collapsiblesItems.get(this.activeItemId).close();
+			}
+			return;
+		}
 		if(this.collapsiblesItems.get(listId) == null) {
 			GWT.log("ERROR");
+			return;
 		}
 		if((this.activeItemId == null) || (this.activeItemId != listId)) {
 			this.collapsiblesItems.get(listId).open();
@@ -308,6 +315,33 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		if(this.selectedSensorIdsInLists.get(this.activeItemId).contains(sensorId)){
 			this.sensorCardsInLists.get(this.activeItemId).get(sensorId).getElement().setAttribute("style",  "background-color: " + sensorColor + " !important");
 		}
+	}
+
+	@Override
+	public void setOneItemStyle(boolean set) {
+		if(set) {
+			this.collapsible.getElement().setAttribute("one","");
+		}else {
+			this.collapsible.getElement().removeAttribute("one");
+		}
+	}
+
+	@Override
+	public Integer getActiveItemId() {
+		return this.activeItemId;
+	}
+
+	@Override
+	public void setOldSelection() {
+		if(this.collapsiblesItems.get(this.activeItemId) == null) {
+			return;
+		}
+		this.collapsiblesItems.get(this.activeItemId).open();
+	}
+
+	@Override
+	public void setActiveItemId(Integer id) {
+		this.activeItemId = id;
 	}
 
 }
