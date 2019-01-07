@@ -85,7 +85,7 @@
     left: 22px;
     top: 8px;
 }
-.value-checbox{
+.value-checkbox{
     margin-top: 10px;
     float: left;	
 }
