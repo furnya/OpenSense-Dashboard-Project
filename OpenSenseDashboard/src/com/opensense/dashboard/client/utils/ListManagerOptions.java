@@ -15,6 +15,7 @@ public class ListManagerOptions {
 	private Size pagerSize = Size.MEDIUM;
 	private int maxObjectOnPage = 10;
 	private Size spinnerSize = Size.MEDIUM;
+	private Integer maxSelectedObjects = null;
 
 	private ListManagerOptions(HandlerManager eventBus, HasWidgets container) {
 		this.eventBus = eventBus;
@@ -82,10 +83,18 @@ public class ListManagerOptions {
 	}
 
 	public Size getSpinnerSize() {
-		return spinnerSize;
+		return this.spinnerSize;
 	}
 
 	public void setSpinnerSize(Size spinnerSize) {
 		this.spinnerSize = spinnerSize;
+	}
+
+	public Integer getMaxSelectedObjects() {
+		return this.maxSelectedObjects;
+	}
+
+	public void setMaxSelectedObjects(Integer maxSelectedObjects) {
+		this.maxSelectedObjects = maxSelectedObjects;
 	}
 }
