@@ -16,7 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.ibm.icu.util.Calendar;
+import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.DateRange;
+import com.opensense.dashboard.shared.License;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Parameter;
@@ -282,7 +284,7 @@ public class ClientRequestHandler {
 
 	public String sendLoginRequest(String body) throws IOException {
 		RequestSender rs = new RequestSender();
-		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/users/login", body);
+		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/users/login", body, null);
 		if(idJSON==null) {
 			return null;
 		}
@@ -402,6 +404,51 @@ public class ClientRequestHandler {
 		}
 		Map<Integer, Measurand> measurandMap = this.getMeasurandMap();
 		return DataObjectBuilder.buildMinimalSensor(sensorJSON, measurandMap);
+	}
+
+	public Map<Integer, License> getLicenseMap() throws IOException{
+		RequestSender rs = new RequestSender();
+		JSONArray licenseArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/licenses");
+		if(licenseArrayJSON==null) {
+			return null;
+		}
+		HashMap<Integer, License> licenseMap = new HashMap<>();
+		for(Object o : licenseArrayJSON) {
+			if(!(o instanceof JSONObject)) {
+				continue;
+			}
+			JSONObject licenseJSON = (JSONObject) o;
+			License l = DataObjectBuilder.buildLicense(licenseJSON);
+			if(l!=null) {
+				licenseMap.put(l.getId(),l);
+			}
+		}
+		return licenseMap;
+	}
+	
+	public String sendCreateSensorRequest(CreateSensorRequest request) throws IOException {
+		RequestSender rs = new RequestSender();
+		JSONObject bodyJSON = new JSONObject();
+		bodyJSON.put(JsonAttributes.MEASURAND_ID.getNameString(), request.getMeasurandId());
+		bodyJSON.put(JsonAttributes.UNIT_ID.getNameString(), request.getUnitId());
+		JSONObject location = new JSONObject();
+		location.put(JsonAttributes.LAT.getNameString(), request.getLatitude());
+		location.put(JsonAttributes.LNG.getNameString(), request.getLongitude());
+		bodyJSON.put(JsonAttributes.LOCATION.getNameString(), location);
+		bodyJSON.put(JsonAttributes.LICENSE_ID.getNameString(), request.getLicenseId());
+		bodyJSON.put(JsonAttributes.ALTITUDE_ABOVE_GROUND.getNameString(), request.getAltitudeAboveGround());
+		bodyJSON.put(JsonAttributes.DIRECTION_VERTICAL.getNameString(), request.getDirectionVertical());
+		bodyJSON.put(JsonAttributes.DIRECTION_HORIZONTAL.getNameString(), request.getDirectionHorizontal());
+		bodyJSON.put(JsonAttributes.SENSOR_MODEL.getNameString(), request.getSensorModel());
+		bodyJSON.put(JsonAttributes.ACCURACY.getNameString(), request.getAccuracy());
+		bodyJSON.put(JsonAttributes.ATTRIBUTION_TEXT.getNameString(), request.getAttributionText());
+		bodyJSON.put(JsonAttributes.ATTRIBUTION_URL.getNameString(), request.getAttributionURL());
+		String body = bodyJSON.toString();
+		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/addSensor", body, SessionUser.getInstance().getToken());
+		if(idJSON==null) {
+			return null;
+		}
+		return idJSON.toString();
 	}
 
 }

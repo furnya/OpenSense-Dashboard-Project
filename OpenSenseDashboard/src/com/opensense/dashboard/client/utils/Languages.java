@@ -618,4 +618,116 @@ public class Languages {
 			return "Sensors without values wont be visible";
 		}
 	}
+	
+	public static String license() {
+		if(de){
+			return "Lizenz";
+		}else{
+			return "License";
+		}
+	}
+	
+	public static String latitude() {
+		if(de){
+			return "Breitengrad";
+		}else{
+			return "Latitude";
+		}
+	}
+	
+	public static String longitude() {
+		if(de){
+			return "Längenengrad";
+		}else{
+			return "Longitude";
+		}
+	}
+	
+	public static String directionVertical() {
+		if(de){
+			return "Vertikale Ausrichtung";
+		}else{
+			return "Vertical direction";
+		}
+	}
+	
+	public static String directionHorizontal() {
+		if(de){
+			return "Horizontale Ausrichtung";
+		}else{
+			return "Horizontal direction";
+		}
+	}
+	
+	public static String sensorModel() {
+		if(de){
+			return "Sensor-Modell";
+		}else{
+			return "Sensor model";
+		}
+	}
+	
+	public static String attributionText() {
+		if(de){
+			return "Beschreibungstext";
+		}else{
+			return "Attribution text";
+		}
+	}
+	
+	public static String attributionURL() {
+		if(de){
+			return "URL";
+		}else{
+			return "Attribution URL";
+		}
+	}
+	
+	public static String confirm() {
+		if(de){
+			return "Bestätigen";
+		}else{
+			return "Confirm";
+		}
+	}
+	
+	public static String cancel() {
+		if(de){
+			return "Abbrechen";
+		}else{
+			return "Cancel";
+		}
+	}
+	
+	public static String notLoggedIn() {
+		if(de){
+			return "Nicht eingeloggt";
+		}else{
+			return "Not logged in";
+		}
+	}
+	
+	public static String sensorCreated() {
+		if(de){
+			return "Sensor erstellt";
+		}else{
+			return "Sensor created";
+		}
+	}
+	
+	public static String invalidParameters() {
+		if(de){
+			return "Ungültige Parameter";
+		}else{
+			return "Invalid parameters";
+		}
+	}
+	
+	public static String with() {
+		if(de){
+			return "mit";
+		}else{
+			return "with";
+		}
+	}
 }

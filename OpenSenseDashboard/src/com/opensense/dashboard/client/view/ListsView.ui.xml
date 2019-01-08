@@ -30,7 +30,7 @@
 		<m:MaterialButton enabled="false" ui:field="createListButton" text="{lang.createNewList}" textColor="WHITE" addStyleNames="d-btn margin-right-15">
 			<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 		</m:MaterialButton>
-		<m:MaterialButton enabled="false" ui:field="createSensor" text="{lang.createSensor}" textColor="WHITE" addStyleNames="d-btn"/>
+		<m:MaterialButton enabled="true" ui:field="createSensor" text="{lang.createSensor}" textColor="WHITE" addStyleNames="d-btn"/>
 	</bh:Div>
 	<bh:Div ui:field="listContainer"/>
 </bh:Div>

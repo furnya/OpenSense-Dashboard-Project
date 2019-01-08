@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.opensense.dashboard.shared.LatLng;
+import com.opensense.dashboard.shared.License;
 import com.opensense.dashboard.shared.Measurand;
 import com.opensense.dashboard.shared.MeasurandType;
 import com.opensense.dashboard.shared.MinimalSensor;
@@ -117,6 +118,18 @@ public class DataObjectBuilder {
 			return null;
 		}
 		return v;
+	}
+
+	public static License buildLicense(JSONObject licenseJSON) {
+		License l = new License();
+		try {
+			l.setId(licenseJSON.getInt(JsonAttributes.ID.getNameString()));
+			l.setFullName(licenseJSON.getString(JsonAttributes.FULL_NAME.getNameString()));
+		}catch(JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return l;
 	}
 
 }

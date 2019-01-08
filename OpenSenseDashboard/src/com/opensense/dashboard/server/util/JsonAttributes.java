@@ -19,7 +19,8 @@ public enum JsonAttributes {
 	LAT("lat"),
 	LNG("lng"),
 	NUMBER_VALUE("numberValue"),
-	TIMESTAMP("timestamp");
+	TIMESTAMP("timestamp"),
+	FULL_NAME("fullName");
 	
 	private final String nameString;
 	

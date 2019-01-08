@@ -8,7 +8,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class License implements IsSerializable{
 
-	private JSONObject rawJSON;
 	private int id;
 	private String shortName;
 	private String fullName;
@@ -32,11 +31,6 @@ public class License implements IsSerializable{
 	 */
 	public int getId() {
 		return id;
-	}
-
-	
-	public String toString() {
-		return this.getRawJSON().toString();
 	}
 
 	/**
@@ -140,22 +134,6 @@ public class License implements IsSerializable{
 	 */
 	public boolean requiresChangeNote() {
 		return requiresChangeNote;
-	}
-
-
-	/**
-	 * @return the rawJSON
-	 */
-	public JSONObject getRawJSON() {
-		return rawJSON;
-	}
-
-
-	/**
-	 * @param rawJSON the rawJSON to set
-	 */
-	public void setRawJSON(JSONObject rawJSON) {
-		this.rawJSON = rawJSON;
 	}
 
 
