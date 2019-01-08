@@ -206,6 +206,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		}else {
 			this.sensors.keySet().forEach(this.shownSensorIds::add);
 		}
+		this.pagerTop.setPage(0);
 		this.pagerTop.update(this.shownSensorIds.size(), true);
 	}
 

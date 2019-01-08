@@ -148,6 +148,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 				card.setHeader("ID " + sensor.getSensorId() + " - " +  sensor.getMeasurand().getDisplayName());
 				card.addValueChangeHandler(event -> {
 					if(event.getValue()) {
+						if((this.presenter.getController().getOptions().getMaxSelectedObjects() != null) &&
+								(this.selectedSensorIdsInLists.get(listId).size() >= this.presenter.getController().getOptions().getMaxSelectedObjects())){
+							card.setActive(false);
+							//TODO: hint why user cant select anything
+							return;
+						}
 						this.selectedSensorIdsInLists.get(listId).add(sensor.getSensorId());
 					}else {
 						this.selectedSensorIdsInLists.get(listId).remove((Object) sensor.getSensorId());
@@ -241,20 +247,25 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		});
 	}
 
-	private void selectAllSensorsInList(int listId, boolean isSelectAll) {
+	private void selectAllSensorsInList(int listId, boolean isSelect) {
 		if(this.selectedSensorIdsInLists.get(listId) == null) {
 			GWT.log("ERROR");
 			return;
 		}
 		final List<Integer> selectedSensors = this.selectedSensorIdsInLists.get(listId);
-		if(isSelectAll) {
+		if(isSelect) {
 			this.showSensorIdsInLists.get(listId).forEach(id -> {
+				if((this.presenter.getController().getOptions().getMaxSelectedObjects() != null) && (selectedSensors.size() >= this.presenter.getController().getOptions().getMaxSelectedObjects())) {
+					this.selectedSensorIdsInLists.replace(listId, selectedSensors);
+					this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(selectedSensors));
+					//TODO: hint why only the getMaxSelectedObjects get selected
+					return;
+				}
 				if(!this.selectedSensorIdsInLists.get(listId).contains(id)) {
 					selectedSensors.add(id);
 					this.sensorCardsInLists.get(listId).get(id).setActive(true);
 				}
 			});
-			this.selectedSensorIdsInLists.replace(listId, selectedSensors);
 		}else {
 			this.selectedSensorIdsInLists.get(listId).forEach(id -> this.sensorCardsInLists.get(listId).get(id).setActive(false));
 			selectedSensors.clear();
