@@ -125,6 +125,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		listManagerOptions.setShowMapButton(true);
 		listManagerOptions.setShowVisualizationButton(false);
 		listManagerOptions.setShowSearchButton(true);
+		listManagerOptions.setMaxSelectedObjects(10);
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
