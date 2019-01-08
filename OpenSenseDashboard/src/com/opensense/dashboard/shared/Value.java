@@ -12,6 +12,11 @@ public class Value implements IsSerializable{
 	public Value() {
 	}
 	
+	public Value(Date timestamp, Double numberValue) {
+		this.timestamp = timestamp;
+		this.numberValue = numberValue;
+	}
+	
 	/**
 	 * @return the numberValue
 	 */

@@ -44,6 +44,8 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 
 	private static final Logger LOGGER = Logger.getLogger(AppController.class.getName());
 
+	private static final int MAX_FAVORITE_SENSORS = 1500;
+
 	/**
 	 * Final reference to this object so the appController's functions can be used in event handlers
 	 */
@@ -121,22 +123,29 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		});
 
 		this.eventBus.addHandler(AddSensorsToFavoriteListEvent.TYPE, event -> {
-			//TODO skip if exists
-			List<Integer> favIds = CookieManager.getFavoriteList();//TODO: set a max
+			List<Integer> favIds = CookieManager.getFavoriteList();
+			if((favIds.size() + event.getIds().size()) > MAX_FAVORITE_SENSORS) {
+				showInfo(Languages.maxFavoriteSensorsReached(MAX_FAVORITE_SENSORS));
+				return;
+			}
+			StringBuilder string = new StringBuilder();
 			event.getIds().stream().filter(sensorId -> !favIds.contains(sensorId)).forEach(sensorId -> {
 				favIds.add(sensorId);
-				MaterialToast.fireToast("Added " + sensorId + " to the fav list");
+				string.append(sensorId + ", ");
 			});
+			showInfo("Added " + (string.length() > 0 ? (string.toString().substring(0, string.length() - 2)) : "nothing") + " to the fav list"); //TODO: translation
 			CookieManager.writeFavoriteListCookie(favIds);
 			this.dataPanelPresenter.updateFavoriteList();
 		});
 
 		this.eventBus.addHandler(RemoveSensorsFromFavoriteListEvent.TYPE, event -> {
 			List<Integer> favIds = CookieManager.getFavoriteList();
+			StringBuilder string = new StringBuilder();
 			event.getIds().stream().filter(favIds::contains).forEach(sensorId -> {
 				favIds.remove(sensorId);
-				MaterialToast.fireToast("Removed " + sensorId + " from the fav list");
+				string.append(sensorId + ", ");
 			});
+			showInfo("Removed" + (string.length() > 0 ? (string.toString().substring(0, string.length() - 2)) : "nothing") + " from the fav list");
 			CookieManager.writeFavoriteListCookie(favIds);
 			this.dataPanelPresenter.updateFavoriteList();
 		});
@@ -334,15 +343,31 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		if(goToHOme || (this.dataPanelPresenter.getActiveDataPanelPagePresenter() instanceof UserPresenter)) {
 			this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
 		}
-		MaterialToast.fireToast("Logged in");
+		showSuccess("Logged in");
 		this.dataPanelPresenter.onUserLoggedIn();
 		this.navigationPanelPresenter.onUserLoggedIn();
 	}
 
 	public void onUserLoggedOut() {
 		this.isGuest = true;
-		MaterialToast.fireToast("Logged out");
+		showSuccess("Logged out");
 		this.dataPanelPresenter.onUserLoggedOut();
 		this.navigationPanelPresenter.onUserLoggedOut();
+	}
+
+	public static void showError(String message) {
+		MaterialToast.fireToast(message, 4000, "error-growl");
+	}
+
+	public static void showSuccess(String message) {
+		MaterialToast.fireToast(message, 4000, "success-growl");
+	}
+
+	public static void showInfo(String message) {
+		MaterialToast.fireToast(message, 4000, "info-growl");
+	}
+
+	public static void showLongInfo(String message) {
+		MaterialToast.fireToast(message, 10000, "info-growl");
 	}
 }

@@ -15,6 +15,7 @@ import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.SearchView;
 import com.opensense.dashboard.shared.ActionResult;
@@ -100,7 +101,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 				this.view.setMinAccuracy(entry.getValue());
 				break;
 			case PLACE:
-				//					view.setPlaceString(entry.getValue());
+				//TODO: remove or add
 				break;
 			default:
 				break;
@@ -132,11 +133,12 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMeasurands() != null)) {
 				this.view.setMeasurandsList(result.getMeasurands());
 			}else {
-				//TODO: show Error
+				AppController.showError(Languages.connectionError());
 			}
 			runnable.run();
 		},caucht -> {
 			runnable.run();
+			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting the measurands.");
 		}, false));
 	}
@@ -173,11 +175,12 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 				}
 				this.view.showSensorData(result.getSensors());
 			}else {
+				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
-				//TODO: show error
 				this.view.showLoadSensorError();
 			}
 		},caught -> {
+			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting the sensors.");
 			this.view.showLoadSensorError();
 		}, false));
@@ -189,12 +192,12 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			if((result != null)) {
 				this.view.showUserListsInDropDown(result);
 			}else {
+				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "asd");
-				//TODO: show error
 			}
 		},caught -> {
+			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting the user lists.");
-			//TODO:showError
 		}, false));
 	}
 
@@ -204,12 +207,12 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
 				MaterialToast.fireToast("Erfolgreich zur liste hinzugefügt");
 			}else {
+				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "asd");
-				//TODO: show error
 			}
 		},caught -> {
+			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting the user lists.");
-			//TODO:showError
 		}, false));
 	}
 

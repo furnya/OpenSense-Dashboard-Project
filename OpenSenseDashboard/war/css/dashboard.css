@@ -4,6 +4,7 @@
 	LIGHTGREY BACKGROUND := #606060
 	GREY BACKGROUND := #404040
 	VERY LIGHT GREY := #909090
+	RED := #a20000 
 */
 
 /** USE THIS AS DEFAULT STYLE NAMES */
@@ -517,4 +518,19 @@ input:focus+label{
 
 .filter-none > img{
     filter: none !important;
+}
+
+.error-growl{
+	background-color: #a20000 !important;
+	border-radius: 6px !important;
+}
+
+.info-growl{
+	background-color: #42DCA3 !important;
+	border-radius: 6px !important;
+}
+
+.success-growl{
+	background-color: #66cc00 !important;
+	border-radius: 6px !important;
 }

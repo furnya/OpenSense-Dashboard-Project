@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -12,6 +14,7 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.event.SelectedSensorsChangeEvent;
@@ -35,6 +38,8 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	@UiTemplate("ListManagerView.ui.xml")
 	interface ListManagerViewUiBinder extends UiBinder<Widget, ListManagerViewImpl> {
 	}
+
+	private static final Logger LOGGER = Logger.getLogger(ListManagerViewImpl.class.getName());
 
 	private static ListManagerViewUiBinder uiBinder = GWT.create(ListManagerViewUiBinder.class);
 
@@ -148,6 +153,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 				card.setHeader("ID " + sensor.getSensorId() + " - " +  sensor.getMeasurand().getDisplayName());
 				card.addValueChangeHandler(event -> {
 					if(event.getValue()) {
+						if((this.presenter.getController().getOptions().getMaxSelectedObjects() != null) &&
+								(this.selectedSensorIdsInLists.get(listId).size() >= this.presenter.getController().getOptions().getMaxSelectedObjects())){
+							card.setActive(false);
+							AppController.showInfo(Languages.maxSensorSelectedLimitExceeded(this.presenter.getController().getOptions().getMaxSelectedObjects()));
+							return;
+						}
 						this.selectedSensorIdsInLists.get(listId).add(sensor.getSensorId());
 					}else {
 						this.selectedSensorIdsInLists.get(listId).remove((Object) sensor.getSensorId());
@@ -241,20 +252,25 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		});
 	}
 
-	private void selectAllSensorsInList(int listId, boolean isSelectAll) {
+	private void selectAllSensorsInList(int listId, boolean isSelect) {
 		if(this.selectedSensorIdsInLists.get(listId) == null) {
 			GWT.log("ERROR");
 			return;
 		}
 		final List<Integer> selectedSensors = this.selectedSensorIdsInLists.get(listId);
-		if(isSelectAll) {
+		if(isSelect) {
 			this.showSensorIdsInLists.get(listId).forEach(id -> {
+				if((this.presenter.getController().getOptions().getMaxSelectedObjects() != null) && (selectedSensors.size() >= this.presenter.getController().getOptions().getMaxSelectedObjects())) {
+					this.selectedSensorIdsInLists.replace(listId, selectedSensors);
+					this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(selectedSensors));
+					AppController.showInfo(Languages.maxSensorSelectedLimitExceeded(this.presenter.getController().getOptions().getMaxSelectedObjects()));
+					return;
+				}
 				if(!this.selectedSensorIdsInLists.get(listId).contains(id)) {
 					selectedSensors.add(id);
 					this.sensorCardsInLists.get(listId).get(id).setActive(true);
 				}
 			});
-			this.selectedSensorIdsInLists.replace(listId, selectedSensors);
 		}else {
 			this.selectedSensorIdsInLists.get(listId).forEach(id -> this.sensorCardsInLists.get(listId).get(id).setActive(false));
 			selectedSensors.clear();
@@ -284,7 +300,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void setCollapsibleListItemSelected(Integer listId) {
+	public void setCollapsibleListItemSelected(final Integer listId) {
 		if(listId == null) {
 			if(this.collapsiblesItems.get(this.activeItemId) != null) {
 				this.collapsiblesItems.get(this.activeItemId).close();
@@ -292,7 +308,8 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			return;
 		}
 		if(this.collapsiblesItems.get(listId) == null) {
-			GWT.log("ERROR");
+			AppController.showError(Languages.selectListItemError());
+			LOGGER.log(Level.WARNING, () -> "Can not select the list with id " + listId);
 			return;
 		}
 		if((this.activeItemId == null) || (this.activeItemId != listId)) {
@@ -307,9 +324,10 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
+	public void setSelectedSensorItemsColor(final int sensorId, final String sensorColor) {
 		if((this.activeItemId == null) && (this.selectedSensorIdsInLists.get(this.activeItemId) == null)) {
-			GWT.log("not set colors");
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, () -> "Can not set the color to the sensor with id " + sensorId);
 			return;
 		}
 		if(this.selectedSensorIdsInLists.get(this.activeItemId).contains(sensorId)){
