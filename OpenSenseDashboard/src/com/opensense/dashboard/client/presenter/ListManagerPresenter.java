@@ -2,16 +2,19 @@ package com.opensense.dashboard.client.presenter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.RemoveSensorsFromFavoriteListEvent;
 import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.ListManagerView;
@@ -27,6 +30,8 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	private ListManagerView view;
 	private ListManager controller;
 	private HandlerManager eventBus;
+
+	private static final Logger LOGGER = Logger.getLogger(ListManagerPresenter.class.getName());
 
 	public ListManagerPresenter(HandlerManager eventBus, ListManager controller, ListManagerViewImpl view) {
 		this.controller = controller;
@@ -60,7 +65,8 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 				}
 				this.view.setOldSelection();
 			}, caught -> {
-				GWT.log("Shit4");
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure fetching mySensors", caught);
 			},true));
 		}else {
 			this.view.setOneItemStyle(true);
@@ -70,15 +76,16 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 
 	public void createNewList() {
 		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<Integer>(result -> {
-			GWT.log("Created new list");
 			if(result != null) {
 				this.view.setActiveItemId(result);
 				this.updateUserLists();
 			}else {
-				GWT.log("Shit5");
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure creating list, result is null");
 			}
 		}, caught -> {
-			GWT.log("Shit6");
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure creating new list", caught);
 		},true));
 	}
 
@@ -88,10 +95,12 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			if(result != null) {
 				this.updateLists();
 			}else {
-				GWT.log("Shit7");
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure deleting user list, result is null");
 			}
 		}, caught -> {
-			GWT.log("Shit8");
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure deleting user list", caught);
 		},true));
 	}
 
@@ -121,10 +130,12 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 				if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
 					this.updateUserLists();
 				}else {
-					GWT.log("Shit9");
+					AppController.showError(Languages.connectionError());
+					LOGGER.log(Level.WARNING, "Failure deleting sensors in list, result is null or the request was not successfull");
 				}
 			}, caught -> {
-				GWT.log("Shit10");
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure deleting sensors in list", caught);
 			},true));
 		}
 	}
@@ -170,10 +181,12 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			if(result != null) {
 				//TODO: the list name should only set in ui if serverCall was successful
 			}else {
-				GWT.log("Shit9");
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure changing the list name, result is null");
 			}
 		}, caught -> {
-			GWT.log("Shit10");
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure changing the list name", caught);
 		},true));
 	}
 
@@ -187,10 +200,12 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 					this.view.selectAllSensorsInList(listId);
 				}
 			}else {
-				GWT.log("Shit11");
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure requesting the minimal sensor data, result is null or did not match the result type");
 			}
 		}, caught -> {
-			GWT.log("Shit12");
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure requesting the minimal sensor data", caught);
 		},true));
 	}
 
@@ -202,7 +217,6 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		if(this.controller.isUserLoggedIn()) {
 			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
 				if((result != null)) {
-					GWT.log("List length="+result.size());
 					result.forEach(userList -> {
 						this.view.addNewUserListItem(userList, true);
 						if(!userList.getSensorIds().isEmpty()) {
@@ -213,10 +227,12 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 					});
 					this.view.setOldSelection();
 				}else {
-					GWT.log("Shit1");
+					AppController.showError(Languages.connectionError());
+					LOGGER.log(Level.WARNING, "Failure updating the user lists, result is null");
 				}
 			}, caught -> {
-				GWT.log("Shit2");
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure updating the user lists", caught);
 			},true));
 		}
 	}

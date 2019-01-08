@@ -16,6 +16,7 @@ import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.MapView;
 import com.opensense.dashboard.shared.Request;
@@ -102,18 +103,18 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 					&& request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
 				if (request.getParameters() != null) {
 					this.eventBus
-							.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, request.getParameters(), false));
+					.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, request.getParameters(), false));
 				} else if (request.getIds() != null) {
 					this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, request.getIds()));
 				}
 				this.view.showMarkers(result.getSensors());
 			} else {
+				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
-				// TODO: show error
 			}
 		}, caught -> {
+			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting the sensors.");
-			// TODO: show error
 		}, false));
 	}
 
@@ -158,11 +159,11 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	@Override
 	public JavaScriptObject getMarkerSpiderfier() {
 		return this.markerSpiderfier;
-	}	
-	
+	}
+
 	public void addPlusCluster(Marker marker) {
 		this.view.checkForSpiderfierMarkers();
-//		this.view.addPlusCluster(marker);//TODO: this should work but the marker is
+		//		this.view.addPlusCluster(marker);//TODO: this should work but the marker is
 		// not correct
 	}
 
