@@ -35,11 +35,13 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.model.Size;
+import com.opensense.dashboard.client.presenter.VisualisationsPresenter;
 import com.opensense.dashboard.client.utils.ChartBounds;
 import com.opensense.dashboard.client.utils.ColorManager;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
+import com.opensense.dashboard.client.utils.UnitMapper;
 import com.opensense.dashboard.shared.DateRange;
 
 import gwt.material.design.client.constants.DatePickerLanguage;
@@ -177,10 +179,44 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@Override
 	public void createChart() {
 		Defaults.getGlobal().getAnimation().setDuration(0);
+		Defaults.getScale().getGrideLines().setColor("rgba(0,0,0,0.5)");
 		this.chart = new LineChart();
 		this.chart.getOptions().setShowLines(true);
 		chart.getOptions().getTooltips().setIntersect(false);
 		chart.getOptions().getTooltips().setMode(InteractionMode.index);
+		chart.getOptions().getTooltips().getCallbacks().setLabelCallback(new TooltipLabelCallback() {
+			
+			@Override
+			public IsColor onLabelTextColor(AbstractChart<?, ?> chart, TooltipItem item) {
+				return new Color(255,255,255);
+			}
+			
+			@Override
+			public TooltipLabelColor onLabelColor(AbstractChart<?, ?> chart, TooltipItem item) {
+				LineDataset dataset = (LineDataset) chart.getData().getDatasets().get(item.getDatasetIndex());
+				TooltipLabelColor color =  new TooltipLabelColor();
+				color.setBackgroundColor(dataset.getBorderColorAsString());
+				return color;
+			}
+			
+			@Override
+			public String onLabel(AbstractChart<?, ?> chart, TooltipItem item) {
+				LineDataset dataset = (LineDataset) chart.getData().getDatasets().get(item.getDatasetIndex());
+				return chart.getData().getDatasets().get(item.getDatasetIndex()).getLabel()+": "
+						+dataset.getDataPoints().get(item.getIndex()).getY()+" "
+						+UnitMapper.getInstance().getUnit(Integer.valueOf(chart.getData().getDatasets().get(item.getDatasetIndex()).getLabel())).getDisplayName();
+			}
+			
+			@Override
+			public String onBeforeLabel(AbstractChart<?, ?> chart, TooltipItem item) {
+				return "";
+			}
+			
+			@Override
+			public String onAfterLabel(AbstractChart<?, ?> chart, TooltipItem item) {
+				return "";
+			}
+		});
 		try {
 			Defaults.getPlugins().register(new ChartBackgroundColor());
 		} catch (InvalidPluginIdException e) {
@@ -337,7 +373,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.yAxis.getTicks().setMin(Math.floor(minValue-((maxValue-minValue)*0.1)));
 		this.yAxis.getTicks().setMax(Math.ceil(maxValue+((maxValue-minValue)*0.1)));
 		this.yAxis.getScaleLabel().setDisplay(true);
-		this.yAxis.getScaleLabel().setLabelString("Temperature");
 		this.chart.getOptions().getScales().setYAxes(this.yAxis);
 	}
 	

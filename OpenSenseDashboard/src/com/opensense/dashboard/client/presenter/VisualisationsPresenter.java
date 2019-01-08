@@ -28,6 +28,7 @@ import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.MinMaxValueHandler;
 import com.opensense.dashboard.client.utils.RequestBuilder;
+import com.opensense.dashboard.client.utils.UnitMapper;
 import com.opensense.dashboard.client.utils.ValueHandler;
 import com.opensense.dashboard.client.view.VisualisationsView;
 import com.opensense.dashboard.shared.DateRange;
@@ -49,7 +50,6 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	private static final int MAX_POINTS = 100;
 	
 	private List<Integer> sensorIds = new LinkedList<>();
-	private Map<Integer, Unit> unitMap = new HashMap<>();
 	private Map<Integer, LineDataset> datasetMap = new HashMap<>();
 	
 	private Date maxTimestamp = null;
@@ -317,7 +317,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	private void sendRequest(final Request request) {
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getValues() != null && result.getSensors() != null) {
-				this.unitMap.put(result.getSensors().get(0).getSensorId(), result.getSensors().get(0).getUnit());
+				UnitMapper.getInstance().putUnit(result.getSensors().get(0).getSensorId(), result.getSensors().get(0).getUnit());
 				this.addSensorValues(result.getSensors().get(0).getSensorId(), result.getValues());
 				view.showChart(this.getDatasetMap(),this.getChartBounds());
 			}else {
@@ -389,10 +389,4 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	public Map<Integer, LineDataset> getDatasetMap() {
 		return this.datasetMap;
 	}
-
-	@Override
-	public Unit getUnit(Integer sensorId) {
-		return this.unitMap.get(sensorId);
-	}
-
 }

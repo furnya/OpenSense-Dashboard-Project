@@ -28,7 +28,6 @@ public interface VisualisationsView extends IDataPanelPageView {
 		DateRange getDateRange();
 		List<Integer> getsensorIds();
 		Map<Integer, LineDataset> getDatasetMap();
-		Unit getUnit(Integer sensorId);
 	}
 	
 	void setPresenter(Presenter presenter);
