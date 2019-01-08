@@ -618,4 +618,36 @@ public class Languages {
 			return "Sensors without values wont be visible";
 		}
 	}
+
+	public static String connectionError() {
+		if(de){
+			return "Es ist ein Fehler aufgetreten. Wiederholen Sie Ihre Anfrage oder versuchen Sie es zu einem späterem Zeitpunkt erneut.";
+		}else{
+			return "";
+		}
+	}
+
+	public static String selectListItemError() {
+		if(de){
+			return "Es ist ein Fehler beim auswählen der Liste aufgetreten.";
+		}else{
+			return "";
+		}
+	}
+
+	public static String maxSensorSelectedLimitExceeded(int maxSensors) {
+		if(de){
+			return "Sie können nicht mehr als " + maxSensors + " Sensoren auswählen.";
+		}else{
+			return "";
+		}
+	}
+
+	public static String maxFavoriteSensorsReached(int maxSensors) {
+		if(de){
+			return "Die Favoriten dürfen maximal " + maxSensors + " enthalten.";
+		}else{
+			return "";
+		}
+	}
 }
