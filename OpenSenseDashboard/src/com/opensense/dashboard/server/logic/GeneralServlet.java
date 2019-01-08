@@ -1,5 +1,6 @@
 package com.opensense.dashboard.server.logic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,13 +9,18 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.json.JSONObject;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.opensense.dashboard.client.services.GeneralService;
+import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.server.util.ClientRequestHandler;
+import com.opensense.dashboard.server.util.JsonAttributes;
 import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.server.util.SessionUser;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
+import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.UserList;
@@ -61,6 +67,9 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			case VALUE_AGGREGATED:
 				response.setValues(ClientRequestHandler.getInstance().getAggregatedValueList(searchRequest.getIds().get(0),searchRequest.getParameters(),searchRequest.getDateRange()));
 				response.setSensors(ClientRequestHandler.getInstance().getSensorList(searchRequest.getParameters(), searchRequest.getIds()));
+				break;
+			case LICENSE:
+				response.setLicenses(ClientRequestHandler.getInstance().getLicenseMap());
 				break;
 			default:
 				break;
@@ -144,6 +153,28 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
 		return new ActionResult(ActionResultType.FAILED);
+	}
+	
+	@Override
+	public ActionResult createSensor(CreateSensorRequest request) {
+		if(SessionUser.getInstance().isGuest()) {
+			ActionResult ar = new ActionResult(ActionResultType.FAILED);
+			ar.setErrorMessage(Languages.notLoggedIn());
+			return ar;
+		}
+		String withID = "";
+		try{
+			String response = ClientRequestHandler.getInstance().sendCreateSensorRequest(request);
+			JSONObject sensor = new JSONObject(response);
+			withID = " "+Languages.with()+" ID "+sensor.getInt(JsonAttributes.ID.getNameString());
+		}catch(IOException e) {
+			ActionResult ar = new ActionResult(ActionResultType.FAILED);
+			ar.setErrorMessage(Languages.invalidParameters());
+			return ar;
+		}
+		ActionResult ar = new ActionResult(ActionResultType.SUCCESSFUL);
+		ar.setErrorMessage(Languages.sensorCreated()+withID);
+		return ar;
 	}
 
 }

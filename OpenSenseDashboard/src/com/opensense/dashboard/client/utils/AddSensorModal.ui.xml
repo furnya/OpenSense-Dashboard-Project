@@ -1,0 +1,44 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
+	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html"
+	xmlns:m="urn:import:gwt.material.design.client.ui"
+	xmlns:d="urn:import:com.opensense.dashboard.client.utils">
+
+	<ui:with type="com.opensense.dashboard.client.utils.Languages"
+		field="lang" />
+	<ui:with
+		type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
+
+	<ui:style>
+	.add-sensor-modal{
+	}
+	.max> div > ul {
+    max-height: 125px!important;
+	}
+	</ui:style>
+
+	<m:MaterialModal ui:field="modal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="800" addStyleNames="{style.add-sensor-modal}">
+       <m:MaterialModalContent>
+           <m:MaterialTitle title="{lang.createSensor}"/>
+           <m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
+           <m:MaterialListBox placeholder="{lang.unit}" ui:field="unitList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
+           <m:MaterialListBox placeholder="{lang.license}" ui:field="licenseList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
+           <m:MaterialTextBox textColor="BLACK" ui:field="latitudeBox" label="{lang.latitude}"/>
+           <m:MaterialTextBox textColor="BLACK" ui:field="longitudeBox" label="{lang.longitude}"/>
+           <m:MaterialTextBox textColor="BLACK" ui:field="altitudeBox" label="{lang.altitudeAboveGround}"/>
+           <m:MaterialTextBox textColor="BLACK" ui:field="directionVerticalBox" label="{lang.directionVertical}"/>
+           <m:MaterialTextBox textColor="BLACK" ui:field="directionHorizontalBox" label="{lang.directionHorizontal}"/>
+           <m:MaterialTextBox textColor="BLACK" ui:field="sensorModelBox" label="{lang.sensorModel}"/>
+           <m:MaterialTextBox textColor="BLACK" ui:field="accuracyBox" label="{lang.accuracy}"/>
+           <m:MaterialTextBox textColor="BLACK" ui:field="attributionTextBox" label="{lang.attributionText}"/>
+           <m:MaterialTextBox textColor="BLACK" ui:field="attributionUrlBox" label="{lang.attributionURL}"/>
+           <m:MaterialButton ui:field="confirmButton" text="{lang.confirm}"/>
+       </m:MaterialModalContent>
+       <m:MaterialModalFooter>
+           <m:MaterialButton ui:field="closeButton" text="{lang.cancel}"/>
+       </m:MaterialModalFooter>
+   </m:MaterialModal>
+
+</ui:UiBinder>

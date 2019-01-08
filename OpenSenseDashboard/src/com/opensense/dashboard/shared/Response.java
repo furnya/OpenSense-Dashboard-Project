@@ -17,6 +17,7 @@ public class Response implements IsSerializable {
 	private List<MinimalSensor> minimalSensors;
 	private List<UserList> userLists;
 	private List<Integer> myListSensors;
+	private Map<Integer, License> licenses;
 
 	public Response() {
 	}
@@ -129,5 +130,19 @@ public class Response implements IsSerializable {
 	 */
 	public void setMySensors(List<Integer> myListSensors) {
 		this.myListSensors = myListSensors;
+	}
+
+	/**
+	 * @return the licenses
+	 */
+	public Map<Integer, License> getLicenses() {
+		return licenses;
+	}
+
+	/**
+	 * @param licenses the licenses to set
+	 */
+	public void setLicenses(Map<Integer, License> licenses) {
+		this.licenses = licenses;
 	}
 }

@@ -21,6 +21,7 @@ public class RequestSender implements Serializable{
 	private static final long serialVersionUID = 5439662018572550904L;
 
 	private static final String APP_JSON = "application/json";
+	private static final String TEXT_HTML = "text/html";
 
 	private HashMap<String, String> parameters;
 	private String parameterString = "";
@@ -137,7 +138,7 @@ public class RequestSender implements Serializable{
 		}
 	}
 
-	public String sendPOSTRequest(String urlString, String body) throws IOException{
+	public String sendPOSTRequest(String urlString, String body, String token) throws IOException{
 		HttpURLConnection con = null;
 		StringBuilder content;
 		try {
@@ -147,6 +148,7 @@ public class RequestSender implements Serializable{
 			con.setRequestMethod("POST");
 			con.setRequestProperty("Accept", APP_JSON);
 			con.setRequestProperty("Content-Type", APP_JSON);
+			if(token!=null) con.setRequestProperty("Authorization", token);
 			con.setDoOutput(true);
 
 			OutputStream os = con.getOutputStream();
@@ -170,8 +172,8 @@ public class RequestSender implements Serializable{
 		return content.toString();
 	}
 
-	public JSONObject objectPOSTRequest(String urlString, String body) throws IOException{
-		String response = this.sendPOSTRequest(urlString, body);
+	public JSONObject objectPOSTRequest(String urlString, String body, String token) throws IOException{
+		String response = this.sendPOSTRequest(urlString, body, token);
 		if(response==null) {
 			return null;
 		}
