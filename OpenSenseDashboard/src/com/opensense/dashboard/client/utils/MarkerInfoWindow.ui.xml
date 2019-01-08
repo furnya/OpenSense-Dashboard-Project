@@ -39,16 +39,17 @@
 		display: grid !important;
 	}
 	
-	.starstyler {
-		margin-top: 5px !important;
+	.ratingdown {
+		margin-top: 6px !important;
 	}
+	
 	</ui:style>
 
 	<bh:Div ui:field="infoBox" addStyleNames="{style.insidewindow}">
 		<bh:Div addStyleNames="flex">
 			<b:Heading ui:field="header" addStyleNames="{style.header}"
 				size="H5" />
-			<d:Rating ui:field="rating" rating="0" addStyleNames="{style.starstyler}"/>
+			<d:Rating ui:field="rating" rating="0" addStyleNames="{style.ratingdown}"/>
 		</bh:Div>
 		<bh:Div addStyleNames="flex">
 			<bh:Div ui:field="datadescriptor"

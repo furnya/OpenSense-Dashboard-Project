@@ -13,6 +13,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.model.Size;
 import com.opensense.dashboard.client.view.MapView.Presenter;
 
 public class MarkerInfoWindow extends Composite {
@@ -71,6 +72,7 @@ public class MarkerInfoWindow extends Composite {
 	public void setInfoWindowRating(Double accuracy) {
 		if(accuracy != null) {
 			rating.setRating(accuracy * 10);
+			rating.setSize(Size.SMALL);
 		}
 	}
 	

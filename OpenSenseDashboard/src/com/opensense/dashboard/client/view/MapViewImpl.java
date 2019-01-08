@@ -83,10 +83,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	private Button recenterBtn = new Button();
 
-	private Button searchBtn = new Button();
-
-	private Button visuBtn = new Button();
-
 	private MarkerClusterer cluster;
 	// This should be a HashMap
 	// ########################################################################
@@ -121,8 +117,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		listManagerOptions.setPagerSize(com.opensense.dashboard.client.model.Size.SMALL);
 		listManagerOptions.setSpinnerSize(com.opensense.dashboard.client.model.Size.SMALL);
 		listManagerOptions.setShowMapButton(false);
-		listManagerOptions.setShowSearchButton(false);
-		listManagerOptions.setShowVisualizationButton(false);
+		listManagerOptions.setShowSearchButton(true);
+		listManagerOptions.setShowVisualizationButton(true);
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
@@ -175,24 +171,13 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private void initMapButtons() {
 		if (this.mList.isEmpty()) {
 			this.recenterBtn.setEnabled(false);
-			this.searchBtn.setEnabled(false);
-			this.visuBtn.setEnabled(false);
 		}
 		this.recenterBtn.add(new Image(GUIImageBundle.INSTANCE.recenter().getSafeUri().asString()));
 		this.recenterBtn.addStyleName("m-btn recenter-icon");
 		this.recenterBtn.setTitle("recenters map to fit bounds");
 		this.recenterBtn.addClickHandler(event -> this.recenterMap());
-		this.searchBtn.add(new Image(GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString()));
-		this.searchBtn.addStyleName("m-btn search-icon");
-		this.searchBtn.setTitle("gets all sensors and sends them to searchPage");
-		this.searchBtn.addClickHandler(event -> this.goToSearchPage());
-		this.visuBtn.add(new Image(GUIImageBundle.INSTANCE.diagramIconSvg().getSafeUri().asString()));
-		this.visuBtn.addStyleName("m-btn visual-icon");
-		this.visuBtn.setTitle("gets all sensors and sends them to visuPage");
-		this.visuBtn.addClickHandler(event -> this.goToVisuPage());
+		
 		this.mapWidget.setControls(ControlPosition.RIGHT_BOTTOM, this.recenterBtn);
-		this.mapWidget.setControls(ControlPosition.TOP_LEFT, this.searchBtn);
-		this.mapWidget.setControls(ControlPosition.LEFT_TOP, this.visuBtn);
 	}
 
 	private void initMapHandler() {
@@ -256,13 +241,11 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		ArrayList<String> dataDesriptors = new ArrayList<>();
 		dataDesriptors.add(Languages.measurand() + ": ");
 		dataDesriptors.add(Languages.sensorTyp() + ": ");
-		dataDesriptors.add(Languages.accuracy() + ": ");
 		dataDesriptors.add(Languages.altitudeAboveGround() + " ");
 		dataDesriptors.add(Languages.origin() + " ");
 		infoWindow.setDataDescriptor(dataDesriptors);
 		sensorData.add(si.getMeasurand().getDisplayName());
 		sensorData.add(si.getSensorModel());
-		sensorData.add("" + si.getAccuracy());
 		sensorData.add("" + si.getAltitudeAboveGround()+ "m");
 		sensorData.add(si.getAttributionText());
 		infoWindow.setData(sensorData);
@@ -344,8 +327,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private void markersOnMapButtonEnabler() {
 		if (!this.mList.isEmpty()) {
 			this.recenterBtn.setEnabled(true);
-			this.searchBtn.setEnabled(true);
-			this.visuBtn.setEnabled(true);
 		}
 	}
 
