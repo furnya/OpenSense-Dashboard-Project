@@ -137,6 +137,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		List<Integer> idsToRemove = getListDifference(this.sensorIds, newIds);
 		List<Integer> idsToAdd = getListDifference(newIds, this.sensorIds);
 		idsToRemove.forEach(this::removeDataset);
+		this.view.updateDatasets(new ArrayList<>(datasetMap.values()));
 		this.setAllSensorCardsGrey(idsToAdd);
 		this.setSensorIdsCopy(newIds);
 		if(!idsToRemove.isEmpty()) {
@@ -161,8 +162,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		if(minMaxHandler.removeValues(sensorId)) {
 			recalculateMinMax();
 		}
-		LineDataset dataset = this.datasetMap.remove(sensorId);
-		view.removeDatasetFromChart(dataset);
+		this.datasetMap.remove(sensorId);
 	}
 	
 	public void recalculateMinMax() {
@@ -229,6 +229,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		if((values == null) || values.isEmpty()) {
 			return;
 		}
+		this.removeDataset(sensorId);
 		ValueHandler valueHandler = new ValueHandler(values);
 
 		minMaxHandler.addValueForId(sensorId, valueHandler.getEarliest());
@@ -243,13 +244,9 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		minMaxHandler.addValueForId(sensorId, new Value(maxDP.getT(),maxDP.getY()));
 		this.minValue = minMaxHandler.getMin().getNumberValue();
 		this.maxValue = minMaxHandler.getMax().getNumberValue();
-		Integer oldSensorId = this.datasetsContainId(sensorId);
-		if(oldSensorId != null) {
-			this.datasetMap.remove(oldSensorId);
-		}
 		this.datasetMap.put(sensorId, dataset);
 		this.setLineDatasetStyle(dataset, sensorId);
-		view.addDatasetToChart(dataset);
+		view.updateDatasets(new ArrayList<>(datasetMap.values()));
 	}
 	
 	public Integer datasetsContainId(Integer id) {

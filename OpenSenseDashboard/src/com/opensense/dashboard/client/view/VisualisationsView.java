@@ -47,4 +47,5 @@ public interface VisualisationsView extends IDataPanelPageView {
 	void highlightDateRange(DateRange dateRange);
 	void addDatasetToChart(Dataset dataset);
 	void setChartAxisX(Date minTimestamp, Date maxTimestamp);
+	void updateDatasets(List<LineDataset> datasets);
 }

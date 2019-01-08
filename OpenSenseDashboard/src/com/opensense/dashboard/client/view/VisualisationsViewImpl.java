@@ -2,6 +2,7 @@ package com.opensense.dashboard.client.view;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.gwtbootstrap3.client.ui.html.Div;
@@ -359,6 +360,13 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		ArrayList<Dataset> datasets = new ArrayList<>();
 		this.chart.getData().getDatasets().forEach(datasets::add);
 		datasets.remove(dataset);
+		Dataset[] newDatasets = new Dataset[datasets.size()];
+		newDatasets = datasets.toArray(newDatasets);
+		this.chart.getData().setDatasets(newDatasets);
+	}
+	
+	@Override 
+	public void updateDatasets(List<LineDataset> datasets) {
 		Dataset[] newDatasets = new Dataset[datasets.size()];
 		newDatasets = datasets.toArray(newDatasets);
 		this.chart.getData().setDatasets(newDatasets);
