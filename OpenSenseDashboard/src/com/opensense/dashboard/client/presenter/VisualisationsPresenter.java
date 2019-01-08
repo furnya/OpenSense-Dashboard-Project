@@ -51,6 +51,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	
 	private List<Integer> sensorIds = new LinkedList<>();
 	private Map<Integer, LineDataset> datasetMap = new HashMap<>();
+	private Map<Integer, Integer> requestMap = new HashMap<>();
 	
 	private Date maxTimestamp = null;
 	private Date minTimestamp = null;
@@ -142,6 +143,9 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		this.setSensorIdsCopy(newIds);
 		if(!idsToRemove.isEmpty()) {
 			view.showChart(this.getDatasetMap(),this.getChartBounds());
+		}
+		if(this.getDateRange()==DateRange.CUSTOM && (view.getStartingDate()==null || view.getEndingDate()==null)) {
+			return;
 		}
 		this.valueRequestForSensorList(idsToAdd, this.getDateRange(), view.getStartingDate(), view.getEndingDate());
 	}
@@ -312,8 +316,13 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	}
 	
 	private void sendRequest(final Request request) {
+		requestMap.put(request.getIds().get(0),request.hashCode());
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getValues() != null && result.getSensors() != null) {
+				if(requestMap.get(request.getIds().get(0))!=request.hashCode()) {
+					return;
+				}
+				requestMap.remove(request.getIds().get(0));
 				UnitMapper.getInstance().putUnit(result.getSensors().get(0).getSensorId(), result.getSensors().get(0).getUnit());
 				this.addSensorValues(result.getSensors().get(0).getSensorId(), result.getValues());
 				view.showChart(this.getDatasetMap(),this.getChartBounds());
