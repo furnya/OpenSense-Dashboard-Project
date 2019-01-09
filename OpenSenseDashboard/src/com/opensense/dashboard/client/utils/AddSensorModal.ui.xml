@@ -17,6 +17,21 @@
 	.max> div > ul {
     max-height: 125px!important;
 	}
+	.mapContainer{
+		width: 60%;
+		height: 100%;
+	}
+	.locContainer{
+		width: 100%;
+		height: 70%;
+	}
+	.locBoxContainer{
+		width: 40%;
+		padding: 10px;
+	}
+	.locBoxContainer > *{
+		width: 100%;
+	}
 	</ui:style>
 
 	<m:MaterialModal ui:field="modal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="800" addStyleNames="{style.add-sensor-modal}">
@@ -25,8 +40,14 @@
            <m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
            <m:MaterialListBox placeholder="{lang.unit}" ui:field="unitList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
            <m:MaterialListBox placeholder="{lang.license}" ui:field="licenseList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
-           <m:MaterialTextBox textColor="BLACK" ui:field="latitudeBox" label="{lang.latitude}"/>
-           <m:MaterialTextBox textColor="BLACK" ui:field="longitudeBox" label="{lang.longitude}"/>
+           <bh:Div addStyleNames="flex {style.locContainer}">
+	           <bh:Div ui:field="map" addStyleNames="round-corners {style.mapContainer}"/>
+	           <bh:Div addStyleNames="{style.locBoxContainer}">
+		   	   		<m:MaterialTextBox textColor="BLACK" ui:field="latitudeBox" label="{lang.latitude}" />
+	           		<m:MaterialTextBox textColor="BLACK" ui:field="longitudeBox" label="{lang.longitude}" />
+	           		<b:Input type="TEXT" ui:field="placeBox" placeholder="{lang.searchForPlace}" />
+	           </bh:Div>
+           </bh:Div>
            <m:MaterialTextBox textColor="BLACK" ui:field="altitudeBox" label="{lang.altitudeAboveGround}"/>
            <m:MaterialTextBox textColor="BLACK" ui:field="directionVerticalBox" label="{lang.directionVertical}"/>
            <m:MaterialTextBox textColor="BLACK" ui:field="directionHorizontalBox" label="{lang.directionHorizontal}"/>

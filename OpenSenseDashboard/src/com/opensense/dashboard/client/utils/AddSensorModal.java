@@ -1,12 +1,26 @@
 package com.opensense.dashboard.client.utils;
 
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.Input;
+import org.gwtbootstrap3.client.ui.html.Div;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.maps.client.MapImpl;
+import com.google.gwt.maps.client.MapOptions;
+import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.maps.client.base.LatLngBounds;
+import com.google.gwt.maps.client.controls.MapTypeStyle;
+import com.google.gwt.maps.client.maptypes.MapTypeStyleElementType;
+import com.google.gwt.maps.client.maptypes.MapTypeStyleFeatureType;
+import com.google.gwt.maps.client.maptypes.MapTypeStyler;
+import com.google.gwt.maps.client.placeslib.Autocomplete;
+import com.google.gwt.maps.client.placeslib.AutocompleteOptions;
+import com.google.gwt.maps.client.placeslib.AutocompleteType;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -42,6 +56,17 @@ public class AddSensorModal extends Composite{
 	private Map<Integer, Measurand> measurandMap;
 	private Map<Integer, Unit> unitMap;
 	private Map<Integer, License> licenseMap;
+	
+	private MapOptions mapOptions;
+	private MapWidget mapWidget;
+	private Button recenterBtn = new Button();
+	private Autocomplete autoComplete;
+	
+	@UiField
+	Div map;
+	
+	@UiField
+	Input placeBox;
 	
 	@UiField
 	MaterialModal modal;
@@ -95,6 +120,66 @@ public class AddSensorModal extends Composite{
 			this.filterUnits(Integer.valueOf(event.getValue()));
 		});
 		requestLicenses();
+		this.initMap();
+		this.initMapHandler();
+		this.initAutoComplete();
+	}
+	
+	private void initAutoComplete() {
+		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
+		autoOptions.setTypes(AutocompleteType.GEOCODE);
+		this.autoComplete = Autocomplete.newInstance(this.placeBox.getElement(), autoOptions);
+		this.autoComplete.addPlaceChangeHandler(event -> {
+			if((this.autoComplete.getPlace() != null) && (this.autoComplete.getPlace().getGeometry() != null)) {
+				LatLngBounds bounds = this.autoComplete.getPlace().getGeometry().getViewPort();
+				this.mapWidget.fitBounds(bounds);
+			}
+		});
+	}
+
+	private void initMap() {
+		this.mapOptions = MapOptions.newInstance();
+		this.mapOptions.setMinZoom(2);
+		this.mapOptions.setMaxZoom(18);
+		this.mapOptions.setDraggable(true);
+		this.mapOptions.setScaleControl(true);
+		this.mapOptions.setStreetViewControl(false);
+		this.mapOptions.setMapTypeControl(false);
+		this.mapOptions.setScrollWheel(true);
+		this.mapOptions.setPanControl(false);
+		this.mapOptions.setZoomControl(true);
+		this.setMapStyles();
+	}
+
+	private void setMapStyles() {
+		MapTypeStyle mapStyle = MapTypeStyle.newInstance();
+		MapTypeStyle mapStyle2 = MapTypeStyle.newInstance();
+		mapStyle.setFeatureType(MapTypeStyleFeatureType.POI);
+		mapStyle2.setFeatureType(MapTypeStyleFeatureType.TRANSIT);
+		mapStyle.setElementType(MapTypeStyleElementType.LABELS);
+		mapStyle2.setElementType(MapTypeStyleElementType.LABELS);
+
+		String visibility = "off";
+		MapTypeStyler styler = MapTypeStyler.newVisibilityStyler(visibility);
+		MapTypeStyler[] stylers = new MapTypeStyler[1];
+		stylers[0] = styler;
+		mapStyle.setStylers(stylers);
+		mapStyle2.setStylers(stylers);
+		MapTypeStyle[] mapStyleArray = new MapTypeStyle[2];
+		mapStyleArray[0] = mapStyle;
+		mapStyleArray[1] = mapStyle2;
+		this.mapOptions.setMapTypeStyles(mapStyleArray);
+		MapImpl mapImpl = MapImpl.newInstance(this.map.getElement(), this.mapOptions);
+		this.mapWidget = MapWidget.newInstance(mapImpl);
+		this.mapWidget.setVisible(true);
+	}
+	
+	private void initMapHandler() {
+		this.mapWidget.addClickHandler(event -> {
+			this.latitudeBox.setValue(event.getMouseEvent().getLatLng().getLatitude()+"");
+			this.longitudeBox.setValue(event.getMouseEvent().getLatLng().getLongitude()+"");
+		});
+
 	}
 	
 	private void requestMeasurands() {

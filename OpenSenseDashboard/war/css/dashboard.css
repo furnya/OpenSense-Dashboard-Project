@@ -538,3 +538,6 @@ input:focus+label{
 	background-color: #66cc00 !important;
 	border-radius: 6px !important;
 }
+.pac-container {
+    z-index: 1051 !important;
+}

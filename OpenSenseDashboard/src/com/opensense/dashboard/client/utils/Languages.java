@@ -770,4 +770,12 @@ public class Languages {
 			return "";
 		}
 	}
+	
+	public static String searchForPlace() {
+		if(de) {
+			return "Nach Ort suchen";
+		}else {
+			return "Search for place";
+		}
+	}
 }
