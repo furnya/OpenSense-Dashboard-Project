@@ -166,19 +166,19 @@ public class ServerLanguages{
 		String unitName = null;
 		switch(unitType) {
 		case CELSIUS:
-			unitName = "°C";
+			unitName = "Â°C";
 			break;
 		case DECIBEL:
 			unitName = "dB";
 			break;
 		case DEGREES:
-			unitName = "°";
+			unitName = "Â°";
 			break;
 		case ENUM:
 			unitName = "";
 			break;
 		case FAHRENHEIT:
-			unitName = "°F";
+			unitName = "Â°F";
 			break;
 		case HPA:
 			unitName = "hPa";

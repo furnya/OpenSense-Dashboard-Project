@@ -87,6 +87,9 @@ public class ListCollapsibleItem extends Composite{
 	@UiField
 	MaterialCollapsibleHeader header;
 
+	@UiField
+	Span sensorDetails;
+
 	private static ListCollapsibleItemUiBinder uiBinder = GWT.create(ListCollapsibleItemUiBinder.class);
 
 	private HandlerRegistration clickHandler;
@@ -264,7 +267,6 @@ public class ListCollapsibleItem extends Composite{
 		}
 	}
 
-
 	private native void clickElement(Element element) /*-{
 		element.click();
 	}-*/;
@@ -277,5 +279,9 @@ public class ListCollapsibleItem extends Composite{
 		if(this.header.getElement().getClassName().contains("active")) {
 			this.clickElement(this.header.getElement());
 		}
+	}
+
+	public void setSensorDetails(String details) {
+		this.sensorDetails.setText(details);
 	}
 }

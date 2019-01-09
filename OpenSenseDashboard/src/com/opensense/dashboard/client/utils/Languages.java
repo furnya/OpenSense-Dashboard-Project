@@ -618,7 +618,7 @@ public class Languages {
 			return "Sensors without values wont be visible";
 		}
 	}
-	
+
 	public static String license() {
 		if(de){
 			return "Lizenz";
@@ -626,7 +626,7 @@ public class Languages {
 			return "License";
 		}
 	}
-	
+
 	public static String latitude() {
 		if(de){
 			return "Breitengrad";
@@ -634,15 +634,15 @@ public class Languages {
 			return "Latitude";
 		}
 	}
-	
+
 	public static String longitude() {
 		if(de){
-			return "L‰ngenengrad";
+			return "L√§ngenengrad";
 		}else{
 			return "Longitude";
 		}
 	}
-	
+
 	public static String directionVertical() {
 		if(de){
 			return "Vertikale Ausrichtung";
@@ -650,7 +650,7 @@ public class Languages {
 			return "Vertical direction";
 		}
 	}
-	
+
 	public static String directionHorizontal() {
 		if(de){
 			return "Horizontale Ausrichtung";
@@ -658,7 +658,7 @@ public class Languages {
 			return "Horizontal direction";
 		}
 	}
-	
+
 	public static String sensorModel() {
 		if(de){
 			return "Sensor-Modell";
@@ -666,7 +666,7 @@ public class Languages {
 			return "Sensor model";
 		}
 	}
-	
+
 	public static String attributionText() {
 		if(de){
 			return "Beschreibungstext";
@@ -674,7 +674,7 @@ public class Languages {
 			return "Attribution text";
 		}
 	}
-	
+
 	public static String attributionURL() {
 		if(de){
 			return "URL";
@@ -682,15 +682,15 @@ public class Languages {
 			return "Attribution URL";
 		}
 	}
-	
+
 	public static String confirm() {
 		if(de){
-			return "Best‰tigen";
+			return "Best√§tigen";
 		}else{
 			return "Confirm";
 		}
 	}
-	
+
 	public static String cancel() {
 		if(de){
 			return "Abbrechen";
@@ -698,7 +698,7 @@ public class Languages {
 			return "Cancel";
 		}
 	}
-	
+
 	public static String notLoggedIn() {
 		if(de){
 			return "Nicht eingeloggt";
@@ -706,7 +706,7 @@ public class Languages {
 			return "Not logged in";
 		}
 	}
-	
+
 	public static String sensorCreated() {
 		if(de){
 			return "Sensor erstellt";
@@ -714,15 +714,15 @@ public class Languages {
 			return "Sensor created";
 		}
 	}
-	
+
 	public static String invalidParameters() {
 		if(de){
-			return "Ung¸ltige Parameter";
+			return "Ung√ºltige Parameter";
 		}else{
 			return "Invalid parameters";
 		}
 	}
-	
+
 	public static String with() {
 		if(de){
 			return "mit";
@@ -730,7 +730,7 @@ public class Languages {
 			return "with";
 		}
 	}
-	
+
 	public static String connectionError() {
 		if(de){
 			return "Es ist ein Fehler aufgetreten. Wiederholen Sie Ihre Anfrage oder versuchen Sie es zu einem sp√§terem Zeitpunkt erneut.";

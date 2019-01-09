@@ -64,15 +64,20 @@
     margin-right: 25px;
     filter: invert(100%);	
 }
+.header{
+	overflow: hidden;
+    white-space: nowrap;
+}
 </ui:style>
 
 <m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE" addStyleNames="collapsible-item">
 	<m:MaterialCollapsibleHeader ui:field="header">
-		<bh:Div addStyleNames="position-relative header">
+		<bh:Div addStyleNames="position-relative {style.header}">
 			<m:MaterialLink iconType="ARROW_DROP_DOWN" iconPosition="LEFT"/>
 			<bh:Span ui:field="listItemName" />
 			<m:MaterialTextBox ui:field="listNameInput" addStyleNames="{style.list-name-input}" display="NONE" />
 			<m:MaterialImage ui:field="listIcon" display="NONE" addStyleNames="{style.list-icon}"/>
+			<bh:Span ui:field="sensorDetails" addStyleNames="margin-left-20"/>
 			<bh:Div addStyleNames="{style.float-right}">
 				<m:MaterialImage display="NONE" ui:field="deleteButton" url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.del-icon} clickable" />
 			</bh:Div>
