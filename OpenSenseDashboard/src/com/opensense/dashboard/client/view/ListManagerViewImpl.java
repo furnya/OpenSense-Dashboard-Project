@@ -136,7 +136,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		final List<Integer> showSensorIds = new ArrayList<>();
 		this.collapsiblesItems.get(listId).showItemSpinner(false);
 		this.collapsiblesItems.get(listId).changeToSelectAll(true);
-		//		this.collapsiblesItems.get(listId).setActionButtonsEnabled(selected);
 		if(sensors.isEmpty()) {
 			this.collapsiblesItems.get(listId).setSelectAllButtonEnabled(false);
 			this.collapsiblesItems.get(listId).showNoDataIndicator(true);
@@ -188,6 +187,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 					this.selectedSensorIdsInLists.get(listId).remove(i);
 				}
 			}
+			this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(this.selectedSensorIdsInLists.get(listId)));
 		}else {
 			this.selectedSensorIdsInLists.put(listId, new ArrayList<>());
 		}
