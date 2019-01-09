@@ -270,11 +270,9 @@ input:focus+label{
     min-height: 100% !important;
     min-width: 100% !important;
     display: block !important;
-    border-top-right-radius: 15px !important;
-    border-top-left-radius: 15px !important;
-    border-bottom-right-radius: 15px !important;
-    border-bottom-left-radius: 15px !important;
-}   
+    border-radius: 6px !important;
+}
+      
 .flex{
 	display: flex;
 }
@@ -302,7 +300,8 @@ input:focus+label{
 .clickable{
 	cursor: pointer;
 }
- .gm-style div div div div div div div div div {
+
+.gm-style div div div div div div div div div {
     background-color: #606060 !important;
     color: #fff;
     font-size: 16px;
@@ -311,6 +310,7 @@ input:focus+label{
 .spinner > Div {
 	border-color: #42DCA3;
 }
+
 .spinner-active {
 	top: 10px;
     position: absolute !important;
