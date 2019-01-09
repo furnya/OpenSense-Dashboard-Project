@@ -419,6 +419,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@Override
 	public void clearSensorData() {
 		this.showNoDataIndicator(false);
+		this.selectAllButton.setText(Languages.selectAllSensors());
 		this.sensors.clear();
 		this.sensorContainer.clear();
 		this.selectedSensors.clear();

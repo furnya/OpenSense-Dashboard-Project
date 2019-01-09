@@ -762,4 +762,12 @@ public class Languages {
 			return "";
 		}
 	}
+
+	public static String deleteSensors() {
+		if(de){
+			return "Sensoren löschen";
+		}else{
+			return "";
+		}
+	}
 }

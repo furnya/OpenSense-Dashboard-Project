@@ -100,9 +100,10 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 		if(editable && options.isEditingActive()) {
 			item.addListNameInputHandler(event -> this.presenter.changeListName(listId, event.getListName()));
-		}
-		if(editable && options.isEditingActive()) {
 			item.addDeleteButtonClickHandler(event -> this.deleteList(listId));
+		}
+		if(options.isEditingActive()) {
+			item.addDeleteSensorsButtonClickHandler(event -> this.presenter.deleteSensorsInList(listId, this.selectedSensorIdsInLists.get(listId)));
 		}
 		if(options.isShowMapButton()) {
 			item.addShowOnMapButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, this.selectedSensorIdsInLists.get(this.activeItemId))));
@@ -112,11 +113,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		}
 		if(options.isShowSearchButton()) {
 			item.addShowSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, this.selectedSensorIdsInLists.get(this.activeItemId))));
-		}
-		if(options.isEditingActive()) {
-			//		item.addAddToListButtonButtonClickHandler(event -> {
-			//
-			//		});
 		}
 
 		if(this.collapsiblesItems.containsKey(listId)) {
@@ -134,12 +130,13 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		this.presenter.deleteUserList(listId);
 	}
 
-
 	@Override
 	public void setSensorsInList(final int listId, final List<MinimalSensor> sensors) {
 		final Map<Integer, BasicSensorItemCard> sensorCards = new HashMap<>();
 		final List<Integer> showSensorIds = new ArrayList<>();
 		this.collapsiblesItems.get(listId).showItemSpinner(false);
+		this.collapsiblesItems.get(listId).changeToSelectAll(true);
+		//		this.collapsiblesItems.get(listId).setActionButtonsEnabled(selected);
 		if(sensors.isEmpty()) {
 			this.collapsiblesItems.get(listId).setSelectAllButtonEnabled(false);
 			this.collapsiblesItems.get(listId).showNoDataIndicator(true);
@@ -164,6 +161,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 						this.selectedSensorIdsInLists.get(listId).remove((Object) sensor.getSensorId());
 					}
 					this.collapsiblesItems.get(listId).setSensorDetails("(Enthält " + this.showSensorIdsInLists.get(listId).size() + " Sensoren davon ausgewählt "+ this.selectedSensorIdsInLists.get(listId).size() + ")");
+					this.collapsiblesItems.get(listId).setActionButtonsEnabled(!this.selectedSensorIdsInLists.get(listId).isEmpty());
 					this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(this.selectedSensorIdsInLists.get(listId)));
 				});
 				if(this.presenter.getController().getOptions().isEditingActive() && (listId != DefaultListItem.SELECTED_LIST_ID)) {
@@ -183,7 +181,13 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			this.sensorCardsInLists.put(listId, sensorCards);
 		}
 		if(this.selectedSensorIdsInLists.containsKey(listId)) {
-			this.selectedSensorIdsInLists.replace(listId, new ArrayList<>());
+			for (int i = this.selectedSensorIdsInLists.get(listId).size() - 1; i >= 0 ; i--) {
+				if(this.sensorCardsInLists.get(listId).containsKey(this.selectedSensorIdsInLists.get(listId).get(i))) {
+					this.sensorCardsInLists.get(listId).get(this.selectedSensorIdsInLists.get(listId).get(i)).setActive(true);
+				}else {
+					this.selectedSensorIdsInLists.get(listId).remove(i);
+				}
+			}
 		}else {
 			this.selectedSensorIdsInLists.put(listId, new ArrayList<>());
 		}
@@ -192,6 +196,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		} else {
 			this.showSensorIdsInLists.put(listId, showSensorIds);
 		}
+		this.collapsiblesItems.get(listId).setActionButtonsEnabled(!this.selectedSensorIdsInLists.get(listId).isEmpty());
 		this.collapsiblesItems.get(listId).getTopPager().update(showSensorIds.size(), true);
 		this.collapsiblesItems.get(listId).setSensorDetails("(Enthält " + this.showSensorIdsInLists.get(listId).size() + " Sensoren davon ausgewählt "+ this.selectedSensorIdsInLists.get(listId).size() + ")");
 	}
@@ -256,28 +261,27 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	private void selectAllSensorsInList(int listId, boolean isSelect) {
 		if(this.selectedSensorIdsInLists.get(listId) == null) {
-			GWT.log("ERROR");
+			LOGGER.log(Level.WARNING, () -> "Can not select all sensors in list with id " + listId);
 			return;
 		}
 		final List<Integer> selectedSensors = this.selectedSensorIdsInLists.get(listId);
 		if(isSelect) {
-			this.showSensorIdsInLists.get(listId).forEach(id -> {
+			for (int id : this.showSensorIdsInLists.get(listId)) {
 				if((this.presenter.getController().getOptions().getMaxSelectedObjects() != null) && (selectedSensors.size() >= this.presenter.getController().getOptions().getMaxSelectedObjects())) {
-					this.selectedSensorIdsInLists.replace(listId, selectedSensors);
-					this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(selectedSensors));
 					AppController.showInfo(Languages.maxSensorSelectedLimitExceeded(this.presenter.getController().getOptions().getMaxSelectedObjects()));
-					return;
+					break;
 				}
 				if(!this.selectedSensorIdsInLists.get(listId).contains(id)) {
 					selectedSensors.add(id);
 					this.sensorCardsInLists.get(listId).get(id).setActive(true);
 				}
-			});
+			}
 		}else {
 			this.selectedSensorIdsInLists.get(listId).forEach(id -> this.sensorCardsInLists.get(listId).get(id).setActive(false));
 			selectedSensors.clear();
 		}
 		this.selectedSensorIdsInLists.replace(listId, selectedSensors);
+		this.collapsiblesItems.get(listId).setActionButtonsEnabled(!this.selectedSensorIdsInLists.get(listId).isEmpty());
 		this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(selectedSensors));
 		this.collapsiblesItems.get(listId).setSensorDetails("(Enthält " + this.showSensorIdsInLists.get(listId).size() + " Sensoren davon ausgewählt "+ this.selectedSensorIdsInLists.get(listId).size() + ")");
 	}
