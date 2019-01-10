@@ -221,4 +221,8 @@ public class ServerLanguages{
 		}
 		return unitName;
 	}
+
+	public static String unexpectedErrorLog() {
+		return "Unexpected error";
+	}
 }

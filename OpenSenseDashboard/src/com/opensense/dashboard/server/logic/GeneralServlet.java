@@ -15,6 +15,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.server.util.ClientRequestHandler;
+import com.opensense.dashboard.server.util.DatabaseManager;
 import com.opensense.dashboard.server.util.JsonAttributes;
 import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.server.util.SessionUser;
@@ -137,6 +138,10 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public Integer createNewUserList() {
+		DatabaseManager db = new DatabaseManager();
+		db.initPooling();
+		System.out.println(db.testDB(123, "testets"));
+
 		//list of list ids with sensor ids in it
 		UserList listItem = new UserList();
 		listItem.setListId(this.idNumber++);
@@ -154,7 +159,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}
 		return new ActionResult(ActionResultType.FAILED);
 	}
-	
+
 	@Override
 	public ActionResult createSensor(CreateSensorRequest request) {
 		if(SessionUser.getInstance().isGuest()) {
