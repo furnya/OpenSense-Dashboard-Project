@@ -13,11 +13,16 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.base.LatLngBounds;
+import com.google.gwt.maps.client.base.Size;
 import com.google.gwt.maps.client.controls.MapTypeStyle;
 import com.google.gwt.maps.client.maptypes.MapTypeStyleElementType;
 import com.google.gwt.maps.client.maptypes.MapTypeStyleFeatureType;
 import com.google.gwt.maps.client.maptypes.MapTypeStyler;
+import com.google.gwt.maps.client.overlays.Marker;
+import com.google.gwt.maps.client.overlays.MarkerImage;
+import com.google.gwt.maps.client.overlays.MarkerOptions;
 import com.google.gwt.maps.client.placeslib.Autocomplete;
 import com.google.gwt.maps.client.placeslib.AutocompleteOptions;
 import com.google.gwt.maps.client.placeslib.AutocompleteType;
@@ -61,6 +66,7 @@ public class AddSensorModal extends Composite{
 	private MapWidget mapWidget;
 	private Button recenterBtn = new Button();
 	private Autocomplete autoComplete;
+	private Marker marker;
 	
 	@UiField
 	Div map;
@@ -121,8 +127,29 @@ public class AddSensorModal extends Composite{
 		});
 		requestLicenses();
 		this.initMap();
-		this.initMapHandler();
 		this.initAutoComplete();
+		this.addLatLngValueChangeHandler();
+		this.initMarker();
+	}
+	
+	private void initMarker() {
+		LatLng position = LatLng.newInstance(0.0,0.0);
+		this.latitudeBox.setValue("0");
+		this.longitudeBox.setValue("0");
+		MarkerOptions markerOpt = MarkerOptions.newInstance();
+		markerOpt.setPosition(position);
+		markerOpt.setMap(this.mapWidget);
+		this.marker = Marker.newInstance(markerOpt);
+		this.marker.setDraggable(true);
+		this.marker.addDragEndHandler(event -> {
+			this.latitudeBox.setValue(this.marker.getPosition().getLatitude()+"");
+			this.longitudeBox.setValue(this.marker.getPosition().getLongitude()+"");
+		});
+		this.mapWidget.addDblClickHandler(event -> {
+			this.latitudeBox.setValue(event.getMouseEvent().getLatLng().getLatitude()+"");
+			this.longitudeBox.setValue(event.getMouseEvent().getLatLng().getLongitude()+"");
+			this.marker.setPosition(LatLng.newInstance(event.getMouseEvent().getLatLng().getLatitude(), event.getMouseEvent().getLatLng().getLongitude()));
+		});
 	}
 	
 	private void initAutoComplete() {
@@ -148,6 +175,7 @@ public class AddSensorModal extends Composite{
 		this.mapOptions.setScrollWheel(true);
 		this.mapOptions.setPanControl(false);
 		this.mapOptions.setZoomControl(true);
+		this.mapOptions.setDisableDoubleClickZoom(true);
 		this.setMapStyles();
 	}
 
@@ -174,12 +202,35 @@ public class AddSensorModal extends Composite{
 		this.mapWidget.setVisible(true);
 	}
 	
-	private void initMapHandler() {
-		this.mapWidget.addClickHandler(event -> {
-			this.latitudeBox.setValue(event.getMouseEvent().getLatLng().getLatitude()+"");
-			this.longitudeBox.setValue(event.getMouseEvent().getLatLng().getLongitude()+"");
+	private void addLatLngValueChangeHandler() {
+		this.latitudeBox.addValueChangeHandler(event -> {
+			Double lat = null;
+			Double lng = null;
+			try {
+				lat = Double.valueOf(event.getValue());
+				lng = Double.valueOf(this.longitudeBox.getValue());
+			}catch(Exception e) {
+				return;
+			}
+			if(lat!=null && lng!=null) {
+				this.mapWidget.setCenter(LatLng.newInstance(lat, lng));
+				this.marker.setPosition(LatLng.newInstance(lat, lng));
+			}
 		});
-
+		this.longitudeBox.addValueChangeHandler(event -> {
+			Double lat = null;
+			Double lng = null;
+			try {
+				lat = Double.valueOf(this.latitudeBox.getValue());
+				lng = Double.valueOf(event.getValue());
+			}catch(Exception e) {
+				return;
+			}
+			if(lat!=null && lng!=null) {
+				this.mapWidget.setCenter(LatLng.newInstance(lat, lng));
+				this.marker.setPosition(LatLng.newInstance(lat, lng));
+			}
+		});
 	}
 	
 	private void requestMeasurands() {
