@@ -1,5 +1,6 @@
 package com.opensense.dashboard.client.utils;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,18 +11,17 @@ import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.base.LatLngBounds;
-import com.google.gwt.maps.client.base.Size;
 import com.google.gwt.maps.client.controls.MapTypeStyle;
 import com.google.gwt.maps.client.maptypes.MapTypeStyleElementType;
 import com.google.gwt.maps.client.maptypes.MapTypeStyleFeatureType;
 import com.google.gwt.maps.client.maptypes.MapTypeStyler;
 import com.google.gwt.maps.client.overlays.Marker;
-import com.google.gwt.maps.client.overlays.MarkerImage;
 import com.google.gwt.maps.client.overlays.MarkerOptions;
 import com.google.gwt.maps.client.placeslib.Autocomplete;
 import com.google.gwt.maps.client.placeslib.AutocompleteOptions;
@@ -42,6 +42,10 @@ import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.Unit;
 
+import gwt.material.design.client.base.validator.AbstractValidator;
+import gwt.material.design.client.base.validator.BlankValidator;
+import gwt.material.design.client.base.validator.DecimalMaxValidator;
+import gwt.material.design.client.base.validator.DecimalMinValidator;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialListBox;
 import gwt.material.design.client.ui.MaterialModal;
@@ -61,10 +65,10 @@ public class AddSensorModal extends Composite{
 	private Map<Integer, Measurand> measurandMap;
 	private Map<Integer, Unit> unitMap;
 	private Map<Integer, License> licenseMap;
+	private Map<MaterialTextBox, Boolean> validMap = new HashMap<>();
 	
 	private MapOptions mapOptions;
 	private MapWidget mapWidget;
-	private Button recenterBtn = new Button();
 	private Autocomplete autoComplete;
 	private Marker marker;
 	
@@ -128,10 +132,107 @@ public class AddSensorModal extends Composite{
 		requestLicenses();
 		this.initMap();
 		this.initAutoComplete();
-		this.addLatLngValueChangeHandler();
 		this.initMarker();
+		this.addValidators();
+		this.initValidMap();
 	}
 	
+	private void initValidMap() {
+		this.validMap.put(this.latitudeBox,true);
+		this.validMap.put(this.longitudeBox,true);
+		this.validMap.put(this.altitudeBox,false);
+		this.validMap.put(this.directionVerticalBox,false);
+		this.validMap.put(this.directionHorizontalBox,false);
+		this.validMap.put(this.sensorModelBox,false);
+		this.validMap.put(this.accuracyBox,false);
+		this.validMap.put(this.attributionTextBox,false);
+		this.validMap.put(this.attributionUrlBox,false);
+	}
+	
+	private void addValidators() {
+		this.latitudeBox.addValidator(createDoubleValidator(-90, 90));
+		this.latitudeBox.addValueChangeHandler(createLatLngValueChangeHandler(this.latitudeBox));
+		this.longitudeBox.addValidator(createDoubleValidator(-180, 180));
+		this.longitudeBox.addValueChangeHandler(createLatLngValueChangeHandler(this.longitudeBox));
+		BlankValidator<String> vString = createStringValidator();
+		this.sensorModelBox.addValidator(vString);
+		this.sensorModelBox.addValueChangeHandler(createStringValueChangeHandler(this.sensorModelBox));
+		this.attributionTextBox.addValidator(vString);
+		this.attributionTextBox.addValueChangeHandler(createStringValueChangeHandler(this.attributionTextBox));
+		this.attributionUrlBox.addValidator(vString);
+		this.attributionUrlBox.addValueChangeHandler(createStringValueChangeHandler(this.attributionUrlBox));
+		this.altitudeBox.addValidator(createDoubleValidator(0, Double.POSITIVE_INFINITY));
+		this.altitudeBox.addValueChangeHandler(createStringValueChangeHandler(this.altitudeBox));
+		this.directionVerticalBox.addValidator(createDoubleValidator(-360, 360));
+		this.directionVerticalBox.addValueChangeHandler(createStringValueChangeHandler(this.directionVerticalBox));
+		this.directionHorizontalBox.addValidator(createDoubleValidator(-360, 360));
+		this.directionHorizontalBox.addValueChangeHandler(createStringValueChangeHandler(this.directionHorizontalBox));
+		this.accuracyBox.addValidator(createDoubleValidator(0, 10));
+		this.accuracyBox.addValueChangeHandler(createStringValueChangeHandler(this.accuracyBox));
+	}
+	
+	private BlankValidator<String> createDoubleValidator(double min, double max){
+		return new BlankValidator<String>("Invalid value") {
+			@Override
+			public boolean isValid(String value) {
+				if(value==null) return false;
+				Double doubleValue = null;
+				try {
+					doubleValue = Double.valueOf(value);
+				}catch(NumberFormatException e) {
+					return false;
+				}
+				if(doubleValue==null) return false;
+				return (min<=doubleValue && doubleValue<=max);
+			}
+		};
+	}
+	
+	private BlankValidator<String> createStringValidator(){
+		return new BlankValidator<String>("Invalid value") {
+			@Override
+			public boolean isValid(String value) {
+				return (value!=null && value!="");
+			}
+		};
+	}
+	
+	private ValueChangeHandler<String> createLatLngValueChangeHandler(MaterialTextBox box){
+		return event -> {
+			if(box.validate(true)) {
+				this.validMap.replace(box,true);
+				this.tryEnableConfirm();
+				if(this.latitudeBox.validate(true) && this.longitudeBox.validate(true)) {
+					double lat = Double.parseDouble(this.latitudeBox.getValue());
+					double lng = Double.parseDouble(this.longitudeBox.getValue());
+					this.mapWidget.setCenter(LatLng.newInstance(lat, lng));
+					this.marker.setPosition(LatLng.newInstance(lat, lng));
+				}
+			}else {
+				this.validMap.replace(box,false);
+				this.confirmButton.setEnabled(false);
+			}
+		};
+	}
+	
+	private ValueChangeHandler<String> createStringValueChangeHandler(MaterialTextBox box){
+		return event -> {
+			if(box.validate(true)) {
+				this.validMap.replace(box,true);
+				this.tryEnableConfirm();
+			}else {
+				this.validMap.replace(box,false);
+				this.confirmButton.setEnabled(false);
+			}
+		};
+	}
+
+	private void tryEnableConfirm() {
+		if(!this.validMap.containsValue(false)) {
+			this.confirmButton.setEnabled(true);
+		}
+	}
+
 	private void initMarker() {
 		LatLng position = LatLng.newInstance(0.0,0.0);
 		this.latitudeBox.setValue("0");
@@ -202,37 +303,6 @@ public class AddSensorModal extends Composite{
 		this.mapWidget.setVisible(true);
 	}
 	
-	private void addLatLngValueChangeHandler() {
-		this.latitudeBox.addValueChangeHandler(event -> {
-			Double lat = null;
-			Double lng = null;
-			try {
-				lat = Double.valueOf(event.getValue());
-				lng = Double.valueOf(this.longitudeBox.getValue());
-			}catch(Exception e) {
-				return;
-			}
-			if(lat!=null && lng!=null) {
-				this.mapWidget.setCenter(LatLng.newInstance(lat, lng));
-				this.marker.setPosition(LatLng.newInstance(lat, lng));
-			}
-		});
-		this.longitudeBox.addValueChangeHandler(event -> {
-			Double lat = null;
-			Double lng = null;
-			try {
-				lat = Double.valueOf(this.latitudeBox.getValue());
-				lng = Double.valueOf(event.getValue());
-			}catch(Exception e) {
-				return;
-			}
-			if(lat!=null && lng!=null) {
-				this.mapWidget.setCenter(LatLng.newInstance(lat, lng));
-				this.marker.setPosition(LatLng.newInstance(lat, lng));
-			}
-		});
-	}
-	
 	private void requestMeasurands() {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MEASURAND, false);
 		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
@@ -297,7 +367,6 @@ public class AddSensorModal extends Composite{
 	
 	@UiHandler("confirmButton")
 	public void onConfirmButtonClicked(ClickEvent e) {
-		//TODO: validate
 		CreateSensorRequest request = new CreateSensorRequest();
 		request.setAccuracy(Double.valueOf(accuracyBox.getValue()));
 		request.setAltitudeAboveGround(Double.valueOf(altitudeBox.getValue()));

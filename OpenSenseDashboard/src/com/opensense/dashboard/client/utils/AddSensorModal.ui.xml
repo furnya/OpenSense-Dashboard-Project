@@ -55,7 +55,7 @@
            <m:MaterialTextBox textColor="BLACK" ui:field="accuracyBox" label="{lang.accuracy}"/>
            <m:MaterialTextBox textColor="BLACK" ui:field="attributionTextBox" label="{lang.attributionText}"/>
            <m:MaterialTextBox textColor="BLACK" ui:field="attributionUrlBox" label="{lang.attributionURL}"/>
-           <m:MaterialButton ui:field="confirmButton" text="{lang.confirm}"/>
+           <m:MaterialButton ui:field="confirmButton" enabled="false" text="{lang.confirm}"/>
        </m:MaterialModalContent>
        <m:MaterialModalFooter>
            <m:MaterialButton ui:field="closeButton" text="{lang.cancel}"/>

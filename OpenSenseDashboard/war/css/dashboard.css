@@ -204,12 +204,12 @@
 }
 
 input:focus{
-    border-bottom: 1px solid #42DCA3 !important;
-    box-shadow: 0 1px 0 0 #42DCA3 !important;
+    border-bottom: 1px solid #42DCA3;
+    box-shadow: 0 1px 0 0 #42DCA3;
 }
 
 input:focus+label{
-	color: #42DCA3 !important;
+	color: #42DCA3;
 }
 
 .nav-container{
