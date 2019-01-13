@@ -139,29 +139,58 @@ public class DatabaseManager {
 	}
 
 	public ActionResult addSensorsToUserList(int userId, int listId, List<Integer> sensors) {
-		//		String sql = "SELECT list_sensors FROM user_lists WHERE user_id = ? AND list_id = ?;";
-		//		ResultSet resultSet = null;
-		//		Integer result = null;
-		//		try (Connection con = openSQLConnection(); PreparedStatement selectStatement = con.prepareStatement(sql)){
-		//			selectStatement.setInt(1, userId);
-		//			selectStatement.setInt(2, listId);
-		//			resultSet = selectStatement.executeQuery();
-		//			StringBuilder sensorsAsString = new StringBuilder();
-		//			while (resultSet.next()) {
-		//				sensorsAsString.append(resultSet.getString("list_sensors"));
-		//			}
-		//			sql = "UPDATE user_lists SET list_sensors = ? WHERE user_id = ? AND list_id = ?;";
-		//			try (PreparedStatement statement = con.prepareStatement(sql)){
-		//				statement.setString(1, new SensorArrayFormatter().concatenateStringArrays(sensorsAsString.toString(), new SensorArrayFormatter().asString(sensors)));
-		//				statement.setInt(2, userId);
-		//				statement.setInt(3, listId);
-		//				result = statement.executeUpdate();
-		//			}
-		//		}catch (Exception e) {
-		//			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
-		//			return new ActionResult(ActionResultType.FAILED);
-		//	}
-		//		return new ActionResult((result != null) && (result != 0) ? ActionResultType.SUCCESSFUL : ActionResultType.FAILED);
-		return new ActionResult(ActionResultType.FAILED);
+		String sql = "SELECT list_sensors FROM user_lists WHERE user_id = ? AND list_id = ?;";
+		ResultSet resultSet = null;
+		Integer result = null;
+		try (Connection con = openSQLConnection(); PreparedStatement selectStatement = con.prepareStatement(sql)){
+			selectStatement.setInt(1, userId);
+			selectStatement.setInt(2, listId);
+			resultSet = selectStatement.executeQuery();
+			String sensorsAsString = "";
+			while (resultSet.next()) {
+				sensorsAsString = resultSet.getString("list_sensors");
+			}
+			ArrayList<Integer> sensorsAsArray = (ArrayList<Integer>) new SensorArrayFormatter().asArray(sensorsAsString);
+			sensorsAsArray.addAll(sensors);
+			sql = "UPDATE user_lists SET list_sensors = ? WHERE user_id = ? AND list_id = ?;";
+			try (PreparedStatement statement = con.prepareStatement(sql)){
+				statement.setString(1, new SensorArrayFormatter().asString(sensorsAsArray));
+				statement.setInt(2, userId);
+				statement.setInt(3, listId);
+				result = statement.executeUpdate();
+			}
+		}catch (Exception e) {
+			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
+			return new ActionResult(ActionResultType.FAILED);
+		}
+		return new ActionResult((result != null) && (result != 0) ? ActionResultType.SUCCESSFUL : ActionResultType.FAILED);
+	}
+
+	public ActionResult deleteSensorsFromUserList(Integer userId, int listId, List<Integer> sensors) {
+		String sql = "SELECT list_sensors FROM user_lists WHERE user_id = ? AND list_id = ?;";
+		ResultSet resultSet = null;
+		Integer result = null;
+		try (Connection con = openSQLConnection(); PreparedStatement selectStatement = con.prepareStatement(sql)){
+			selectStatement.setInt(1, userId);
+			selectStatement.setInt(2, listId);
+			resultSet = selectStatement.executeQuery();
+			String sensorsAsString = "";
+			while (resultSet.next()) {
+				sensorsAsString = resultSet.getString("list_sensors");
+			}
+			ArrayList<Integer> sensorsAsArray = (ArrayList<Integer>) new SensorArrayFormatter().asArray(sensorsAsString);
+			sensorsAsArray.removeAll(sensors);
+			sql = "UPDATE user_lists SET list_sensors = ? WHERE user_id = ? AND list_id = ?;";
+			try (PreparedStatement statement = con.prepareStatement(sql)){
+				statement.setString(1, new SensorArrayFormatter().asString(sensorsAsArray));
+				statement.setInt(2, userId);
+				statement.setInt(3, listId);
+				result = statement.executeUpdate();
+			}
+		}catch (Exception e) {
+			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
+			return new ActionResult(ActionResultType.FAILED);
+		}
+		return new ActionResult((result != null) && (result != 0) ? ActionResultType.SUCCESSFUL : ActionResultType.FAILED);
 	}
 }

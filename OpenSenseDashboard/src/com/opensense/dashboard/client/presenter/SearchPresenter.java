@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client.presenter;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -12,6 +14,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
@@ -25,13 +28,13 @@ import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.UserList;
 
-import gwt.material.design.client.ui.MaterialToast;
-
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 
 	private static final Logger LOGGER = Logger.getLogger(SearchPresenter.class.getName());
 
 	private final SearchView view;
+
+	private final Map<Integer, UserList> shownUserLists = new HashMap<>();
 
 	public SearchPresenter(HandlerManager eventBus, AppController appController, SearchView view) {
 		super(view, eventBus, appController);
@@ -188,12 +191,15 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 
 	@Override
 	public void getListsAndShow() {
+		this.shownUserLists.clear();
 		GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
 			if((result != null)) {
+				this.shownUserLists.put(DefaultListItem.FAVORITE_LIST_ID, new UserList(DefaultListItem.FAVORITE_LIST_ID, Languages.favorites()));
+				result.forEach(userList -> this.shownUserLists.put(userList.getListId(), userList));
 				this.view.showUserListsInDropDown(result);
 			}else {
 				AppController.showError(Languages.connectionError());
-				LOGGER.log(Level.WARNING, "asd");
+				LOGGER.log(Level.WARNING, "Result is null");
 			}
 		},caught -> {
 			AppController.showError(Languages.connectionError());
@@ -202,13 +208,13 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	}
 
 	@Override
-	public void addSelectedSensorsToUserList(int listId, List<Integer> selectedSensors) {
+	public void addSelectedSensorsToUserList(final int listId, final List<Integer> selectedSensors) {
 		GeneralService.Util.getInstance().addSensorsToUserList(listId, selectedSensors, new DefaultAsyncCallback<ActionResult>(result -> {
 			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-				MaterialToast.fireToast("Erfolgreich zur liste hinzugefügt");
+				AppController.showSuccess(Languages.addedSensorsToList(Arrays.toString(selectedSensors.toArray()).replace("[", "").replace("]", ""), this.shownUserLists.get(listId).getListName()));
 			}else {
 				AppController.showError(Languages.connectionError());
-				LOGGER.log(Level.WARNING, "asd");
+				LOGGER.log(Level.WARNING, "Result is nul or did not match the expected resultType");
 			}
 		},caught -> {
 			AppController.showError(Languages.connectionError());

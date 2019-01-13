@@ -1,9 +1,7 @@
 package com.opensense.dashboard.server.logic;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -89,9 +87,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}
 	}
 
-	private final Map<Integer, UserList> lists = new HashMap<>();
-	int idNumber = 0;
-
 	@Override
 	public List<UserList> getUserLists() { // this method could be added in the get data from request (LIST)
 		return ClientRequestHandler.getInstance().getUserLists();
@@ -107,12 +102,10 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	}
 
 	@Override
-	public ActionResult deleteSensorsFromUserList(int listId, List<Integer> sensors) {//TODO:
-		if(this.lists.containsKey(listId)) {
-			UserList list = this.lists.get(listId);
-			sensors.forEach(list.getSensorIds()::remove);
-			this.lists.replace(listId, list);
-			return new ActionResult(ActionResultType.SUCCESSFUL);
+	public ActionResult deleteSensorsFromUserList(int listId, List<Integer> sensors) {
+		if(!SessionUser.getInstance().isGuest()) {
+			DatabaseManager db = new DatabaseManager();
+			return db.deleteSensorsFromUserList(SessionUser.getInstance().getUserId(), listId, sensors);
 		}
 		return new ActionResult(ActionResultType.FAILED);
 	}
@@ -165,7 +158,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		ar.setErrorMessage(Languages.sensorCreated()+withID);
 		return ar;
 	}
-	
+
 	@Override
 	public ActionResult deleteSensorFromMySensors(Integer sensorId) {
 		if(SessionUser.getInstance().isGuest()) {

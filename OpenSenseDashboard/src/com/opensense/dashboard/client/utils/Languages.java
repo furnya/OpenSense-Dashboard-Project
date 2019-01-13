@@ -714,10 +714,10 @@ public class Languages {
 			return "Sensor created";
 		}
 	}
-	
+
 	public static String sensorDeleted() {
 		if(de){
-			return "Sensor gel�scht";
+			return "Sensor gelöscht";
 		}else{
 			return "Sensor deleted";
 		}
@@ -778,12 +778,20 @@ public class Languages {
 			return "";
 		}
 	}
-	
+
 	public static String searchForPlace() {
 		if(de) {
 			return "Nach Ort suchen";
 		}else {
 			return "Search for place";
+		}
+	}
+
+	public static String addedSensorsToList(String sensosAsList, String listName) {
+		if(de) {
+			return "Die Sensoren " + sensosAsList + " wurden erfolgreich zu der Liste \"" + listName + "\" hinzugefügt";
+		}else {
+			return "The sensors  " + sensosAsList + " got added successfully to the list \"" + listName + "\"";
 		}
 	}
 }

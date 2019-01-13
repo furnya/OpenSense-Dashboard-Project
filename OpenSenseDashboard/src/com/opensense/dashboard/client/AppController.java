@@ -133,7 +133,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 				favIds.add(sensorId);
 				string.append(sensorId + ", ");
 			});
-			showInfo("Added " + (string.length() > 0 ? (string.toString().substring(0, string.length() - 2)) : "nothing") + " to the fav list"); //TODO: translation
+			showSuccess(Languages.addedSensorsToList(string.toString().substring(0, string.length() - 2), Languages.favorites()));
 			CookieManager.writeFavoriteListCookie(favIds);
 			this.dataPanelPresenter.updateFavoriteList();
 		});
@@ -145,7 +145,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 				favIds.remove(sensorId);
 				string.append(sensorId + ", ");
 			});
-			showInfo("Removed" + (string.length() > 0 ? (string.toString().substring(0, string.length() - 2)) : "nothing") + " from the fav list");
+			showSuccess(Languages.addedSensorsToList(string.toString().substring(0, string.length() - 2), Languages.favorites()));
 			CookieManager.writeFavoriteListCookie(favIds);
 			this.dataPanelPresenter.updateFavoriteList();
 		});

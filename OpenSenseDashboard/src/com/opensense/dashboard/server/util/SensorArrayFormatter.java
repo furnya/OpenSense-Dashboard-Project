@@ -25,10 +25,4 @@ public class SensorArrayFormatter {
 	public String asString(List<Integer> sensorsAsArray){
 		return Arrays.toString(sensorsAsArray.toArray());
 	}
-
-	public String concatenateStringArrays(String sensorsAsString, String sensorsAsString2) {
-		sensorsAsString = sensorsAsString.replaceAll("\\]", ", ");
-		sensorsAsString2 = sensorsAsString2.replaceAll("\\[", "");
-		return sensorsAsString + sensorsAsString2;
-	}
 }
