@@ -60,23 +60,33 @@
 }
 </ui:style>
 
-<bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
-	<bh:Div addStyleNames="{style.left}">
-		<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>
-		<bh:Div addStyleNames="{style.icon-size} margin-right-10">
-			<b:Image ui:field="icon" width="100%" height="100%"/>
-		</bh:Div>
-		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
-		<m:MaterialPreLoader ui:field="cardSpinner" display="NONE" addStyleNames="spinner">
-			<m:MaterialSpinner/>
-		</m:MaterialPreLoader>
-	</bh:Div>
-	<bh:Div addStyleNames="{style.right}">
-		<bh:Div addStyleNames="{style.button-container}">
-			<m:MaterialImage display="NONE" ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
-			<m:MaterialImage display="NONE" ui:field="trashButton" url="{gui.trash.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
-		</bh:Div>
-	</bh:Div>
-</bh:Div>
+<m:MaterialCollapsible ui:field="collapsible" addStyleNames="round-corners">
+	<m:MaterialCollapsibleItem ui:field="collapsibleItem" addStyleNames="round-corners">
+		<m:MaterialCollapsibleHeader addStyleNames="round-corners no-padding">
+			<bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
+				<bh:Div addStyleNames="{style.left}">
+					<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>
+					<bh:Div addStyleNames="{style.icon-size} margin-right-10">
+						<b:Image ui:field="icon" width="100%" height="100%"/>
+					</bh:Div>
+					<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
+					<m:MaterialPreLoader ui:field="cardSpinner" display="NONE" addStyleNames="spinner">
+						<m:MaterialSpinner/>
+					</m:MaterialPreLoader>
+				</bh:Div>
+				<bh:Div addStyleNames="{style.right}">
+					<bh:Div addStyleNames="{style.button-container}">
+						<m:MaterialImage ui:field="expandButton" url="{gui.searchIconSvg.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+						<m:MaterialImage display="NONE" ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+						<m:MaterialImage display="NONE" ui:field="trashButton" url="{gui.trash.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+					</bh:Div>
+				</bh:Div>
+			</bh:Div>
+		</m:MaterialCollapsibleHeader>
+	<m:MaterialCollapsibleBody>
+		<m:MaterialLabel text="HEADER" addStyleNames="{style.font}"/>
+	</m:MaterialCollapsibleBody>
+	</m:MaterialCollapsibleItem>
+</m:MaterialCollapsible>
 
 </ui:UiBinder>

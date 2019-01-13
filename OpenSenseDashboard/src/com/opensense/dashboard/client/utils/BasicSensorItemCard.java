@@ -16,6 +16,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 import gwt.material.design.client.ui.MaterialCheckBox;
+import gwt.material.design.client.ui.MaterialCollapsible;
+import gwt.material.design.client.ui.MaterialCollapsibleItem;
 import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialPreLoader;
@@ -30,6 +32,12 @@ public class BasicSensorItemCard extends Composite{
 
 	@UiField
 	Div layout;
+	
+	@UiField
+	MaterialCollapsible collapsible;
+	
+	@UiField
+	MaterialCollapsibleItem collapsibleItem;
 
 	@UiField
 	MaterialLabel header;
@@ -40,6 +48,9 @@ public class BasicSensorItemCard extends Composite{
 	@UiField
 	MaterialCheckBox checkbox;
 
+	@UiField
+	MaterialImage expandButton;
+	
 	@UiField
 	MaterialImage favButton;
 
@@ -83,8 +94,17 @@ public class BasicSensorItemCard extends Composite{
 	}
 
 	private void addClickHandler() {
-		this.layout.addDomHandler(event -> this.checkbox.setValue(!this.checkbox.getValue(), true), ClickEvent.getType());
+		this.collapsibleItem.addDomHandler(event -> this.checkbox.setValue(!this.checkbox.getValue(), true), ClickEvent.getType());
 		this.addClickListener(this.checkbox.getElement());
+		this.addClickListener(this.collapsibleItem.getElement());
+		this.expandButton.addDomHandler(event -> {
+			if(this.collapsibleItem.isActive()) {
+				this.collapsibleItem.collapse();
+			}else {
+				this.collapsibleItem.expand();
+			}
+		}, ClickEvent.getType());
+		this.addClickListener(this.expandButton.getElement());
 	}
 
 	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
