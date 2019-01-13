@@ -234,9 +234,9 @@ public class AddSensorModal extends Composite{
 	}
 
 	private void initMarker() {
-		LatLng position = LatLng.newInstance(0.0,0.0);
-		this.latitudeBox.setValue("0");
-		this.longitudeBox.setValue("0");
+		LatLng position = LatLng.newInstance(52.0,13.0);
+		this.latitudeBox.setValue("52.0");
+		this.longitudeBox.setValue("13.0");
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
 		markerOpt.setMap(this.mapWidget);
