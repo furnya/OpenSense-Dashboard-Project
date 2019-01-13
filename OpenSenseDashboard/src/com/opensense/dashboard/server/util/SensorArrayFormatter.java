@@ -8,11 +8,11 @@ import cern.colt.Arrays;
 public class SensorArrayFormatter {
 
 	public List<Integer> asArray(String sensorsAsString){
-		sensorsAsString = sensorsAsString.replace("[", "");
-		sensorsAsString = sensorsAsString.replace("]", "");
+		sensorsAsString = sensorsAsString.replaceAll("\\[", "");
+		sensorsAsString = sensorsAsString.replaceAll("\\]", "");
 		List<Integer> sensorIds = new ArrayList<>();
 		if(!sensorsAsString.isEmpty()) {
-			String[] slittedString = sensorsAsString.split(",");
+			String[] slittedString = sensorsAsString.split(", ");
 			for(String value : slittedString) {
 				if(value.matches("^[0-9]*$")) {
 					sensorIds.add(Integer.valueOf(value));
@@ -27,8 +27,8 @@ public class SensorArrayFormatter {
 	}
 
 	public String concatenateStringArrays(String sensorsAsString, String sensorsAsString2) {
-		sensorsAsString = sensorsAsString.replace("]", ",");
-		sensorsAsString2 = sensorsAsString2.replace("[", "");
+		sensorsAsString = sensorsAsString.replaceAll("\\]", ", ");
+		sensorsAsString2 = sensorsAsString2.replaceAll("\\[", "");
 		return sensorsAsString + sensorsAsString2;
 	}
 }
