@@ -192,14 +192,15 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	@Override
 	public void getListsAndShow() {
 		this.shownUserLists.clear();
-		GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
-			if((result != null)) {
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.USER_LIST, false);
+		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getUserLists() != null)) {
 				this.shownUserLists.put(DefaultListItem.FAVORITE_LIST_ID, new UserList(DefaultListItem.FAVORITE_LIST_ID, Languages.favorites()));
-				result.forEach(userList -> this.shownUserLists.put(userList.getListId(), userList));
-				this.view.showUserListsInDropDown(result);
+				result.getUserLists().forEach(userList -> this.shownUserLists.put(userList.getListId(), userList));
+				this.view.showUserListsInDropDown(result.getUserLists());
 			}else {
 				AppController.showError(Languages.connectionError());
-				LOGGER.log(Level.WARNING, "Result is null");
+				LOGGER.log(Level.WARNING, "Result is null or did not match the expected result type");
 			}
 		},caught -> {
 			AppController.showError(Languages.connectionError());

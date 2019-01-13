@@ -9,7 +9,6 @@ import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
-import com.opensense.dashboard.shared.UserList;
 
 @RemoteServiceRelativePath("../general")
 public interface GeneralService extends RemoteService {
@@ -35,7 +34,6 @@ public interface GeneralService extends RemoteService {
 
 	Response getDataFromRequest(Request searchRequest);
 	void setServerLanguage(String lang);
-	List<UserList> getUserLists();
 	Integer createNewUserList();
 	ActionResult deleteUserList(int listId);
 	ActionResult changeUserListName(int listId, String newListName);

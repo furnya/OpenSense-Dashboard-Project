@@ -20,7 +20,6 @@ import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
-import com.opensense.dashboard.shared.UserList;
 
 @SuppressWarnings("serial")
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
@@ -85,11 +84,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}else {
 			ServerLanguages.setGerman();
 		}
-	}
-
-	@Override
-	public List<UserList> getUserLists() { // this method could be added in the get data from request (LIST)
-		return ClientRequestHandler.getInstance().getUserLists();
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
-import com.opensense.dashboard.shared.UserList;
 
 public class ListManagerPresenter implements IPresenter, ListManagerView.Presenter{
 
@@ -228,9 +227,10 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	private void updateUserLists() {
 		this.view.clearUserLists();
 		if(this.controller.isUserLoggedIn()) {
-			GeneralService.Util.getInstance().getUserLists(new DefaultAsyncCallback<List<UserList>>(result -> {
-				if((result != null)) {
-					result.forEach(userList -> {
+			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.USER_LIST, false);
+			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getUserLists() != null)) {
+					result.getUserLists().forEach(userList -> {
 						this.view.addNewUserListItem(userList, true);
 						if(!userList.getSensorIds().isEmpty()) {
 							this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
