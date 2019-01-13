@@ -1,9 +1,8 @@
 package com.opensense.dashboard.server.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import cern.colt.Arrays;
 
 public class SensorArrayFormatter {
 
