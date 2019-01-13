@@ -333,7 +333,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	@Override
 	public void setSelectedSensorItemsColor(final int sensorId, final String sensorColor) {
 		if((this.activeItemId == null) && (this.selectedSensorIdsInLists.get(this.activeItemId) == null)) {
-			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, () -> "Can not set the color to the sensor with id " + sensorId);
 			return;
 		}

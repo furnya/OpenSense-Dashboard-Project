@@ -69,6 +69,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		super(view, eventBus, appController);
 		this.view = view;
 		this.view.setPresenter(this);
+		this.setListManager(this.view.getListManager());
 	}
 	
 	public VisualisationsView getView() {
@@ -355,7 +356,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	 * @return the listManager
 	 */
 	public ListManager getListManager() {
-		return listManager;
+		return this.listManager;
 	}
 
 	/**
