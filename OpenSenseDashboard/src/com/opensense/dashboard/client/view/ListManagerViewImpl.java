@@ -144,7 +144,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			sensors.forEach(sensor -> {
 				final List<Integer> idList = new ArrayList<>();
 				idList.add(sensor.getSensorId());
-				final BasicSensorItemCard card = new BasicSensorItemCard();
+				final BasicSensorItemCard card = new BasicSensorItemCard(sensor.getSensorId());
 				card.setIcon(MeasurandIconHelper.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 				card.setHeader("ID " + sensor.getSensorId() + " - " +  sensor.getMeasurand().getDisplayName());
 				card.addValueChangeHandler(event -> {

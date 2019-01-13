@@ -1,6 +1,10 @@
 package com.opensense.dashboard.client.utils;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.gwtbootstrap3.client.ui.html.Div;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -14,9 +18,17 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.services.GeneralService;
+import com.opensense.dashboard.shared.Request;
+import com.opensense.dashboard.shared.Response;
+import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.Sensor;
 
+import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialCollapsible;
+import gwt.material.design.client.ui.MaterialCollapsibleBody;
 import gwt.material.design.client.ui.MaterialCollapsibleItem;
 import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialLabel;
@@ -30,8 +42,13 @@ public class BasicSensorItemCard extends Composite{
 
 	private static BasicSensorItemCardUiBinder uiBinder = GWT.create(BasicSensorItemCardUiBinder.class);
 
+	private int sensorId;
+	
 	@UiField
 	Div layout;
+	
+	@UiField
+	MaterialCollapsibleBody collapsibleBody;
 	
 	@UiField
 	MaterialCollapsible collapsible;
@@ -59,8 +76,24 @@ public class BasicSensorItemCard extends Composite{
 
 	@UiField
 	MaterialPreLoader cardSpinner;
+	
+	@UiField
+	Rating rating;
+	
+	@UiField
+	Div content;
+	
+	@UiField
+	Div previewContainer;
+	
+	@UiField
+	Span firstValue;
+	
+	@UiField
+	Span lastValue;
 
-	public BasicSensorItemCard() {
+	public BasicSensorItemCard(Integer sensorId) {
+		this.sensorId = sensorId;
 		this.initWidget(uiBinder.createAndBindUi(this));
 		this.addClickHandler();
 	}
@@ -101,10 +134,63 @@ public class BasicSensorItemCard extends Composite{
 			if(this.collapsibleItem.isActive()) {
 				this.collapsibleItem.collapse();
 			}else {
-				this.collapsibleItem.expand();
+				this.loadAllSensorInfo();
 			}
 		}, ClickEvent.getType());
 		this.addClickListener(this.expandButton.getElement());
+	}
+
+	private void loadAllSensorInfo() {
+		this.content.clear();
+		Request request = new Request(ResultType.SENSOR);
+		List<Integer> idList = new LinkedList<>();
+		idList.add(this.sensorId);
+		request.setIds(idList);
+		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
+				this.collapsibleItem.expand();
+				this.showSensorInfo(result.getSensors().get(0));
+			}else {
+				AppController.showError(Languages.connectionError());
+				this.collapsibleBody.setDisplay(Display.NONE);
+			}
+		},caught -> {
+			AppController.showError(Languages.connectionError());
+			this.collapsibleBody.setDisplay(Display.NONE);
+		}, false));
+	}
+	
+	private void addInfoPair(String key, String value) {
+		Div container = new Div();
+		container.addStyleName("flex");
+		Span keySpan = new Span();
+		keySpan.setText(key+": ");
+		keySpan.addStyleName("title-sensor");
+		Span valueSpan = new Span();
+		valueSpan.setText(value);
+		valueSpan.addStyleName("value-sensor");
+		container.add(keySpan);
+		container.add(valueSpan);
+		this.content.add(container);
+	}
+
+	private void showSensorInfo(Sensor sensor) {
+		this.rating.setRating(sensor.getAccuracy()*10.0);
+		this.addInfoPair(Languages.userId(), sensor.getUserId()+"");
+		this.addInfoPair(Languages.unit(), sensor.getUnit().getDisplayName()+"");
+		this.addInfoPair(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
+		this.addInfoPair(Languages.directionVertical(), sensor.getDirectionVertical()+"°");
+		this.addInfoPair(Languages.directionHorizontal(), sensor.getDirectionHorizontal()+"°");
+		this.addInfoPair(Languages.sensorModel(), sensor.getSensorModel());
+		this.addInfoPair(Languages.attributionText(), sensor.getAttributionText());
+		this.addInfoPair(Languages.attributionURL(), sensor.getAttributionURLString());
+		if(sensor.getValuePreview()!=null) {
+			this.firstValue.setText(Languages.getDate(sensor.getValuePreview().getMinValue().getTimestamp()) + " - " + sensor.getValuePreview().getMinValue().getNumberValue());
+			this.lastValue.setText(Languages.getDate(sensor.getValuePreview().getMaxValue().getTimestamp()) + " - " + sensor.getValuePreview().getMaxValue().getNumberValue());
+		}else {
+			this.firstValue.setText(Languages.noValuePreviewData());
+			this.lastValue.setText(Languages.noValuePreviewData());
+		}
 	}
 
 	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {

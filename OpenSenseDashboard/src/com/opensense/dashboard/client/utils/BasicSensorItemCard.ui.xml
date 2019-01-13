@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui" 
 	xmlns:bh="urn:import:org.gwtbootstrap3.client.ui.html" xmlns:m="urn:import:gwt.material.design.client.ui"
-	xmlns:ma="urn:import:gwt.material.design.addins.client">
+	xmlns:ma="urn:import:gwt.material.design.addins.client" xmlns:d="urn:import:com.opensense.dashboard.client.utils">
 	
 	<ui:with type="com.opensense.dashboard.client.utils.Languages" field="lang" />
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
@@ -58,11 +58,45 @@
 	margin-top: auto;
 	margin-left: 10px;
 }
+.colHeader{
+	line-height: unset;
+	background-color: #202020;
+}
+.no-border{
+	border: none;
+}
+.small-spinner{
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    left: 0px;	
+    top: 3px;
+}
+.content-container{
+	text-align: left;
+    width: 90%;	
+    display: flex;
+    overflow: hidden;
+}
+.content-container > Div{
+	margin-right: 15px;	
+}
+.header{
+    display: flex;
+    width: 90%;
+    background-color: inherit;
+}
+.inherit-background{
+    background-color: inherit;
+}
+.infoBody{
+	background-color: white !important;
+}
 </ui:style>
 
-<m:MaterialCollapsible ui:field="collapsible" addStyleNames="round-corners">
+<m:MaterialCollapsible ui:field="collapsible" addStyleNames="round-corners {style.no-border} margin-bottom-10">
 	<m:MaterialCollapsibleItem ui:field="collapsibleItem" addStyleNames="round-corners">
-		<m:MaterialCollapsibleHeader addStyleNames="round-corners no-padding">
+		<m:MaterialCollapsibleHeader addStyleNames="round-corners no-padding {style.colHeader} {style.no-border}">
 			<bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
 				<bh:Div addStyleNames="{style.left}">
 					<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>
@@ -76,15 +110,35 @@
 				</bh:Div>
 				<bh:Div addStyleNames="{style.right}">
 					<bh:Div addStyleNames="{style.button-container}">
-						<m:MaterialImage ui:field="expandButton" url="{gui.searchIconSvg.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
+						<m:MaterialImage ui:field="expandButton" url="{gui.info.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
 						<m:MaterialImage display="NONE" ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
 						<m:MaterialImage display="NONE" ui:field="trashButton" url="{gui.trash.getSafeUri.asString}" width="25px" addStyleNames="clickable image-button"/>
 					</bh:Div>
 				</bh:Div>
 			</bh:Div>
 		</m:MaterialCollapsibleHeader>
-	<m:MaterialCollapsibleBody>
-		<m:MaterialLabel text="HEADER" addStyleNames="{style.font}"/>
+	<m:MaterialCollapsibleBody ui:field="collapsibleBody" addStyleNames="{style.infoBody}">
+		<bh:Div addStyleNames="{style.mid}">
+			<bh:Div addStyleNames="flex {style.inherit-background}">
+				<bh:Div addStyleNames="{style.header}" ui:field="midContainer">
+					<m:MaterialLabel text="{lang.accuracy}" addStyleNames="{style.font}"/>
+					<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
+				</bh:Div>
+			</bh:Div>
+			<bh:Div ui:field="content"/>
+			<bh:Div ui:field="previewContainer">
+				<bh:Div> 
+					<bh:Div addStyleNames="flex">
+						<bh:Span text="{lang.firstValue}" addStyleNames="title-sensor"/>
+						<bh:Span ui:field="firstValue" addStyleNames="value-sensor"/>
+					</bh:Div>
+					<bh:Div addStyleNames="flex">
+						<bh:Span text="{lang.lastValue}" addStyleNames="title-sensor"/>
+						<bh:Span ui:field="lastValue" addStyleNames="value-sensor"/>
+					</bh:Div>
+				</bh:Div>
+			</bh:Div>
+		</bh:Div>
 	</m:MaterialCollapsibleBody>
 	</m:MaterialCollapsibleItem>
 </m:MaterialCollapsible>

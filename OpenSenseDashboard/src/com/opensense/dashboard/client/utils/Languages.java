@@ -485,17 +485,17 @@ public class Languages {
 
 	public static String altitudeAboveGround() {
 		if(de) {
-			return "Höhe über Grund:";
+			return "Höhe über Grund";
 		}else {
-			return "Altitude above ground:";
+			return "Altitude above ground";
 		}
 	}
 
 	public static String origin() {
 		if(de) {
-			return "Herkunft:";
+			return "Herkunft";
 		}else {
-			return "Origin:";
+			return "Origin";
 		}
 	}
 
@@ -784,6 +784,14 @@ public class Languages {
 			return "Nach Ort suchen";
 		}else {
 			return "Search for place";
+		}
+	}
+
+	public static String userId() {
+		if(de) {
+			return "Benutzer-ID";
+		}else {
+			return "User ID";
 		}
 	}
 }
