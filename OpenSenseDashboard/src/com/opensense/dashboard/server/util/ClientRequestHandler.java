@@ -101,7 +101,11 @@ public class ClientRequestHandler {
 		Map<Integer, Unit> unitMap = this.getUnitMap();
 		if((ids!=null) && !ids.isEmpty()) {
 			for(int id : ids) {
-				sensorList.add(this.getSensor(id,measurandMap,unitMap));
+				try {
+					sensorList.add(this.getSensor(id,measurandMap,unitMap));
+				}catch(IOException e) {
+					continue;
+				}
 			}
 			return sensorList;
 		}
@@ -373,7 +377,11 @@ public class ClientRequestHandler {
 		LinkedList<MinimalSensor> sensorList = new LinkedList<>();
 		if((ids!=null) && !ids.isEmpty()) {
 			for(int id : ids) {
-				sensorList.add(this.getMinimalSensor(id));
+				try{
+					sensorList.add(this.getMinimalSensor(id));
+				}catch(IOException e) {
+					continue;
+				}
 			}
 			return sensorList;
 		}
