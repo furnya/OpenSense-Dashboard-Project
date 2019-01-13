@@ -1,9 +1,7 @@
 package com.opensense.dashboard.server.logic;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -60,7 +58,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 				response.setMinimalSensors(ClientRequestHandler.getInstance().getMinimalSensorList(searchRequest.getParameters(), searchRequest.getIds()));
 				break;
 			case USER_LIST:
-				response.setUserLists(this.getUserLists());//TODO implement with request to opensense.network or to database
+				response.setUserLists(ClientRequestHandler.getInstance().getUserLists());//TODO implement with request to opensense.network or to database
 				break;
 			case MYSENSORS:
 				response.setMySensors(ClientRequestHandler.getInstance().getMySensorIds(SessionUser.getInstance().getToken()));
@@ -96,28 +94,20 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public List<UserList> getUserLists() { // this method could be added in the get data from request (LIST)
-		if(SessionUser.getInstance().isGuest()) {
-			System.out.println("GUEST MODE DETECTED");
-			return new LinkedList<>();
-		}
-		List<UserList> list = new ArrayList<>();
-		this.lists.values().forEach(list::add);
-		return list;
+		return ClientRequestHandler.getInstance().getUserLists();
 	}
 
 	@Override
 	public ActionResult addSensorsToUserList(int listId, List<Integer> sensors) {
-		if(this.lists.containsKey(listId)) {
-			UserList list = this.lists.get(listId);
-			sensors.forEach(list.getSensorIds()::add);
-			this.lists.replace(listId, list);
-			return new ActionResult(ActionResultType.SUCCESSFUL);
+		if(!SessionUser.getInstance().isGuest()) {
+			DatabaseManager db = new DatabaseManager();
+			return db.addSensorsToUserList(SessionUser.getInstance().getUserId(), listId, sensors);
 		}
 		return new ActionResult(ActionResultType.FAILED);
 	}
 
 	@Override
-	public ActionResult deleteSensorsFromUserList(int listId, List<Integer> sensors) {
+	public ActionResult deleteSensorsFromUserList(int listId, List<Integer> sensors) {//TODO:
 		if(this.lists.containsKey(listId)) {
 			UserList list = this.lists.get(listId);
 			sensors.forEach(list.getSensorIds()::remove);
@@ -129,33 +119,27 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public ActionResult deleteUserList(int listId) {
-		if(this.lists.containsKey(listId)) {
-			this.lists.remove(listId);
-			return new ActionResult(ActionResultType.SUCCESSFUL);
+		if(!SessionUser.getInstance().isGuest()) {
+			DatabaseManager db = new DatabaseManager();
+			return db.deleteUserList(SessionUser.getInstance().getUserId(), listId);
 		}
 		return new ActionResult(ActionResultType.FAILED);
 	}
 
 	@Override
 	public Integer createNewUserList() {
-		DatabaseManager db = new DatabaseManager();
-		db.initPooling();
-		System.out.println(db.testDB(123, "testets"));
-
-		//list of list ids with sensor ids in it
-		UserList listItem = new UserList();
-		listItem.setListId(this.idNumber++);
-		listItem.setListName("Neue Liste " + listItem.getListId());
-		listItem.setSensorIds(new ArrayList<>());
-		this.lists.put(listItem.getListId(), listItem);
-		return listItem.getListId();
+		if(!SessionUser.getInstance().isGuest()) {
+			DatabaseManager db = new DatabaseManager();
+			return db.createNewUserList(SessionUser.getInstance().getUserId());
+		}
+		return null;
 	}
 
 	@Override
 	public ActionResult changeUserListName(int listId, String newListName) {
-		if(this.lists.containsKey(listId)) {
-			this.lists.get(listId).setListName(newListName);
-			return new ActionResult(ActionResultType.SUCCESSFUL);
+		if(!SessionUser.getInstance().isGuest()) {
+			DatabaseManager db = new DatabaseManager();
+			return db.changeUserListName(SessionUser.getInstance().getUserId(), listId, newListName);
 		}
 		return new ActionResult(ActionResultType.FAILED);
 	}

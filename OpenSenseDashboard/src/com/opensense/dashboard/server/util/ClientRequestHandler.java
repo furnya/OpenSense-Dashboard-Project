@@ -24,6 +24,7 @@ import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Parameter;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.Unit;
+import com.opensense.dashboard.shared.UserList;
 import com.opensense.dashboard.shared.Value;
 import com.opensense.dashboard.shared.ValuePreview;
 
@@ -425,7 +426,7 @@ public class ClientRequestHandler {
 		}
 		return licenseMap;
 	}
-	
+
 	public String sendCreateSensorRequest(CreateSensorRequest request) throws IOException {
 		RequestSender rs = new RequestSender();
 		JSONObject bodyJSON = new JSONObject();
@@ -449,6 +450,15 @@ public class ClientRequestHandler {
 			return null;
 		}
 		return idJSON.toString();
+	}
+
+	public List<UserList> getUserLists() {
+		if(!SessionUser.getInstance().isGuest()) {
+			DatabaseManager db = new DatabaseManager();
+			return db.getUserLists(SessionUser.getInstance().getUserId());
+		}
+		System.out.println("GUEST MODE DETECTED");
+		return new LinkedList<>();
 	}
 
 }

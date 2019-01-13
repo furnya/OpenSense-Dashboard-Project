@@ -225,4 +225,12 @@ public class ServerLanguages{
 	public static String unexpectedErrorLog() {
 		return "Unexpected error";
 	}
+
+	public static String newList() {
+		if(de) {
+			return "Neue Liste";
+		}else {
+			return "New list";
+		}
+	}
 }

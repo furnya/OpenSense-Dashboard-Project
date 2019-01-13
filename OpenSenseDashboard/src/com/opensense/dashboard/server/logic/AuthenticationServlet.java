@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.opensense.dashboard.client.services.AuthenticationService;
 import com.opensense.dashboard.server.util.ClientRequestHandler;
+import com.opensense.dashboard.server.util.DatabaseManager;
 import com.opensense.dashboard.server.util.SessionUser;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
@@ -26,7 +27,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 				return true;
 			}
 		}
-		SessionUser.getInstance().setGuest(true);
+		SessionUser.getInstance().removeUser();
 		return false;
 	}
 
@@ -36,21 +37,20 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		String token;
 		try {
 			token = ClientRequestHandler.getInstance().sendLoginRequest(body);
-			SessionUser.getInstance().setToken(token);
-			SessionUser.getInstance().setUsername(username);
+			SessionUser.getInstance().createUser(1, username, token); //TODO: set our user id to 1 staticly
 		} catch (Exception e) {
-			LOGGER.log(Level.WARNING, "Failure", e);
+			SessionUser.getInstance().removeUser();
+			LOGGER.log(Level.WARNING, "Failure while login", e);
 			return new ActionResult(ActionResultType.FAILED);
 		}
-		SessionUser.getInstance().setGuest(false);
+		DatabaseManager.initPooling();
 		return new ActionResult(ActionResultType.SUCCESSFUL);
 	}
 
 	@Override
 	public ActionResult userLoggedOut() {
-		SessionUser.getInstance().setToken(null);
-		SessionUser.getInstance().setUsername(null);
-		SessionUser.getInstance().setGuest(true);
+		SessionUser.getInstance().removeUser();
+		DatabaseManager.clearDataSource();
 		return new ActionResult(ActionResultType.SUCCESSFUL);
 	}
 }
