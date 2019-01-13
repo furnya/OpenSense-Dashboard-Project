@@ -48,7 +48,7 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	
 	@UiHandler("createSensor")
 	public void onCreateSensorClicked(ClickEvent e) {
-		AddSensorModal modal = new AddSensorModal();
+		AddSensorModal modal = new AddSensorModal(this.listManager);
 		RootPanel.get().add(modal);
 		modal.open();
 	}

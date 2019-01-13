@@ -714,6 +714,14 @@ public class Languages {
 			return "Sensor created";
 		}
 	}
+	
+	public static String sensorDeleted() {
+		if(de){
+			return "Sensor gelöscht";
+		}else{
+			return "Sensor deleted";
+		}
+	}
 
 	public static String invalidParameters() {
 		if(de){

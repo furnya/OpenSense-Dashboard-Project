@@ -13,6 +13,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.presenter.ListManagerPresenter;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
@@ -42,6 +43,8 @@ public class AddSensorModal extends Composite{
 	private Map<Integer, Measurand> measurandMap;
 	private Map<Integer, Unit> unitMap;
 	private Map<Integer, License> licenseMap;
+	
+	private ListManager listManager;
 	
 	@UiField
 	MaterialModal modal;
@@ -88,7 +91,8 @@ public class AddSensorModal extends Composite{
 	@UiField
 	MaterialButton confirmButton;
 	
-	public AddSensorModal() {
+	public AddSensorModal(ListManager listManager) {
+		this.listManager = listManager;
 		initWidget(uiBinder.createAndBindUi(this));
 		requestMeasurands();
 		this.measurandList.addValueChangeHandler(event -> {
@@ -179,6 +183,7 @@ public class AddSensorModal extends Composite{
 			MaterialToast.fireToast(result.getErrorMessage());
 			if(result.getActionResultType()==ActionResultType.SUCCESSFUL) {
 				modal.close();
+				this.listManager.updateLists();
 			}
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure creating the sensor.");
