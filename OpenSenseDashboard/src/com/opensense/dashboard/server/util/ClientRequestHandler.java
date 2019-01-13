@@ -461,4 +461,9 @@ public class ClientRequestHandler {
 		return new LinkedList<>();
 	}
 
+	public String sendDeleteSensorRequest(Integer sensorId) throws IOException{
+		RequestSender rs = new RequestSender();
+		return rs.deleteRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+SENSORS+sensorId, SessionUser.getInstance().getToken());
+	}
+
 }

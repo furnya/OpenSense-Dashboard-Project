@@ -1,18 +1,38 @@
 package com.opensense.dashboard.client.utils;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.Input;
+import org.gwtbootstrap3.client.ui.html.Div;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.maps.client.MapImpl;
+import com.google.gwt.maps.client.MapOptions;
+import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.maps.client.base.LatLng;
+import com.google.gwt.maps.client.base.LatLngBounds;
+import com.google.gwt.maps.client.controls.MapTypeStyle;
+import com.google.gwt.maps.client.maptypes.MapTypeStyleElementType;
+import com.google.gwt.maps.client.maptypes.MapTypeStyleFeatureType;
+import com.google.gwt.maps.client.maptypes.MapTypeStyler;
+import com.google.gwt.maps.client.overlays.Marker;
+import com.google.gwt.maps.client.overlays.MarkerOptions;
+import com.google.gwt.maps.client.placeslib.Autocomplete;
+import com.google.gwt.maps.client.placeslib.AutocompleteOptions;
+import com.google.gwt.maps.client.placeslib.AutocompleteType;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.presenter.ListManagerPresenter;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
@@ -23,6 +43,10 @@ import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.Unit;
 
+import gwt.material.design.client.base.validator.AbstractValidator;
+import gwt.material.design.client.base.validator.BlankValidator;
+import gwt.material.design.client.base.validator.DecimalMaxValidator;
+import gwt.material.design.client.base.validator.DecimalMinValidator;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialListBox;
 import gwt.material.design.client.ui.MaterialModal;
@@ -42,6 +66,20 @@ public class AddSensorModal extends Composite{
 	private Map<Integer, Measurand> measurandMap;
 	private Map<Integer, Unit> unitMap;
 	private Map<Integer, License> licenseMap;
+	private Map<MaterialTextBox, Boolean> validMap = new HashMap<>();
+	
+	private MapOptions mapOptions;
+	private MapWidget mapWidget;
+	private Autocomplete autoComplete;
+	private Marker marker;
+	
+	@UiField
+	Div map;
+	
+	@UiField
+	Input placeBox;
+	
+	private ListManager listManager;
 	
 	@UiField
 	MaterialModal modal;
@@ -88,13 +126,185 @@ public class AddSensorModal extends Composite{
 	@UiField
 	MaterialButton confirmButton;
 	
-	public AddSensorModal() {
+	public AddSensorModal(ListManager listManager) {
+		this.listManager = listManager;
 		initWidget(uiBinder.createAndBindUi(this));
 		requestMeasurands();
 		this.measurandList.addValueChangeHandler(event -> {
 			this.filterUnits(Integer.valueOf(event.getValue()));
 		});
 		requestLicenses();
+		this.initMap();
+		this.initAutoComplete();
+		this.initMarker();
+		this.addValidators();
+		this.initValidMap();
+	}
+	
+	private void initValidMap() {
+		this.validMap.put(this.latitudeBox,true);
+		this.validMap.put(this.longitudeBox,true);
+		this.validMap.put(this.altitudeBox,false);
+		this.validMap.put(this.directionVerticalBox,false);
+		this.validMap.put(this.directionHorizontalBox,false);
+		this.validMap.put(this.sensorModelBox,false);
+		this.validMap.put(this.accuracyBox,false);
+		this.validMap.put(this.attributionTextBox,false);
+		this.validMap.put(this.attributionUrlBox,false);
+	}
+	
+	private void addValidators() {
+		this.latitudeBox.addValidator(createDoubleValidator(-90, 90));
+		this.latitudeBox.addValueChangeHandler(createLatLngValueChangeHandler(this.latitudeBox));
+		this.longitudeBox.addValidator(createDoubleValidator(-180, 180));
+		this.longitudeBox.addValueChangeHandler(createLatLngValueChangeHandler(this.longitudeBox));
+		BlankValidator<String> vString = createStringValidator();
+		this.sensorModelBox.addValidator(vString);
+		this.sensorModelBox.addValueChangeHandler(createStringValueChangeHandler(this.sensorModelBox));
+		this.attributionTextBox.addValidator(vString);
+		this.attributionTextBox.addValueChangeHandler(createStringValueChangeHandler(this.attributionTextBox));
+		this.attributionUrlBox.addValidator(vString);
+		this.attributionUrlBox.addValueChangeHandler(createStringValueChangeHandler(this.attributionUrlBox));
+		this.altitudeBox.addValidator(createDoubleValidator(0, Double.POSITIVE_INFINITY));
+		this.altitudeBox.addValueChangeHandler(createStringValueChangeHandler(this.altitudeBox));
+		this.directionVerticalBox.addValidator(createDoubleValidator(-360, 360));
+		this.directionVerticalBox.addValueChangeHandler(createStringValueChangeHandler(this.directionVerticalBox));
+		this.directionHorizontalBox.addValidator(createDoubleValidator(-360, 360));
+		this.directionHorizontalBox.addValueChangeHandler(createStringValueChangeHandler(this.directionHorizontalBox));
+		this.accuracyBox.addValidator(createDoubleValidator(0, 10));
+		this.accuracyBox.addValueChangeHandler(createStringValueChangeHandler(this.accuracyBox));
+	}
+	
+	private BlankValidator<String> createDoubleValidator(double min, double max){
+		return new BlankValidator<String>("Invalid value") {
+			@Override
+			public boolean isValid(String value) {
+				if(value==null) return false;
+				Double doubleValue = null;
+				try {
+					doubleValue = Double.valueOf(value);
+				}catch(NumberFormatException e) {
+					return false;
+				}
+				if(doubleValue==null) return false;
+				return (min<=doubleValue && doubleValue<=max);
+			}
+		};
+	}
+	
+	private BlankValidator<String> createStringValidator(){
+		return new BlankValidator<String>("Invalid value") {
+			@Override
+			public boolean isValid(String value) {
+				return (value!=null && value!="");
+			}
+		};
+	}
+	
+	private ValueChangeHandler<String> createLatLngValueChangeHandler(MaterialTextBox box){
+		return event -> {
+			if(box.validate(true)) {
+				this.validMap.replace(box,true);
+				this.tryEnableConfirm();
+				if(this.latitudeBox.validate(true) && this.longitudeBox.validate(true)) {
+					double lat = Double.parseDouble(this.latitudeBox.getValue());
+					double lng = Double.parseDouble(this.longitudeBox.getValue());
+					this.mapWidget.setCenter(LatLng.newInstance(lat, lng));
+					this.marker.setPosition(LatLng.newInstance(lat, lng));
+				}
+			}else {
+				this.validMap.replace(box,false);
+				this.confirmButton.setEnabled(false);
+			}
+		};
+	}
+	
+	private ValueChangeHandler<String> createStringValueChangeHandler(MaterialTextBox box){
+		return event -> {
+			if(box.validate(true)) {
+				this.validMap.replace(box,true);
+				this.tryEnableConfirm();
+			}else {
+				this.validMap.replace(box,false);
+				this.confirmButton.setEnabled(false);
+			}
+		};
+	}
+
+	private void tryEnableConfirm() {
+		if(!this.validMap.containsValue(false)) {
+			this.confirmButton.setEnabled(true);
+		}
+	}
+
+	private void initMarker() {
+		LatLng position = LatLng.newInstance(52.0,13.0);
+		this.latitudeBox.setValue("52.0");
+		this.longitudeBox.setValue("13.0");
+		MarkerOptions markerOpt = MarkerOptions.newInstance();
+		markerOpt.setPosition(position);
+		markerOpt.setMap(this.mapWidget);
+		this.marker = Marker.newInstance(markerOpt);
+		this.marker.setDraggable(true);
+		this.marker.addDragEndHandler(event -> {
+			this.latitudeBox.setValue(this.marker.getPosition().getLatitude()+"");
+			this.longitudeBox.setValue(this.marker.getPosition().getLongitude()+"");
+		});
+		this.mapWidget.addDblClickHandler(event -> {
+			this.latitudeBox.setValue(event.getMouseEvent().getLatLng().getLatitude()+"");
+			this.longitudeBox.setValue(event.getMouseEvent().getLatLng().getLongitude()+"");
+			this.marker.setPosition(LatLng.newInstance(event.getMouseEvent().getLatLng().getLatitude(), event.getMouseEvent().getLatLng().getLongitude()));
+		});
+	}
+	
+	private void initAutoComplete() {
+		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
+		autoOptions.setTypes(AutocompleteType.GEOCODE);
+		this.autoComplete = Autocomplete.newInstance(this.placeBox.getElement(), autoOptions);
+		this.autoComplete.addPlaceChangeHandler(event -> {
+			if((this.autoComplete.getPlace() != null) && (this.autoComplete.getPlace().getGeometry() != null)) {
+				LatLngBounds bounds = this.autoComplete.getPlace().getGeometry().getViewPort();
+				this.mapWidget.fitBounds(bounds);
+			}
+		});
+	}
+
+	private void initMap() {
+		this.mapOptions = MapOptions.newInstance();
+		this.mapOptions.setMinZoom(2);
+		this.mapOptions.setMaxZoom(18);
+		this.mapOptions.setDraggable(true);
+		this.mapOptions.setScaleControl(true);
+		this.mapOptions.setStreetViewControl(false);
+		this.mapOptions.setMapTypeControl(false);
+		this.mapOptions.setScrollWheel(true);
+		this.mapOptions.setPanControl(false);
+		this.mapOptions.setZoomControl(true);
+		this.mapOptions.setDisableDoubleClickZoom(true);
+		this.setMapStyles();
+	}
+
+	private void setMapStyles() {
+		MapTypeStyle mapStyle = MapTypeStyle.newInstance();
+		MapTypeStyle mapStyle2 = MapTypeStyle.newInstance();
+		mapStyle.setFeatureType(MapTypeStyleFeatureType.POI);
+		mapStyle2.setFeatureType(MapTypeStyleFeatureType.TRANSIT);
+		mapStyle.setElementType(MapTypeStyleElementType.LABELS);
+		mapStyle2.setElementType(MapTypeStyleElementType.LABELS);
+
+		String visibility = "off";
+		MapTypeStyler styler = MapTypeStyler.newVisibilityStyler(visibility);
+		MapTypeStyler[] stylers = new MapTypeStyler[1];
+		stylers[0] = styler;
+		mapStyle.setStylers(stylers);
+		mapStyle2.setStylers(stylers);
+		MapTypeStyle[] mapStyleArray = new MapTypeStyle[2];
+		mapStyleArray[0] = mapStyle;
+		mapStyleArray[1] = mapStyle2;
+		this.mapOptions.setMapTypeStyles(mapStyleArray);
+		MapImpl mapImpl = MapImpl.newInstance(this.map.getElement(), this.mapOptions);
+		this.mapWidget = MapWidget.newInstance(mapImpl);
+		this.mapWidget.setVisible(true);
 	}
 	
 	private void requestMeasurands() {
@@ -161,7 +371,6 @@ public class AddSensorModal extends Composite{
 	
 	@UiHandler("confirmButton")
 	public void onConfirmButtonClicked(ClickEvent e) {
-		//TODO: validate
 		CreateSensorRequest request = new CreateSensorRequest();
 		request.setAccuracy(Double.valueOf(accuracyBox.getValue()));
 		request.setAltitudeAboveGround(Double.valueOf(altitudeBox.getValue()));
@@ -179,6 +388,7 @@ public class AddSensorModal extends Composite{
 			MaterialToast.fireToast(result.getErrorMessage());
 			if(result.getActionResultType()==ActionResultType.SUCCESSFUL) {
 				modal.close();
+				this.listManager.updateLists();
 			}
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure creating the sensor.");

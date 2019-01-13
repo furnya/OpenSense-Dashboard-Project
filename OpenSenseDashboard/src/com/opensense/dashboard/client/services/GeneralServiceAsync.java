@@ -21,4 +21,5 @@ public interface GeneralServiceAsync {
 	void addSensorsToUserList(int listId, List<Integer> sensors, AsyncCallback<ActionResult> asyncCallback);
 	void deleteSensorsFromUserList(int listId, List<Integer> sensors, AsyncCallback<ActionResult> asyncCallback);
 	void createSensor(CreateSensorRequest request, AsyncCallback<ActionResult> asyncCallback);
+	void deleteSensorFromMySensors(Integer sensorId, AsyncCallback<ActionResult> asyncCallback);
 }

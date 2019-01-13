@@ -180,5 +180,34 @@ public class RequestSender implements Serializable{
 		return new JSONObject(response);
 	}
 
+	public String deleteRequest(String urlString, String token) throws IOException{
+		HttpURLConnection con = null;
+		StringBuilder content;
+		try {
+			URL url = new URL(urlString);
+			con = (HttpURLConnection) url.openConnection();
+
+			con.setRequestMethod("DELETE");
+			con.setRequestProperty("Accept", TEXT_HTML);
+			if(token!=null) con.setRequestProperty("Authorization", token);
+			con.setDoOutput(true);
+
+			con.getResponseMessage();
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			content = new StringBuilder();
+			while ((inputLine = in.readLine()) != null) {
+				content.append(inputLine);
+			}
+			in.close();
+		} catch (IOException e) {
+			if(con != null) {
+				con.disconnect();
+			}
+			throw e;
+		}
+		return content.toString();
+	}
+
 
 }

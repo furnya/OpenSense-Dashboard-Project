@@ -165,5 +165,18 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		ar.setErrorMessage(Languages.sensorCreated()+withID);
 		return ar;
 	}
+	
+	@Override
+	public ActionResult deleteSensorFromMySensors(Integer sensorId) {
+		if(SessionUser.getInstance().isGuest()) {
+			return new ActionResult(ActionResultType.FAILED);
+		}
+		try{
+			ClientRequestHandler.getInstance().sendDeleteSensorRequest(sensorId);
+		}catch(IOException e) {
+			return new ActionResult(ActionResultType.FAILED);
+		}
+		return new ActionResult(ActionResultType.SUCCESSFUL);
+	}
 
 }

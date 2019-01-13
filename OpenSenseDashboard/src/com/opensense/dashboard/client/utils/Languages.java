@@ -714,6 +714,14 @@ public class Languages {
 			return "Sensor created";
 		}
 	}
+	
+	public static String sensorDeleted() {
+		if(de){
+			return "Sensor gelöscht";
+		}else{
+			return "Sensor deleted";
+		}
+	}
 
 	public static String invalidParameters() {
 		if(de){
@@ -768,6 +776,14 @@ public class Languages {
 			return "Sensoren lÃ¶schen";
 		}else{
 			return "";
+		}
+	}
+	
+	public static String searchForPlace() {
+		if(de) {
+			return "Nach Ort suchen";
+		}else {
+			return "Search for place";
 		}
 	}
 }
