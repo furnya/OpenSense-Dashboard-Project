@@ -542,6 +542,7 @@ input:focus+label{
 
 .sensor-item-card[class*="collapsed"] .card-header{
 	border-bottom: none !important;
+	border-radius: 6px;
 }
 
 .sensor-item-card .header-label{
