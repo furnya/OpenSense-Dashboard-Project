@@ -1,8 +1,5 @@
 package com.opensense.dashboard.client.utils;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
 
@@ -18,14 +15,7 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.AppController;
-import com.opensense.dashboard.client.presenter.ListManagerPresenter;
-import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.view.ListManagerView;
-import com.opensense.dashboard.client.view.ListManagerViewImpl;
-import com.opensense.dashboard.shared.Request;
-import com.opensense.dashboard.shared.Response;
-import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.Sensor;
 
 import gwt.material.design.client.constants.Display;
@@ -48,16 +38,16 @@ public class BasicSensorItemCard extends Composite{
 
 	private int sensorId;
 	private ListManagerView view;
-	
+
 	@UiField
 	Div layout;
-	
+
 	@UiField
 	MaterialCollapsibleBody collapsibleBody;
-	
+
 	@UiField
 	MaterialCollapsible collapsible;
-	
+
 	@UiField
 	MaterialCollapsibleItem collapsibleItem;
 
@@ -72,7 +62,7 @@ public class BasicSensorItemCard extends Composite{
 
 	@UiField
 	MaterialImage expandButton;
-	
+
 	@UiField
 	MaterialImage favButton;
 
@@ -81,22 +71,22 @@ public class BasicSensorItemCard extends Composite{
 
 	@UiField
 	MaterialPreLoader cardSpinner;
-	
+
 	@UiField
 	Rating rating;
-	
+
 	@UiField
 	Div content;
-	
+
 	@UiField
 	Div previewContainer;
-	
+
 	@UiField
 	Span firstValue;
-	
+
 	@UiField
 	Span lastValue;
-	
+
 	@UiField
 	MaterialCollapsibleHeader collapsibleHeader;
 
@@ -154,11 +144,11 @@ public class BasicSensorItemCard extends Composite{
 	private void loadAllSensorInfo() {
 		this.view.loadAllSensorInfo(this.sensorId, this);
 	}
-	
+
 	public void hideBody() {
 		this.collapsibleBody.setDisplay(Display.NONE);
 	}
-	
+
 	private void addInfoPair(String key, String value) {
 		Div container = new Div();
 		container.addStyleName("flex");
@@ -181,8 +171,8 @@ public class BasicSensorItemCard extends Composite{
 		this.addInfoPair(Languages.userId(), sensor.getUserId()+"");
 		this.addInfoPair(Languages.unit(), sensor.getUnit().getDisplayName()+"");
 		this.addInfoPair(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
-		this.addInfoPair(Languages.directionVertical(), sensor.getDirectionVertical()+"°");
-		this.addInfoPair(Languages.directionHorizontal(), sensor.getDirectionHorizontal()+"°");
+		this.addInfoPair(Languages.directionVertical(), sensor.getDirectionVertical()+"ï¿½");
+		this.addInfoPair(Languages.directionHorizontal(), sensor.getDirectionHorizontal()+"ï¿½");
 		this.addInfoPair(Languages.sensorModel(), sensor.getSensorModel());
 		this.addInfoPair(Languages.attributionText(), sensor.getAttributionText());
 		this.addInfoPair(Languages.attributionURL(), sensor.getAttributionURLString());

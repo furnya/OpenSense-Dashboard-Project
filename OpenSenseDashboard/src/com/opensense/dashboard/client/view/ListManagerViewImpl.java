@@ -22,7 +22,6 @@ import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.model.Size;
-import com.opensense.dashboard.client.presenter.ListManagerPresenter;
 import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListCollapsibleItem;
@@ -33,7 +32,6 @@ import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.UserList;
 
-import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.ui.MaterialCollapsible;
 
 public class ListManagerViewImpl extends Composite implements ListManagerView {
