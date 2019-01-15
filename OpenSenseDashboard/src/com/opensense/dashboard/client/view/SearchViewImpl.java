@@ -297,7 +297,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	}
 
 	private void buildValidators() {
-		final RegExValidator rgx = new RegExValidator("^(?:[0-9]|0[0-9]|10|)$");
+		final RegExValidator rgx = new RegExValidator("^(?:[0-9]|0[0-9]|10|)$",Languages.errorMessageAccuracy());
+
 		this.minAccuracy.addValidator(rgx);
 		this.minAccuracy.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
 		this.minAccuracy.addValueChangeHandler(event -> {
@@ -316,7 +317,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 				this.searchButton.setEnabled(true);
 			}
 		});
-		final RegExValidator digitrgx = new RegExValidator("^1?\\d{0,4}$");
+		final RegExValidator digitrgx = new RegExValidator("^1?\\d{0,4}$",Languages.errorMessageMaxSens());
 		this.maxSensors.addValidator(digitrgx);
 		this.maxSensors.getChildrenList().get(0).getElement().setAttribute(AUTO_COMPLETE, "off");
 		this.maxSensors.addValueChangeHandler(event -> {
