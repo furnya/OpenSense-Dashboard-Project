@@ -829,7 +829,7 @@ public class Languages {
 
 	public static String listContains(int sensorsSize, int selectedSensorsSize) {
 		if(de) {
-			return "(Enthält " + sensorsSize + (sensorsSize > 1 ? "Sensoren" : "Sensor") + " davon ausgewählt " + selectedSensorsSize + ")";
+			return "(Enthält " + sensorsSize + (sensorsSize > 1 ? " Sensoren" : " Sensor") + " davon ausgewählt " + selectedSensorsSize + ")";
 		}else {
 			return "";
 		}

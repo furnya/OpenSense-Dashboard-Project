@@ -12,77 +12,77 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.client.utils.Spinner;
 
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialLabel;
-import gwt.material.design.client.ui.MaterialPreLoader;
 import gwt.material.design.client.ui.MaterialTextBox;
 
 public class UserViewImpl extends DataPanelPageView implements UserView {
-	
+
 	@UiTemplate("UserView.ui.xml")
 	interface UserViewUiBinder extends UiBinder<Widget, UserViewImpl> {
 	}
-	
+
 	private static UserViewUiBinder uiBinder = GWT.create(UserViewUiBinder.class);
 
 	protected Presenter presenter;
-	
+
 	@UiField
 	Div loginContainer;
-	
+
 	@UiField
 	MaterialTextBox userName;
-	
+
 	@UiField
 	MaterialTextBox password;
-	
+
 	@UiField
 	MaterialTextBox passwordVerify;
-	
+
 	@UiField
 	MaterialButton loginButton;
-	
+
 	@UiField
 	MaterialLabel regiLabel;
-	
+
 	@UiField
-	MaterialPreLoader spinner;
-	
+	Spinner spinner;
+
 	public UserViewImpl() {
-		initWidget(uiBinder.createAndBindUi(this));
+		this.initWidget(uiBinder.createAndBindUi(this));
 	}
-	
+
 	@UiHandler("regiLabel")
 	public void onRegiLabelClicked(ClickEvent e) {
-		resetViewElements();
-		if(Languages.register().equals(regiLabel.getText())) {
-			regiLabel.setText(Languages.login());
-			passwordVerify.getElement().getStyle().setDisplay(Display.BLOCK);
+		this.resetViewElements();
+		if(Languages.register().equals(this.regiLabel.getText())) {
+			this.regiLabel.setText(Languages.login());
+			this.passwordVerify.getElement().getStyle().setDisplay(Display.BLOCK);
 		}else {
-			regiLabel.setText(Languages.register());
-			passwordVerify.getElement().getStyle().setDisplay(Display.NONE);
+			this.regiLabel.setText(Languages.register());
+			this.passwordVerify.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}
-	
+
 	@UiHandler("loginButton")
 	public void onLoginButtonClicked(ClickEvent e) {
-		spinner.getElement().getStyle().clearDisplay();
-		loginButton.setEnabled(false);
-		regiLabel.setEnabled(false);
-		presenter.sendLoginRequest(userName.getText(), password.getText());
+		this.spinner.getElement().getStyle().clearDisplay();
+		this.loginButton.setEnabled(false);
+		this.regiLabel.setEnabled(false);
+		this.presenter.sendLoginRequest(this.userName.getText(), this.password.getText());
 	}
-	
+
 	@UiHandler("userName")
 	public void onUserNameValueChange(ValueChangeEvent<String> event) {
-		clearErrors();
+		this.clearErrors();
 	}
-	
+
 	@UiHandler("password")
 	public void onPasswordValueChange(ValueChangeEvent<String> event) {
-		clearErrors();
+		this.clearErrors();
 	}
-	
+
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
@@ -90,31 +90,31 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 
 	@Override
 	public void initView() {
-		if(presenter.isUserLoggedIn()) {
-			loginContainer.getElement().getStyle().setDisplay(Display.NONE);
+		if(this.presenter.isUserLoggedIn()) {
+			this.loginContainer.getElement().getStyle().setDisplay(Display.NONE);
 		}else {
-			loginContainer.getElement().getStyle().clearDisplay();
+			this.loginContainer.getElement().getStyle().clearDisplay();
 		}
 	}
 
 	@Override
 	public void resetViewElements() {
-		loginButton.setEnabled(true);
-		regiLabel.setEnabled(true);
-		password.reset();
-		userName.reset();
-		spinner.getElement().getStyle().setDisplay(Display.NONE);
+		this.loginButton.setEnabled(true);
+		this.regiLabel.setEnabled(true);
+		this.password.reset();
+		this.userName.reset();
+		this.spinner.getElement().getStyle().setDisplay(Display.NONE);
 	}
 
 	private void clearErrors() {
-		password.getErrorHandler().clearErrors();
-		userName.getErrorHandler().clearErrors();
+		this.password.getErrorHandler().clearErrors();
+		this.userName.getErrorHandler().clearErrors();
 	}
 
 	@Override
 	public void showLoginNotValid() {
-		resetViewElements();
-		password.setError(Languages.loginValidateError());
-		userName.setError("");
+		this.resetViewElements();
+		this.password.setError(Languages.loginValidateError());
+		this.userName.setError("");
 	}
 }

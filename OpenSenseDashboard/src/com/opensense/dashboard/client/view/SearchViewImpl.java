@@ -46,7 +46,6 @@ import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialListBox;
 import gwt.material.design.client.ui.MaterialNavBar;
-import gwt.material.design.client.ui.MaterialPreLoader;
 import gwt.material.design.client.ui.MaterialTextBox;
 
 public class SearchViewImpl extends DataPanelPageView implements SearchView {
@@ -101,7 +100,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	MaterialTextBox maxSensors;
 
 	@UiField
-	MaterialPreLoader spinner;
+	Spinner spinner;
 
 	@UiField
 	MaterialButton selectAllButton;

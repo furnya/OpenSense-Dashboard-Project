@@ -108,7 +108,9 @@
 		</bh:Div>
 	</bh:Div>	
 	<bh:Div addStyleNames="{style.panel} round-corners margin-top-10 flex">
-		<m:MaterialButton ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false"/>
+		<m:MaterialButton ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false">
+			<m:MaterialImage url="{gui.selectAll.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+		</m:MaterialButton>
 		<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false" >
 			<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 		</m:MaterialButton>
@@ -130,9 +132,7 @@
 		<bh:Div addStyleNames="{style.value-checkbox}">
 			<m:MaterialCheckBox ui:field="onlySensorsWithValueBox" text="{lang.hideSensorWIithoutValues}"  type="FILLED" addStyleNames="{style.checkbox} white-checkbox" value="true"/>
 		</bh:Div>
-		<m:MaterialPreLoader ui:field="spinner" display="NONE" addStyleNames="margin-top-10 spinner">
-			<m:MaterialSpinner/>
-		</m:MaterialPreLoader>
+		<d:Spinner ui:field="spinner" size="SMALL" display="NONE" addStyleNames="margin-top-10"/>
 		<bh:Div ui:field="noDataIndicator" addStyleNames="{style.no-sensor} round-corners margin-top-10 margin-bottom-10" width="100%">
 			<bh:Span text="{lang.noData}" addStyleNames="{style.center-text}"/>
 		</bh:Div>

@@ -36,12 +36,12 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.model.Size;
-import com.opensense.dashboard.client.presenter.VisualisationsPresenter;
 import com.opensense.dashboard.client.utils.ChartBounds;
 import com.opensense.dashboard.client.utils.ColorManager;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
+import com.opensense.dashboard.client.utils.Spinner;
 import com.opensense.dashboard.client.utils.UnitMapper;
 import com.opensense.dashboard.shared.DateRange;
 
@@ -49,7 +49,6 @@ import gwt.material.design.client.constants.DatePickerLanguage;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialDatePicker;
 import gwt.material.design.client.ui.MaterialLabel;
-import gwt.material.design.client.ui.MaterialPreLoader;
 
 public class VisualisationsViewImpl extends DataPanelPageView implements VisualisationsView {
 
@@ -61,7 +60,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	Div container;
 
 	@UiField
-	MaterialPreLoader viewSpinner;
+	Spinner viewSpinner;
 
 	@UiField
 	Div chartContainer;
@@ -117,7 +116,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	public void initView(Runnable runnable) {
 		this.createChart();
 		this.setDatePickerOptions();
-		this.highlightDateRange(presenter.getDateRange());
+		this.highlightDateRange(this.presenter.getDateRange());
 		this.listContainer.clear();
 		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(), this.listContainer);
 		listManagerOptions.setEditingActive(false);
@@ -130,9 +129,9 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
-			presenter.onSelectedSensorsChange(event.getSelectedIds());
+			this.presenter.onSelectedSensorsChange(event.getSelectedIds());
 		});
-		presenter.setListManager(this.listManager);
+		this.presenter.setListManager(this.listManager);
 	}
 
 	@UiHandler("customRange")
@@ -184,15 +183,15 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		Defaults.getScale().getGrideLines().setColor("rgba(0,0,0,0.5)");
 		this.chart = new LineChart();
 		this.chart.getOptions().setShowLines(true);
-		chart.getOptions().getTooltips().setIntersect(false);
-		chart.getOptions().getTooltips().setMode(InteractionMode.index);
-		chart.getOptions().getTooltips().getCallbacks().setLabelCallback(new TooltipLabelCallback() {
-			
+		this.chart.getOptions().getTooltips().setIntersect(false);
+		this.chart.getOptions().getTooltips().setMode(InteractionMode.index);
+		this.chart.getOptions().getTooltips().getCallbacks().setLabelCallback(new TooltipLabelCallback() {
+
 			@Override
 			public IsColor onLabelTextColor(AbstractChart<?, ?> chart, TooltipItem item) {
 				return new Color(255,255,255);
 			}
-			
+
 			@Override
 			public TooltipLabelColor onLabelColor(AbstractChart<?, ?> chart, TooltipItem item) {
 				LineDataset dataset = (LineDataset) chart.getData().getDatasets().get(item.getDatasetIndex());
@@ -200,20 +199,20 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 				color.setBackgroundColor(dataset.getBorderColorAsString());
 				return color;
 			}
-			
+
 			@Override
 			public String onLabel(AbstractChart<?, ?> chart, TooltipItem item) {
 				LineDataset dataset = (LineDataset) chart.getData().getDatasets().get(item.getDatasetIndex());
 				return chart.getData().getDatasets().get(item.getDatasetIndex()).getLabel()+": "
-						+dataset.getDataPoints().get(item.getIndex()).getY()+" "
-						+UnitMapper.getInstance().getUnit(Integer.valueOf(chart.getData().getDatasets().get(item.getDatasetIndex()).getLabel())).getDisplayName();
+				+dataset.getDataPoints().get(item.getIndex()).getY()+" "
+				+UnitMapper.getInstance().getUnit(Integer.valueOf(chart.getData().getDatasets().get(item.getDatasetIndex()).getLabel())).getDisplayName();
 			}
-			
+
 			@Override
 			public String onBeforeLabel(AbstractChart<?, ?> chart, TooltipItem item) {
 				return "";
 			}
-			
+
 			@Override
 			public String onAfterLabel(AbstractChart<?, ?> chart, TooltipItem item) {
 				return "";
@@ -249,6 +248,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		return true;
 	}
 
+	@Override
 	public void addDatasetToChart(Dataset dataset) {
 		ArrayList<Dataset> datasets = new ArrayList<>();
 		this.chart.getData().getDatasets().forEach(datasets::add);
@@ -364,14 +364,14 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		newDatasets = datasets.toArray(newDatasets);
 		this.chart.getData().setDatasets(newDatasets);
 	}
-	
-	@Override 
+
+	@Override
 	public void updateDatasets(List<LineDataset> datasets) {
 		Dataset[] newDatasets = new Dataset[datasets.size()];
 		newDatasets = datasets.toArray(newDatasets);
 		this.chart.getData().setDatasets(newDatasets);
 	}
-	
+
 	@Override
 	public void setChartDatasets(LineDataset[] datasets) {
 		this.chart.getData().setDatasets(datasets);
@@ -384,7 +384,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.yAxis.getScaleLabel().setDisplay(true);
 		this.chart.getOptions().getScales().setYAxes(this.yAxis);
 	}
-	
+
 	@Override
 	public void setChartAxisX(Date minTimestamp, Date maxTimestamp) {
 		TimeUnit tu = this.calculateTimeUnit(new ChartBounds(0.0, 0.0, minTimestamp, maxTimestamp));

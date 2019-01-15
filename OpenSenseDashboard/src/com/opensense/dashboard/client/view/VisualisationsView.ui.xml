@@ -106,9 +106,7 @@
 			<m:MaterialButton ui:field="pastWeek" text="{lang.pastWeek}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 			<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 		</bh:Div>
-		<m:MaterialPreLoader ui:field="viewSpinner" display="NONE" addStyleNames="spinner">
-			<m:MaterialSpinner/>
-		</m:MaterialPreLoader>
+		<d:Spinner size="MEDIUM" ui:field="viewSpinner" display="NONE" />
 		<m:MaterialLabel ui:field="noDatasetsLabel" textColor="WHITE" text="{lang.noData}" display="NONE"/>
 		<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>	
 	</bh:Div>
