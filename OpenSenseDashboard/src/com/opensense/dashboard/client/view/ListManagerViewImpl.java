@@ -339,7 +339,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			return;
 		}
 		if(this.selectedSensorIdsInLists.get(this.activeItemId).contains(sensorId)){
-			this.sensorCardsInLists.get(this.activeItemId).get(sensorId).getElement().setAttribute("style",  "background-color: " + sensorColor + " !important");
+			this.sensorCardsInLists.get(this.activeItemId).get(sensorId).setColor(sensorColor);
 		}
 	}
 

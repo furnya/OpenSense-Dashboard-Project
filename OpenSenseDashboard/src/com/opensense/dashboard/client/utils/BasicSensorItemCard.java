@@ -61,6 +61,9 @@ public class BasicSensorItemCard extends Composite{
 
 	@UiField
 	MaterialImage check;
+	
+	@UiField
+	Div headerContainer;
 
 	public BasicSensorItemCard() {
 		this.initWidget(uiBinder.createAndBindUi(this));
@@ -137,14 +140,14 @@ public class BasicSensorItemCard extends Composite{
 		this.addContentValue(Languages.userId(), sensor.getUserId()+"");
 		this.addContentValue(Languages.unit(), sensor.getUnit().getDisplayName()+"");
 		this.addContentValue(Languages.altitudeAboveGround(), sensor.getAltitudeAboveGround()+"m");
-		this.addContentValue(Languages.directionVertical(), sensor.getDirectionVertical()+"�");
-		this.addContentValue(Languages.directionHorizontal(), sensor.getDirectionHorizontal()+"�");
+		this.addContentValue(Languages.directionVertical(), sensor.getDirectionVertical()+"°");
+		this.addContentValue(Languages.directionHorizontal(), sensor.getDirectionHorizontal()+"°");
 		this.addContentValue(Languages.sensorModel(), sensor.getSensorModel());
 		this.addContentValue(Languages.attributionText(), sensor.getAttributionText());
 		this.addContentValue(Languages.attributionURL(), sensor.getAttributionURLString());
 		if((sensor.getValuePreview() != null)) {
-			this.addContentValue(Languages.firstValue(), Languages.getDate(sensor.getValuePreview().getMinValue().getTimestamp()) + " - " + sensor.getValuePreview().getMinValue().getNumberValue() + " " + sensor.getUnit().getDisplayName());
-			this.addContentValue(Languages.lastValue(),	Languages.getDate(sensor.getValuePreview().getMaxValue().getTimestamp()) + " - " + sensor.getValuePreview().getMaxValue().getNumberValue() + " " + sensor.getUnit().getDisplayName());
+			this.addContentValue(Languages.firstValue(), Languages.getDate(sensor.getValuePreview().getMinValue().getTimestamp()) + " - " + String.valueOf(sensor.getValuePreview().getMinValue().getNumberValue()).substring(0, 10) + " " + sensor.getUnit().getDisplayName());
+			this.addContentValue(Languages.lastValue(),	Languages.getDate(sensor.getValuePreview().getMaxValue().getTimestamp()) + " - " + String.valueOf(sensor.getValuePreview().getMaxValue().getNumberValue()).substring(0, 10) + " " + sensor.getUnit().getDisplayName());
 		}else {
 			this.addContentValue(Languages.values(), Languages.noValuePreviewData());
 		}
@@ -157,10 +160,16 @@ public class BasicSensorItemCard extends Composite{
 			this.layout.addStyleName("card-active");
 			this.check.getElement().getStyle().clearDisplay();
 		}else {
+			this.layout.getElement().getStyle().clearBackgroundColor();
 			this.layout.removeStyleName("card-active");
 			this.check.getElement().getStyle().setDisplay(Display.NONE);
 		}
 		this.active = active;
+	}
+	
+	public void setColor(String color) {
+		this.layout.removeStyleName("card-active");
+		this.layout.getElement().setAttribute("style",  "background-color: " + color);
 	}
 
 	public void showLoadingIndicator(boolean show) {
