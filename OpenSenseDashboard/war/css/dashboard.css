@@ -541,3 +541,8 @@ input:focus+label{
 .pac-container {
     z-index: 1051 !important;
 }
+.colHeader-active{
+	background-color: white !important;
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+}

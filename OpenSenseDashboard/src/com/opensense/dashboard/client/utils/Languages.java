@@ -485,17 +485,17 @@ public class Languages {
 
 	public static String altitudeAboveGround() {
 		if(de) {
-			return "Höhe über Grund:";
+			return "Höhe über Grund";
 		}else {
-			return "Altitude above ground:";
+			return "Altitude above ground";
 		}
 	}
 
 	public static String origin() {
 		if(de) {
-			return "Herkunft:";
+			return "Herkunft";
 		}else {
-			return "Origin:";
+			return "Origin";
 		}
 	}
 
@@ -717,7 +717,7 @@ public class Languages {
 
 	public static String sensorDeleted() {
 		if(de){
-			return "Sensor gelöscht";
+			return "Sensor gel�scht";
 		}else{
 			return "Sensor deleted";
 		}
@@ -792,6 +792,14 @@ public class Languages {
 			return "Die Sensoren " + sensosAsList + " wurden erfolgreich zu der Liste \"" + listName + "\" hinzugefügt";
 		}else {
 			return "The sensors  " + sensosAsList + " got added successfully to the list \"" + listName + "\"";
+		}
+	}
+	
+	public static String userId() {
+		if(de) {
+			return "Benutzer-ID";
+		}else {
+			return "User ID";
 		}
 	}
 }
