@@ -132,6 +132,11 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	}
 	
 	public void onSelectedSensorsChange(List<Integer> newIds) {
+		if(newIds==null || newIds.isEmpty()) {
+			this.setSensorIdsCopy(newIds);
+			this.view.showNoSensorsSelected();
+			return;
+		}
 		if(!this.updateNeeded(newIds)) {
 			this.setSensorIdsCopy(newIds);
 			return;

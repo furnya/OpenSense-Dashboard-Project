@@ -632,4 +632,7 @@ input:focus+label{
 .sensor-item-card .card-action-buttons >:nth-child(3){
 	right: 4%;
 }
+.display-none{
+	display: none;
+}
 

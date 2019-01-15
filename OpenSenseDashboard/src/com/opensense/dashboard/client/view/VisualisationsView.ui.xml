@@ -89,6 +89,17 @@
 .selectPanel button{
 	margin-top: 10px;
 }
+.no-data-div{
+	background: #606060;
+	height: 25vw;
+	padding: 0 10%;
+}
+.no-data-label{
+	font-size: 2vw;
+	position: relative;
+	top: 40%;
+	text-align: center;
+}
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="window-height flex">
@@ -107,7 +118,9 @@
 			<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 		</bh:Div>
 		<d:Spinner size="MEDIUM" ui:field="viewSpinner" display="NONE" />
-		<m:MaterialLabel ui:field="noDatasetsLabel" textColor="WHITE" text="{lang.noData}" display="NONE"/>
+		<bh:Div ui:field="noDatasetsDiv" addStyleNames="{style.no-data-div}">
+			<m:MaterialLabel ui:field="noDataLabel" textColor="WHITE" text="{lang.noSensorsSelected}" addStyleNames="{style.no-data-label}"/>
+		</bh:Div>
 		<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>	
 	</bh:Div>
 	<bh:Div addStyleNames= "{style.sensor-container}">
