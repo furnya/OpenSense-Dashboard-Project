@@ -12,29 +12,24 @@
 	height: 40px;
 	width: 40px;	
 }
-.font{
-	margin-top: 5px;
-	font-size: 20px;	
-    white-space: nowrap;
-}
 .right{
 	right: 4%;	
 }
 </ui:style>
 
 <bh:Div ui:field="layout" addStyleNames="user-select-none round-corners sensor-item-card">
-	<bh:Div addStyleNames="header" ui:field="headerContainer">
+	<bh:Div addStyleNames="card-header" ui:field="headerContainer">
 		<bh:Div addStyleNames="{style.icon-size} margin-right-10">
 			<b:Image ui:field="icon" width="100%" height="100%"/>
 		</bh:Div>	
-		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
+		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="header-label"/>
 		<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
 	</bh:Div>
 	<m:MaterialButton ui:field="favButton" addStyleNames="round-button d-btn {style.right}">
 		<m:MaterialImage url="{gui.favorite.getSafeUri.asString}"/>
 	</m:MaterialButton>
-	<bh:Div ui:field="content" addStyleNames="content"/>
-	<m:MaterialImage ui:field="check" addStyleNames="check" url="{gui.check.getSafeUri.asString}" display="NONE"/>
+	<bh:Div ui:field="content" addStyleNames="card-content"/>
+	<m:MaterialImage ui:field="check" addStyleNames="card-active-check" url="{gui.check.getSafeUri.asString}" display="NONE"/>
 </bh:Div>
 
 </ui:UiBinder>

@@ -1,7 +1,6 @@
 package com.opensense.dashboard.client.presenter;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,7 +12,6 @@ import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.RemoveSensorsFromFavoriteListEvent;
 import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.services.GeneralService;
-import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.Languages;
@@ -254,21 +252,19 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 
 	@Override
-	public void requestAllSensorInfo(Integer sensorId, BasicSensorItemCard card) {
+	public void requestAllSensorInfo(final int listId, final List<Integer> sensorIds) {
 		Request request = new Request(ResultType.SENSOR);
-		List<Integer> idList = new LinkedList<>();
-		idList.add(sensorId);
-		request.setIds(idList);
+		request.setIds(sensorIds);
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if((result != null) && (result.getResultType() != null) && request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
-				this.view.showAllSensorInfo(result.getSensors().get(0), card);
+				this.view.showAllSensorInfo(listId, result.getSensors());
 			}else {
 				AppController.showError(Languages.connectionError());
-				this.view.showAllSensorInfo(null, card);
+				LOGGER.log(Level.WARNING, "Failure requesting all sensor info");
 			}
 		},caught -> {
 			AppController.showError(Languages.connectionError());
-			this.view.showAllSensorInfo(null, card);
+			LOGGER.log(Level.WARNING, "Failure requesting all sensor info", caught);
 		}, false));
 	}
 }

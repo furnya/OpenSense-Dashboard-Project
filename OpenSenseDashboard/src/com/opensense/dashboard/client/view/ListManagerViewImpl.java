@@ -145,11 +145,11 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			sensors.forEach(sensor -> {
 				final List<Integer> idList = new ArrayList<>();
 				idList.add(sensor.getSensorId());
-				final BasicSensorItemCard card = new BasicSensorItemCard(sensor.getSensorId(), this);
+				final BasicSensorItemCard card = new BasicSensorItemCard();
 				card.setIcon(MeasurandIconHelper.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 				card.setHeader("ID " + sensor.getSensorId() + " - " +  sensor.getMeasurand().getDisplayName());
-				card.addValueChangeHandler(event -> {
-					if(event.getValue()) {
+				card.addActiveChangeHandler(event -> {
+					if(event.isActive()) {
 						if((this.presenter.getController().getOptions().getMaxSelectedObjects() != null) &&
 								(this.selectedSensorIdsInLists.get(listId).size() >= this.presenter.getController().getOptions().getMaxSelectedObjects())){
 							card.setActive(false);
@@ -170,6 +170,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 				if(listId != DefaultListItem.FAVORITE_LIST_ID) {
 					card.addFavButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(idList)));
 				}
+				card.addShowInfoButtonClickHandler(event -> this.presenter.requestAllSensorInfo(listId, idList));
 				sensorCards.put(sensor.getSensorId(), card);
 				showSensorIds.add(sensor.getSensorId());
 			});
@@ -370,17 +371,13 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	}
 
 	@Override
-	public void loadAllSensorInfo(Integer sensorId, BasicSensorItemCard card) {
-		this.presenter.requestAllSensorInfo(sensorId, card);
-	}
-
-	@Override
-	public void showAllSensorInfo(Sensor sensor, BasicSensorItemCard card) {
-		if(sensor==null) {
-			card.hideBody();
-		}else {
-			card.showSensorInfo(sensor);
-		}
+	public void showAllSensorInfo(int listId, List<Sensor> sensors) {
+		sensors.forEach(sensor -> {
+			if(this.sensorCardsInLists.get(listId).containsKey(sensor.getSensorId())){
+				this.sensorCardsInLists.get(listId).get(sensor.getSensorId()).showSensorInfo(sensor);
+				//TODO: expend card
+			}
+		});
 	}
 
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Sensor;
@@ -18,7 +17,7 @@ public interface ListManagerView {
 		HandlerManager getEventBus();
 		ListManager getController();
 		void changeListName(int listId, String listName);
-		public void requestAllSensorInfo(Integer sensorId, BasicSensorItemCard card);
+		public void requestAllSensorInfo(int sensorId, List<Integer> idList);
 	}
 
 	public Widget asWidget();
@@ -36,6 +35,5 @@ public interface ListManagerView {
 	public Integer getActiveItemId();
 	public void setOldSelection();
 	public void setActiveItemId(Integer id);
-	public void loadAllSensorInfo(Integer sensorId, BasicSensorItemCard card);
-	public void showAllSensorInfo(Sensor sensor, BasicSensorItemCard card);
+	public void showAllSensorInfo(int listId, List<Sensor> list);
 }
