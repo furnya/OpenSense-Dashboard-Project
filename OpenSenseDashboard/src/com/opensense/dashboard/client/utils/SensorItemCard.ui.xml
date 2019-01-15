@@ -8,135 +8,33 @@
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
-.content{
-	cursor: pointer;
-	background-color: #fff;
-	display: flex;
-}
-.card-button{
-	float: right;
-    margin-top: 5px;
-}
-.card-button > img {
-	width: 24px;
-	filter: invert(100%);		
-}
 .icon-size{
 	height: 40px;
 	width: 40px;	
 }
-.left{
-	width: 5%;
-	min-width: 50px;
-	display: flex;
-    place-content: center;
-    place-items: center;
-}
-.mid{
-	width: 95%;
-	padding: 10px;
-   	background-color: inherit;	
-}
-.right{
-    width: 10%;
-    overflow: hidden;
-    place-content: center;
-    place-items: center;
-    display: flex;
-}
 .font{
 	margin-top: 5px;
 	font-size: 20px;	
+    white-space: nowrap;
 }
-.checkbox{
-	margin-top: 8px;
-}
-.fav-icon{
-    width: 40px;
-    filter: brightness(80%);
-}
-@keyframes trans {
-    0% {transform: scale(1,1);}
-    10% {transform: scale(1.1,1.1);}
-    20% {transform: scale(1.2,1.2);}
-    30% {transform: scale(1.1,1.1);}
-    40% {transform: scale(1,1);}
-    60% {transform: scale(0.9,0.9);}
-    80% {transform: scale(0.8,0.8);}
-    90% {transform: scale(0.9,0.9);}
-    100% {transform: scale(1,1);}
-}
-.fav-icon:hover{
-	animation: 1s trans;
-	animation-iteration-count: infinite;
-}
-.header{
-    display: flex;
-    width: 90%;
-    background-color: inherit;
-}
-.content-container{
-	text-align: left;
-    width: 90%;	
-    display: flex;
-    overflow: hidden;
-}
-.content-container > Div{
-	margin-right: 15px;	
-}
-.inherit-background{
-    background-color: inherit;
-}
-.small-spinner{
-    width: 18px;
-    height: 18px;
-    position: absolute;
-    left: 0px;	
-    top: 3px;
+.right{
+	right: 4%;	
 }
 </ui:style>
 
-<bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
-	<bh:Div addStyleNames="{style.left}">
-		<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>
+<bh:Div ui:field="layout" addStyleNames="user-select-none round-corners sensor-item-card">
+	<bh:Div addStyleNames="header" ui:field="headerContainer">
+		<bh:Div addStyleNames="{style.icon-size} margin-right-10">
+			<b:Image ui:field="icon" width="100%" height="100%"/>
+		</bh:Div>	
+		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
+		<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
 	</bh:Div>
-	<bh:Div addStyleNames="{style.mid}">
-		<bh:Div addStyleNames="flex {style.inherit-background}">
-			<bh:Div addStyleNames="{style.header}" ui:field="midContainer">
-				<bh:Div addStyleNames="{style.icon-size} margin-right-10">
-					<b:Image ui:field="icon" width="100%" height="100%"/>
-				</bh:Div>	
-				<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="{style.font}"/>
-				<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
-			</bh:Div>
-		</bh:Div>
-		<bh:Div ui:field="content" addStyleNames="{style.content-container}"/>
-		<bh:Div  ui:field="previewContainer">
-			<bh:Div> 
-				<bh:Div addStyleNames="flex">
-					<bh:Span text="{lang.firstValue}" addStyleNames="title-sensor"/>
-					<bh:Div addStyleNames="position-relative">
-						<m:MaterialPreLoader ui:field="firstSpinner" addStyleNames="spinner {style.small-spinner}">
-							<m:MaterialSpinner/>
-						</m:MaterialPreLoader>
-						<bh:Span ui:field="firstValue" addStyleNames="value-sensor"/>
-					</bh:Div>
-				</bh:Div>
-				<bh:Div addStyleNames="flex">
-					<bh:Span text="{lang.lastValue}" addStyleNames="title-sensor"/>
-					<bh:Div addStyleNames="position-relative">
-						<m:MaterialPreLoader ui:field="lastSpinner" addStyleNames="spinner {style.small-spinner}">
-							<m:MaterialSpinner/>
-						</m:MaterialPreLoader>
-						<bh:Span ui:field="lastValue" addStyleNames="value-sensor"/>
-					</bh:Div>
-				</bh:Div>
-			</bh:Div>
-		</bh:Div>
-	</bh:Div>
-	<bh:Div addStyleNames="{style.right}">
-		<b:Image ui:field="favButton" url="{gui.favoriteRed.getSafeUri.asString}" addStyleNames="{style.fav-icon} clickable" />
-	</bh:Div>
+	<m:MaterialButton ui:field="favButton" addStyleNames="round-button d-btn {style.right}">
+		<m:MaterialImage url="{gui.favorite.getSafeUri.asString}"/>
+	</m:MaterialButton>
+	<bh:Div ui:field="content" addStyleNames="content"/>
+	<m:MaterialImage ui:field="check" addStyleNames="check" url="{gui.check.getSafeUri.asString}" display="NONE"/>
 </bh:Div>
 
 </ui:UiBinder>

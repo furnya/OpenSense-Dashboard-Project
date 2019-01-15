@@ -794,4 +794,12 @@ public class Languages {
 			return "The sensors  " + sensosAsList + " got added successfully to the list \"" + listName + "\"";
 		}
 	}
+
+	public static String values() {
+		if(de) {
+			return "Werte";
+		}else {
+			return "Values";
+		}
+	}
 }

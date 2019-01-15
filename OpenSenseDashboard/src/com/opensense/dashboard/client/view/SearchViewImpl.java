@@ -255,15 +255,14 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			card.addContentValue(Languages.origin(), sensor.getAttributionText());
 
 			if((sensor.getValuePreview() != null)) {
-				card.setValuePreviewConent(
-						Languages.getDate(sensor.getValuePreview().getMinValue().getTimestamp()) + " - " + sensor.getValuePreview().getMinValue().getNumberValue() + " " + sensor.getUnit().getDisplayName(),
-						Languages.getDate(sensor.getValuePreview().getMaxValue().getTimestamp()) + " - " + sensor.getValuePreview().getMaxValue().getNumberValue() + " " + sensor.getUnit().getDisplayName());
+				card.addContentValue(Languages.firstValue(), Languages.getDate(sensor.getValuePreview().getMinValue().getTimestamp()) + " - " + sensor.getValuePreview().getMinValue().getNumberValue() + " " + sensor.getUnit().getDisplayName());
+				card.addContentValue(Languages.lastValue(),	Languages.getDate(sensor.getValuePreview().getMaxValue().getTimestamp()) + " - " + sensor.getValuePreview().getMaxValue().getNumberValue() + " " + sensor.getUnit().getDisplayName());
 			}else {
-				card.setValuePreviewConent(Languages.noValuePreviewData(), Languages.noValuePreviewData());
+				card.addContentValue(Languages.values(), Languages.noValuePreviewData());
 			}
 
-			card.addValueChangeHandler(event -> {
-				if(event.getValue()) {
+			card.addActiveChangeHandler(event -> {
+				if(event.isActive()) {
 					this.selectedSensors.add(sensorId);
 				}else {
 					this.selectedSensors.remove(sensorId);

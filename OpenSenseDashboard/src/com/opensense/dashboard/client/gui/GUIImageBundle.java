@@ -141,4 +141,7 @@ public interface GUIImageBundle extends ClientBundle {
 
 	@Source("icons/select-all.svg")
 	SVGResource selectAll();
+
+	@Source("icons/check.svg")
+	SVGResource check();
 }

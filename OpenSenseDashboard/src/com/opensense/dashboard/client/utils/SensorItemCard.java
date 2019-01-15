@@ -4,22 +4,21 @@ import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.event.ActiveChangeEvent;
+import com.opensense.dashboard.client.event.ActiveChangeEventHandler;
 
-import gwt.material.design.client.constants.Display;
-import gwt.material.design.client.ui.MaterialCheckBox;
+import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialLabel;
-import gwt.material.design.client.ui.MaterialPreLoader;
 
 public class SensorItemCard extends Composite{
 
@@ -29,14 +28,13 @@ public class SensorItemCard extends Composite{
 
 	private static SensorItemCardUiBinder uiBinder = GWT.create(SensorItemCardUiBinder.class);
 
+	private boolean active = false;
+
 	@UiField
 	Div layout;
 
 	@UiField
 	Div content;
-
-	@UiField
-	Div previewContainer;
 
 	@UiField
 	MaterialLabel header;
@@ -45,32 +43,19 @@ public class SensorItemCard extends Composite{
 	Image icon;
 
 	@UiField
-	Div midContainer;
+	Div headerContainer;
 
 	@UiField
-	MaterialCheckBox checkbox;
-
-	@UiField
-	Image favButton;
+	MaterialButton favButton;
 
 	@UiField
 	Rating rating;
 
 	@UiField
-	Span firstValue;
-
-	@UiField
-	Span lastValue;
-
-	@UiField
-	MaterialPreLoader firstSpinner;
-
-	@UiField
-	MaterialPreLoader lastSpinner;
+	MaterialImage check;
 
 	public SensorItemCard() {
 		this.initWidget(uiBinder.createAndBindUi(this));
-		this.addClickHandler();
 	}
 
 	public void addFavButtonClickHandler(ClickHandler handler) {
@@ -96,48 +81,22 @@ public class SensorItemCard extends Composite{
 		return this.content;
 	}
 
-	private void addClickHandler() {
-		this.layout.addDomHandler(event -> this.checkbox.setValue(!this.checkbox.getValue(), true), ClickEvent.getType());
-		this.addClickListener(this.checkbox.getElement());
-	}
-
-	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
-		return this.checkbox.addValueChangeHandler(event -> {
-			this.setActive(event.getValue());
-			handler.onValueChange(event);
-		});
+	public void addActiveChangeHandler(ActiveChangeEventHandler handler) {
+		this.layout.addDomHandler(event -> {
+			this.setActive(!this.active);
+			handler.onActiveChangeEvent(new ActiveChangeEvent(this.active));
+		}, ClickEvent.getType());
 	}
 
 	public void setActive(boolean active) {
-		this.checkbox.setValue(active);
 		if(active) {
 			this.layout.addStyleName("card-active");
+			this.check.getElement().getStyle().clearDisplay();
 		}else {
 			this.layout.removeStyleName("card-active");
+			this.check.getElement().getStyle().setDisplay(Display.NONE);
 		}
-	}
-
-	public void setValuePreviewConent(String firstText, String lastText) {
-		this.showPreviewContentSpinner(false);
-		this.firstValue.setText(firstText);
-		this.lastValue.setText(lastText);
-	}
-
-	/**
-	 * shows the preview spinner which indicates that the content will be shown
-	 * clears the content before showing
-	 * @param show
-	 */
-	public void showPreviewContentSpinner(boolean show) {
-		if(show) {
-			this.firstValue.setText("");
-			this.lastValue.setText("");
-			this.firstSpinner.setDisplay(Display.BLOCK);
-			this.lastSpinner.setDisplay(Display.BLOCK);
-		}else {
-			this.firstSpinner.setDisplay(Display.NONE);
-			this.lastSpinner.setDisplay(Display.NONE);
-		}
+		this.active = active;
 	}
 
 	public void setRating(Double accuracy) {
@@ -145,12 +104,6 @@ public class SensorItemCard extends Composite{
 			this.rating.setRating(accuracy * 10);
 		}
 	}
-
-	private native void addClickListener(Element elem) /*-{
-		elem.addEventListener("click", function(event){
-			event.stopPropagation();
-		});
-	}-*/;
 
 	public void addContentValue(String titleText, String valueText) {
 		Div valueCon = new Div();
