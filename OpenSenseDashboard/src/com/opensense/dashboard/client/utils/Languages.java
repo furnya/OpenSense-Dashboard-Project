@@ -834,4 +834,20 @@ public class Languages {
 			return "";
 		}
 	}
+	
+	public static String errorMessageAccuracy() {
+		if(de) {
+			return "Bitte gebe eine Zahl zwischen 0 und 10 ein";
+		}else {
+			return "Please enter a number between 0 and 10";
+		}
+	}
+	
+	public static String errorMessageMaxSens() {
+		if(de) {
+			return "Bitte gebe eine Zahl zwischen 1 und 19999 ein";
+		}else {
+			return "Please enter a number between 1 and 19999";
+		}
+	}
 }
