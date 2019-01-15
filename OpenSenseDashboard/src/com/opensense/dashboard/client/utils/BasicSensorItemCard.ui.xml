@@ -90,13 +90,16 @@
     background-color: inherit;
 }
 .infoBody{
+	user-select: text;
 	background-color: white !important;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
 }
 </ui:style>
 
 <m:MaterialCollapsible ui:field="collapsible" addStyleNames="round-corners {style.no-border} margin-bottom-10">
 	<m:MaterialCollapsibleItem ui:field="collapsibleItem" addStyleNames="round-corners">
-		<m:MaterialCollapsibleHeader addStyleNames="round-corners no-padding {style.colHeader} {style.no-border}">
+		<m:MaterialCollapsibleHeader ui:field="collapsibleHeader" addStyleNames="round-corners no-padding {style.colHeader} {style.no-border}">
 			<bh:Div ui:field="layout" addStyleNames="user-select-none round-corners {style.content}">
 				<bh:Div addStyleNames="{style.left}">
 					<m:MaterialCheckBox ui:field="checkbox" type="FILLED" addStyleNames="{style.checkbox}"/>

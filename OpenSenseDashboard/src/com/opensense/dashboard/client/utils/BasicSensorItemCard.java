@@ -19,7 +19,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.presenter.ListManagerPresenter;
 import com.opensense.dashboard.client.services.GeneralService;
+import com.opensense.dashboard.client.view.ListManagerView;
+import com.opensense.dashboard.client.view.ListManagerViewImpl;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
@@ -29,6 +32,7 @@ import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.ui.MaterialCheckBox;
 import gwt.material.design.client.ui.MaterialCollapsible;
 import gwt.material.design.client.ui.MaterialCollapsibleBody;
+import gwt.material.design.client.ui.MaterialCollapsibleHeader;
 import gwt.material.design.client.ui.MaterialCollapsibleItem;
 import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialLabel;
@@ -43,6 +47,7 @@ public class BasicSensorItemCard extends Composite{
 	private static BasicSensorItemCardUiBinder uiBinder = GWT.create(BasicSensorItemCardUiBinder.class);
 
 	private int sensorId;
+	private ListManagerView view;
 	
 	@UiField
 	Div layout;
@@ -91,8 +96,12 @@ public class BasicSensorItemCard extends Composite{
 	
 	@UiField
 	Span lastValue;
+	
+	@UiField
+	MaterialCollapsibleHeader collapsibleHeader;
 
-	public BasicSensorItemCard(Integer sensorId) {
+	public BasicSensorItemCard(Integer sensorId, ListManagerView view) {
+		this.view = view;
 		this.sensorId = sensorId;
 		this.initWidget(uiBinder.createAndBindUi(this));
 		this.addClickHandler();
@@ -130,9 +139,11 @@ public class BasicSensorItemCard extends Composite{
 		this.collapsibleItem.addDomHandler(event -> this.checkbox.setValue(!this.checkbox.getValue(), true), ClickEvent.getType());
 		this.addClickListener(this.checkbox.getElement());
 		this.addClickListener(this.collapsibleItem.getElement());
+		this.addClickListener(this.collapsibleBody.getElement());
 		this.expandButton.addDomHandler(event -> {
 			if(this.collapsibleItem.isActive()) {
 				this.collapsibleItem.collapse();
+				this.collapsibleHeader.removeStyleName("colHeader-active");
 			}else {
 				this.loadAllSensorInfo();
 			}
@@ -141,23 +152,11 @@ public class BasicSensorItemCard extends Composite{
 	}
 
 	private void loadAllSensorInfo() {
-		this.content.clear();
-		Request request = new Request(ResultType.SENSOR);
-		List<Integer> idList = new LinkedList<>();
-		idList.add(this.sensorId);
-		request.setIds(idList);
-		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
-			if((result != null) && (result.getResultType() != null) && request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
-				this.collapsibleItem.expand();
-				this.showSensorInfo(result.getSensors().get(0));
-			}else {
-				AppController.showError(Languages.connectionError());
-				this.collapsibleBody.setDisplay(Display.NONE);
-			}
-		},caught -> {
-			AppController.showError(Languages.connectionError());
-			this.collapsibleBody.setDisplay(Display.NONE);
-		}, false));
+		this.view.loadAllSensorInfo(this.sensorId, this);
+	}
+	
+	public void hideBody() {
+		this.collapsibleBody.setDisplay(Display.NONE);
 	}
 	
 	private void addInfoPair(String key, String value) {
@@ -174,7 +173,10 @@ public class BasicSensorItemCard extends Composite{
 		this.content.add(container);
 	}
 
-	private void showSensorInfo(Sensor sensor) {
+	public void showSensorInfo(Sensor sensor) {
+		this.content.clear();
+		this.collapsibleItem.expand();
+		this.collapsibleHeader.addStyleName("colHeader-active");
 		this.rating.setRating(sensor.getAccuracy()*10.0);
 		this.addInfoPair(Languages.userId(), sensor.getUserId()+"");
 		this.addInfoPair(Languages.unit(), sensor.getUnit().getDisplayName()+"");

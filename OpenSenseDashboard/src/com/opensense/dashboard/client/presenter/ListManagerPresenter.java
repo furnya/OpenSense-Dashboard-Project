@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client.presenter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.RemoveSensorsFromFavoriteListEvent;
 import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.services.GeneralService;
+import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.Languages;
@@ -21,9 +23,13 @@ import com.opensense.dashboard.client.view.ListManagerView;
 import com.opensense.dashboard.client.view.ListManagerViewImpl;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
+import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.UserList;
+
+import gwt.material.design.client.constants.Display;
 
 public class ListManagerPresenter implements IPresenter, ListManagerView.Presenter{
 
@@ -248,5 +254,24 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 				LOGGER.log(Level.WARNING, "Failure updating the user lists", caught);
 			},true));
 		}
+	}
+
+	@Override
+	public void requestAllSensorInfo(Integer sensorId, BasicSensorItemCard card) {
+		Request request = new Request(ResultType.SENSOR);
+		List<Integer> idList = new LinkedList<>();
+		idList.add(sensorId);
+		request.setIds(idList);
+		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
+				this.view.showAllSensorInfo(result.getSensors().get(0), card);
+			}else {
+				AppController.showError(Languages.connectionError());
+				this.view.showAllSensorInfo(null, card);
+			}
+		},caught -> {
+			AppController.showError(Languages.connectionError());
+			this.view.showAllSensorInfo(null, card);
+		}, false));
 	}
 }

@@ -22,6 +22,7 @@ import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.model.Size;
+import com.opensense.dashboard.client.presenter.ListManagerPresenter;
 import com.opensense.dashboard.client.utils.BasicSensorItemCard;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListCollapsibleItem;
@@ -29,8 +30,10 @@ import com.opensense.dashboard.client.utils.ListManagerOptions;
 import com.opensense.dashboard.client.utils.MeasurandIconHelper;
 import com.opensense.dashboard.client.utils.Pager;
 import com.opensense.dashboard.shared.MinimalSensor;
+import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.UserList;
 
+import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.ui.MaterialCollapsible;
 
 public class ListManagerViewImpl extends Composite implements ListManagerView {
@@ -144,7 +147,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			sensors.forEach(sensor -> {
 				final List<Integer> idList = new ArrayList<>();
 				idList.add(sensor.getSensorId());
-				final BasicSensorItemCard card = new BasicSensorItemCard(sensor.getSensorId());
+				final BasicSensorItemCard card = new BasicSensorItemCard(sensor.getSensorId(), this);
 				card.setIcon(MeasurandIconHelper.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 				card.setHeader("ID " + sensor.getSensorId() + " - " +  sensor.getMeasurand().getDisplayName());
 				card.addValueChangeHandler(event -> {
@@ -366,6 +369,20 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	@Override
 	public void setActiveItemId(Integer id) {
 		this.activeItemId = id;
+	}
+
+	@Override
+	public void loadAllSensorInfo(Integer sensorId, BasicSensorItemCard card) {
+		this.presenter.requestAllSensorInfo(sensorId, card);
+	}
+
+	@Override
+	public void showAllSensorInfo(Sensor sensor, BasicSensorItemCard card) {
+		if(sensor==null) {
+			card.hideBody();
+		}else {
+			card.showSensorInfo(sensor);
+		}
 	}
 
 }
