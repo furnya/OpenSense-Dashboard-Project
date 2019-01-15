@@ -485,17 +485,17 @@ public class Languages {
 
 	public static String altitudeAboveGround() {
 		if(de) {
-			return "HÃ¶he Ã¼ber Grund:";
+			return "Höhe über Grund";
 		}else {
-			return "Altitude above ground:";
+			return "Altitude above ground";
 		}
 	}
 
 	public static String origin() {
 		if(de) {
-			return "Herkunft:";
+			return "Herkunft";
 		}else {
-			return "Origin:";
+			return "Origin";
 		}
 	}
 
@@ -533,7 +533,7 @@ public class Languages {
 
 	public static String loginValidateError() {
 		if(de){
-			return "UngÃ¼ltige E-Mail-Adresse oder ungÃ¼ltiges Kennwort";
+			return "Ungültige E-Mail-Adresse oder ungültiges Kennwort";
 		}else{
 			return "Not valid E-mail address or not valid passord";
 		}
@@ -557,7 +557,7 @@ public class Languages {
 
 	public static String noListData(){
 		if(de){
-			return "Es wurden noch keine Sensoren zur Liste hinzugefÃ¼gt";
+			return "Es wurden noch keine Sensoren zur Liste hinzugefügt";
 		}else{
 			return "No sensors existing in this list";
 		}
@@ -717,7 +717,7 @@ public class Languages {
 
 	public static String sensorDeleted() {
 		if(de){
-			return "Sensor gelÃ¶scht";
+			return "Sensor gelöscht";
 		}else{
 			return "Sensor deleted";
 		}
@@ -792,6 +792,14 @@ public class Languages {
 			return "Die Sensoren " + sensosAsList + " wurden erfolgreich zu der Liste \"" + listName + "\" hinzugefÃ¼gt";
 		}else {
 			return "The sensors  " + sensosAsList + " got added successfully to the list \"" + listName + "\"";
+		}
+	}
+	
+	public static String userId() {
+		if(de) {
+			return "Benutzer-ID";
+		}else {
+			return "User ID";
 		}
 	}
 

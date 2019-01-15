@@ -583,3 +583,8 @@ input:focus+label{
     bottom: 4%;
     right: 1%;
 }
+.colHeader-active{
+	background-color: white !important;
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+}
