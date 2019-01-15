@@ -122,20 +122,20 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		if(listId == DefaultListItem.FAVORITE_LIST_ID) {
 			this.eventBus.fireEvent(new RemoveSensorsFromFavoriteListEvent(sensorIds));
 		}else if(listId == DefaultListItem.MY_LIST_ID) {
-			sensorIds.forEach(sensorId -> {
-				GeneralService.Util.getInstance().deleteSensorFromMySensors(sensorId, new DefaultAsyncCallback<ActionResult>(result -> {
-					if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-						this.updateLists();
-						AppController.showInfo(Languages.sensorDeleted());
-					}else {
-						AppController.showError(Languages.connectionError());
-						LOGGER.log(Level.WARNING, "Failure deleting sensors in list, result is null or the request was not successfull");
-					}
-				}, caught -> {
+			GeneralService.Util.getInstance().deleteSensorsFromMySensors(sensorIds, new DefaultAsyncCallback<ActionResult>(result -> {
+				if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
+					this.updateLists();
+					AppController.showInfo(Languages.sensorDeleted());
+				}else {
+					this.updateLists();
 					AppController.showError(Languages.connectionError());
-					LOGGER.log(Level.WARNING, "Failure deleting sensors in list", caught);
-				},true));
-			});
+					LOGGER.log(Level.WARNING, "Failure deleting sensors in list, result is null or the request was not successfull");
+				}
+			}, caught -> {
+				this.updateLists();
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure deleting sensors in list", caught);
+			},true));
 		}else if(listId == DefaultListItem.SELECTED_LIST_ID) {
 			// Do nothing
 		}else {

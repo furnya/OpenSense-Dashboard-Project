@@ -25,7 +25,7 @@ import com.opensense.dashboard.shared.Response;
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
 
 	private static final Logger LOGGER = Logger.getLogger(GeneralServlet.class.getName());
-
+	
 	@Override
 	public Response getDataFromRequest(Request searchRequest) {
 		Response response = new Response();
@@ -154,16 +154,23 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 	}
 
 	@Override
-	public ActionResult deleteSensorFromMySensors(Integer sensorId) {
+	public ActionResult deleteSensorsFromMySensors(List<Integer> sensorIds) {
 		if(SessionUser.getInstance().isGuest()) {
 			return new ActionResult(ActionResultType.FAILED);
 		}
-		try{
-			ClientRequestHandler.getInstance().sendDeleteSensorRequest(sensorId);
-		}catch(IOException e) {
+		boolean[] deleteFailed = {false};
+		sensorIds.forEach(sensorId -> {
+			try{
+				ClientRequestHandler.getInstance().sendDeleteSensorRequest(sensorId);
+			}catch(IOException e) {
+				deleteFailed[0] = true;
+			}
+		});
+		if(deleteFailed[0]) {
 			return new ActionResult(ActionResultType.FAILED);
+		}else {
+			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
-		return new ActionResult(ActionResultType.SUCCESSFUL);
 	}
 
 }
