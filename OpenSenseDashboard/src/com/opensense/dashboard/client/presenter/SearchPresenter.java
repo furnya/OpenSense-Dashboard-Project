@@ -212,7 +212,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 	public void addSelectedSensorsToUserList(final int listId, final List<Integer> selectedSensors) {
 		GeneralService.Util.getInstance().addSensorsToUserList(listId, selectedSensors, new DefaultAsyncCallback<ActionResult>(result -> {
 			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-				AppController.showSuccess(Languages.addedSensorsToList(Arrays.toString(selectedSensors.toArray()).replace("[", "").replace("]", ""), this.shownUserLists.get(listId).getListName()));
+				AppController.showSuccess(Languages.addedSensorsToList(Arrays.toString(selectedSensors.toArray()).replace("[", "").replace("]", ""), this.shownUserLists.get(listId).getListName(), selectedSensors.size() > 1));
 			}else {
 				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "Result is nul or did not match the expected resultType");

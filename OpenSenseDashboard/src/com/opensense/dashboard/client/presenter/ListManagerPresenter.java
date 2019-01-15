@@ -111,7 +111,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	 */
 	public void addSensorsToList(final int listId, final List<Integer> sensorIds) {
 		//TODO: Auto-generated method stub
-		if(listId == -1) {
+		if(listId == DefaultListItem.FAVORITE_LIST_ID) {
 			this.eventBus.fireEvent(new AddSensorsToFavoriteListEvent(sensorIds));
 		}
 	}

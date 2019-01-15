@@ -787,11 +787,11 @@ public class Languages {
 		}
 	}
 
-	public static String addedSensorsToList(String sensosAsList, String listName) {
+	public static String addedSensorsToList(String sensors, String listName, boolean moreThanOne) {
 		if(de) {
-			return "Die Sensoren " + sensosAsList + " wurden erfolgreich zu der Liste \"" + listName + "\" hinzugefügt";
+			return  (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde") + " erfolgreich zur Liste \"" + listName + "\" hinzugefügt";
 		}else {
-			return "The sensors  " + sensosAsList + " got added successfully to the list \"" + listName + "\"";
+			return  (moreThanOne ? "The sensors " : "The sensor ") + sensors + " got added successfully to the list \"" + listName + "\"";
 		}
 	}
 
@@ -808,6 +808,30 @@ public class Languages {
 			return "Werte";
 		}else {
 			return "Values";
+		}
+	}
+
+	public static String containsAlready(String sensors, String listName, boolean moreThanOne) {
+		if(de) {
+			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde") + " bereits zur Liste \"" + listName + "\" hinzugefügt";
+		}else {
+			return "";
+		}
+	}
+
+	public static String removeSensorsFromList(String sensors, String listName, boolean moreThanOne) {
+		if(de) {
+			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde") + " aus der Liste \"" + listName + "\" gelöscht";
+		}else {
+			return "";
+		}
+	}
+
+	public static String listContains(int sensorsSize, int selectedSensorsSize) {
+		if(de) {
+			return "(Enthält " + sensorsSize + (sensorsSize > 1 ? "Sensoren" : "Sensor") + " davon ausgewählt " + selectedSensorsSize + ")";
+		}else {
+			return "";
 		}
 	}
 }

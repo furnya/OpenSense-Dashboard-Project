@@ -1,6 +1,7 @@
 package com.opensense.dashboard.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -124,16 +125,26 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 
 		this.eventBus.addHandler(AddSensorsToFavoriteListEvent.TYPE, event -> {
 			List<Integer> favIds = CookieManager.getFavoriteList();
+			List<Integer> notAdded = new ArrayList<>();
 			if((favIds.size() + event.getIds().size()) > MAX_FAVORITE_SENSORS) {
-				showInfo(Languages.maxFavoriteSensorsReached(MAX_FAVORITE_SENSORS));
+				showError(Languages.maxFavoriteSensorsReached(MAX_FAVORITE_SENSORS));
 				return;
 			}
 			StringBuilder string = new StringBuilder();
-			event.getIds().stream().filter(sensorId -> !favIds.contains(sensorId)).forEach(sensorId -> {
-				favIds.add(sensorId);
-				string.append(sensorId + ", ");
+			event.getIds().stream().forEach(sensorId -> {
+				if(!favIds.contains(sensorId)) {
+					favIds.add(sensorId);
+					string.append(sensorId + ", ");
+				}else {
+					notAdded.add(sensorId);
+				}
 			});
-			showSuccess(Languages.addedSensorsToList(string.toString().substring(0, string.length() - 2), Languages.favorites()));
+			if(!string.toString().substring(0, string.length() - 2).isEmpty()) {
+				showSuccess(Languages.addedSensorsToList(string.toString().substring(0, string.length() - 2), Languages.favorites(), (event.getIds().size() - notAdded.size()) > 1));
+			}
+			if(!notAdded.isEmpty()) {
+				showInfo(Languages.containsAlready(Arrays.toString(notAdded.toArray()).replace("[", "").replace("]", ""), Languages.favorites(), notAdded.size() > 1));
+			}
 			CookieManager.writeFavoriteListCookie(favIds);
 			this.dataPanelPresenter.updateFavoriteList();
 		});
@@ -145,7 +156,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 				favIds.remove(sensorId);
 				string.append(sensorId + ", ");
 			});
-			showSuccess(Languages.addedSensorsToList(string.toString().substring(0, string.length() - 2), Languages.favorites()));
+			showSuccess(Languages.removeSensorsFromList(string.toString().substring(0, string.length() - 2), Languages.favorites(), event.getIds().size() > 1));
 			CookieManager.writeFavoriteListCookie(favIds);
 			this.dataPanelPresenter.updateFavoriteList();
 		});
