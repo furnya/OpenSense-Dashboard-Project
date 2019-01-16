@@ -65,6 +65,13 @@ public class SensorItemCard extends Composite{
 		});
 	}
 
+	public void addActiveChangeHandler(ActiveChangeEventHandler handler) {
+		this.layout.addDomHandler(event -> {
+			this.setActive(!this.active);
+			handler.onActiveChangeEvent(new ActiveChangeEvent(this.active));
+		}, ClickEvent.getType());
+	}
+
 	public void setHeader(String text) {
 		this.header.setText(text);
 	}
@@ -79,13 +86,6 @@ public class SensorItemCard extends Composite{
 
 	public Div getContent() {
 		return this.content;
-	}
-
-	public void addActiveChangeHandler(ActiveChangeEventHandler handler) {
-		this.layout.addDomHandler(event -> {
-			this.setActive(!this.active);
-			handler.onActiveChangeEvent(new ActiveChangeEvent(this.active));
-		}, ClickEvent.getType());
 	}
 
 	public void setActive(boolean active) {

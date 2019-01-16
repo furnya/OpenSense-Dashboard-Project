@@ -87,10 +87,13 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	MaterialDatePicker endingDate;
 
 	@UiField
-	MaterialLabel noDatasetsLabel;
+	Div noDatasetsDiv;
 
 	@UiField
 	Div listContainer;
+	
+	@UiField
+	MaterialLabel noDataLabel;
 
 	private static VisualisationsViewUiBinder uiBinder = GWT.create(VisualisationsViewUiBinder.class);
 
@@ -260,9 +263,10 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	public void showNoDatasetsIndicator(boolean show) {
 		if(show) {
-			this.noDatasetsLabel.getElement().getStyle().clearDisplay();
+			this.noDatasetsDiv.removeStyleName("display-none");
+			this.noDataLabel.setText(Languages.noData());
 		}else {
-			this.noDatasetsLabel.getElement().getStyle().setDisplay(Display.NONE);
+			this.noDatasetsDiv.addStyleName("display-none");
 		}
 	}
 
@@ -398,5 +402,12 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 	@Override
 	public LineChart getChart() {
 		return this.chart;
+	}
+
+	@Override
+	public void showNoSensorsSelected() {
+		this.chartContainer.clear();
+		this.noDatasetsDiv.removeStyleName("display-none");
+		this.noDataLabel.setText(Languages.noSensorsSelected());
 	}
 }

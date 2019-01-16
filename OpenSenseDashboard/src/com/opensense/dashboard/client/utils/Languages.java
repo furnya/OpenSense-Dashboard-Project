@@ -102,7 +102,7 @@ public class Languages {
 
 	public static String errorDataPanelPageLoading() {
 		if(de) {
-			return "Fehler beim laden der Seite";
+			return "Fehler beim Laden der Seite";
 		}else {
 			return "Error while loading the page";
 		}
@@ -848,6 +848,14 @@ public class Languages {
 			return "Bitte gebe eine Zahl zwischen 1 und 19999 ein";
 		}else {
 			return "Please enter a number between 1 and 19999";
+		}
+	}
+	
+	public static String noSensorsSelected() {
+		if(de) {
+			return "Keine Sensoren ausgewählt";
+		}else {
+			return "No sensors selected";
 		}
 	}
 }

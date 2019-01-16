@@ -9,6 +9,7 @@
 	
 <ui:style>
 .star-container{
+	max-width: fit-content;
     display: flex;
     margin-top: -3px;
     background-color: inherit;

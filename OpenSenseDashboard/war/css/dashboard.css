@@ -530,7 +530,7 @@ input:focus+label{
 	transition: all 0.5s;
 }
 
-.sensor-item-card .header{
+.sensor-item-card .card-header{
 	display: flex;
 	width: 100%;
 	border-bottom: 2px solid #606060;
@@ -538,6 +538,17 @@ input:focus+label{
 	border-top-left-radius: 6px;
 	padding: 8px;
 	overflow: hidden;
+}
+
+.sensor-item-card[class*="collapsed"] .card-header{
+	border-bottom: none !important;
+	border-radius: 6px;
+}
+
+.sensor-item-card .header-label{
+	margin-top: 5px;
+	font-size: 20px;	
+    white-space: nowrap;
 }
 
 .sensor-item-card .round-button{
@@ -548,8 +559,16 @@ input:focus+label{
 	padding: unset;
 	top: 20%;
 }
+.sensor-item-card[class*="collapsed"] .round-button{
+	position: absolute;
+	border-radius: 25px;
+	width: 40px;
+	height: 40px;
+	padding: unset;
+	top: 12%;
+}
 
-.sensor-item-card .round-button:hover{
+.sensor-item-card .round-button[class*="red-button"]:hover{
 	background-color: red !important;
 }
 
@@ -559,14 +578,24 @@ input:focus+label{
 	filter: invert(100%) brightness(100%);
 }
 
-.sensor-item-card .content{
+.sensor-item-card[class*="collapsed"] .round-button > img{
+	width: 18px;
+	height: 18px;
+	filter: invert(100%) brightness(100%);
+}
+
+.sensor-item-card[class*="collapsed"] .info-content{
+	display: NONE !important;
+}
+
+.sensor-item-card .card-content{
 	padding: 8px;
 	overflow: hidden;
 	white-space: nowrap;
 	width: 85%;
 }
 
-.card-active .header{
+.card-active .card-header{
 	background-color: #42DCA3 !important;
 }
 
@@ -576,15 +605,34 @@ input:focus+label{
 	box-shadow: 0px 0px 8px 3px white !important;
 }
 
-.sensor-item-card .check{
+.sensor-item-card[class*="collapsed"] .card-active-check{
+	display: NONE !important;	
+}
+.sensor-item-card .card-active-check{
     width: 30px;
     height: 25px;
     position: absolute;
     bottom: 4%;
     right: 1%;
 }
-.colHeader-active{
-	background-color: white !important;
-	border-bottom-left-radius: 0px !important;
-	border-bottom-right-radius: 0px !important;
+
+.sensor-item-card[class*="collapsed"] .card-action-buttons > button{
+	top: 12%;
 }
+.sensor-item-card .card-action-buttons > button{
+	top: 8%;
+}
+
+.sensor-item-card .card-action-buttons > :nth-child(1){
+	right: 9%;
+}
+.sensor-item-card .card-action-buttons > :nth-child(2){
+	right: 14%;
+}
+.sensor-item-card .card-action-buttons >:nth-child(3){
+	right: 4%;
+}
+.display-none{
+	display: none;
+}
+
