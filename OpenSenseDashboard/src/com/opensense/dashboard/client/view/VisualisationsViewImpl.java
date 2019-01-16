@@ -185,6 +185,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		Defaults.getGlobal().getAnimation().setDuration(0);
 		Defaults.getScale().getGrideLines().setColor("rgba(0,0,0,0.5)");
 		this.chart = new LineChart();
+		this.chart.getCanvas().addClassName("chart-height");
+		this.chart.getOptions().setMaintainAspectRatio(false);
 		this.chart.getOptions().setShowLines(true);
 		this.chart.getOptions().getTooltips().setIntersect(false);
 		this.chart.getOptions().getTooltips().setMode(InteractionMode.index);

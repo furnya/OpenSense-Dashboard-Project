@@ -48,7 +48,7 @@
 	overflow: auto;
 }
 .sensor-container-inner{
-	max-height: 93vh;
+	max-height: 90vh;
 	background-color: #404040;
 }
 .sensor-list-container > Div{
@@ -91,7 +91,8 @@
 }
 .no-data-div{
 	background: #606060;
-	height: 25vw;
+	height: 38vw;
+	max-height: 75vh;
 	padding: 0 10%;
 }
 .no-data-label{
@@ -118,7 +119,7 @@
 			<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
 		</bh:Div>
 		<d:Spinner size="MEDIUM" ui:field="viewSpinner" display="NONE" />
-		<bh:Div ui:field="noDatasetsDiv" addStyleNames="{style.no-data-div}">
+		<bh:Div ui:field="noDatasetsDiv" addStyleNames="{style.no-data-div} round-corners">
 			<m:MaterialLabel ui:field="noDataLabel" textColor="WHITE" text="{lang.noSensorsSelected}" addStyleNames="{style.no-data-label}"/>
 		</bh:Div>
 		<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>	

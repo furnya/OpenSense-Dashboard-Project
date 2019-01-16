@@ -635,4 +635,7 @@ input:focus+label{
 .display-none{
 	display: none;
 }
-
+.chart-height{
+	height: 38vw;
+	max-height: 75vh;
+}
