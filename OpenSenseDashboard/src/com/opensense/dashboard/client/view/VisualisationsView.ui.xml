@@ -48,8 +48,8 @@
 	overflow: auto;
 }
 .sensor-container-inner{
-	background-color: black;
-	padding: 5px;
+	max-height: 93vh;
+	background-color: #404040;
 }
 .sensor-list-container > Div{
 	margin-bottom: 15px;
