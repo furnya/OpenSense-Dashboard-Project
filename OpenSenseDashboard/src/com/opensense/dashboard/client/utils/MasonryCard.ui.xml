@@ -11,12 +11,36 @@
 		field="lang" />
 	<ui:with
 		type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
-	
-<ui:style>
 
-</ui:style>
-
-<bh:Div >
-</bh:Div>
-
+	<ui:style>
+	.add-sensor-modal{
+	}
+	.max> div > ul {
+    max-height: 125px!important;
+	}
+	.mapContainer{
+		width: 60%;
+		height: 100%;
+	}
+	.locContainer{
+		width: 100%;
+		height: 70%;
+	}
+	.locBoxContainer{
+		width: 40%;
+		padding: 10px;
+	}
+	.locBoxContainer > *{
+		width: 100%;
+	}
+	.modalHeader{
+		font-size: 200%;
+		text-transform: uppercase;
+	}
+	</ui:style>
+	<ma:masonry.MaterialMasonry ui:field="masonry">
+		<m:MaterialColumn grid="l4 s12 m6" />
+		<m:MaterialColumn grid="l4 s12 m6" />
+		<m:MaterialColumn grid="l4 s12 m6" />
+	</ma:masonry.MaterialMasonry>
 </ui:UiBinder>
