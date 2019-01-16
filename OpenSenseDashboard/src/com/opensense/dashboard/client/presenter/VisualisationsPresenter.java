@@ -133,6 +133,8 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	
 	public void onSelectedSensorsChange(List<Integer> newIds) {
 		if(newIds==null || newIds.isEmpty()) {
+			this.sensorIds.forEach(this::removeDataset);
+			this.view.updateDatasets(new ArrayList<>(datasetMap.values()));
 			this.setSensorIdsCopy(newIds);
 			this.view.showNoSensorsSelected();
 			return;
