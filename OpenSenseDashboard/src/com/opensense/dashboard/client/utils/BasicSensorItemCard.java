@@ -7,6 +7,16 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.maps.client.MapImpl;
+import com.google.gwt.maps.client.MapOptions;
+import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.maps.client.base.LatLng;
+import com.google.gwt.maps.client.controls.MapTypeStyle;
+import com.google.gwt.maps.client.maptypes.MapTypeStyleElementType;
+import com.google.gwt.maps.client.maptypes.MapTypeStyleFeatureType;
+import com.google.gwt.maps.client.maptypes.MapTypeStyler;
+import com.google.gwt.maps.client.overlays.Marker;
+import com.google.gwt.maps.client.overlays.MarkerOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -64,6 +74,12 @@ public class BasicSensorItemCard extends Composite{
 	
 	@UiField
 	Div headerContainer;
+	
+	@UiField
+	Div map;
+	
+	private MapOptions mapOptions;
+	private MapWidget mapWidget;
 
 	public BasicSensorItemCard() {
 		this.initWidget(uiBinder.createAndBindUi(this));
@@ -151,6 +167,43 @@ public class BasicSensorItemCard extends Composite{
 		}else {
 			this.addContentValue(Languages.values(), Languages.noValuePreviewData());
 		}
+			this.mapOptions = MapOptions.newInstance();
+			this.mapOptions.setMinZoom(2);
+			this.mapOptions.setMaxZoom(18);
+			this.mapOptions.setDraggable(true);
+			this.mapOptions.setScaleControl(true);
+			this.mapOptions.setStreetViewControl(false);
+			this.mapOptions.setMapTypeControl(false);
+			this.mapOptions.setScrollWheel(true);
+			this.mapOptions.setPanControl(false);
+			this.mapOptions.setZoomControl(true);
+			this.mapOptions.setDisableDoubleClickZoom(true);
+			MapTypeStyle mapStyle = MapTypeStyle.newInstance();
+			MapTypeStyle mapStyle2 = MapTypeStyle.newInstance();
+			mapStyle.setFeatureType(MapTypeStyleFeatureType.POI);
+			mapStyle2.setFeatureType(MapTypeStyleFeatureType.TRANSIT);
+			mapStyle.setElementType(MapTypeStyleElementType.LABELS);
+			mapStyle2.setElementType(MapTypeStyleElementType.LABELS);
+
+			String visibility = "off";
+			MapTypeStyler styler = MapTypeStyler.newVisibilityStyler(visibility);
+			MapTypeStyler[] stylers = new MapTypeStyler[1];
+			stylers[0] = styler;
+			mapStyle.setStylers(stylers);
+			mapStyle2.setStylers(stylers);
+			MapTypeStyle[] mapStyleArray = new MapTypeStyle[2];
+			mapStyleArray[0] = mapStyle;
+			mapStyleArray[1] = mapStyle2;
+			this.mapOptions.setMapTypeStyles(mapStyleArray);
+			MapImpl mapImpl = MapImpl.newInstance(this.map.getElement(), this.mapOptions);
+			this.mapWidget = MapWidget.newInstance(mapImpl);
+			this.mapWidget.setVisible(true);
+			LatLng position = LatLng.newInstance(sensor.getLocation().getLat(),sensor.getLocation().getLon());
+			MarkerOptions markerOpt = MarkerOptions.newInstance();
+			markerOpt.setPosition(position);
+			markerOpt.setMap(this.mapWidget);
+			Marker marker = Marker.newInstance(markerOpt);
+			marker.setDraggable(false);
 		this.infoLoaded = true;
 		this.layout.getElement().removeClassName("collapsed");
 	}

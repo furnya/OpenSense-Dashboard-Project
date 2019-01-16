@@ -18,6 +18,10 @@
 	font-size: 20px;	
     white-space: nowrap;
 }
+.mapContainer{
+		width: 300px;
+		height: 300px;
+}
 </ui:style>
 
 <bh:Div ui:field="layout" addStyleNames="user-select-none round-corners sensor-item-card collapsed">
@@ -43,6 +47,7 @@
 		<m:MaterialLabel text="{lang.accuracy}" addStyleNames="{style.float-left}"/>
 		<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
 		<bh:Div ui:field="content" addStyleNames="card-content"/>
+		<bh:Div ui:field="map" addStyleNames="round-corners {style.mapContainer}"/>
 		<m:MaterialImage ui:field="check" addStyleNames="card-active-check" url="{gui.check.getSafeUri.asString}" display="NONE"/>
 	</bh:Div>
 </bh:Div>
