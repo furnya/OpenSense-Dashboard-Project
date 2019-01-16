@@ -85,6 +85,9 @@ public class ListCollapsibleItem extends Composite{
 	MaterialButton deleteSensorsButton;
 
 	@UiField
+	MaterialButton showInfoButton;
+
+	@UiField
 	MaterialDropDown listDropDown;
 
 	@UiField
@@ -145,6 +148,11 @@ public class ListCollapsibleItem extends Composite{
 		this.addToListButton.addClickHandler(handler);
 	}
 
+	public void addShowInfoButtonButtonClickHandler(ClickHandler handler) {
+		this.showInfoButton.getElement().getStyle().clearDisplay();
+		this.showInfoButton.addClickHandler(handler);
+	}
+
 	public void setSelectAllButtonEnabled(boolean enabled) {
 		this.selectAllButton.setEnabled(enabled);
 	}
@@ -155,6 +163,7 @@ public class ListCollapsibleItem extends Composite{
 		this.showOnMapButton.setEnabled(enabled);
 		this.addToListButton.setEnabled(enabled);
 		this.deleteSensorsButton.setEnabled(enabled);
+		this.showInfoButton.setEnabled(enabled);
 	}
 
 	public void addDeleteButtonClickHandler(ClickHandler handler) {

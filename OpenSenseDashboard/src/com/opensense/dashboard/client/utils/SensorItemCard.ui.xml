@@ -25,9 +25,11 @@
 		<m:MaterialLabel ui:field="header" text="HEADER" addStyleNames="header-label"/>
 		<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
 	</bh:Div>
-	<m:MaterialButton ui:field="favButton" addStyleNames="round-button d-btn {style.right}">
-		<m:MaterialImage url="{gui.favorite.getSafeUri.asString}"/>
-	</m:MaterialButton>
+	<bh:Div addStyleNames="card-action-buttons">
+		<m:MaterialButton ui:field="favButton" addStyleNames="round-button d-btn {style.right}">
+			<m:MaterialImage url="{gui.favorite.getSafeUri.asString}"/>
+		</m:MaterialButton>
+	</bh:Div>
 	<bh:Div ui:field="content" addStyleNames="card-content"/>
 	<m:MaterialImage ui:field="check" addStyleNames="card-active-check" url="{gui.check.getSafeUri.asString}" display="NONE"/>
 </bh:Div>

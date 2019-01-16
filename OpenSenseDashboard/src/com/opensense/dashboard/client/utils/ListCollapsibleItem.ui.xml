@@ -104,9 +104,14 @@
 				<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners">
 				</m:MaterialDropDown>
 			</bh:Div>
-			<m:MaterialButton display="NONE" ui:field="deleteSensorsButton" text="{lang.deleteSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10" enabled="false">
-				<m:MaterialImage url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-			</m:MaterialButton>
+			<bh:Div addStyleNames="flex list-action-btns">
+				<m:MaterialButton display="NONE" ui:field="showInfoButton" text="{lang.information}" textColor="WHITE" addStyleNames="d-btn margin-top-10" enabled="false">
+					<m:MaterialImage url="{gui.info.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+				</m:MaterialButton>
+				<m:MaterialButton display="NONE" ui:field="deleteSensorsButton" text="{lang.deleteSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10" enabled="false">
+					<m:MaterialImage url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+				</m:MaterialButton>
+			</bh:Div>
 		</bh:Div>
 		<d:Pager ui:field="pagerTop" addStyleNames="pager"/>
 		<d:Spinner ui:field="listItemSpinner" addStyleNames="margin-top-10"/>

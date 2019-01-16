@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -98,7 +99,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		item.setSpinnerSize(options.getSpinnerSize());
 		item.addSelectAllButtonClickHandler(event -> this.selectAllSensorsInList(listId, event.isSelectAll()));
 		item.addHeaderClickedHandler(event -> this.onSelectedItemsChanged());
-
+		item.addShowInfoButtonButtonClickHandler(event -> this.selectedSensorIdsInLists.get(listId).forEach(sensorId -> this.clickElement(this.sensorCardsInLists.get(listId).get(sensorId).getInfoButtonElement())));
 		if(editable && options.isEditingActive()) {
 			item.addListNameInputHandler(event -> this.presenter.changeListName(listId, event.getListName()));
 			item.addDeleteButtonClickHandler(event -> this.deleteList(listId));
@@ -115,7 +116,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		if(options.isShowSearchButton()) {
 			item.addShowSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, this.selectedSensorIdsInLists.get(this.activeItemId))));
 		}
-
 		if(this.collapsiblesItems.containsKey(listId)) {
 			this.collapsiblesItems.get(listId).removeFromParent();
 			this.collapsiblesItems.replace(listId, item);
@@ -375,9 +375,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		sensors.forEach(sensor -> {
 			if(this.sensorCardsInLists.get(listId).containsKey(sensor.getSensorId())){
 				this.sensorCardsInLists.get(listId).get(sensor.getSensorId()).showSensorInfo(sensor);
-				//TODO: expend card
 			}
 		});
 	}
+
+	private native void clickElement(Element infoButtonElement) /*-{
+		infoButtonElement.click();
+	}-*/;
 
 }

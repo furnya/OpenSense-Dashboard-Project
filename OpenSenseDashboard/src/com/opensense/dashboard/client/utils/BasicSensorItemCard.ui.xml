@@ -19,8 +19,8 @@
     white-space: nowrap;
 }
 .mapContainer{
-		width: 300px;
-		height: 300px;
+	width: 240px;
+    height: 240px;
 }
 </ui:style>
 
@@ -44,10 +44,14 @@
 		</m:MaterialButton>
 	</bh:Div>
 	<bh:Div addStyleNames="info-content">
-		<m:MaterialLabel text="{lang.accuracy}" addStyleNames="{style.float-left}"/>
-		<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
-		<bh:Div ui:field="content" addStyleNames="card-content"/>
-		<bh:Div ui:field="map" addStyleNames="round-corners {style.mapContainer}"/>
+		<bh:Div addStyleNames="accuracy-container">
+			<m:MaterialLabel text="{lang.accuracy}" addStyleNames="{style.float-left}"/>
+			<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
+		</bh:Div>
+		<bh:Div addStyleNames="flex">
+			<bh:Div ui:field="content" addStyleNames="card-content"/>
+			<bh:Div ui:field="map" addStyleNames="round-corners {style.mapContainer}"/>
+		</bh:Div>
 		<m:MaterialImage ui:field="check" addStyleNames="card-active-check" url="{gui.check.getSafeUri.asString}" display="NONE"/>
 	</bh:Div>
 </bh:Div>

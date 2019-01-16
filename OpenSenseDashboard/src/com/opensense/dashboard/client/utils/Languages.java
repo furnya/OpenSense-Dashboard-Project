@@ -834,7 +834,7 @@ public class Languages {
 			return "";
 		}
 	}
-	
+
 	public static String errorMessageAccuracy() {
 		if(de) {
 			return "Bitte gebe eine Zahl zwischen 0 und 10 ein";
@@ -842,7 +842,7 @@ public class Languages {
 			return "Please enter a number between 0 and 10";
 		}
 	}
-	
+
 	public static String errorMessageMaxSens() {
 		if(de) {
 			return "Bitte gebe eine Zahl zwischen 1 und 19999 ein";
@@ -850,12 +850,20 @@ public class Languages {
 			return "Please enter a number between 1 and 19999";
 		}
 	}
-	
+
 	public static String noSensorsSelected() {
 		if(de) {
 			return "Keine Sensoren ausgewählt";
 		}else {
 			return "No sensors selected";
+		}
+	}
+
+	public static String information() {
+		if(de) {
+			return "Information zeigen";
+		}else {
+			return "Show information";
 		}
 	}
 }

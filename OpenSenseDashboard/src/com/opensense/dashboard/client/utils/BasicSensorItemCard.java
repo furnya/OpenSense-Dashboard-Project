@@ -4,6 +4,7 @@ import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -71,13 +72,13 @@ public class BasicSensorItemCard extends Composite{
 
 	@UiField
 	MaterialImage check;
-	
+
 	@UiField
 	Div headerContainer;
-	
+
 	@UiField
 	Div map;
-	
+
 	private MapOptions mapOptions;
 	private MapWidget mapWidget;
 
@@ -167,43 +168,43 @@ public class BasicSensorItemCard extends Composite{
 		}else {
 			this.addContentValue(Languages.values(), Languages.noValuePreviewData());
 		}
-			this.mapOptions = MapOptions.newInstance();
-			this.mapOptions.setMinZoom(2);
-			this.mapOptions.setMaxZoom(18);
-			this.mapOptions.setDraggable(true);
-			this.mapOptions.setScaleControl(true);
-			this.mapOptions.setStreetViewControl(false);
-			this.mapOptions.setMapTypeControl(false);
-			this.mapOptions.setScrollWheel(true);
-			this.mapOptions.setPanControl(false);
-			this.mapOptions.setZoomControl(true);
-			this.mapOptions.setDisableDoubleClickZoom(true);
-			MapTypeStyle mapStyle = MapTypeStyle.newInstance();
-			MapTypeStyle mapStyle2 = MapTypeStyle.newInstance();
-			mapStyle.setFeatureType(MapTypeStyleFeatureType.POI);
-			mapStyle2.setFeatureType(MapTypeStyleFeatureType.TRANSIT);
-			mapStyle.setElementType(MapTypeStyleElementType.LABELS);
-			mapStyle2.setElementType(MapTypeStyleElementType.LABELS);
+		this.mapOptions = MapOptions.newInstance();
+		this.mapOptions.setMinZoom(2);
+		this.mapOptions.setMaxZoom(18);
+		this.mapOptions.setDraggable(true);
+		this.mapOptions.setScaleControl(true);
+		this.mapOptions.setStreetViewControl(false);
+		this.mapOptions.setMapTypeControl(false);
+		this.mapOptions.setScrollWheel(true);
+		this.mapOptions.setPanControl(false);
+		this.mapOptions.setZoomControl(true);
+		this.mapOptions.setDisableDoubleClickZoom(true);
+		MapTypeStyle mapStyle = MapTypeStyle.newInstance();
+		MapTypeStyle mapStyle2 = MapTypeStyle.newInstance();
+		mapStyle.setFeatureType(MapTypeStyleFeatureType.POI);
+		mapStyle2.setFeatureType(MapTypeStyleFeatureType.TRANSIT);
+		mapStyle.setElementType(MapTypeStyleElementType.LABELS);
+		mapStyle2.setElementType(MapTypeStyleElementType.LABELS);
 
-			String visibility = "off";
-			MapTypeStyler styler = MapTypeStyler.newVisibilityStyler(visibility);
-			MapTypeStyler[] stylers = new MapTypeStyler[1];
-			stylers[0] = styler;
-			mapStyle.setStylers(stylers);
-			mapStyle2.setStylers(stylers);
-			MapTypeStyle[] mapStyleArray = new MapTypeStyle[2];
-			mapStyleArray[0] = mapStyle;
-			mapStyleArray[1] = mapStyle2;
-			this.mapOptions.setMapTypeStyles(mapStyleArray);
-			MapImpl mapImpl = MapImpl.newInstance(this.map.getElement(), this.mapOptions);
-			this.mapWidget = MapWidget.newInstance(mapImpl);
-			this.mapWidget.setVisible(true);
-			LatLng position = LatLng.newInstance(sensor.getLocation().getLat(),sensor.getLocation().getLon());
-			MarkerOptions markerOpt = MarkerOptions.newInstance();
-			markerOpt.setPosition(position);
-			markerOpt.setMap(this.mapWidget);
-			Marker marker = Marker.newInstance(markerOpt);
-			marker.setDraggable(false);
+		String visibility = "off";
+		MapTypeStyler styler = MapTypeStyler.newVisibilityStyler(visibility);
+		MapTypeStyler[] stylers = new MapTypeStyler[1];
+		stylers[0] = styler;
+		mapStyle.setStylers(stylers);
+		mapStyle2.setStylers(stylers);
+		MapTypeStyle[] mapStyleArray = new MapTypeStyle[2];
+		mapStyleArray[0] = mapStyle;
+		mapStyleArray[1] = mapStyle2;
+		this.mapOptions.setMapTypeStyles(mapStyleArray);
+		MapImpl mapImpl = MapImpl.newInstance(this.map.getElement(), this.mapOptions);
+		this.mapWidget = MapWidget.newInstance(mapImpl);
+		this.mapWidget.setVisible(true);
+		LatLng position = LatLng.newInstance(sensor.getLocation().getLat(),sensor.getLocation().getLon());
+		MarkerOptions markerOpt = MarkerOptions.newInstance();
+		markerOpt.setPosition(position);
+		markerOpt.setMap(this.mapWidget);
+		Marker marker = Marker.newInstance(markerOpt);
+		marker.setDraggable(false);
 		this.infoLoaded = true;
 		this.layout.getElement().removeClassName("collapsed");
 	}
@@ -219,7 +220,7 @@ public class BasicSensorItemCard extends Composite{
 		}
 		this.active = active;
 	}
-	
+
 	public void setColor(String color) {
 		this.layout.removeStyleName("card-active");
 		this.layout.getElement().setAttribute("style",  "background-color: " + color);
@@ -227,6 +228,10 @@ public class BasicSensorItemCard extends Composite{
 
 	public void showLoadingIndicator(boolean show) {
 		//TODO:
+	}
+
+	public Element getInfoButtonElement() {
+		return this.showInfoButton.getElement();
 	}
 
 }
