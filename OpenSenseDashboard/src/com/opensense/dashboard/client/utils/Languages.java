@@ -669,7 +669,7 @@ public class Languages {
 
 	public static String attributionText() {
 		if(de){
-			return "Beschreibungstext";
+			return "Zuordnungstext";
 		}else{
 			return "Attribution text";
 		}
