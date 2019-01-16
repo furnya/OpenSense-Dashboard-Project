@@ -27,7 +27,6 @@
   <inherits name="org.pepstock.charba.Charba"/>
   <inherits name='com.github.gwtd3.D3' />
   <inherits name='com.googlecode.gwt.crypto.Crypto'/>
-  <inherits name="gwt.material.design.addins.GwtMaterialAddins"/>
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.opensense.dashboard.client.Dashboard'/>
