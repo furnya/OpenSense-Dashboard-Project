@@ -2,11 +2,15 @@ package com.opensense.dashboard.client.presenter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.googlecode.gwt.crypto.bouncycastle.DataLengthException;
+import com.googlecode.gwt.crypto.bouncycastle.InvalidCipherTextException;
+import com.googlecode.gwt.crypto.client.TripleDesCipher;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.AuthenticationService;
@@ -83,5 +87,42 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	@Override
 	public boolean isUserLoggedIn() {
 		return !this.appController.isGuest();
+	}
+
+	@Override
+	public void sendRegisterRequest(String username, String password, String email) {
+		TripleDesCipher cipher = new TripleDesCipher();
+		cipher.setKey(new byte[] { -110, 121, -65, 22, -60, 61, -22, -60, 21, -122, 41, -89, -89, -68, -8, 41, -119, -51, -12, -36, 19, -8, -17, 47 });
+		try {
+			password = cipher.encrypt(password);
+		} catch (DataLengthException | IllegalStateException | InvalidCipherTextException e) {
+			AppController.showError(Languages.connectionError());
+			return;
+		}
+		AuthenticationService.Util.getInstance().userRegisterRequest(username, password, email, new DefaultAsyncCallback<ActionResult>(result -> {
+			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())){
+				this.appController.onUserLoggedIn(true);
+			}else{
+				AppController.showError(Languages.invalidParameters());
+			}
+		},caught -> {
+			this.view.showLoginNotValid();
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure requesting the register.");
+		}, false));		
+	}
+
+	@Override
+	public void sendForgotPasswordRequest(String email) {
+		AuthenticationService.Util.getInstance().forgotPasswordRequest(email, new DefaultAsyncCallback<ActionResult>(result -> {
+			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())){
+				AppController.showSuccess(Languages.passwordResetSent());
+			}else{
+				AppController.showError(Languages.connectionError());
+			}
+		},caught -> {
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure requesting the password reset.");
+		}, false));
 	}
 }

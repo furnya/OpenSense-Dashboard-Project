@@ -145,7 +145,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public ActionResult createSensor(CreateSensorRequest request) {
-		if(SessionUser.getInstance().isGuest()) {
+		if(SessionUser.getInstance().isGuest() || SessionUser.getInstance().getToken()==null) {
 			ActionResult ar = new ActionResult(ActionResultType.FAILED);
 			ar.setErrorMessage(Languages.notLoggedIn());
 			return ar;
@@ -167,7 +167,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public ActionResult deleteSensorsFromMySensors(List<Integer> sensorIds) {
-		if(SessionUser.getInstance().isGuest()) {
+		if(SessionUser.getInstance().isGuest()  || SessionUser.getInstance().getToken()==null) {
 			return new ActionResult(ActionResultType.FAILED);
 		}
 		boolean[] deleteFailed = {false};
@@ -184,48 +184,4 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
 	}
-	
-	public void sendResetPasswordMail(String email) {
-		Properties mailProps = new Properties();
-        mailProps.put("mail.smtp.from", "Opensense-Dashboard");
-        mailProps.put("mail.smtp.host", "smtp.gmail.com");
-        mailProps.put("mail.smtp.port", "25");
-        mailProps.put("mail.smtp.auth", true);
-        mailProps.put("mail.smtp.socketFactory.port", "587");
-        mailProps.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        mailProps.put("mail.smtp.socketFactory.fallback", "true");
-        mailProps.put("mail.smtp.starttls.enable", "true");
-
-        Session mailSession = Session.getDefaultInstance(mailProps, new Authenticator() {
-
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("opensense.dashboard@gmail.com", "8smsl8Kg2");
-            }
-
-        });
-
-        MimeMessage message = new MimeMessage(mailSession);
-        try {
-			message.setFrom(new InternetAddress("opensense.dashboard@gmail.com"));
-			String[] emails = { email };
-	        InternetAddress dests[] = new InternetAddress[emails.length];
-	        for (int i = 0; i < emails.length; i++) {
-	            dests[i] = new InternetAddress(emails[i].trim().toLowerCase());
-	        }
-	        message.setRecipients(Message.RecipientType.TO, dests);
-	        message.setSubject("Password Reset", "UTF-8");
-	        Multipart mp = new MimeMultipart();
-	        MimeBodyPart mbp = new MimeBodyPart();
-	        mbp.setContent("New password: blabla", "text/html;charset=utf-8");
-	        mp.addBodyPart(mbp);
-	        message.setContent(mp);
-	        message.setSentDate(new java.util.Date());
-
-	        Transport.send(message);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

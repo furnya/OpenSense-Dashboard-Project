@@ -11,6 +11,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.Spinner;
 
@@ -48,29 +49,75 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 
 	@UiField
 	Spinner spinner;
+	
+	@UiField
+	MaterialTextBox email;
+	
+	@UiField
+	MaterialLabel forgotPassword;
 
 	public UserViewImpl() {
 		this.initWidget(uiBinder.createAndBindUi(this));
 	}
 
+	@UiHandler("forgotPassword")
+	public void onForgotPasswordClicked(ClickEvent e) {
+		this.userName.getElement().getStyle().setDisplay(Display.NONE);
+		this.password.getElement().getStyle().setDisplay(Display.NONE);
+		this.passwordVerify.getElement().getStyle().setDisplay(Display.NONE);
+		this.email.getElement().getStyle().setDisplay(Display.BLOCK);
+		this.loginButton.setText(Languages.send());
+	}
+	
 	@UiHandler("regiLabel")
 	public void onRegiLabelClicked(ClickEvent e) {
 		this.resetViewElements();
 		if(Languages.register().equals(this.regiLabel.getText())) {
 			this.regiLabel.setText(Languages.login());
+			this.loginButton.setText(Languages.register());
+			this.userName.getElement().getStyle().setDisplay(Display.BLOCK);
+			this.password.getElement().getStyle().setDisplay(Display.BLOCK);
 			this.passwordVerify.getElement().getStyle().setDisplay(Display.BLOCK);
+			this.email.getElement().getStyle().setDisplay(Display.BLOCK);
 		}else {
 			this.regiLabel.setText(Languages.register());
+			this.loginButton.setText(Languages.login());
+			this.userName.getElement().getStyle().setDisplay(Display.BLOCK);
+			this.password.getElement().getStyle().setDisplay(Display.BLOCK);
 			this.passwordVerify.getElement().getStyle().setDisplay(Display.NONE);
+			this.email.getElement().getStyle().setDisplay(Display.NONE);
 		}
 	}
 
 	@UiHandler("loginButton")
 	public void onLoginButtonClicked(ClickEvent e) {
-		this.spinner.getElement().getStyle().clearDisplay();
-		this.loginButton.setEnabled(false);
-		this.regiLabel.setEnabled(false);
-		this.presenter.sendLoginRequest(this.userName.getText(), this.password.getText());
+		if(Languages.register().equals(this.loginButton.getText())) {
+			//TODO ask database if username exists
+			if(this.userName.getValue()==null) {
+				AppController.showError(Languages.invalidUsername());
+				return;
+			}
+			if(this.password.getValue()==null || this.passwordVerify.getValue()==null || this.password.getValue()!=this.passwordVerify.getValue()) {
+				AppController.showError(Languages.passwordsDontMatch());
+				return;
+			}
+			if(this.email.getValue()==null || !this.email.getValue().matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
+				AppController.showError(Languages.invalidEmail());
+				return;
+			}
+			this.presenter.sendRegisterRequest(this.userName.getValue(),this.password.getValue(),this.email.getValue());
+		}else if(Languages.login().equals(this.loginButton.getText())){
+			this.spinner.getElement().getStyle().clearDisplay();
+			this.loginButton.setEnabled(false);
+			this.regiLabel.setEnabled(false);
+			this.presenter.sendLoginRequest(this.userName.getText(), this.password.getText());
+		}else if(Languages.send().equals(this.loginButton.getText())) {
+			if(this.email.getValue()==null || !this.email.getValue().matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
+				AppController.showError(Languages.invalidEmail());
+				return;
+			}
+			this.presenter.sendForgotPasswordRequest(this.email.getValue());
+		}
 	}
 
 	@UiHandler("userName")

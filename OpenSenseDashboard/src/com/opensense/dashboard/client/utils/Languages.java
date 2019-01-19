@@ -866,4 +866,53 @@ public class Languages {
 			return "Show information";
 		}
 	}
+	
+	public static String emailAddress() {
+		if(de) {
+			return "Email-Adresse";
+		}else {
+			return "Email address";
+		}
+	}
+	
+	public static String passwordsDontMatch() {
+		if(de) {
+			return "Passwörter stimmen nicht überein";
+		}else {
+			return "Passwords do not match";
+		}
+	}
+	
+	public static String invalidEmail() {
+		if(de) {
+			return "Ungültige Email-Adresse";
+		}else {
+			return "Invalid email address";
+		}
+	}
+	
+	public static String invalidUsername() {
+		if(de) {
+			return "Ungültiger Benutzername";
+		}else {
+			return "Invalid username";
+		}
+	}
+	
+	public static String send() {
+		if(de) {
+			return "Absenden";
+		}else {
+			return "Send";
+		}
+	}
+	
+	public static String passwordResetSent() {
+		if(de) {
+			return "Passwort-Zurücksetzung wurde gesendet";
+		}else {
+			return "Password reset was sent";
+		}
+	}
+	
 }

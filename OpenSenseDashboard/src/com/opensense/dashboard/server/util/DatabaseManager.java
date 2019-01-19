@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,6 +14,8 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.UserList;
+
+import gwt.material.design.incubator.client.chart.chartjs.RadarChart;
 
 public class DatabaseManager {
 
@@ -192,5 +195,78 @@ public class DatabaseManager {
 			return new ActionResult(ActionResultType.FAILED);
 		}
 		return new ActionResult((result != null) && (result != 0) ? ActionResultType.SUCCESSFUL : ActionResultType.FAILED);
+	}
+	
+	public ActionResult createUserProfile(String email, String username, String password) {
+		String sql = "INSERT INTO user_profiles (email, password, username) VALUES (?, ?, ?);";
+		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
+			statement.setString(1, email);
+			statement.setString(2, password);
+			statement.setString(3, username);
+			statement.executeUpdate();
+		} catch (Exception e) {
+			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
+			return new ActionResult(ActionResultType.FAILED);
+		}
+		return new ActionResult(ActionResultType.SUCCESSFUL);
+	}
+	
+	public String getPassword(String username) {
+		String sql = "SELECT password FROM user_profiles WHERE username = ?;";
+		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
+			statement.setString(1, username);
+			ResultSet resultSet = statement.executeQuery();
+			String password = "";
+			while(resultSet.next()) {
+				password = resultSet.getString("password");
+			}
+			return password;
+		} catch (Exception e) {
+			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
+			return null;
+		}
+	}
+	
+	public int getUserIdFromUsername(String username) {
+		String sql = "SELECT user_id FROM user_profiles WHERE username = ?;";
+		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
+			statement.setString(1, username);
+			ResultSet resultSet = statement.executeQuery();
+			Integer userId = null;
+			while(resultSet.next()) {
+				userId = resultSet.getInt("user_id");
+			}
+			return userId;
+		} catch (Exception e) {
+			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
+			return new Random().nextInt();
+		}
+	}
+	
+	public int getUserIdFromEmail(String email) {
+		String sql = "SELECT user_id FROM user_profiles WHERE email = ?;";
+		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
+			statement.setString(1, email);
+			ResultSet resultSet = statement.executeQuery();
+			Integer userId = null;
+			while(resultSet.next()) {
+				userId = resultSet.getInt("user_id");
+			}
+			return userId;
+		} catch (Exception e) {
+			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
+			return new Random().nextInt();
+		}
+	}
+
+	public void setUserPassword(Integer userId, String password) {
+		String sql = "UPDATE user_profiles SET password=? WHERE  user_id=?;";
+		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
+			statement.setString(1, password);
+			statement.setInt(2, userId);
+			statement.executeUpdate();
+		} catch (Exception e) {
+			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
+		}
 	}
 }
