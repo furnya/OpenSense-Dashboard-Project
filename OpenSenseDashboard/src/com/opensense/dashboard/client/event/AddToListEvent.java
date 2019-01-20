@@ -9,10 +9,12 @@ public class AddToListEvent extends GwtEvent<AddToListEventHandler>{
 	public static final Type<AddToListEventHandler> TYPE = new Type<>();
 
 	private int listId;
+	private String listName;
 
-	public AddToListEvent(Integer listId) {
+	public AddToListEvent(Integer listId, String listName) {
 		super();
 		this.listId = listId;
+		this.listName = listName;
 	}
 
 	@Override
@@ -27,5 +29,9 @@ public class AddToListEvent extends GwtEvent<AddToListEventHandler>{
 
 	public int getListId() {
 		return this.listId;
+	}
+	
+	public String getListName() {
+		return this.listName;
 	}
 }

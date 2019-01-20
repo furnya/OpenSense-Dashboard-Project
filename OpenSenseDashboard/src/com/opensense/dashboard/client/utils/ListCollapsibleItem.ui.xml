@@ -119,13 +119,13 @@
 					</m:MaterialButton>
 				</m:MaterialTooltip>
 				<m:MaterialTooltip text="{lang.addToListTooltip}">
-					<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn" enabled="false" activates="dp-3">
+					<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
 						<d:Spinner display="NONE" addStyleNames="{style.drop-down-spinner}" size="SMALL" ui:field="listDropDownSpinner"/>
 						<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 					</m:MaterialButton>
 				</m:MaterialTooltip>
-				<m:MaterialDropDown ui:field="listDropDown" activator="dp-3" addStyleNames="round-corners {style.drop-down}">
-					<m:MaterialLink ui:field="favoriteButton" text="{lang.favorites}" >
+				<m:MaterialDropDown ui:field="listDropDown" activator="dp" addStyleNames="round-corners {style.drop-down}">
+					<m:MaterialLink ui:field="favoriteLink" text="{lang.favorites}" >
 						<m:MaterialImage addStyleNames="{style.fav-img}" url="{gui.favoriteRed.getSafeUri.asString}"/>
 					</m:MaterialLink>
 				</m:MaterialDropDown>

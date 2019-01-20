@@ -26,7 +26,11 @@ import com.opensense.dashboard.client.event.ListNameChangedEvent;
 import com.opensense.dashboard.client.event.ListNameChangedEventHandler;
 import com.opensense.dashboard.client.event.SensorSelectionEvent;
 import com.opensense.dashboard.client.event.SensorSelectionEventHandler;
+import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.model.Size;
+import com.opensense.dashboard.client.presenter.ListManagerPresenter;
+import com.opensense.dashboard.client.view.ListManagerView;
+import com.opensense.dashboard.client.view.ListManagerViewImpl;
 import com.opensense.dashboard.shared.UserList;
 
 import gwt.material.design.client.ui.MaterialButton;
@@ -109,6 +113,9 @@ public class ListCollapsibleItem extends Composite{
 	
 	@UiField
 	Spinner listDropDownSpinner;
+	
+	@UiField
+	MaterialLink favoriteLink;
 
 	private static ListCollapsibleItemUiBinder uiBinder = GWT.create(ListCollapsibleItemUiBinder.class);
 
@@ -123,6 +130,11 @@ public class ListCollapsibleItem extends Composite{
 		this.listDropDown.addMouseWheelHandler(MouseWheelEvent::stopPropagation);
 	}
 
+	public void setActivators(int id) {
+		this.addToListButton.setActivates("ddact-"+id);
+		this.listDropDown.setActivator("ddact-"+id);
+	}
+	
 	public void setSpinnerSize(Size spinnerSize) {
 		this.listItemSpinner.setSize(spinnerSize);
 	}
@@ -332,10 +344,11 @@ public class ListCollapsibleItem extends Composite{
 		this.clearListsDropDown();
 		this.addToListButton.setEnabled(true);
 		this.showListDropDownSpinner(false);
+		this.favoriteLink.addClickHandler(event -> handler.onAddToListEvent(new AddToListEvent(DefaultListItem.FAVORITE_LIST_ID,Languages.favorites())));
 		userLists.forEach(userList -> {
 			MaterialLink link = new MaterialLink();
 			link.setText(userList.getListName());
-			link.addClickHandler(event -> handler.onAddToListEvent(new AddToListEvent(userList.getListId())));
+			link.addClickHandler(event -> handler.onAddToListEvent(new AddToListEvent(userList.getListId(),userList.getListName())));
 			this.listDropDown.add(link);
 		});
 	}

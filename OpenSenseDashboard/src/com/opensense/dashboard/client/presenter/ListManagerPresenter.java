@@ -3,10 +3,10 @@ package com.opensense.dashboard.client.presenter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -17,7 +17,6 @@ import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.Languages;
-import com.opensense.dashboard.client.utils.ListCollapsibleItem;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.ListManagerView;
@@ -27,6 +26,7 @@ import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.UserList;
 
 public class ListManagerPresenter implements IPresenter, ListManagerView.Presenter{
 
@@ -228,6 +228,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
 		this.view.setSelectedSensorItemsColor(sensorId, sensorColor);
 	}
+	
 	private void updateUserLists() {
 		this.view.clearUserLists();
 		if(this.controller.isUserLoggedIn()) {
@@ -242,6 +243,31 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 							this.view.setSensorsInList(userList.getListId(), new ArrayList<>());
 						}
 					});
+					this.view.setOldSelection();
+				}else {
+					AppController.showError(Languages.connectionError());
+					LOGGER.log(Level.WARNING, "Failure updating the user lists, result is null");
+				}
+			}, caught -> {
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure updating the user lists", caught);
+			},true));
+		}
+	}
+	
+	private void updateUserList(int listId) {
+		if(this.controller.isUserLoggedIn()) {
+			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.USER_LIST, false);
+			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getUserLists() != null)) {
+					UserList userList  = result.getUserLists().stream().filter(list -> list.getListId()==listId).findFirst().get();
+					int index = this.view.clearUserList(listId);
+					this.view.addNewUserListItem(userList, true, index);
+					if(!userList.getSensorIds().isEmpty()) {
+						this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
+					}else {
+						this.view.setSensorsInList(userList.getListId(), new ArrayList<>());
+					}
 					this.view.setOldSelection();
 				}else {
 					AppController.showError(Languages.connectionError());
@@ -288,10 +314,16 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	}
 	
 	@Override
-	public void addSelectedSensorsToUserList(final int listId, final List<Integer> selectedSensors) {
+	public void addSelectedSensorsToUserList(final int listId, final String listName, final List<Integer> selectedSensors) {
+		if(listId==DefaultListItem.FAVORITE_LIST_ID) {
+			this.addSensorsToList(listId, selectedSensors);
+			this.updateFavoriteList();
+			return;
+		}
 		GeneralService.Util.getInstance().addSensorsToUserList(listId, selectedSensors, new DefaultAsyncCallback<ActionResult>(result -> {
 			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-//				AppController.showSuccess(Languages.addedSensorsToList(Arrays.toString(selectedSensors.toArray()).replace("[", "").replace("]", ""), this.shownUserLists.get(listId).getListName(), selectedSensors.size() > 1));
+				AppController.showSuccess(Languages.addedSensorsToList(Arrays.toString(selectedSensors.toArray()).replace("[", "").replace("]", ""), listName, selectedSensors.size() > 1));
+				this.updateUserList(listId);
 			}else {
 				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "Result is nul or did not match the expected resultType");
