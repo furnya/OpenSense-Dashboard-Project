@@ -68,6 +68,18 @@
 	overflow: hidden;
     white-space: nowrap;
 }
+.list-buttons{
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.drop-down-spinner{
+	position: absolute;
+    left: 22px;
+    top: 8px;
+}
+.drop-down{
+	max-height: 25vh !important;
+}
 </ui:style>
 
 <m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE" addStyleNames="collapsible-item">
@@ -85,7 +97,7 @@
 	</m:MaterialCollapsibleHeader>
 	<m:MaterialCollapsibleBody addStyleNames="{style.body}">
 		<bh:Div addStyleNames="margin-bottom-10">
-			<bh:Div addStyleNames="flex list-action-btns">
+			<bh:Div addStyleNames="flex list-action-btns {style.list-buttons}">
 				<m:MaterialTooltip ui:field="selectAllTooltip" text="{lang.selectAllTooltip}">
 					<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
 						<m:MaterialImage url="{gui.selectAll.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
@@ -107,21 +119,23 @@
 					</m:MaterialButton>
 				</m:MaterialTooltip>
 				<m:MaterialTooltip text="{lang.addToListTooltip}">
-					<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn" enabled="false" activates="dp-1">
+					<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn" enabled="false" activates="dp-3">
+						<d:Spinner display="NONE" addStyleNames="{style.drop-down-spinner}" size="SMALL" ui:field="listDropDownSpinner"/>
 						<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 					</m:MaterialButton>
 				</m:MaterialTooltip>
-				<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners">
+				<m:MaterialDropDown ui:field="listDropDown" activator="dp-3" addStyleNames="round-corners {style.drop-down}">
+					<m:MaterialLink ui:field="favoriteButton" text="{lang.favorites}" >
+						<m:MaterialImage addStyleNames="{style.fav-img}" url="{gui.favoriteRed.getSafeUri.asString}"/>
+					</m:MaterialLink>
 				</m:MaterialDropDown>
-			</bh:Div>
-			<bh:Div addStyleNames="flex list-action-btns">
 				<m:MaterialTooltip text="{lang.infoTooltip}">
-					<m:MaterialButton display="NONE" ui:field="showInfoButton" text="{lang.information}" textColor="WHITE" addStyleNames="d-btn margin-top-10" enabled="false">
+					<m:MaterialButton display="NONE" ui:field="showInfoButton" text="{lang.information}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
 						<m:MaterialImage url="{gui.info.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 					</m:MaterialButton>
 				</m:MaterialTooltip>
 				<m:MaterialTooltip text="{lang.deleteTooltip}">
-					<m:MaterialButton display="NONE" ui:field="deleteSensorsButton" text="{lang.deleteSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10" enabled="false">
+					<m:MaterialButton display="NONE" ui:field="deleteSensorsButton" text="{lang.deleteSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
 						<m:MaterialImage url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 					</m:MaterialButton>
 				</m:MaterialTooltip>

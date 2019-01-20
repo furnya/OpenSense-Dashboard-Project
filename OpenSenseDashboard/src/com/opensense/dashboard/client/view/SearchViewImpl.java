@@ -490,6 +490,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@Override
 	public void showUserListsInDropDown(List<UserList> userLists) {
+		GWT.debugger();
 		this.clearListsDropDown();
 		this.addToListButton.setEnabled(true);
 		this.showListDropDownSpinner(false);

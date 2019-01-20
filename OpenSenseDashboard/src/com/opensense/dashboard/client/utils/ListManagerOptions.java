@@ -12,6 +12,7 @@ public class ListManagerOptions {
 	private boolean showSearchButton = true;
 	private boolean showMapButton = true;
 	private boolean showVisualizationButton = true;
+	private boolean showAddToListButton = true;
 	private Size pagerSize = Size.MEDIUM;
 	private int maxObjectOnPage = 10;
 	private Size spinnerSize = Size.MEDIUM;
@@ -96,5 +97,19 @@ public class ListManagerOptions {
 
 	public void setMaxSelectedObjects(Integer maxSelectedObjects) {
 		this.maxSelectedObjects = maxSelectedObjects;
+	}
+
+	/**
+	 * @return the addToListButton
+	 */
+	public boolean isShowAddToListButton() {
+		return showAddToListButton;
+	}
+
+	/**
+	 * @param addToListButton the addToListButton to set
+	 */
+	public void setShowAddToListButton(boolean showAddToListButton) {
+		this.showAddToListButton = showAddToListButton;
 	}
 }

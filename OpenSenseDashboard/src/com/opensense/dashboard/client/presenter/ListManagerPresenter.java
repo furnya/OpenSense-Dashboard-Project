@@ -1,10 +1,12 @@
 package com.opensense.dashboard.client.presenter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -15,6 +17,7 @@ import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.client.utils.ListCollapsibleItem;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.view.ListManagerView;
@@ -265,6 +268,37 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		},caught -> {
 			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting all sensor info", caught);
+		}, false));
+	}
+	
+	@Override
+	public void requestAndShowUserList(int listId) {
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.USER_LIST, false);
+		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getUserLists() != null)) {
+				this.view.showUserListDropdown(listId,result.getUserLists());
+			}else {
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure requesting the user lists, result is null");
+			}
+		}, caught -> {
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure requesting the user lists", caught);
+		},true));
+	}
+	
+	@Override
+	public void addSelectedSensorsToUserList(final int listId, final List<Integer> selectedSensors) {
+		GeneralService.Util.getInstance().addSensorsToUserList(listId, selectedSensors, new DefaultAsyncCallback<ActionResult>(result -> {
+			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
+//				AppController.showSuccess(Languages.addedSensorsToList(Arrays.toString(selectedSensors.toArray()).replace("[", "").replace("]", ""), this.shownUserLists.get(listId).getListName(), selectedSensors.size() > 1));
+			}else {
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Result is nul or did not match the expected resultType");
+			}
+		},caught -> {
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure requesting the user lists.");
 		}, false));
 	}
 }

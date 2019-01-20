@@ -116,6 +116,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		if(options.isShowSearchButton()) {
 			item.addShowSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, this.selectedSensorIdsInLists.get(this.activeItemId))));
 		}
+		if(options.isShowAddToListButton()) {
+			item.addAddToListButtonButtonClickHandler(event -> {
+				item.clearListsDropDown();
+				this.presenter.requestAndShowUserList(listId);
+			});
+		}
 		if(this.collapsiblesItems.containsKey(listId)) {
 			this.collapsiblesItems.get(listId).removeFromParent();
 			this.collapsiblesItems.replace(listId, item);
@@ -382,5 +388,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	private native void clickElement(Element infoButtonElement) /*-{
 		infoButtonElement.click();
 	}-*/;
+
+	@Override
+	public void showUserListDropdown(int listId, List<UserList> userLists) {
+		this.collapsiblesItems.get(listId).showUserListsInDropDown(event -> {
+			this.presenter.addSelectedSensorsToUserList(event.getListId(), this.selectedSensorIdsInLists.get(listId));
+		}, userLists);
+	}
 
 }

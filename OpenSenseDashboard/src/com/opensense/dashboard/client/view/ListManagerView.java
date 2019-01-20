@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.utils.ListCollapsibleItem;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Sensor;
@@ -18,6 +19,8 @@ public interface ListManagerView {
 		ListManager getController();
 		void changeListName(int listId, String listName);
 		public void requestAllSensorInfo(int sensorId, List<Integer> idList);
+		void requestAndShowUserList(int listId);
+		void addSelectedSensorsToUserList(int listId, List<Integer> selectedSensors);
 	}
 
 	public Widget asWidget();
@@ -36,4 +39,5 @@ public interface ListManagerView {
 	public void setOldSelection();
 	public void setActiveItemId(Integer id);
 	public void showAllSensorInfo(int listId, List<Sensor> list);
+	public void showUserListDropdown(int listId, List<UserList> userLists);
 }
