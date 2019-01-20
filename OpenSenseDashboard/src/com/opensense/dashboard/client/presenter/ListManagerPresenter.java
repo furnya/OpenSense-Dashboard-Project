@@ -56,25 +56,29 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		this.updateFavoriteList();
 		this.updateUserLists();
 		if(this.controller.isUserLoggedIn()) {
-			this.view.showMySensorListsItem(true);
-			this.view.setOneItemStyle(false);
-			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MYSENSORS, false);
-			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
-				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMyListSensors() != null)
-						&& !result.getMyListSensors().isEmpty()){
-					this.getMinimalSensorDataAndShow(DefaultListItem.MY_LIST_ID, result.getMyListSensors(), false);
-				}else {
-					this.view.setSensorsInList(DefaultListItem.MY_LIST_ID, new ArrayList<>());
-				}
-				this.view.setOldSelection();
-			}, caught -> {
-				AppController.showError(Languages.connectionError());
-				LOGGER.log(Level.WARNING, "Failure fetching mySensors", caught);
-			},true));
+			this.updateMySensorsList();
 		}else {
 			this.view.setOneItemStyle(true);
 			this.view.showMySensorListsItem(false);
 		}
+	}
+	
+	public void updateMySensorsList() {
+		this.view.showMySensorListsItem(true);
+		this.view.setOneItemStyle(false);
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MYSENSORS, false);
+		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMyListSensors() != null)
+					&& !result.getMyListSensors().isEmpty()){
+				this.getMinimalSensorDataAndShow(DefaultListItem.MY_LIST_ID, result.getMyListSensors(), false);
+			}else {
+				this.view.setSensorsInList(DefaultListItem.MY_LIST_ID, new ArrayList<>());
+			}
+			this.view.setOldSelection();
+		}, caught -> {
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure fetching mySensors", caught);
+		},true));
 	}
 
 	public void createNewList() {
@@ -127,15 +131,15 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		}else if(listId == DefaultListItem.MY_LIST_ID) {
 			GeneralService.Util.getInstance().deleteSensorsFromMySensors(sensorIds, new DefaultAsyncCallback<ActionResult>(result -> {
 				if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-					this.updateLists();
+					this.updateMySensorsList();
 					AppController.showInfo(Languages.sensorDeleted());
 				}else {
-					this.updateLists();
+					this.updateMySensorsList();
 					AppController.showError(Languages.connectionError());
 					LOGGER.log(Level.WARNING, "Failure deleting sensors in list, result is null or the request was not successfull");
 				}
 			}, caught -> {
-				this.updateLists();
+				this.updateMySensorsList();
 				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "Failure deleting sensors in list", caught);
 			},true));
@@ -144,7 +148,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		}else {
 			GeneralService.Util.getInstance().deleteSensorsFromUserList(listId, sensorIds, new DefaultAsyncCallback<ActionResult>(result -> {
 				if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-					this.updateUserLists();
+					this.updateUserList(listId);
 				}else {
 					AppController.showError(Languages.connectionError());
 					LOGGER.log(Level.WARNING, "Failure deleting sensors in list, result is null or the request was not successfull");
