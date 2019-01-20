@@ -47,6 +47,7 @@ import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialListBox;
 import gwt.material.design.client.ui.MaterialNavBar;
 import gwt.material.design.client.ui.MaterialTextBox;
+import gwt.material.design.client.ui.MaterialTooltip;
 
 public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
@@ -119,6 +120,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@UiField
 	Spinner listDropDownSpinner;
+	
+	@UiField
+	MaterialTooltip selectAllTooltip;
 
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
@@ -216,12 +220,14 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 				this.selectedSensors.add(this.shownSensorIds.get(i));
 			}
 			this.selectAllButton.setText(Languages.deselectAllSensors());
+			this.selectAllTooltip.setText(Languages.deselectAllTooltip());
 		}else {
 			for (int i = this.selectedSensors.size() - 1; i >= 0; i --) {
 				this.sensorViews.get(this.selectedSensors.get(i)).setActive(false);
 				this.selectedSensors.remove(i);
 			}
 			this.selectAllButton.setText(Languages.selectAllSensors());
+			this.selectAllTooltip.setText(Languages.selectAllTooltip());
 		}
 		this.onSelectedSensorsChanged();
 	}

@@ -27,10 +27,16 @@
 
 <bh:Div addStyleNames="{style.container}">
 	<bh:Div addStyleNames="{style.panel} flex round-corners margin-bottom-10">
-		<m:MaterialButton enabled="false" ui:field="createListButton" text="{lang.createNewList}" textColor="WHITE" addStyleNames="d-btn margin-right-15">
-			<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-		</m:MaterialButton>
-		<m:MaterialButton enabled="true" ui:field="createSensor" text="{lang.createSensor}" textColor="WHITE" addStyleNames="d-btn"/>
+		<m:MaterialTooltip text="{lang.createNewList}">
+			<m:MaterialButton enabled="false" ui:field="createListButton" text="{lang.createNewList}" textColor="WHITE" addStyleNames="d-btn margin-right-15">
+				<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.createSensor}">
+			<m:MaterialButton enabled="true" ui:field="createSensor" text="{lang.createSensor}" textColor="WHITE" addStyleNames="d-btn">
+				<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
 	</bh:Div>
 	<bh:Div ui:field="listContainer"/>
 </bh:Div>

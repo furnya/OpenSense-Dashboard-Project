@@ -104,23 +104,33 @@
 		<bh:Div addStyleNames="flex {style.margin}">
 			<m:MaterialTextBox ui:field="minAccuracy" textColor="WHITE" width="33%" label="{lang.minAccuracy}"/>
 			<m:MaterialTextBox ui:field="maxAccuracy" textColor="WHITE" width="33%" label="{lang.maxAccuracy}"/>
-			<m:MaterialButton  ui:field="searchButton" width="33%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
+			<m:MaterialTooltip text="{lang.searchTooltip}">
+				<m:MaterialButton  ui:field="searchButton" width="33%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
+			</m:MaterialTooltip>
 		</bh:Div>
 	</bh:Div>	
 	<bh:Div addStyleNames="{style.panel} round-corners margin-top-10 flex">
-		<m:MaterialButton ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false">
-			<m:MaterialImage url="{gui.selectAll.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-		</m:MaterialButton>
-		<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false" >
-			<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-		</m:MaterialButton>
-		<m:MaterialButton ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false">
-			<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-		</m:MaterialButton>
-		<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn position-relative" enabled="false" activates="dp-1">
-			<d:Spinner display="NONE" addStyleNames="{style.drop-down-spinner}" size="SMALL" ui:field="listDropDownSpinner"/>
-			<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-		</m:MaterialButton>
+		<m:MaterialTooltip ui:field="selectAllTooltip" text="{lang.selectAllTooltip}">
+			<m:MaterialButton ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false">
+				<m:MaterialImage url="{gui.selectAll.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.showOnMapTooltip}">
+			<m:MaterialButton ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false" >
+				<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.showValuesTooltip}">
+			<m:MaterialButton ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn search-action-btn margin-right-15" enabled="false">
+				<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.addToListTooltip}">
+			<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn position-relative" enabled="false" activates="dp-1">
+				<d:Spinner display="NONE" addStyleNames="{style.drop-down-spinner}" size="SMALL" ui:field="listDropDownSpinner"/>
+				<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
 		<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners {style.drop-down}">
 			<m:MaterialLink ui:field="favoriteButton" text="{lang.favorites}" >
 				<m:MaterialImage addStyleNames="{style.fav-img}" url="{gui.favoriteRed.getSafeUri.asString}"/>

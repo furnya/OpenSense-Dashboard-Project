@@ -26,9 +26,11 @@
 		<d:Rating ui:field="rating" size="MEDIUM" rating="0"/>
 	</bh:Div>
 	<bh:Div addStyleNames="card-action-buttons">
-		<m:MaterialButton ui:field="favButton" addStyleNames="round-button d-btn {style.right}">
-			<m:MaterialImage url="{gui.favorite.getSafeUri.asString}"/>
-		</m:MaterialButton>
+		<m:MaterialTooltip text="{lang.favTooltip}">
+			<m:MaterialButton ui:field="favButton" addStyleNames="round-button d-btn {style.right}">
+				<m:MaterialImage url="{gui.favorite.getSafeUri.asString}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
 	</bh:Div>
 	<bh:Div ui:field="content" addStyleNames="card-content"/>
 	<m:MaterialImage ui:field="check" addStyleNames="card-active-check" url="{gui.check.getSafeUri.asString}" display="NONE"/>

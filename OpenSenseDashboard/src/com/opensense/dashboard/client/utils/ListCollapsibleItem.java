@@ -29,6 +29,7 @@ import gwt.material.design.client.ui.MaterialCollapsibleItem;
 import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialTextBox;
+import gwt.material.design.client.ui.MaterialTooltip;
 
 public class ListCollapsibleItem extends Composite{
 
@@ -95,6 +96,9 @@ public class ListCollapsibleItem extends Composite{
 
 	@UiField
 	Span sensorDetails;
+	
+	@UiField
+	MaterialTooltip selectAllTooltip;
 
 	private static ListCollapsibleItemUiBinder uiBinder = GWT.create(ListCollapsibleItemUiBinder.class);
 
@@ -251,8 +255,10 @@ public class ListCollapsibleItem extends Composite{
 	public void changeToSelectAll(boolean selectAll) {
 		if(selectAll) {
 			this.selectAllButton.setText(Languages.selectAllSensors());
+			this.selectAllTooltip.setText(Languages.selectAllTooltip());
 		}else {
 			this.selectAllButton.setText(Languages.deselectAllSensors());
+			this.selectAllTooltip.setText(Languages.deselectAllTooltip());
 		}
 	}
 
