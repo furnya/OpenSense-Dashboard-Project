@@ -173,4 +173,12 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}
 	}
 
+	@Override
+	public String getUserName() {
+		if(!SessionUser.getInstance().isGuest()) {
+			return SessionUser.getInstance().getUsername();
+		}
+		return null;
+	}
+
 }

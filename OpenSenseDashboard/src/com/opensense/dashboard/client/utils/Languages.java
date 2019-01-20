@@ -866,4 +866,20 @@ public class Languages {
 			return "Show information";
 		}
 	}
+	
+	public static String welcome() {
+		if(de) {
+			return "Willkommen: ";
+		}else {
+			return "Welcome: ";
+		}
+	}
+
+	public static String guest() {
+		if(de) {
+			return "Gast";
+		}else {
+			return "Guest";
+		}
+	}
 }

@@ -111,6 +111,10 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 	}
 
 	public void onUserLoggedIn() {
+		if(this.activeDataPanelPagePresenter instanceof HomePresenter) {
+			HomePresenter homePresenter = (HomePresenter) this.activeDataPanelPagePresenter;
+			homePresenter.onUserLoggedIn();
+		}
 		if(this.activeDataPanelPagePresenter instanceof ListsPresenter) {
 			ListsPresenter listsPresenter = (ListsPresenter) this.activeDataPanelPagePresenter;
 			listsPresenter.onUserLoggedIn();
@@ -127,6 +131,10 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 	}
 
 	public void onUserLoggedOut() {
+		if(this.activeDataPanelPagePresenter instanceof HomePresenter) {
+			HomePresenter homePresenter = (HomePresenter) this.activeDataPanelPagePresenter;
+			homePresenter.onUserLoggedOut();
+		}
 		if(this.activeDataPanelPagePresenter instanceof ListsPresenter) {
 			ListsPresenter listsPresenter = (ListsPresenter) this.activeDataPanelPagePresenter;
 			listsPresenter.onUserLoggedOut();
