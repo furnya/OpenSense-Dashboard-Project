@@ -1,9 +1,6 @@
 package com.opensense.dashboard.server.logic;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -55,36 +52,24 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 
 	@Override
 	public ActionResult userLoginRequest(String username, String password) {
-		String body = "{\"username\":\""+username+"\",\"password\":\""+password+"\"}";
-		String token;
-		token = ClientRequestHandler.getInstance().sendLoginRequest(body);
-		if(token==null) {
-			DatabaseManager.initPooling();
-			DatabaseManager db = new DatabaseManager();
-			String passwordDB = db.getPassword(username);
-			TripleDesCipher cipher = new TripleDesCipher();
-			cipher.setKey(key);
-			try {
-				password = cipher.encrypt(password);
-			} catch (DataLengthException | IllegalStateException | InvalidCipherTextException e) {
-				return new ActionResult(ActionResultType.FAILED);
-			}
-			if(password.equals(passwordDB)) {
-				SessionUser.getInstance().createUser(db.getUserIdFromUsername(username), username, null);
-				return new ActionResult(ActionResultType.SUCCESSFUL);
-			}else {
-				SessionUser.getInstance().removeUser();
-				return new ActionResult(ActionResultType.FAILED);
-			}
+		DatabaseManager.initPooling();
+		DatabaseManager db = new DatabaseManager();
+		String passwordDB = db.getPassword(username);
+		TripleDesCipher cipher = new TripleDesCipher();
+		cipher.setKey(key);
+		try {
+			password = cipher.encrypt(password);
+		} catch (DataLengthException | IllegalStateException | InvalidCipherTextException e) {
+			return new ActionResult(ActionResultType.FAILED);
+		}
+		if(password.equals(passwordDB)) {
+			String body = "{\"username\":\""+System.getenv("USERNAME")+"\",\"password\":\""+System.getenv("PASSWORD")+"\"}";
+			String token = ClientRequestHandler.getInstance().sendLoginRequest(body);
+			SessionUser.getInstance().createUser(db.getUserIdFromUsername(username), username, token);
+			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}else {
-			try {
-				Integer userId = ClientRequestHandler.getInstance().getUserId(token);
-				SessionUser.getInstance().createUser(userId, username, token);
-				return new ActionResult(ActionResultType.SUCCESSFUL);
-			}catch(IOException e) {
-				SessionUser.getInstance().createUser(new Random().nextInt(), username, token);
-				return new ActionResult(ActionResultType.SUCCESSFUL);
-			}
+			SessionUser.getInstance().removeUser();
+			return new ActionResult(ActionResultType.FAILED);
 		}
 	}
 
@@ -143,7 +128,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("opensense.dashboard@gmail.com", "8smsl8Kg2");
+                return new PasswordAuthentication("opensense.dashboard@gmail.com", System.getenv("PASSWORD"));
             }
 
         });
