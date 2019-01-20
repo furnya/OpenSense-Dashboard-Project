@@ -2,20 +2,8 @@ package com.opensense.dashboard.server.logic;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import org.json.JSONObject;
 
@@ -37,7 +25,7 @@ import com.opensense.dashboard.shared.Response;
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
 
 	private static final Logger LOGGER = Logger.getLogger(GeneralServlet.class.getName());
-	
+
 	@Override
 	public Response getDataFromRequest(Request searchRequest) {
 		Response response = new Response();
@@ -145,7 +133,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public ActionResult createSensor(CreateSensorRequest request) {
-		if(SessionUser.getInstance().isGuest() || SessionUser.getInstance().getToken()==null) {
+		if(SessionUser.getInstance().isGuest() || (SessionUser.getInstance().getToken()==null)) {
 			ActionResult ar = new ActionResult(ActionResultType.FAILED);
 			ar.setErrorMessage(Languages.notLoggedIn());
 			return ar;
@@ -167,7 +155,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public ActionResult deleteSensorsFromMySensors(List<Integer> sensorIds) {
-		if(SessionUser.getInstance().isGuest()  || SessionUser.getInstance().getToken()==null) {
+		if(SessionUser.getInstance().isGuest()  || (SessionUser.getInstance().getToken()==null)) {
 			return new ActionResult(ActionResultType.FAILED);
 		}
 		boolean[] deleteFailed = {false};

@@ -8,11 +8,11 @@
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
-.content{
+.popup-content{
 	display: flex;
 	place-content: center;	
 }
-.login-container{
+.popup-container{
 	display: grid;
 	background-color: #202020;
 	padding: 20px 20px;	
@@ -41,23 +41,48 @@
 	-webkit-text-fill-color: white !important;
 	transition: background-color 5000s ease-in-out 0s !important;
 }
-
-
+.button-panel{
+	float: left;	
+}
+.label-buttons > span{
+    border-bottom: 1px solid white;
+	color: white;	
+    width: fit-content;
+}
 </ui:style>
 
-<bh:Div addStyleNames="{style.content}">
-	<bh:Div ui:field="loginContainer" addStyleNames="round-corners {style.login-container}">
-		<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="userName" type="TEXT" label="{lang.username}" addStyleNames="{style.autofill-overwrite}"/>
-		<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="email" type="EMAIL" label="{lang.emailAddress}" display="NONE" addStyleNames="{style.autofill-overwrite}"/>
-		<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="password" type="PASSWORD" label="{lang.password}" addStyleNames="{style.autofill-overwrite}"/>
-		<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="passwordVerify" type="PASSWORD" label="{lang.passwordVerify}" display="NONE" addStyleNames="{style.autofill-overwrite}"/>
-		<bh:Div addStyleNames="{style.center}">
-			<bh:Div addStyleNames="display-grid-center">
-				<m:MaterialLabel ui:field="regiLabel" text="{lang.register}" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
-				<m:MaterialLabel ui:field="forgotPassword" text="{lang.forgotPassword}" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
-				<m:MaterialButton ui:field="loginButton" text="{lang.login}" textColor="WHITE" addStyleNames="d-btn {style.login-button}">
-					<d:Spinner ui:field="spinner" size="SMALL" display="NONE" addStyleNames="{style.button-spinner}"/>
-				</m:MaterialButton>
+<bh:Div>
+	<bh:Div ui:field="buttonPanel" addStyleNames="{style.button-panel} {style.label-buttons}">
+		<m:MaterialLabel ui:field="changePassword" text="{lang.changePassword}" addStyleNames="clickable margin-top-20"/>
+		<m:MaterialLabel ui:field="logoutButton" text="{lang.logout}" addStyleNames="clickable margin-top-20"/>
+	</bh:Div>
+	<bh:Div addStyleNames="{style.popup-content}">
+		<bh:Div ui:field="forgotPasswordContainer" addStyleNames="round-corners {style.popup-container}">
+			<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="oldPassword" type="PASSWORD" label="{lang.oldPassword}" addStyleNames="{style.autofill-overwrite}"/>
+			<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="newPassword" type="PASSWORD" label="{lang.newPassword}" addStyleNames="{style.autofill-overwrite}"/>
+			<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="verifyNewPassword" type="PASSWORD" label="{lang.verifyNewPassword}" addStyleNames="{style.autofill-overwrite}"/>
+			<bh:Div addStyleNames="{style.center}">
+				<bh:Div addStyleNames="display-grid-center {style.label-buttons}">
+					<m:MaterialLabel ui:field="goBack" text="{lang.goBack}" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
+					<m:MaterialButton ui:field="saveButton" text="{lang.saveNewPassword}" textColor="WHITE" addStyleNames="d-btn {style.login-button}">
+						<d:Spinner ui:field="saveSpinner" size="SMALL" display="NONE" addStyleNames="{style.button-spinner}"/>
+					</m:MaterialButton>
+				</bh:Div>
+			</bh:Div>
+		</bh:Div>
+		<bh:Div ui:field="loginContainer" addStyleNames="round-corners {style.popup-container}">
+			<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="userName" type="TEXT" label="{lang.username}" addStyleNames="{style.autofill-overwrite}"/>
+			<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="email" type="EMAIL" label="{lang.emailAddress}" display="NONE" addStyleNames="{style.autofill-overwrite}"/>
+			<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="password" type="PASSWORD" label="{lang.password}" addStyleNames="{style.autofill-overwrite}"/>
+			<m:MaterialTextBox textColor="WHITE" width="30vw" ui:field="passwordVerify" type="PASSWORD" label="{lang.passwordVerify}" display="NONE" addStyleNames="{style.autofill-overwrite}"/>
+			<bh:Div addStyleNames="{style.center}">
+				<bh:Div addStyleNames="display-grid-center {style.label-buttons}">
+					<m:MaterialLabel ui:field="regiLabel" text="{lang.register}" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
+					<m:MaterialLabel ui:field="forgotPassword" text="{lang.forgotPassword}" textColor="WHITE" addStyleNames="margin-bottom-10 clickable"/>
+					<m:MaterialButton ui:field="loginButton" text="{lang.login}" textColor="WHITE" addStyleNames="d-btn {style.login-button}">
+						<d:Spinner ui:field="spinner" size="SMALL" display="NONE" addStyleNames="{style.button-spinner}"/>
+					</m:MaterialButton>
+				</bh:Div>
 			</bh:Div>
 		</bh:Div>
 	</bh:Div>

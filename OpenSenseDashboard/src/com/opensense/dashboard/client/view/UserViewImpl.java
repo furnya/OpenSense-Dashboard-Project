@@ -49,12 +49,36 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 
 	@UiField
 	Spinner spinner;
-	
+
+	@UiField
+	Spinner saveSpinner;
+
 	@UiField
 	MaterialTextBox email;
-	
+
 	@UiField
 	MaterialLabel forgotPassword;
+
+	@UiField
+	MaterialLabel goBack;
+
+	@UiField
+	Div buttonPanel;
+
+	@UiField
+	Div forgotPasswordContainer;
+
+	@UiField
+	MaterialTextBox oldPassword;
+
+	@UiField
+	MaterialTextBox newPassword;
+
+	@UiField
+	MaterialTextBox verifyNewPassword;
+
+	@UiField
+	MaterialButton saveButton;
 
 	public UserViewImpl() {
 		this.initWidget(uiBinder.createAndBindUi(this));
@@ -68,7 +92,7 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 		this.email.getElement().getStyle().setDisplay(Display.BLOCK);
 		this.loginButton.setText(Languages.send());
 	}
-	
+
 	@UiHandler("regiLabel")
 	public void onRegiLabelClicked(ClickEvent e) {
 		this.resetViewElements();
@@ -93,15 +117,15 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 	public void onLoginButtonClicked(ClickEvent e) {
 		if(Languages.register().equals(this.loginButton.getText())) {
 			//TODO ask database if username exists
-			if(this.userName.getValue()==null) {
+			if((this.userName.getValue()==null) && this.userName.getValue().isEmpty()) {
 				AppController.showError(Languages.invalidUsername());
 				return;
 			}
-			if(this.password.getValue()==null || this.passwordVerify.getValue()==null || this.password.getValue()!=this.passwordVerify.getValue()) {
+			if((this.password.getValue()==null) || this.password.getValue().isEmpty() || this.passwordVerify.getValue().isEmpty() || (this.passwordVerify.getValue()==null) || (this.password.getValue()!=this.passwordVerify.getValue())) {
 				AppController.showError(Languages.passwordsDontMatch());
 				return;
 			}
-			if(this.email.getValue()==null || !this.email.getValue().matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
+			if((this.email.getValue()==null) || !this.email.getValue().matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
 				AppController.showError(Languages.invalidEmail());
 				return;
 			}
@@ -112,7 +136,7 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 			this.regiLabel.setEnabled(false);
 			this.presenter.sendLoginRequest(this.userName.getText(), this.password.getText());
 		}else if(Languages.send().equals(this.loginButton.getText())) {
-			if(this.email.getValue()==null || !this.email.getValue().matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
+			if((this.email.getValue()==null) || !this.email.getValue().matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
 				AppController.showError(Languages.invalidEmail());
 				return;
 			}
@@ -130,6 +154,37 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 		this.clearErrors();
 	}
 
+	@UiHandler("logoutButton")
+	public void onLogoutButtonClicked(ClickEvent event) {
+		this.presenter.logout();
+	}
+
+	@UiHandler("changePassword")
+	public void onChangePasswordButtonClicked(ClickEvent event) {
+		this.buttonPanel.getElement().getStyle().setDisplay(Display.NONE);
+		this.forgotPasswordContainer.getElement().getStyle().clearDisplay();
+	}
+
+	@UiHandler("goBack")
+	public void onGoBackButtonClicked(ClickEvent event) {
+		this.buttonPanel.getElement().getStyle().clearDisplay();
+		this.forgotPasswordContainer.getElement().getStyle().setDisplay(Display.NONE);
+	}
+
+	@UiHandler("saveButton")
+	public void onSaveButtonClicked(ClickEvent e) {
+		if((this.oldPassword.getValue()==null) && this.oldPassword.getValue().isEmpty()) {
+			AppController.showError(Languages.invalidUsername());
+			return;
+		}
+		if((this.newPassword.getValue()==null) || (this.verifyNewPassword.getValue()==null) || this.newPassword.getValue().isEmpty() || this.verifyNewPassword.getValue().isEmpty() || (this.newPassword.getValue()!=this.verifyNewPassword.getValue())) {
+			AppController.showError(Languages.passwordsDontMatch());
+			return;
+		}
+		this.showSaveButtonSpinner(true);
+		this.presenter.sendChangePasswordRequest(this.oldPassword.getValue(),this.newPassword.getValue());
+	}
+
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
@@ -137,11 +192,7 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 
 	@Override
 	public void initView() {
-		if(this.presenter.isUserLoggedIn()) {
-			this.loginContainer.getElement().getStyle().setDisplay(Display.NONE);
-		}else {
-			this.loginContainer.getElement().getStyle().clearDisplay();
-		}
+		this.showLoginPopup(this.presenter.isUserLoggedIn());
 	}
 
 	@Override
@@ -164,4 +215,36 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 		this.password.setError(Languages.loginValidateError());
 		this.userName.setError("");
 	}
+
+	@Override
+	public void showLoginPopup(boolean show) {
+		if(this.presenter.isUserLoggedIn()) {
+			this.loginContainer.getElement().getStyle().setDisplay(Display.NONE);
+			this.buttonPanel.getElement().getStyle().clearDisplay();
+		}else {
+			this.loginContainer.getElement().getStyle().clearDisplay();
+			this.buttonPanel.getElement().getStyle().setDisplay(Display.NONE);
+		}
+		this.hideChangePasswordContainer(true);
+	}
+
+	@Override
+	public void hideChangePasswordContainer(boolean hide) {
+		if(hide) {
+			this.forgotPasswordContainer.getElement().getStyle().setDisplay(Display.NONE);
+		}else {
+			this.forgotPasswordContainer.getElement().getStyle().clearDisplay();
+		}
+	}
+
+	@Override
+	public void showSaveButtonSpinner(boolean show){
+		if(!show) {
+			this.saveSpinner.getElement().getStyle().setDisplay(Display.NONE);
+		}else {
+			this.saveSpinner.getElement().getStyle().clearDisplay();
+		}
+		this.saveButton.setEnabled(!show);
+	}
+
 }

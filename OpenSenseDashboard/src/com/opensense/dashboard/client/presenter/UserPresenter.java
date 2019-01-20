@@ -2,7 +2,6 @@ package com.opensense.dashboard.client.presenter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +43,7 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 
 	@Override
 	public void onPageReturn() {
-		// TODO Auto-generated method stub
+		this.view.showLoginPopup(!this.isUserLoggedIn());
 	}
 
 	@Override
@@ -109,7 +108,7 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 			this.view.showLoginNotValid();
 			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting the register.");
-		}, false));		
+		}, false));
 	}
 
 	@Override
@@ -125,4 +124,30 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 			LOGGER.log(Level.WARNING, "Failure requesting the password reset.");
 		}, false));
 	}
+
+	@Override
+	public void logout() {
+		this.appController.logout();
+	}
+
+	@Override
+	public void sendChangePasswordRequest(String oldPassword, String newPassword) {
+		AuthenticationService.Util.getInstance().changePassword(oldPassword, newPassword, new DefaultAsyncCallback<ActionResult>(result -> {
+			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())){
+				this.view.hideChangePasswordContainer(true);
+				this.view.showSaveButtonSpinner(false);
+				AppController.showSuccess(Languages.successfullyChangedPassword());
+			}else{
+				AppController.showError(result.getErrorMessage());
+				this.view.showSaveButtonSpinner(false);
+			}
+		},caught -> {
+			this.view.showSaveButtonSpinner(false);
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure requesting the password change.");
+		}, false));
+	}
+
+
+
 }

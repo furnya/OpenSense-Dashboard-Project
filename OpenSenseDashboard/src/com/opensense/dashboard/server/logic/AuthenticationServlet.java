@@ -1,11 +1,9 @@
 package com.opensense.dashboard.server.logic;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Properties;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.mail.Authenticator;
@@ -28,6 +26,7 @@ import com.googlecode.gwt.crypto.client.TripleDesCipher;
 import com.opensense.dashboard.client.services.AuthenticationService;
 import com.opensense.dashboard.server.util.ClientRequestHandler;
 import com.opensense.dashboard.server.util.DatabaseManager;
+import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.server.util.SessionUser;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
@@ -61,7 +60,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		if(token==null) {
 			DatabaseManager.initPooling();
 			DatabaseManager db = new DatabaseManager();
-			String passwordDB = db.getPassword(username);
+			String passwordDB = db.getPasswordFromUsername(username);
 			TripleDesCipher cipher = new TripleDesCipher();
 			cipher.setKey(key);
 			try {
@@ -127,47 +126,83 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
 	}
-	
+
 	public void sendResetPasswordMail(String email, String password) {
 		Properties mailProps = new Properties();
-        mailProps.put("mail.smtp.from", "Opensense-Dashboard");
-        mailProps.put("mail.smtp.host", "smtp.gmail.com");
-        mailProps.put("mail.smtp.port", "25");
-        mailProps.put("mail.smtp.auth", true);
-        mailProps.put("mail.smtp.socketFactory.port", "587");
-        mailProps.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        mailProps.put("mail.smtp.socketFactory.fallback", "true");
-        mailProps.put("mail.smtp.starttls.enable", "true");
+		mailProps.put("mail.smtp.from", "Opensense-Dashboard");
+		mailProps.put("mail.smtp.host", "smtp.gmail.com");
+		mailProps.put("mail.smtp.port", "25");
+		mailProps.put("mail.smtp.auth", true);
+		mailProps.put("mail.smtp.socketFactory.port", "587");
+		mailProps.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		mailProps.put("mail.smtp.socketFactory.fallback", "true");
+		mailProps.put("mail.smtp.starttls.enable", "true");
 
-        Session mailSession = Session.getDefaultInstance(mailProps, new Authenticator() {
+		Session mailSession = Session.getDefaultInstance(mailProps, new Authenticator() {
 
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("opensense.dashboard@gmail.com", "8smsl8Kg2");
-            }
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication("opensense.dashboard@gmail.com", "8smsl8Kg2");
+			}
 
-        });
+		});
 
-        MimeMessage message = new MimeMessage(mailSession);
-        try {
+		MimeMessage message = new MimeMessage(mailSession);
+		try {
 			message.setFrom(new InternetAddress("opensense.dashboard@gmail.com"));
 			String[] emails = { email };
-	        InternetAddress dests[] = new InternetAddress[emails.length];
-	        for (int i = 0; i < emails.length; i++) {
-	            dests[i] = new InternetAddress(emails[i].trim().toLowerCase());
-	        }
-	        message.setRecipients(Message.RecipientType.TO, dests);
-	        message.setSubject("Password Reset", "UTF-8");
-	        Multipart mp = new MimeMultipart();
-	        MimeBodyPart mbp = new MimeBodyPart();
-	        mbp.setContent("New password: "+password, "text/html;charset=utf-8");
-	        mp.addBodyPart(mbp);
-	        message.setContent(mp);
-	        message.setSentDate(new java.util.Date());
+			InternetAddress dests[] = new InternetAddress[emails.length];
+			for (int i = 0; i < emails.length; i++) {
+				dests[i] = new InternetAddress(emails[i].trim().toLowerCase());
+			}
+			message.setRecipients(Message.RecipientType.TO, dests);
+			message.setSubject("Password Reset", "UTF-8");
+			Multipart mp = new MimeMultipart();
+			MimeBodyPart mbp = new MimeBodyPart();
+			mbp.setContent("New password: "+password, "text/html;charset=utf-8");
+			mp.addBodyPart(mbp);
+			message.setContent(mp);
+			message.setSentDate(new java.util.Date());
 
-	        Transport.send(message);
+			Transport.send(message);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, "Failure sending email", e);
 		}
+	}
+
+	@Override
+	public ActionResult changePassword(String oldPassword, String newPassword) {
+		if(SessionUser.getInstance().isGuest()) {
+			return new ActionResult(ActionResultType.FAILED);
+		}
+		DatabaseManager db = new DatabaseManager();
+		String passwordDB = db.getPasswordFromUserId(SessionUser.getInstance().getUserId());
+		if(this.isPasswordCorrect(passwordDB, oldPassword)){
+			return db.setUserPassword(SessionUser.getInstance().getUserId(), this.encryptPassword(newPassword));
+		}else {
+			return new ActionResult(ActionResultType.FAILED, ServerLanguages.wrongPassword());
+		}
+	}
+
+	private String encryptPassword(String password) {
+		TripleDesCipher cipher = new TripleDesCipher();
+		cipher.setKey(key);
+		try {
+			return cipher.encrypt(password);
+		} catch (DataLengthException | IllegalStateException | InvalidCipherTextException e) {
+			return null;
+		}
+	}
+
+	private boolean isPasswordCorrect(String password, String typedPassword){
+		TripleDesCipher cipher = new TripleDesCipher();
+		cipher.setKey(key);
+		String encryptedPassword = "";
+		try {
+			encryptedPassword = cipher.encrypt(typedPassword);
+		} catch (DataLengthException | IllegalStateException | InvalidCipherTextException e) {
+			return false;
+		}
+		return encryptedPassword.equals(password);
 	}
 }

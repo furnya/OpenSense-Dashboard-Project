@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,8 +13,6 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.UserList;
-
-import gwt.material.design.incubator.client.chart.chartjs.RadarChart;
 
 public class DatabaseManager {
 
@@ -196,7 +193,7 @@ public class DatabaseManager {
 		}
 		return new ActionResult((result != null) && (result != 0) ? ActionResultType.SUCCESSFUL : ActionResultType.FAILED);
 	}
-	
+
 	public ActionResult createUserProfile(String email, String username, String password) {
 		String sql = "INSERT INTO user_profiles (email, password, username) VALUES (?, ?, ?);";
 		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
@@ -210,8 +207,8 @@ public class DatabaseManager {
 		}
 		return new ActionResult(ActionResultType.SUCCESSFUL);
 	}
-	
-	public String getPassword(String username) {
+
+	public String getPasswordFromUsername(String username) {
 		String sql = "SELECT password FROM user_profiles WHERE username = ?;";
 		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
 			statement.setString(1, username);
@@ -226,47 +223,65 @@ public class DatabaseManager {
 			return null;
 		}
 	}
-	
-	public int getUserIdFromUsername(String username) {
-		String sql = "SELECT user_id FROM user_profiles WHERE username = ?;";
+
+	public String getPasswordFromUserId(int userId) {
+		String sql = "SELECT password FROM user_profiles WHERE user_id = ?;";
 		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
-			statement.setString(1, username);
+			statement.setInt(1, userId);
 			ResultSet resultSet = statement.executeQuery();
-			Integer userId = null;
+			String password = "";
 			while(resultSet.next()) {
-				userId = resultSet.getInt("user_id");
+				password = resultSet.getString("password");
 			}
-			return userId;
+			return password;
 		} catch (Exception e) {
 			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
-			return new Random().nextInt();
-		}
-	}
-	
-	public int getUserIdFromEmail(String email) {
-		String sql = "SELECT user_id FROM user_profiles WHERE email = ?;";
-		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
-			statement.setString(1, email);
-			ResultSet resultSet = statement.executeQuery();
-			Integer userId = null;
-			while(resultSet.next()) {
-				userId = resultSet.getInt("user_id");
-			}
-			return userId;
-		} catch (Exception e) {
-			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
-			return new Random().nextInt();
+			return null;
 		}
 	}
 
-	public void setUserPassword(Integer userId, String password) {
-		String sql = "UPDATE user_profiles SET password=? WHERE  user_id=?;";
+	public int getUserIdFromUsername(String username) {
+		String sql = "SELECT user_id FROM user_profiles WHERE username = ?;";
+		Integer userId = null;
 		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
-			statement.setString(1, password);
-			statement.setInt(2, userId);
-			statement.executeUpdate();
+			statement.setString(1, username);
+			ResultSet resultSet = statement.executeQuery();
+			while(resultSet.next()) {
+				userId = resultSet.getInt("user_id");
+			}
+			return userId;
 		} catch (Exception e) {
 			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
 		}
+		return userId;
+	}
+
+	public Integer getUserIdFromEmail(String email) {
+		String sql = "SELECT user_id FROM user_profiles WHERE email = ?;";
+		Integer userId = null;
+		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
+			statement.setString(1, email);
+			ResultSet resultSet = statement.executeQuery();
+			while(resultSet.next()) {
+				userId = resultSet.getInt("user_id");
+			}
+			return userId;
+		} catch (Exception e) {
+			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
+		}
+		return userId;
+	}
+
+	public ActionResult setUserPassword(int userId, String password) {
+		String sql = "UPDATE user_profiles SET password=? WHERE  user_id=?;";
+		Integer result = null;
+		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
+			statement.setString(1, password);
+			statement.setInt(2, userId);
+			result = statement.executeUpdate();
+		} catch (Exception e) {
+			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
+		}
+		return (result != null) && (result != 0) ? new ActionResult(ActionResultType.SUCCESSFUL) : new ActionResult(ActionResultType.FAILED);
 	}
 }
