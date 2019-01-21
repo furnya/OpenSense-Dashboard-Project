@@ -815,7 +815,7 @@ public class Languages {
 		if(de) {
 			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde") + " bereits zur Liste \"" + listName + "\" hinzugefügt";
 		}else {
-			return "";
+			return (moreThanOne ? "The sensors " + sensors + " were" : "The sensor " + sensors + " was") + " added to the list \"" + listName + "\"";
 		}
 	}
 
@@ -823,15 +823,15 @@ public class Languages {
 		if(de) {
 			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde") + " aus der Liste \"" + listName + "\" gelöscht";
 		}else {
-			return "";
+			return (moreThanOne ? "The sensors " + sensors + " were" : "The sensor " + sensors + " was") + " deleted from the list \"" + listName + "\"";
 		}
 	}
 
 	public static String listContains(int sensorsSize, int selectedSensorsSize) {
 		if(de) {
-			return "(Enthält " + sensorsSize + (sensorsSize > 1 ? " Sensoren" : " Sensor") + " davon ausgewählt " + selectedSensorsSize + ")";
+			return "(Enthält " + sensorsSize + (sensorsSize > 1 ? " Sensoren" : " Sensor") + ", davon ausgewählt: " + selectedSensorsSize + ")";
 		}else {
-			return "";
+			return "(Contains " + sensorsSize + (sensorsSize > 1 ? " sensors" : " sensor") + ", selected of these: " + selectedSensorsSize + ")";
 		}
 	}
 
@@ -864,6 +864,86 @@ public class Languages {
 			return "Information zeigen";
 		}else {
 			return "Show information";
+		}
+	}
+	
+	public static String searchTooltip() {
+		if(de) {
+			return "Sensoren anhand der angegeben Parameter suchen";
+		}else {
+			return "Search sensors on the basis of the given parameters";
+		}
+	}
+	
+	public static String selectAllTooltip() {
+		if(de) {
+			return "Alle Sensoren in der Liste auswählen";
+		}else {
+			return "Select all sensors displayed in the list";
+		}
+	}
+	
+	public static String deselectAllTooltip() {
+		if(de) {
+			return "Alle ausgewählten Sensoren abwählen";
+		}else {
+			return "Deselect all selected sensors";
+		}
+	}
+	
+	public static String showOnMapTooltip() {
+		if(de) {
+			return "Ausgewählte Sensoren auf der Karte anzeigen";
+		}else {
+			return "Show selected sensors on the map";
+		}
+	}
+	
+	public static String showValuesTooltip() {
+		if(de) {
+			return "Werte aller ausgewählten Sensoren im Diagramm anzeigen";
+		}else {
+			return "Show the values of the selected sensors in a chart";
+		}
+	}
+	
+	public static String addToListTooltip() {
+		if(de) {
+			return "Alle ausgewählten Sensoren zu einer Liste hinzufügen";
+		}else {
+			return "Add all selected sensors to a list";
+		}
+	}
+	
+	public static String favTooltip() {
+		if(de) {
+			return "Zu Favoriten hinzufügen";
+		}else {
+			return "Add to favorites";
+		}
+	}
+	
+	public static String infoTooltip() {
+		if(de) {
+			return "Informationen anzeigen";
+		}else {
+			return "Show information";
+		}
+	}
+	
+	public static String deleteTooltip() {
+		if(de) {
+			return "Aus der Liste löschen";
+		}else {
+			return "Delete from list";
+		}
+	}
+	
+	public static String showInSearchTooltip() {
+		if(de) {
+			return "Ausgewählte Sensoren in der Suche anzeigen";
+		}else {
+			return "Show selected sensors in the search view";
 		}
 	}
 	

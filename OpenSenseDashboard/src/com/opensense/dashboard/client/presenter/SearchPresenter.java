@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
@@ -171,10 +172,12 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 		History.newItem(DataPanelPage.SEARCH.name(), false);
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if((result != null) && (result.getResultType() != null) && request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
-				if(request.getParameters() != null) {
-					this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, request.getParameters(), false));
-				}else if(request.getIds() != null) {
-					this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, false, request.getIds()));
+				if((this.appController.getDataPanelPresenter().getActiveDataPanelPagePresenter() instanceof SearchPresenter)) {
+					if(request.getParameters() != null) {
+						this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, request.getParameters(), false));
+					}else if(request.getIds() != null) {
+						this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, false, request.getIds()));
+					}
 				}
 				this.view.showSensorData(result.getSensors());
 			}else {

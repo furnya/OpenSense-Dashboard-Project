@@ -101,22 +101,36 @@
 	top: 40%;
 	text-align: center;
 }
+.range-button{
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 </ui:style>
 
 <bh:Div ui:field="container" addStyleNames="window-height flex">
 	<bh:Div ui:field="dataContainer" addStyleNames="{style.dataContainer}">
 		<bh:Div addStyleNames="{style.panel} {style.visPanel} visPanel round-corners">
 			<m:MaterialLabel textColor="WHITE" text="{lang.timespan}"/>
-			<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+			<m:MaterialTooltip text="{lang.customRange}">
+				<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn {style.range-button}"/>
+			</m:MaterialTooltip>
 			<!-- >dp:DateBox ui:field="newdp" title="{lang.from}"></dp:DateBox-->
 			<m:MaterialDatePicker ui:field="startingDate" textColor="WHITE" autoClose="true" placeholder="{lang.from}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
 			<!-- ma:timepicker.MaterialTimePicker ui:field="startingTime" placeholder="Time"/-->
 			<m:MaterialDatePicker ui:field="endingDate" textColor="WHITE" autoClose="true" placeholder="{lang.to}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
 			<!-- ma:timepicker.MaterialTimePicker ui:field="endingTime" placeholder="Time"/-->
-			<m:MaterialButton ui:field="pastYear" text="{lang.pastYear}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
-			<m:MaterialButton ui:field="pastMonth" text="{lang.pastMonth}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
-			<m:MaterialButton ui:field="pastWeek" text="{lang.pastWeek}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
-			<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn"/>
+			<m:MaterialTooltip text="{lang.pastYear}">
+				<m:MaterialButton ui:field="pastYear" text="{lang.pastYear}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn {style.range-button}"/>
+			</m:MaterialTooltip>
+			<m:MaterialTooltip text="{lang.pastMonth}">
+				<m:MaterialButton ui:field="pastMonth" text="{lang.pastMonth}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn {style.range-button}"/>
+			</m:MaterialTooltip>
+			<m:MaterialTooltip text="{lang.pastWeek}">
+				<m:MaterialButton ui:field="pastWeek" text="{lang.pastWeek}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn {style.range-button}"/>
+			</m:MaterialTooltip>
+			<m:MaterialTooltip text="{lang.past24Hours}">
+				<m:MaterialButton ui:field="past24Hours" text="{lang.past24Hours}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn {style.range-button}"/>
+			</m:MaterialTooltip>
 		</bh:Div>
 		<d:Spinner size="MEDIUM" ui:field="viewSpinner" display="NONE" />
 		<bh:Div ui:field="noDatasetsDiv" addStyleNames="{style.no-data-div} round-corners">

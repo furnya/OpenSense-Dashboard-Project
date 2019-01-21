@@ -486,11 +486,9 @@ input:focus+label{
 	overflow: hidden;
 }
 .list-action-btns > button{
-	width: calc(33.33% - 10px);
-	min-width: 0px;
-}
-.list-action-btns > button:not(:first-child) {
-	margin-left: 15px;
+	flex: 1 0 20%;
+	min-width: 23%;
+	margin: 10px;
 }
 .list-container {
 	max-height: calc(100vh - 65px);

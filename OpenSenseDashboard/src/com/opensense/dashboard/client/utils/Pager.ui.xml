@@ -58,18 +58,26 @@
 	</ui:style>
 	
 	<bh:Div addStyleNames="{style.pager}">
-		<m:MaterialButton enabled="false" ui:field="backwardsButton" addStyleNames="d-btn" title="{lang.backwards}">
-			<m:MaterialImage url="{gui.backwards.getSafeUri.asString}"/>
-		</m:MaterialButton>
-		<m:MaterialButton enabled="false" ui:field="backwardsStepByStepButton" addStyleNames="d-btn" title="{lang.backwardsStepByStep}">
-			<m:MaterialImage url="{gui.backwardsStepbyStep.getSafeUri.asString}" />
-		</m:MaterialButton>
+		<m:MaterialTooltip text="{lang.backwards}">
+			<m:MaterialButton enabled="false" ui:field="backwardsButton" addStyleNames="d-btn">
+				<m:MaterialImage url="{gui.backwards.getSafeUri.asString}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.backwardsStepByStep}">
+			<m:MaterialButton enabled="false" ui:field="backwardsStepByStepButton" addStyleNames="d-btn">
+				<m:MaterialImage url="{gui.backwardsStepbyStep.getSafeUri.asString}" />
+			</m:MaterialButton>
+		</m:MaterialTooltip>
 		<bh:Span ui:field="pageNumber" text="0-0 of 0" title="{lang.pageConfiguration}" color="white"/>
-		<m:MaterialButton enabled="false" ui:field="forwardsStepByStepButton" addStyleNames="d-btn" title="{lang.forwardsStepByStep}">
-			<m:MaterialImage url="{gui.forwardsStepByStep.getSafeUri.asString}" />
-		</m:MaterialButton>
-		<m:MaterialButton enabled="false" ui:field="forwardsButton" addStyleNames="d-btn" title="{lang.forwards}">
-			<m:MaterialImage url="{gui.forwards.getSafeUri.asString}" />
-		</m:MaterialButton>
+		<m:MaterialTooltip text="{lang.forwardsStepByStep}">
+			<m:MaterialButton enabled="false" ui:field="forwardsStepByStepButton" addStyleNames="d-btn">
+				<m:MaterialImage url="{gui.forwardsStepByStep.getSafeUri.asString}" />
+			</m:MaterialButton>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.forwards}">
+			<m:MaterialButton enabled="false" ui:field="forwardsButton" addStyleNames="d-btn">
+				<m:MaterialImage url="{gui.forwards.getSafeUri.asString}" />
+			</m:MaterialButton>
+		</m:MaterialTooltip>
 	</bh:Div>	
 </ui:UiBinder> 

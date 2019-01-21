@@ -107,7 +107,6 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			VisualisationsPresenter visualisationsPresenter = (VisualisationsPresenter) this.activeDataPanelPagePresenter;
 			visualisationsPresenter.updateFavoriteList();
 		}
-		//TODO: add vis
 	}
 
 	public void onUserLoggedIn() {
@@ -127,7 +126,6 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			VisualisationsPresenter visualisationsPresenter = (VisualisationsPresenter) this.activeDataPanelPagePresenter;
 			visualisationsPresenter.onUserLoggedIn();
 		}
-		//TODO: add vis
 	}
 
 	public void onUserLoggedOut() {
@@ -147,6 +145,5 @@ public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 			VisualisationsPresenter visualisationsPresenter = (VisualisationsPresenter) this.activeDataPanelPagePresenter;
 			visualisationsPresenter.onUserLoggedOut();
 		}
-		//TODO: add vis
 	}
 }

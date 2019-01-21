@@ -381,4 +381,8 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	public static void showLongInfo(String message) {
 		MaterialToast.fireToast(message, 10000, "info-growl");
 	}
+	
+	public DataPanelPresenter getDataPanelPresenter() {
+		return this.dataPanelPresenter;
+	}
 }

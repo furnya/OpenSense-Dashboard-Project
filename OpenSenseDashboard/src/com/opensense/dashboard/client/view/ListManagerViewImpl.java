@@ -88,9 +88,9 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
-
+	
 	@Override
-	public void addNewUserListItem(final UserList userList, boolean editable) {
+	public void addNewUserListItem(final UserList userList, boolean editable, int index) {
 		final int listId = userList.getListId();
 		final ListManagerOptions options = this.presenter.getController().getOptions();
 
@@ -116,15 +116,31 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		if(options.isShowSearchButton()) {
 			item.addShowSearchButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, this.selectedSensorIdsInLists.get(this.activeItemId))));
 		}
+		if(options.isShowAddToListButton()) {
+			item.addAddToListButtonButtonClickHandler(event -> {
+				item.clearListsDropDown();
+				this.presenter.requestAndShowUserList(listId);
+			});
+		}
+		item.setActivators(listId);
 		if(this.collapsiblesItems.containsKey(listId)) {
 			this.collapsiblesItems.get(listId).removeFromParent();
 			this.collapsiblesItems.replace(listId, item);
 		}else {
 			this.collapsiblesItems.put(listId, item);
 		}
-		this.collapsible.add(item);
+		if(index>=0) {
+			this.collapsible.insert(item, index);
+		}else {
+			this.collapsible.add(item);
+		}
 		this.initPager(listId);
 		item.showItem(true);
+	}
+
+	@Override
+	public void addNewUserListItem(final UserList userList, boolean editable) {
+		this.addNewUserListItem(userList, editable, -1);
 	}
 
 	public void deleteList(int listId) {
@@ -260,6 +276,18 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			this.selectedSensorIdsInLists.remove(id);
 		});
 	}
+	
+	@Override
+	public int clearUserList(int id) {
+		if(this.collapsiblesItems.get(id)==null) return -1;
+		int index = this.collapsible.getChildrenList().indexOf(this.collapsiblesItems.get(id));
+		this.collapsiblesItems.get(id).removeFromParent();
+		this.collapsiblesItems.remove(id);
+		this.showSensorIdsInLists.remove(id);
+		this.sensorCardsInLists.remove(id);
+		this.selectedSensorIdsInLists.remove(id);
+		return index;
+	}
 
 	private void selectAllSensorsInList(int listId, boolean isSelect) {
 		if(this.selectedSensorIdsInLists.get(listId) == null) {
@@ -382,5 +410,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	private native void clickElement(Element infoButtonElement) /*-{
 		infoButtonElement.click();
 	}-*/;
+
+	@Override
+	public void showUserListDropdown(int listId, List<UserList> userLists) {
+		this.collapsiblesItems.get(listId).showUserListsInDropDown(event -> {
+			this.presenter.addSelectedSensorsToUserList(event.getListId(), event.getListName(), this.selectedSensorIdsInLists.get(listId));
+		}, userLists);
+	}
 
 }

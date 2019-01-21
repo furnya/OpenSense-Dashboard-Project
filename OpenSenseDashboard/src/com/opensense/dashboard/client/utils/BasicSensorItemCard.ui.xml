@@ -33,15 +33,21 @@
 	</bh:Div>
 	<d:Spinner ui:field="cardSpinner" size="MEDIUM" display="NONE"/>
 	<bh:Div addStyleNames="card-action-buttons">
-		<m:MaterialButton display="NONE"  ui:field="showInfoButton" addStyleNames="round-button d-btn">
-			<m:MaterialImage url="{gui.info.getSafeUri.asString}"/>
-		</m:MaterialButton>
-		<m:MaterialButton display="NONE"  ui:field="favButton" addStyleNames="round-button d-btn">
-			<m:MaterialImage url="{gui.favorite.getSafeUri.asString}"/>
-		</m:MaterialButton>
-		<m:MaterialButton display="NONE"  ui:field="trashButton" addStyleNames="round-button d-btn red-button">
+		<m:MaterialTooltip text="{lang.infoTooltip}">
+			<m:MaterialButton display="NONE"  ui:field="showInfoButton" addStyleNames="round-button d-btn">
+				<m:MaterialImage url="{gui.info.getSafeUri.asString}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.favTooltip}">
+			<m:MaterialButton display="NONE"  ui:field="favButton" addStyleNames="round-button d-btn">
+				<m:MaterialImage url="{gui.favorite.getSafeUri.asString}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.deleteTooltip}">
+			<m:MaterialButton display="NONE"  ui:field="trashButton" addStyleNames="round-button d-btn red-button">
 			<m:MaterialImage url="{gui.trash.getSafeUri.asString}"/>
 		</m:MaterialButton>
+		</m:MaterialTooltip>
 	</bh:Div>
 	<bh:Div addStyleNames="info-content">
 		<bh:Div addStyleNames="accuracy-container">

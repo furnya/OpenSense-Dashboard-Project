@@ -1,10 +1,13 @@
 package com.opensense.dashboard.client.presenter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -24,6 +27,7 @@ import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
+import com.opensense.dashboard.shared.UserList;
 
 public class ListManagerPresenter implements IPresenter, ListManagerView.Presenter{
 
@@ -53,32 +57,38 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		this.updateFavoriteList();
 		this.updateUserLists();
 		if(this.controller.isUserLoggedIn()) {
-			this.view.showMySensorListsItem(true);
-			this.view.setOneItemStyle(false);
-			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MYSENSORS, false);
-			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
-				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMyListSensors() != null)
-						&& !result.getMyListSensors().isEmpty()){
-					this.getMinimalSensorDataAndShow(DefaultListItem.MY_LIST_ID, result.getMyListSensors(), false);
-				}else {
-					this.view.setSensorsInList(DefaultListItem.MY_LIST_ID, new ArrayList<>());
-				}
-				this.view.setOldSelection();
-			}, caught -> {
-				AppController.showError(Languages.connectionError());
-				LOGGER.log(Level.WARNING, "Failure fetching mySensors", caught);
-			},true));
+			this.updateMySensorsList();
 		}else {
 			this.view.setOneItemStyle(true);
 			this.view.showMySensorListsItem(false);
 		}
+	}
+	
+	public void updateMySensorsList() {
+		this.view.showMySensorListsItem(true);
+		this.view.setOneItemStyle(false);
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MYSENSORS, false);
+		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getMyListSensors() != null)
+					&& !result.getMyListSensors().isEmpty()){
+				this.getMinimalSensorDataAndShow(DefaultListItem.MY_LIST_ID, result.getMyListSensors(), false);
+			}else {
+				this.view.setSensorsInList(DefaultListItem.MY_LIST_ID, new ArrayList<>());
+			}
+			this.view.setOldSelection();
+		}, caught -> {
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure fetching mySensors", caught);
+		},true));
 	}
 
 	public void createNewList() {
 		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<Integer>(result -> {
 			if(result != null) {
 				this.view.setActiveItemId(result);
-				this.updateUserLists();
+				UserList newList = new UserList(result, Languages.newList());
+				this.view.addNewUserListItem(newList, true, -1);
+				this.view.setSensorsInList(result, new ArrayList<>());
 			}else {
 				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "Failure creating list, result is null");
@@ -124,15 +134,15 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		}else if(listId == DefaultListItem.MY_LIST_ID) {
 			GeneralService.Util.getInstance().deleteSensorsFromMySensors(sensorIds, new DefaultAsyncCallback<ActionResult>(result -> {
 				if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-					this.updateLists();
+					this.updateMySensorsList();
 					AppController.showInfo(Languages.sensorDeleted());
 				}else {
-					this.updateLists();
+					this.updateMySensorsList();
 					AppController.showError(Languages.connectionError());
 					LOGGER.log(Level.WARNING, "Failure deleting sensors in list, result is null or the request was not successfull");
 				}
 			}, caught -> {
-				this.updateLists();
+				this.updateMySensorsList();
 				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "Failure deleting sensors in list", caught);
 			},true));
@@ -141,7 +151,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		}else {
 			GeneralService.Util.getInstance().deleteSensorsFromUserList(listId, sensorIds, new DefaultAsyncCallback<ActionResult>(result -> {
 				if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-					this.updateUserLists();
+					this.updateUserList(listId);
 				}else {
 					AppController.showError(Languages.connectionError());
 					LOGGER.log(Level.WARNING, "Failure deleting sensors in list, result is null or the request was not successfull");
@@ -225,6 +235,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
 		this.view.setSelectedSensorItemsColor(sensorId, sensorColor);
 	}
+	
 	private void updateUserLists() {
 		this.view.clearUserLists();
 		if(this.controller.isUserLoggedIn()) {
@@ -239,6 +250,31 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 							this.view.setSensorsInList(userList.getListId(), new ArrayList<>());
 						}
 					});
+					this.view.setOldSelection();
+				}else {
+					AppController.showError(Languages.connectionError());
+					LOGGER.log(Level.WARNING, "Failure updating the user lists, result is null");
+				}
+			}, caught -> {
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure updating the user lists", caught);
+			},true));
+		}
+	}
+	
+	private void updateUserList(int listId) {
+		if(this.controller.isUserLoggedIn()) {
+			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.USER_LIST, false);
+			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getUserLists() != null)) {
+					UserList userList  = result.getUserLists().stream().filter(list -> list.getListId()==listId).findFirst().get();
+					int index = this.view.clearUserList(listId);
+					this.view.addNewUserListItem(userList, true, index);
+					if(!userList.getSensorIds().isEmpty()) {
+						this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
+					}else {
+						this.view.setSensorsInList(userList.getListId(), new ArrayList<>());
+					}
 					this.view.setOldSelection();
 				}else {
 					AppController.showError(Languages.connectionError());
@@ -265,6 +301,43 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		},caught -> {
 			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting all sensor info", caught);
+		}, false));
+	}
+	
+	@Override
+	public void requestAndShowUserList(int listId) {
+		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.USER_LIST, false);
+		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
+			if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getUserLists() != null)) {
+				this.view.showUserListDropdown(listId,result.getUserLists());
+			}else {
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Failure requesting the user lists, result is null");
+			}
+		}, caught -> {
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure requesting the user lists", caught);
+		},true));
+	}
+	
+	@Override
+	public void addSelectedSensorsToUserList(final int listId, final String listName, final List<Integer> selectedSensors) {
+		if(listId==DefaultListItem.FAVORITE_LIST_ID) {
+			this.addSensorsToList(listId, selectedSensors);
+			this.updateFavoriteList();
+			return;
+		}
+		GeneralService.Util.getInstance().addSensorsToUserList(listId, selectedSensors, new DefaultAsyncCallback<ActionResult>(result -> {
+			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
+				AppController.showSuccess(Languages.addedSensorsToList(Arrays.toString(selectedSensors.toArray()).replace("[", "").replace("]", ""), listName, selectedSensors.size() > 1));
+				this.updateUserList(listId);
+			}else {
+				AppController.showError(Languages.connectionError());
+				LOGGER.log(Level.WARNING, "Result is nul or did not match the expected resultType");
+			}
+		},caught -> {
+			AppController.showError(Languages.connectionError());
+			LOGGER.log(Level.WARNING, "Failure requesting the user lists.");
 		}, false));
 	}
 }
