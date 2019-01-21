@@ -84,7 +84,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 
 	@Override
 	public void onPageReturn() {
-		// TODO Auto-generated method stub
+		this.view.getListManager().setUserLoggedInAndUpdate(!this.appController.isGuest());
 	}
 	
 	@Override
@@ -102,6 +102,13 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		view.getListManager().updateSelectedSensorsList(ids);
 	}
 
+	public void onUserLoggedIn() {
+		this.view.getListManager().onUserLoggedIn();
+	}
+
+	public void onUserLoggedOut() {
+		this.view.getListManager().onUserLoggedOut();
+	}
 
 	@Override
 	public void waitUntilViewInit(final Runnable runnable) {
@@ -349,14 +356,6 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 
 	public void updateFavoriteList() {
 		this.view.getListManager().updateFavoriteList();
-	}
-
-	public void onUserLoggedIn() {
-		this.view.getListManager().onUserLoggedIn();
-	}
-
-	public void onUserLoggedOut() {
-		this.view.getListManager().onUserLoggedOut();
 	}
 
 	/**
