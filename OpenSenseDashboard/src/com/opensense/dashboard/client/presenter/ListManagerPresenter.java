@@ -86,7 +86,9 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 		GeneralService.Util.getInstance().createNewUserList(new DefaultAsyncCallback<Integer>(result -> {
 			if(result != null) {
 				this.view.setActiveItemId(result);
-				this.updateUserLists();
+				UserList newList = new UserList(result, Languages.newList());
+				this.view.addNewUserListItem(newList, true, -1);
+				this.view.setSensorsInList(result, new ArrayList<>());
 			}else {
 				AppController.showError(Languages.connectionError());
 				LOGGER.log(Level.WARNING, "Failure creating list, result is null");
