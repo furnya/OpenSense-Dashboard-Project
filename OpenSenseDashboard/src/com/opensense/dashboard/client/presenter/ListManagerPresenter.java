@@ -240,8 +240,8 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.USER_LIST, false);
 			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
 				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getUserLists() != null)) {
+					this.view.clearUserLists();
 					result.getUserLists().forEach(userList -> {
-						this.view.clearUserLists();
 						this.view.addNewUserListItem(userList, true);
 						if(!userList.getSensorIds().isEmpty()) {
 							this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
