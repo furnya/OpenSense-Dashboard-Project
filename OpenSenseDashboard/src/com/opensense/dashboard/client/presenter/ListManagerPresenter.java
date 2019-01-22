@@ -3,11 +3,9 @@ package com.opensense.dashboard.client.presenter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -63,7 +61,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			this.view.showMySensorListsItem(false);
 		}
 	}
-	
+
 	public void updateMySensorsList() {
 		this.view.showMySensorListsItem(true);
 		this.view.setOneItemStyle(false);
@@ -235,7 +233,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 	public void setSelectedSensorItemsColor(int sensorId, String sensorColor) {
 		this.view.setSelectedSensorItemsColor(sensorId, sensorColor);
 	}
-	
+
 	private void updateUserLists() {
 		this.view.clearUserLists();
 		if(this.controller.isUserLoggedIn()) {
@@ -243,6 +241,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(), new DefaultAsyncCallback<Response>(result -> {
 				if((result != null) && (result.getResultType() != null) && requestBuilder.getRequest().getRequestType().equals(result.getResultType()) && (result.getUserLists() != null)) {
 					result.getUserLists().forEach(userList -> {
+						this.view.clearUserLists();
 						this.view.addNewUserListItem(userList, true);
 						if(!userList.getSensorIds().isEmpty()) {
 							this.getMinimalSensorDataAndShow(userList.getListId(), userList.getSensorIds(), false);
@@ -261,7 +260,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			},true));
 		}
 	}
-	
+
 	private void updateUserList(int listId) {
 		if(this.controller.isUserLoggedIn()) {
 			final RequestBuilder requestBuilder = new RequestBuilder(ResultType.USER_LIST, false);
@@ -303,7 +302,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			LOGGER.log(Level.WARNING, "Failure requesting all sensor info", caught);
 		}, false));
 	}
-	
+
 	@Override
 	public void requestAndShowUserList(int listId) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.USER_LIST, false);
@@ -319,7 +318,7 @@ public class ListManagerPresenter implements IPresenter, ListManagerView.Present
 			LOGGER.log(Level.WARNING, "Failure requesting the user lists", caught);
 		},true));
 	}
-	
+
 	@Override
 	public void addSelectedSensorsToUserList(final int listId, final String listName, final List<Integer> selectedSensors) {
 		if(listId==DefaultListItem.FAVORITE_LIST_ID) {
