@@ -3,12 +3,12 @@ package com.opensense.dashboard.server.util;
 import com.opensense.dashboard.shared.MeasurandType;
 
 public class ServerLanguages{
-
 	/**
 	 * German or english
 	 */
 	private static boolean de = true;
 	private static boolean en = false;
+	private static boolean es = false;
 
 	private ServerLanguages() {
 		// Empty private constructor to hide the implicit public one.
@@ -22,14 +22,26 @@ public class ServerLanguages{
 		return en;
 	}
 
+	public static boolean isSpanish() {
+		return es;
+	}
+
 	public static void setGerman() {
 		de = true;
 		en = false;
+		es = false;
 	}
 
 	public static void setEnglish() {
 		de = false;
 		en = true;
+		es = false;
+	}
+
+	public static void setSpanish() {
+		de = false;
+		en = false;
+		es = true;
 	}
 
 	public static String getMeasurandName(MeasurandType measurandType) {
@@ -231,6 +243,14 @@ public class ServerLanguages{
 			return "Neue Liste";
 		}else {
 			return "New list";
+		}
+	}
+
+	public static String wrongPassword() {
+		if(de) {
+			return "Das eingegebende Passwort ist nicht korrekt";
+		}else {
+			return "The entered password is not correct";
 		}
 	}
 }

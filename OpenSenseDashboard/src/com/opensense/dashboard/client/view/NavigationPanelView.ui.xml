@@ -12,17 +12,8 @@
 	width: 90px;
 	bottom: 0px;
 }
-.logout-container{
-    position: absolute;
-    bottom: 43px;
-    left: 90px;
-}
-.logout-container > button {
-    border-radius: 0;
-    border: none;
-    box-shadow: none;	
-}
 </ui:style>
+
 
 <bh:Div addStyleNames="nav-container vertical user-select-none">
 	<b:ButtonGroup ui:field="buttonGroup"/>
@@ -31,9 +22,6 @@
 			<b:Button addStyleNames="nav-button" ui:field="lastButton"/>
  		</m:MaterialTooltip>
  	</bh:Div>
- 	<bh:Div ui:field="logoutContainer" addStyleNames="{style.logout-container}">
-		<m:MaterialButton text="{lang.logout}" ui:field="logout" addStyleNames="d-btn"/>
-	</bh:Div>
 </bh:Div>
 
 </ui:UiBinder>

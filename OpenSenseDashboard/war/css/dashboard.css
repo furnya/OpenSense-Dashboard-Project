@@ -644,3 +644,16 @@ input:focus+label{
 	height: 38vw;
 	max-height: 75vh;
 }
+
+.footer-right-container{
+	position: absolute;
+	right: 10px;
+	top: 2px;
+	color: white;
+}
+.footer-right-container > img[class*="active"]{
+	border-radius: 10px;
+    box-shadow: 0px 0px 5px 2px white !important;
+    cursor: default !important;
+}
+

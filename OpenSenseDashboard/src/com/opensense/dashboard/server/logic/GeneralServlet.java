@@ -25,6 +25,7 @@ import com.opensense.dashboard.shared.Response;
 public class GeneralServlet extends RemoteServiceServlet implements GeneralService{
 
 	private static final Logger LOGGER = Logger.getLogger(GeneralServlet.class.getName());
+
 	
 	@Override
 	public Response getDataFromRequest(Request searchRequest) {
@@ -133,7 +134,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public ActionResult createSensor(CreateSensorRequest request) {
-		if(SessionUser.getInstance().isGuest()) {
+		if(SessionUser.getInstance().isGuest() || (SessionUser.getInstance().getToken()==null)) {
 			ActionResult ar = new ActionResult(ActionResultType.FAILED);
 			ar.setErrorMessage(Languages.notLoggedIn());
 			return ar;
@@ -155,7 +156,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	@Override
 	public ActionResult deleteSensorsFromMySensors(List<Integer> sensorIds) {
-		if(SessionUser.getInstance().isGuest()) {
+		if(SessionUser.getInstance().isGuest()  || (SessionUser.getInstance().getToken()==null)) {
 			return new ActionResult(ActionResultType.FAILED);
 		}
 		boolean[] deleteFailed = {false};
@@ -172,7 +173,6 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
 	}
-
 	@Override
 	public String getUserName() {
 		if(!SessionUser.getInstance().isGuest()) {

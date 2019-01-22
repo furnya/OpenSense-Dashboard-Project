@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -317,24 +319,36 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		return idsAsString.toString();
 	}
 
-	public void switchLanguage() {
-		if(Languages.isGerman()) {
+	public void switchLanguage(String lang) {
+		if(lang.equals(Languages.getActualLanguageString())) {
+			return;
+		}
+		if(Languages.GERMAN.equals(lang)) {
+			Languages.setGerman();
+		}else if(Languages.ENGLISH.equals(lang)) {
 			Languages.setEnglish();
 		}else {
-			Languages.setGerman();
+			Languages.setSpanish();
 		}
 		CookieManager.writeLanguageCookie(Languages.getActualLanguageString());
 		Window.Location.reload();
 	}
 
 	private void setLanguageFromCookies() {
-		if ((CookieManager.getLanguage() != null) && "en".equals(CookieManager.getLanguage())) {
-			Languages.setEnglish();
+		String lang = CookieManager.getLanguage();
+		if ((lang != null)) {
+			if(Languages.GERMAN.equals(lang)) {
+				Languages.setGerman();
+			}else if(Languages.ENGLISH.equals(lang)) {
+				Languages.setEnglish();
+			}else {
+				Languages.setSpanish();
+			}
 		}else {
-			Languages.setGerman();
+			lang = Languages.getActualLanguageString(); // Default is german
 		}
 		// Sets the correct serverLanguage.
-		GeneralService.Util.getInstance().setServerLanguage(Languages.getActualLanguageString(), new DefaultAsyncCallback<Void>(result -> {}));
+		GeneralService.Util.getInstance().setServerLanguage(lang, new DefaultAsyncCallback<Void>(result -> {}));
 	}
 
 	public boolean isGuest() {
@@ -354,34 +368,56 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		if(goToHOme || (this.dataPanelPresenter.getActiveDataPanelPagePresenter() instanceof UserPresenter)) {
 			this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
 		}
-		showSuccess("Logged in");
+		showSuccess(Languages.loggedIn());
+		this.navigationPanelPresenter.setLastButtonActive(true);
 		this.dataPanelPresenter.onUserLoggedIn();
-		this.navigationPanelPresenter.onUserLoggedIn();
 	}
 
 	public void onUserLoggedOut() {
 		this.isGuest = true;
-		showSuccess("Logged out");
+		showSuccess(Languages.loggedOut());
+		if((this.dataPanelPresenter.getActiveDataPanelPagePresenter() instanceof UserPresenter)) {
+			this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
+		}
+		this.navigationPanelPresenter.setLastButtonActive(false);
 		this.dataPanelPresenter.onUserLoggedOut();
-		this.navigationPanelPresenter.onUserLoggedOut();
 	}
+	
+	private static final int MAX_TOASTS = 4;
+	private static final String TOAST_CONTAINER_ID = "toast-container";
 
 	public static void showError(String message) {
-		MaterialToast.fireToast(message, 4000, "error-growl");
+		Element toastContainer = Document.get().getElementById(TOAST_CONTAINER_ID);
+		int toastCount = (toastContainer!=null) ? toastContainer.getChildCount() : 0;
+		if(toastCount<=MAX_TOASTS) {
+			MaterialToast.fireToast(message, 4000, "error-growl");
+		}
 	}
 
 	public static void showSuccess(String message) {
-		MaterialToast.fireToast(message, 4000, "success-growl");
+		Element toastContainer = Document.get().getElementById(TOAST_CONTAINER_ID);
+		int toastCount = (toastContainer!=null) ? toastContainer.getChildCount() : 0;
+		if(toastCount<=MAX_TOASTS) {
+			MaterialToast.fireToast(message, 4000, "success-growl");
+		}
 	}
 
 	public static void showInfo(String message) {
-		MaterialToast.fireToast(message, 4000, "info-growl");
+		Element toastContainer = Document.get().getElementById(TOAST_CONTAINER_ID);
+		int toastCount = (toastContainer!=null) ? toastContainer.getChildCount() : 0;
+		if(toastCount<=MAX_TOASTS) {
+			MaterialToast.fireToast(message, 4000, "info-growl");
+		}
 	}
 
 	public static void showLongInfo(String message) {
-		MaterialToast.fireToast(message, 10000, "info-growl");
+		Element toastContainer = Document.get().getElementById(TOAST_CONTAINER_ID);
+		int toastCount = (toastContainer!=null) ? toastContainer.getChildCount() : 0;
+		if(toastCount<=MAX_TOASTS) {
+			MaterialToast.fireToast(message, 10000, "info-growl");
+		}
 	}
-	
+
 	public DataPanelPresenter getDataPanelPresenter() {
 		return this.dataPanelPresenter;
 	}

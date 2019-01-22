@@ -144,10 +144,19 @@ public interface GUIImageBundle extends ClientBundle {
 
 	@Source("icons/check.svg")
 	SVGResource check();
-	
+
 	@Source("icons/information.svg")
 	SVGResource info();
 	
 	@Source("icons/dashboard-icon.svg")
 	SVGResource dashboardIcon();
+
+	@Source("icons/english-flag.svg")
+	SVGResource englishFlag();
+
+	@Source("icons/german-flag.svg")
+	SVGResource germanFlag();
+
+	@Source("icons/spanish-flag.svg")
+	SVGResource spanishFlag();
 }

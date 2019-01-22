@@ -42,6 +42,7 @@ public class ClientRequestHandler {
 	private static final String AGGREGATION_TYPE = "aggregationType";
 	private static final String AGGREGATION_RANGE = "aggregationRange";
 	private static final String SENSORS = "/sensors/";
+	private static final String USER_PROFILE = "/users/profile";
 
 	private static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
 
@@ -287,9 +288,14 @@ public class ClientRequestHandler {
 		}
 	}
 
-	public String sendLoginRequest(String body) throws IOException {
+	public String sendLoginRequest(String body) {
 		RequestSender rs = new RequestSender();
-		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/users/login", body, null);
+		JSONObject idJSON = null;
+		try{
+			idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/users/login", body, null);
+		}catch(IOException e) {
+			return null;
+		}
 		if(idJSON==null) {
 			return null;
 		}
@@ -358,6 +364,7 @@ public class ClientRequestHandler {
 
 	public List<Integer> getMySensorIds(String token) throws IOException{
 		LinkedList<Integer> sensorIdList = new LinkedList<>();
+		if(token==null) return sensorIdList;
 		RequestSender rs = new RequestSender();
 		JSONArray sensorArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/mysensorids", token);
 		if(sensorArrayJSON==null) {
@@ -462,6 +469,7 @@ public class ClientRequestHandler {
 
 	public List<UserList> getUserLists() {
 		if(!SessionUser.getInstance().isGuest()) {
+			DatabaseManager.initPooling();
 			DatabaseManager db = new DatabaseManager();
 			return db.getUserLists(SessionUser.getInstance().getUserId());
 		}
@@ -472,6 +480,15 @@ public class ClientRequestHandler {
 	public String sendDeleteSensorRequest(Integer sensorId) throws IOException{
 		RequestSender rs = new RequestSender();
 		return rs.deleteRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+SENSORS+sensorId, SessionUser.getInstance().getToken());
+	}
+	
+	public Integer getUserId(String token) throws IOException{
+		RequestSender rs = new RequestSender();
+		JSONArray profileJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+USER_PROFILE, token);
+		if(profileJSON==null) {
+			return null;
+		}
+		return ((JSONObject) profileJSON.get(0)).getInt(JsonAttributes.ID.getNameString());
 	}
 
 }

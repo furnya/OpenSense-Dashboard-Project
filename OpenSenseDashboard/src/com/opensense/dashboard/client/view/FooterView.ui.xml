@@ -7,13 +7,7 @@
 	<ui:with type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 	
 <ui:style>
-.right{
-	position: absolute;
-	right: 10px;
-	top: 4px;
-	color: white;
-}
-.html{
+ .html{
     margin-left: 90px;
     text-align: center;
     margin-top: 4px;
@@ -24,11 +18,24 @@
 .html > a{
 	color: white;	
 }
+.margin-right-8{
+	margin-right: 8px;
+}
 </ui:style>
 
 <bh:Div addStyleNames="display-block user-select-none">
 	<g:HTML ui:field="htmlCon" addStyleNames="{style.html}"/>
-	<bh:Span ui:field="languageSwitch" text="{lang.languageChange}" addStyleNames="{style.right} clickable"/>
+	<bh:Div addStyleNames="footer-right-container">
+		<m:MaterialTooltip text="{lang.german}" position="TOP">
+			<m:MaterialImage ui:field="germanButton" url="{gui.germanFlag.getSafeUri.asString}" height="18px" width="18px" addStyleNames=" clickable margin-right-10"/>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.english}" position="TOP">
+			<m:MaterialImage ui:field="englishButton" url="{gui.englishFlag.getSafeUri.asString}" height="18px" width="18px" addStyleNames="clickable {style.margin-right-8}"/>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.spanish}" position="TOP">
+			<m:MaterialImage ui:field="spanishButton" url="{gui.spanishFlag.getSafeUri.asString}" height="22px" width="22px" addStyleNames="clickable"/>
+		</m:MaterialTooltip>
+	</bh:Div>
 </bh:Div>
 
 </ui:UiBinder>
