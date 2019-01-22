@@ -989,4 +989,20 @@ public class Languages {
 			return "Spanish";
 		}
 	}
+	
+	public static String delete() {
+		if(de) {
+			return "Löschen";
+		}else {
+			return "Delete";
+		}
+	}
+	
+	public static String confirmDeleteQuestion() {
+		if(de) {
+			return "Möchten Sie die Liste wirklich löschen?";
+		}else {
+			return "Do you really want to delete the list?";
+		}
+	}
 }

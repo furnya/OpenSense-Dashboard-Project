@@ -14,6 +14,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
@@ -24,6 +25,7 @@ import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.model.Size;
 import com.opensense.dashboard.client.utils.BasicSensorItemCard;
+import com.opensense.dashboard.client.utils.ConfirmDeleteModal;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.ListCollapsibleItem;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
@@ -102,7 +104,11 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		item.addShowInfoButtonButtonClickHandler(event -> this.selectedSensorIdsInLists.get(listId).forEach(sensorId -> this.clickElement(this.sensorCardsInLists.get(listId).get(sensorId).getInfoButtonElement())));
 		if(editable && options.isEditingActive()) {
 			item.addListNameInputHandler(event -> this.presenter.changeListName(listId, event.getListName()));
-			item.addDeleteButtonClickHandler(event -> this.deleteList(listId));
+			item.addDeleteButtonClickHandler(event -> {
+				ConfirmDeleteModal modal = new ConfirmDeleteModal(event2 -> this.deleteList(listId));
+				RootPanel.get().add(modal);
+				modal.open();
+			});
 		}
 		if(options.isEditingActive()) {
 			item.addDeleteSensorsButtonClickHandler(event -> this.presenter.deleteSensorsInList(listId, this.selectedSensorIdsInLists.get(listId)));
