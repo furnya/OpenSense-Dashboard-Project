@@ -21,4 +21,5 @@ public interface UserView extends IDataPanelPageView{
 	public void showLoginPopup(boolean b);
 	public void hideChangePasswordContainer(boolean b);
 	public void showSaveButtonSpinner(boolean b);
+	void reEnableButtons();
 }

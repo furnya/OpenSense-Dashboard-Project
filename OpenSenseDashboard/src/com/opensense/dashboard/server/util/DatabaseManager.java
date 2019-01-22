@@ -13,6 +13,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.UserList;
+import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 
 public class DatabaseManager {
 
@@ -198,7 +199,12 @@ public class DatabaseManager {
 		return new ActionResult((result != null) && (result != 0) ? ActionResultType.SUCCESSFUL : ActionResultType.FAILED);
 	}
 
-	public ActionResult createUserProfile(String email, String username, String password) {
+	public Integer createUserProfile(String email, String username, String password) {
+		Integer usernameId = getUserIdFromUsername(username);
+		Integer emailId = getUserIdFromEmail(email);
+		if((usernameId!=null && usernameId!=0) || (emailId!=null && emailId!=0)) {
+			return -1;
+		}
 		String sql = "INSERT INTO user_profiles (email, password, username) VALUES (?, ?, ?);";
 		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){
 			statement.setString(1, email);
@@ -206,10 +212,9 @@ public class DatabaseManager {
 			statement.setString(3, username);
 			statement.executeUpdate();
 		} catch (Exception e) {
-			logger.log(Level.WARNING, ServerLanguages.unexpectedErrorLog(), e);
-			return new ActionResult(ActionResultType.FAILED);
+			return -2;
 		}
-		return new ActionResult(ActionResultType.SUCCESSFUL);
+		return this.getUserIdFromUsername(username);
 	}
 
 	public String getPasswordFromUsername(String username) {
@@ -244,7 +249,7 @@ public class DatabaseManager {
 		}
 	}
 
-	public int getUserIdFromUsername(String username) {
+	public Integer getUserIdFromUsername(String username) {
 		String sql = "SELECT user_id FROM user_profiles WHERE username = ?;";
 		Integer userId = null;
 		try (Connection con = openSQLConnection(); PreparedStatement statement = con.prepareStatement(sql)){

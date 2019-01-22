@@ -89,24 +89,30 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 	}
 
 	@Override
-	public void sendRegisterRequest(String username, String password, String email) {
+	public void sendRegisterRequest(String username, final String password, String email) {
 		TripleDesCipher cipher = new TripleDesCipher();
 		cipher.setKey(new byte[] { -110, 121, -65, 22, -60, 61, -22, -60, 21, -122, 41, -89, -89, -68, -8, 41, -119, -51, -12, -36, 19, -8, -17, 47 });
+		String passwordCrypt = password;
 		try {
-			password = cipher.encrypt(password);
+			passwordCrypt = cipher.encrypt(password);
 		} catch (DataLengthException | IllegalStateException | InvalidCipherTextException e) {
 			AppController.showError(Languages.connectionError());
 			return;
 		}
-		AuthenticationService.Util.getInstance().userRegisterRequest(username, password, email, new DefaultAsyncCallback<ActionResult>(result -> {
+		AuthenticationService.Util.getInstance().userRegisterRequest(username, passwordCrypt, email, new DefaultAsyncCallback<ActionResult>(result -> {
 			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())){
 				AppController.showSuccess(Languages.successfullyCreatedAccout());
-				this.view.resetViewElements();
+				this.appController.onUserLoggedIn(true);
 			}else{
-				AppController.showError(Languages.invalidParameters());
+				this.view.reEnableButtons();
+				if(result!=null && result.getErrorMessage()!=null && !result.getErrorMessage().isEmpty()) {
+					AppController.showError(result.getErrorMessage());
+				}else {
+					AppController.showError(Languages.invalidParameters());
+				}
 			}
 		},caught -> {
-			this.view.showLoginNotValid();
+			this.view.reEnableButtons();
 			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting the register.");
 		}, false));
@@ -119,9 +125,11 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 				AppController.showSuccess(Languages.passwordResetSent());
 				this.view.resetViewElements();
 			}else{
+				this.view.reEnableButtons();
 				AppController.showError(Languages.connectionError());
 			}
 		},caught -> {
+			this.view.reEnableButtons();
 			AppController.showError(Languages.connectionError());
 			LOGGER.log(Level.WARNING, "Failure requesting the password reset.");
 		}, false));

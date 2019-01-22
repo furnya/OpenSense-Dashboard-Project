@@ -253,4 +253,12 @@ public class ServerLanguages{
 			return "The entered password is not correct";
 		}
 	}
+	
+	public static String usernameOrEmailExists() {
+		if(de) {
+			return "Es existiert schon ein Benutzer mit dieser Email-Adresse oder diesem Benutzernamen";
+		}else {
+			return "A user with this email or this username already exists";
+		}
+	}
 }

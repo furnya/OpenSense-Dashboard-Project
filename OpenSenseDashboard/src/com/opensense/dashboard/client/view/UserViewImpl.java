@@ -86,6 +86,8 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 
 	@UiHandler("forgotPassword")
 	public void onForgotPasswordClicked(ClickEvent e) {
+		this.resetViewElements();
+		this.regiLabel.setText(Languages.login());
 		this.userName.getElement().getStyle().setDisplay(Display.NONE);
 		this.password.getElement().getStyle().setDisplay(Display.NONE);
 		this.passwordVerify.getElement().getStyle().setDisplay(Display.NONE);
@@ -95,7 +97,6 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 
 	@UiHandler("regiLabel")
 	public void onRegiLabelClicked(ClickEvent e) {
-		this.resetViewElements();
 		if(Languages.register().equals(this.regiLabel.getText())) {
 			this.regiLabel.setText(Languages.login());
 			this.loginButton.setText(Languages.register());
@@ -129,17 +130,26 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 				AppController.showError(Languages.invalidEmail());
 				return;
 			}
+			this.spinner.getElement().getStyle().clearDisplay();
+			this.loginButton.setEnabled(false);
+			this.regiLabel.setEnabled(false);
+			this.forgotPassword.setEnabled(false);
 			this.presenter.sendRegisterRequest(this.userName.getValue(),this.password.getValue(),this.email.getValue());
 		}else if(Languages.login().equals(this.loginButton.getText())){
 			this.spinner.getElement().getStyle().clearDisplay();
 			this.loginButton.setEnabled(false);
 			this.regiLabel.setEnabled(false);
+			this.forgotPassword.setEnabled(false);
 			this.presenter.sendLoginRequest(this.userName.getText(), this.password.getText());
 		}else if(Languages.send().equals(this.loginButton.getText())) {
 			if((this.email.getValue()==null) || !this.email.getValue().matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
 				AppController.showError(Languages.invalidEmail());
 				return;
 			}
+			this.spinner.getElement().getStyle().clearDisplay();
+			this.loginButton.setEnabled(false);
+			this.regiLabel.setEnabled(false);
+			this.forgotPassword.setEnabled(false);
 			this.presenter.sendForgotPasswordRequest(this.email.getValue());
 		}
 	}
@@ -199,6 +209,7 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 	public void resetViewElements() {
 		this.loginButton.setEnabled(true);
 		this.regiLabel.setEnabled(true);
+		this.forgotPassword.setEnabled(true);
 		this.regiLabel.setText(Languages.register());
 		this.loginButton.setText(Languages.login());
 		this.userName.getElement().getStyle().setDisplay(Display.BLOCK);
@@ -206,7 +217,17 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 		this.passwordVerify.getElement().getStyle().setDisplay(Display.NONE);
 		this.email.getElement().getStyle().setDisplay(Display.NONE);
 		this.password.reset();
+		this.email.reset();
+		this.passwordVerify.reset();
 		this.userName.reset();
+		this.spinner.getElement().getStyle().setDisplay(Display.NONE);
+	}
+	
+	@Override
+	public void reEnableButtons() {
+		this.loginButton.setEnabled(true);
+		this.regiLabel.setEnabled(true);
+		this.forgotPassword.setEnabled(true);
 		this.spinner.getElement().getStyle().setDisplay(Display.NONE);
 	}
 
