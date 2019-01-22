@@ -1,8 +1,6 @@
 package com.opensense.dashboard.server.logic;
 
-import java.io.IOException;
 import java.util.Properties;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,21 +54,16 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 	public ActionResult userLoginRequest(String username, String password) {
 		DatabaseManager.initPooling();
 		DatabaseManager db = new DatabaseManager();
-			String passwordDB = db.getPasswordFromUsername(username);
-		TripleDesCipher cipher = new TripleDesCipher();
-		cipher.setKey(key);
-		try {
-			password = cipher.encrypt(password);
-		} catch (DataLengthException | IllegalStateException | InvalidCipherTextException e) {
-			return new ActionResult(ActionResultType.FAILED);
-		}
-		if(password.equals(passwordDB)) {
+		String passwordDB = db.getPasswordFromUsername(username);
+		password = this.encryptPassword(password);
+		if(this.isPasswordCorrect(passwordDB, password)) {
 			String body = "{\"username\":\""+System.getenv("USERNAME")+"\",\"password\":\""+System.getenv("PASSWORD")+"\"}";
 			String token = ClientRequestHandler.getInstance().sendLoginRequest(body);
 			SessionUser.getInstance().createUser(db.getUserIdFromUsername(username), username, token);
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}else {
 			SessionUser.getInstance().removeUser();
+			DatabaseManager.clearDataSource();
 			return new ActionResult(ActionResultType.FAILED);
 		}
 	}
@@ -90,6 +83,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		if(ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
 			SessionUser.getInstance().createUser(db.getUserIdFromUsername(username), username, null);
 		}
+		DatabaseManager.clearDataSource();
 		return result;
 	}
 
@@ -99,6 +93,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		DatabaseManager db = new DatabaseManager();
 		Integer userId = db.getUserIdFromEmail(email);
 		if(userId==0) {
+			DatabaseManager.clearDataSource();
 			return new ActionResult(ActionResultType.FAILED);
 		}else {
 			String password = RandomStringUtils.randomAlphanumeric(10);
@@ -111,6 +106,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 			}
 			db.setUserPassword(userId, passwordHash);
 			this.sendResetPasswordMail(email, password);
+			DatabaseManager.clearDataSource();
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
 	}
@@ -127,12 +123,10 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		mailProps.put("mail.smtp.starttls.enable", "true");
 
 		Session mailSession = Session.getDefaultInstance(mailProps, new Authenticator() {
-
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("opensense.dashboard@gmail.com", System.getenv("PASSWORD"));
+				return new PasswordAuthentication("opensense.dashboard@gmail.com", System.getenv("PASSWORD"));
 			}
-
 		});
 
 		MimeMessage message = new MimeMessage(mailSession);
