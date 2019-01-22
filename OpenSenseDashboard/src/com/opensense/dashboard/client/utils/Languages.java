@@ -1279,7 +1279,7 @@ public class Languages {
 		} else if (en) {
 			return "German";
 		} else {
-			return "Espa\u00F1ol";
+			return "Alem\u00E1n";
 		}
 	}
 
@@ -1289,7 +1289,7 @@ public class Languages {
 		} else if (en) {
 			return "English";
 		} else {
-			return "Espa\u00F1ol";
+			return "Ingl\u00E9s";
 		}
 	}
 
@@ -1299,7 +1299,7 @@ public class Languages {
 		} else if (en) {
 			return "Spanish";
 		} else {
-			return "Español";
+			return "Espa\u00F1ol";
 		}
 	}
 
