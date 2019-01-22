@@ -41,4 +41,5 @@ public interface ListManagerView {
 	public void showUserListDropdown(int listId, List<UserList> userLists);
 	int clearUserList(int id);
 	void addNewUserListItem(UserList userList, boolean editable, int index);
+	void showSpinner(boolean show);
 }

@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -31,10 +32,12 @@ import com.opensense.dashboard.client.utils.ListCollapsibleItem;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
 import com.opensense.dashboard.client.utils.MeasurandIconHelper;
 import com.opensense.dashboard.client.utils.Pager;
+import com.opensense.dashboard.client.utils.Spinner;
 import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.UserList;
 
+import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.ui.MaterialCollapsible;
 
 public class ListManagerViewImpl extends Composite implements ListManagerView {
@@ -51,6 +54,9 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@UiField
 	MaterialCollapsible collapsible;
+	
+	@UiField
+	Spinner spinner;
 
 	private Map<Integer, Map<Integer, BasicSensorItemCard>> sensorCardsInLists = new HashMap<>();
 	private Map<Integer, List<Integer>> showSensorIdsInLists = new HashMap<>();
@@ -422,6 +428,15 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		this.collapsiblesItems.get(listId).showUserListsInDropDown(event -> {
 			this.presenter.addSelectedSensorsToUserList(event.getListId(), event.getListName(), this.selectedSensorIdsInLists.get(listId));
 		}, userLists);
+	}
+	
+	@Override
+	public void showSpinner(boolean show){
+		if(show) {
+			this.spinner.getElement().getStyle().clearDisplay();
+		}else {
+			this.spinner.getElement().getStyle().setDisplay(Style.Display.NONE);
+		}
 	}
 
 }
