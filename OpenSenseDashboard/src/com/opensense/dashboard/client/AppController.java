@@ -368,16 +368,19 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		if(goToHOme || (this.dataPanelPresenter.getActiveDataPanelPagePresenter() instanceof UserPresenter)) {
 			this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
 		}
-		showSuccess("Logged in");
+		showSuccess(Languages.loggedIn());
+		this.navigationPanelPresenter.setLastButtonActive(true);
 		this.dataPanelPresenter.onUserLoggedIn();
-		this.navigationPanelPresenter.onUserLoggedIn();
 	}
 
 	public void onUserLoggedOut() {
 		this.isGuest = true;
-		showSuccess("Logged out");
+		showSuccess(Languages.loggedOut());
+		if((this.dataPanelPresenter.getActiveDataPanelPagePresenter() instanceof UserPresenter)) {
+			this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.HOME, true));
+		}
+		this.navigationPanelPresenter.setLastButtonActive(false);
 		this.dataPanelPresenter.onUserLoggedOut();
-		this.navigationPanelPresenter.onUserLoggedOut();
 	}
 	
 	private static final int MAX_TOASTS = 4;

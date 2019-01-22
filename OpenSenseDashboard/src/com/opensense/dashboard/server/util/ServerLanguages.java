@@ -245,4 +245,12 @@ public class ServerLanguages{
 			return "New list";
 		}
 	}
+
+	public static String wrongPassword() {
+		if(de) {
+			return "Das eingegebende Passwort ist nicht korrekt";
+		}else {
+			return "The entered password is not correct";
+		}
+	}
 }

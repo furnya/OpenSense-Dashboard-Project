@@ -1005,4 +1005,128 @@ public class Languages {
 			return "Do you really want to delete the list?";
 		}
 	}
+
+	public static String emailAddress() {
+		if(de) {
+			return "Email-Adresse";
+		}else {
+			return "Email address";
+		}
+	}
+
+	public static String passwordsDontMatch() {
+		if(de) {
+			return "Passwörter stimmen nicht überein";
+		}else {
+			return "Passwords do not match";
+		}
+	}
+
+	public static String invalidEmail() {
+		if(de) {
+			return "Ungültige Email-Adresse";
+		}else {
+			return "Invalid email address";
+		}
+	}
+
+	public static String invalidUsername() {
+		if(de) {
+			return "Ungültiger Benutzername";
+		}else {
+			return "Invalid username";
+		}
+	}
+
+	public static String send() {
+		if(de) {
+			return "Absenden";
+		}else {
+			return "Send";
+		}
+	}
+
+	public static String passwordResetSent() {
+		if(de) {
+			return "Passwort-Zurücksetzung wurde gesendet";
+		}else {
+			return "Password reset was sent";
+		}
+	}
+
+	public static String loggedOut() {
+		if(de) {
+			return "Erfolgreich abgemeldet";
+		}else {
+			return "Successfully logged out";
+		}
+	}
+
+	public static String loggedIn() {
+		if(de) {
+			return "Erfolgreich angemeldet";
+		}else {
+			return "Succesfully logged in";
+		}
+	}
+
+	public static String changePassword() {
+		if(de) {
+			return "Passwort ändern";
+		}else {
+			return "Change password";
+		}
+	}
+
+	public static String saveNewPassword() {
+		if(de) {
+			return "Passwort speichern";
+		}else {
+			return "Save new passoword";
+		}
+	}
+
+
+	public static String verifyNewPassword() {
+		if(de) {
+			return "Neues Passwort bestätigen";
+		}else {
+			return "Verify new password";
+		}
+	}
+
+
+	public static String oldPassword() {
+		if(de) {
+			return "Altes Passwort";
+		}else {
+			return "Old password";
+		}
+	}
+
+
+	public static String newPassword() {
+		if(de) {
+			return "Neues Passwort";
+		}else {
+			return "New password";
+		}
+	}
+
+	public static String goBack() {
+		if(de) {
+			return "Zurück";
+		}else {
+			return "Back";
+		}
+	}
+
+	public static String successfullyChangedPassword() {
+		if(de) {
+			return "Das Passwort wurde erfolgreich geändert";
+		}else {
+			return "The password was successfully changed";
+		}
+	}
+
 }
