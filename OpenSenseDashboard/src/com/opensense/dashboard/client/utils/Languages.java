@@ -4,6 +4,7 @@ import java.util.Date;
 
 /**
  * The languages are set to german by default to change it use the setter
+ * 
  * @author Roeber
  */
 public class Languages {
@@ -37,383 +38,389 @@ public class Languages {
 	}
 
 	public static String getActualLanguageString() {
-		if(de) {
+		if (de) {
 			return "de";
-		}else {
+		} else {
 			return "en";
 		}
 	}
 
 	public static String text() {
-		if(de) {
+		if (de) {
 			return "Das ist der text";
-		}else {
+		} else {
 			return "";
 		}
 	}
 
 	public static String home() {
-		if(de) {
+		if (de) {
 			return "Zuhause";
-		}else {
+		} else {
 			return "Home";
 		}
 	}
 
 	public static String search() {
-		if(de) {
+		if (de) {
 			return "Suche";
-		}else {
+		} else {
 			return "Search";
 		}
 	}
 
 	public static String map() {
-		if(de) {
+		if (de) {
 			return "Karte";
-		}else {
+		} else {
 			return "Map";
 		}
 	}
 
 	public static String graphics() {
-		if(de) {
+		if (de) {
 			return "Grafiken";
-		}else {
+		} else {
 			return "Visualizations";
 		}
 	}
 
 	public static String list() {
-		if(de) {
+		if (de) {
 			return "Listen";
-		}else {
+		} else {
 			return "Lists";
 		}
 	}
 
 	public static String user() {
-		if(de) {
+		if (de) {
 			return "Benutzerverwaltung";
-		}else {
+		} else {
 			return "User";
 		}
 	}
 
 	public static String errorDataPanelPageLoading() {
-		if(de) {
+		if (de) {
 			return "Fehler beim Laden der Seite";
-		}else {
+		} else {
 			return "Error while loading the page";
 		}
 	}
 
 	public static String searchPlace() {
-		if(de) {
+		if (de) {
 			return "Sensoren Ortsabhängig suchen";
-		}else {
+		} else {
 			return "Search by place";
 		}
 	}
 
 	public static String maxSensors() {
-		if(de) {
+		if (de) {
 			return "Maximale Anzahl von Sensoren";
-		}else {
+		} else {
 			return "Maximum amount of sensors";
 		}
 	}
 
 	public static String minAccuracy() {
-		if(de) {
+		if (de) {
 			return "Minimale Genauigkeit";
-		}else {
+		} else {
 			return "Minimal accuracy";
 		}
 	}
 
 	public static String maxAccuracy() {
-		if(de) {
+		if (de) {
 			return "Maximale Genauigkeit";
-		}else {
+		} else {
 			return "Maximal accuracy";
 		}
 	}
 
 	public static String unit() {
-		if(de) {
+		if (de) {
 			return "Einheit";
-		}else {
+		} else {
 			return "Unit";
 		}
 	}
 
 	public static String minValue() {
-		if(de) {
+		if (de) {
 			return "Minimaler Wert";
-		}else {
+		} else {
 			return "Minimal value";
 		}
 	}
 
 	public static String maxValue() {
-		if(de) {
+		if (de) {
 			return "Maximaler Wert";
-		}else {
+		} else {
 			return "Maximal value";
 		}
 	}
 
 	public static String minDate() {
-		if(de) {
+		if (de) {
 			return "Minimales Datum";
-		}else {
+		} else {
 			return "Minimal date";
 		}
 	}
 
 	public static String maxDate() {
-		if(de) {
+		if (de) {
 			return "Maximales Datum";
-		}else {
+		} else {
 			return "Maximal date";
 		}
 	}
 
 	public static String minTime() {
-		if(de) {
+		if (de) {
 			return "Minimale Zeit";
-		}else {
+		} else {
 			return "Minimal time";
 		}
 	}
 
 	public static String maxTime() {
-		if(de) {
+		if (de) {
 			return "Maximale Zeit";
-		}else {
+		} else {
 			return "Minimale";
 		}
 	}
 
 	public static String type() {
-		if(de) {
+		if (de) {
 			return "Typ";
-		}else {
+		} else {
 			return "Type";
 		}
 	}
 
 	public static String measurand() {
-		if(de) {
+		if (de) {
 			return "Messgrösse";
-		}else {
+		} else {
 			return "Measurand";
 		}
 	}
 
 	public static String all() {
-		if(de) {
+		if (de) {
 			return "Alle";
-		}else {
+		} else {
 			return "All";
 		}
 	}
 
 	public static String languageChange() {
-		if(de) {
+		if (de) {
 			return "EN";
-		}else {
+		} else {
 			return "DE";
 		}
 	}
 
 	public static String past24Hours() {
-		if(de) {
+		if (de) {
 			return "Letzte 24h";
-		}else {
+		} else {
 			return "Past 24h";
 		}
 	}
 
 	public static String pastWeek() {
-		if(de) {
+		if (de) {
 			return "Letzte Woche";
-		}else {
+		} else {
 			return "Past week";
 		}
 	}
 
 	public static String pastMonth() {
-		if(de) {
+		if (de) {
 			return "Letzter Monat";
-		}else {
+		} else {
 			return "Past month";
 		}
 	}
 
 	public static String pastYear() {
-		if(de) {
+		if (de) {
 			return "Letztes Jahr";
-		}else {
+		} else {
 			return "Past year";
 		}
 	}
 
 	public static String customRange() {
-		if(de) {
+		if (de) {
 			return "Benutzerdefiniert";
-		}else {
+		} else {
 			return "Custom range";
 		}
 	}
 
 	public static String timespan() {
-		if(de) {
+		if (de) {
 			return "Zeitspanne";
-		}else {
+		} else {
 			return "Timespan";
 		}
 	}
 
 	public static String from() {
-		if(de) {
+		if (de) {
 			return "Von";
-		}else {
+		} else {
 			return "From";
 		}
 	}
 
 	public static String to() {
-		if(de) {
+		if (de) {
 			return "Bis";
-		}else {
+		} else {
 			return "To";
 		}
 	}
 
 	public static String seletedShowOnMap() {
-		if(de) {
+		if (de) {
 			return "Auf Karte zeigen";
-		}else {
+		} else {
 			return "Show on map";
 		}
 	}
 
 	public static String seletedShowOnSearch() {
-		if(de) {
+		if (de) {
 			return "In Suche zeigen";
-		}else {
+		} else {
 			return "Show on search";
 		}
 	}
 
 	public static String selectedShowVisualisations() {
-		if(de) {
+		if (de) {
 			return "Werte anzeigen";
-		}else {
+		} else {
 			return "Show values";
 		}
 	}
 
 	public static String selectedShowInSearch() {
-		if(de) {
+		if (de) {
 			return "In Suche anzeigen";
-		}else {
+		} else {
 			return "Show in search";
 		}
 	}
 
 	public static String selectedAddToList() {
-		if(de) {
+		if (de) {
 			return "Zur Liste hinzufügen";
-		}else {
+		} else {
 			return "Add to list";
 		}
 	}
 
 	public static String allSelectedSensors() {
-		if(de) {
+		if (de) {
 			return "Alle ausgewählten Sensoren:";
-		}else {
+		} else {
 			return "All selected sensors";
 		}
 	}
 
 	public static String selectAllSensors() {
-		if(de) {
+		if (de) {
 			return "Alle auswählen";
-		}else {
+		} else {
 			return "Select all";
 		}
 	}
 
 	public static String deselectAllSensors() {
-		if(de) {
+		if (de) {
 			return "Alle abwählen";
-		}else {
+		} else {
 			return "Deselect all";
 		}
 	}
 
-	public static String backwards(){
-		if(de){
+	public static String backwards() {
+		if (de) {
 			return "Zum Anfang";
-		}else{
+		} else {
 			return "Back to start";
 		}
 	}
 
-	public static String forwards(){
-		if(de){
+	public static String forwards() {
+		if (de) {
 			return "Zum Ende";
-		}else{
+		} else {
 			return "Forward to end";
 		}
 	}
 
-	public static String forwardsStepByStep(){
-		if(de){
+	public static String forwardsStepByStep() {
+		if (de) {
 			return "Nächste Seite";
-		}else{
+		} else {
 			return "Next page";
 		}
 	}
 
-	public static String backwardsStepByStep(){
-		if(de){
+	public static String backwardsStepByStep() {
+		if (de) {
 			return "Vorherige Seite";
-		}else{
+		} else {
 			return "Previous page";
 		}
 	}
 
 	public static String setPageNumber(int page, int maxObjectsOnPage, int size) {
-		if(de){
+		if (de) {
 			if (size == 0) {
 				return "0-0 von 0";
 			}
-			return Integer.toString((page * maxObjectsOnPage) + 1) + "-" + ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " von " + Integer.toString(size);
-		}else{
+			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
+					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+							: size)
+					+ " von " + Integer.toString(size);
+		} else {
 			if (size == 0) {
 				return "0-0 of 0";
 			}
-			return Integer.toString((page * maxObjectsOnPage) + 1) + "-" + ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage) : size) + " of " + Integer.toString(size);
+			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
+					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+							: size)
+					+ " of " + Integer.toString(size);
 		}
 	}
 
-	public static String pageConfiguration(){
-		if(de){
+	public static String pageConfiguration() {
+		if (de) {
 			return "Anzahl von Objekten auf einer Seite";
-		}else{
+		} else {
 			return "Number of objects on one page";
 		}
 	}
 
-	public static String noData(){
-		if(de){
+	public static String noData() {
+		if (de) {
 			return "Es konnten keine Daten zu den gewählten Suchparametern gefunden werden";
-		}else{
+		} else {
 			return "No data was found for the chosen parameters";
 		}
 	}
@@ -427,539 +434,579 @@ public class Languages {
 		return timestamp.toLocaleString();
 	}
 
-	public static String username(){
-		if(de){
+	public static String username() {
+		if (de) {
 			return "Benutzername";
-		}else{
+		} else {
 			return "Username";
 		}
 	}
 
-	public static String password(){
-		if(de){
+	public static String password() {
+		if (de) {
 			return "Passwort";
-		}else{
+		} else {
 			return "Password";
 		}
 	}
 
-	public static String passwordVerify(){
-		if(de){
+	public static String passwordVerify() {
+		if (de) {
 			return "Passwort bestätigen";
-		}else{
+		} else {
 			return "Confirm password";
 		}
 	}
 
 	public static String firstValue() {
-		if(de){
+		if (de) {
 			return "Erste Messung";
-		}else{
+		} else {
 			return "First measurement";
 		}
 	}
 
 	public static String lastValue() {
-		if(de){
+		if (de) {
 			return "Letzer Messung";
-		}else{
+		} else {
 			return "Last measurement";
 		}
 	}
 
 	public static String noValuePreviewData() {
-		if(de){
+		if (de) {
 			return "Keine Messungen vorhanden";
-		}else{
+		} else {
 			return "No measurements available";
 		}
 	}
 
 	public static String rating(double rating) {
-		if(de){
+		if (de) {
 			return "Genauigkeit: " + rating + " von 5 Sternen";
-		}else{
+		} else {
 			return "Accuracy: " + rating + " out of 5 stars";
 		}
 	}
 
 	public static String altitudeAboveGround() {
-		if(de) {
+		if (de) {
 			return "Höhe über Grund";
-		}else {
+		} else {
 			return "Altitude above ground";
 		}
 	}
 
 	public static String origin() {
-		if(de) {
+		if (de) {
 			return "Herkunft";
-		}else {
+		} else {
 			return "Origin";
 		}
 	}
 
 	public static String register() {
-		if(de) {
+		if (de) {
 			return "Registrieren";
-		}else {
+		} else {
 			return "Register";
 		}
 	}
 
 	public static String forgotPassword() {
-		if(de) {
+		if (de) {
 			return "Passwort vergessen?";
-		}else {
+		} else {
 			return "Forgot password?";
 		}
 	}
 
 	public static String login() {
-		if(de) {
+		if (de) {
 			return "Einloggen";
-		}else {
+		} else {
 			return "Log in";
 		}
 	}
 
-	public static String logout(){
-		if(de){
+	public static String logout() {
+		if (de) {
 			return "Ausloggen";
-		}else{
+		} else {
 			return "Log out";
 		}
 	}
 
 	public static String loginValidateError() {
-		if(de){
+		if (de) {
 			return "Ungültige E-Mail-Adresse oder ungültiges Kennwort";
-		}else{
+		} else {
 			return "Not valid E-mail address or not valid passord";
 		}
 	}
 
 	public static String accuracy() {
-		if(de) {
+		if (de) {
 			return "Genauigkeit";
-		}else {
+		} else {
 			return "Accuracy";
 		}
 	}
 
 	public static String sensorTyp() {
-		if(de) {
+		if (de) {
 			return "Sensortyp";
-		}else {
+		} else {
 			return "Sensormodel";
 		}
 	}
 
-	public static String noListData(){
-		if(de){
+	public static String noListData() {
+		if (de) {
 			return "Es wurden noch keine Sensoren zur Liste hinzugefügt";
-		}else{
+		} else {
 			return "No sensors existing in this list";
 		}
 	}
 
-	public static String createNewList(){
-		if(de){
+	public static String createNewList() {
+		if (de) {
 			return "Neue Liste erstellen";
-		}else{
+		} else {
 			return "Create new list";
 		}
 	}
 
 	public static String newList() {
-		if(de){
+		if (de) {
 			return "Neue Liste ";
-		}else{
+		} else {
 			return "New list ";
 		}
 	}
 
 	public static String favorites() {
-		if(de){
+		if (de) {
 			return "Favoriten";
-		}else{
+		} else {
 			return "Favorites";
 		}
 	}
 
 	public static String selectedSensors() {
-		if(de){
+		if (de) {
 			return "Ausgewälte Sensoren";
-		}else{
+		} else {
 			return "Selected sensors";
 		}
 	}
 
 	public static String mySensors() {
-		if(de){
+		if (de) {
 			return "Meine Sensoren";
-		}else{
+		} else {
 			return "My sensors";
 		}
 	}
 
 	public static String createSensor() {
-		if(de){
+		if (de) {
 			return "Sensor erstellen";
-		}else{
+		} else {
 			return "Create sensor";
 		}
 	}
 
 	public static String hideSensorWIithoutValues() {
-		if(de){
+		if (de) {
 			return "Sensoren ohne Werte ausblenden";
-		}else{
+		} else {
 			return "Sensors without values wont be visible";
 		}
 	}
 
 	public static String license() {
-		if(de){
+		if (de) {
 			return "Lizenz";
-		}else{
+		} else {
 			return "License";
 		}
 	}
 
 	public static String latitude() {
-		if(de){
+		if (de) {
 			return "Breitengrad";
-		}else{
+		} else {
 			return "Latitude";
 		}
 	}
 
 	public static String longitude() {
-		if(de){
+		if (de) {
 			return "Längenengrad";
-		}else{
+		} else {
 			return "Longitude";
 		}
 	}
 
 	public static String directionVertical() {
-		if(de){
+		if (de) {
 			return "Vertikale Ausrichtung";
-		}else{
+		} else {
 			return "Vertical direction";
 		}
 	}
 
 	public static String directionHorizontal() {
-		if(de){
+		if (de) {
 			return "Horizontale Ausrichtung";
-		}else{
+		} else {
 			return "Horizontal direction";
 		}
 	}
 
 	public static String sensorModel() {
-		if(de){
+		if (de) {
 			return "Sensor-Modell";
-		}else{
+		} else {
 			return "Sensor model";
 		}
 	}
 
 	public static String attributionText() {
-		if(de){
+		if (de) {
 			return "Zuordnungstext";
-		}else{
+		} else {
 			return "Attribution text";
 		}
 	}
 
 	public static String attributionURL() {
-		if(de){
+		if (de) {
 			return "URL";
-		}else{
+		} else {
 			return "Attribution URL";
 		}
 	}
 
 	public static String confirm() {
-		if(de){
+		if (de) {
 			return "Bestätigen";
-		}else{
+		} else {
 			return "Confirm";
 		}
 	}
 
 	public static String cancel() {
-		if(de){
+		if (de) {
 			return "Abbrechen";
-		}else{
+		} else {
 			return "Cancel";
 		}
 	}
 
 	public static String notLoggedIn() {
-		if(de){
+		if (de) {
 			return "Nicht eingeloggt";
-		}else{
+		} else {
 			return "Not logged in";
 		}
 	}
 
 	public static String sensorCreated() {
-		if(de){
+		if (de) {
 			return "Sensor erstellt";
-		}else{
+		} else {
 			return "Sensor created";
 		}
 	}
 
 	public static String sensorDeleted() {
-		if(de){
+		if (de) {
 			return "Sensor gelöscht";
-		}else{
+		} else {
 			return "Sensor deleted";
 		}
 	}
 
 	public static String invalidParameters() {
-		if(de){
+		if (de) {
 			return "Ungültige Parameter";
-		}else{
+		} else {
 			return "Invalid parameters";
 		}
 	}
 
 	public static String with() {
-		if(de){
+		if (de) {
 			return "mit";
-		}else{
+		} else {
 			return "with";
 		}
 	}
 
 	public static String connectionError() {
-		if(de){
+		if (de) {
 			return "Es ist ein Fehler aufgetreten. Wiederholen Sie Ihre Anfrage oder versuchen Sie es zu einem späterem Zeitpunkt erneut.";
-		}else{
+		} else {
 			return "";
 		}
 	}
 
 	public static String selectListItemError() {
-		if(de){
+		if (de) {
 			return "Es ist ein Fehler beim auswählen der Liste aufgetreten.";
-		}else{
+		} else {
 			return "";
 		}
 	}
 
 	public static String maxSensorSelectedLimitExceeded(int maxSensors) {
-		if(de){
+		if (de) {
 			return "Sie können nicht mehr als " + maxSensors + " Sensoren auswählen.";
-		}else{
+		} else {
 			return "";
 		}
 	}
 
 	public static String maxFavoriteSensorsReached(int maxSensors) {
-		if(de){
+		if (de) {
 			return "Die Favoriten dürfen maximal " + maxSensors + " enthalten.";
-		}else{
+		} else {
 			return "";
 		}
 	}
 
 	public static String deleteSensors() {
-		if(de){
+		if (de) {
 			return "Sensoren löschen";
-		}else{
+		} else {
 			return "";
 		}
 	}
 
 	public static String searchForPlace() {
-		if(de) {
+		if (de) {
 			return "Nach Ort suchen";
-		}else {
+		} else {
 			return "Search for place";
 		}
 	}
 
 	public static String addedSensorsToList(String sensors, String listName, boolean moreThanOne) {
-		if(de) {
-			return  (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde") + " erfolgreich zur Liste \"" + listName + "\" hinzugefügt";
-		}else {
-			return  (moreThanOne ? "The sensors " : "The sensor ") + sensors + " got added successfully to the list \"" + listName + "\"";
+		if (de) {
+			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde")
+					+ " erfolgreich zur Liste \"" + listName + "\" hinzugefügt";
+		} else {
+			return (moreThanOne ? "The sensors " : "The sensor ") + sensors + " got added successfully to the list \""
+					+ listName + "\"";
 		}
 	}
 
 	public static String userId() {
-		if(de) {
+		if (de) {
 			return "Benutzer-ID";
-		}else {
+		} else {
 			return "User ID";
 		}
 	}
 
 	public static String values() {
-		if(de) {
+		if (de) {
 			return "Werte";
-		}else {
+		} else {
 			return "Values";
 		}
 	}
 
 	public static String containsAlready(String sensors, String listName, boolean moreThanOne) {
-		if(de) {
-			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde") + " bereits zur Liste \"" + listName + "\" hinzugefügt";
-		}else {
-			return (moreThanOne ? "The sensors " + sensors + " were" : "The sensor " + sensors + " was") + " added to the list \"" + listName + "\"";
+		if (de) {
+			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde")
+					+ " bereits zur Liste \"" + listName + "\" hinzugefügt";
+		} else {
+			return (moreThanOne ? "The sensors " + sensors + " were" : "The sensor " + sensors + " was")
+					+ " added to the list \"" + listName + "\"";
 		}
 	}
 
 	public static String removeSensorsFromList(String sensors, String listName, boolean moreThanOne) {
-		if(de) {
-			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde") + " aus der Liste \"" + listName + "\" gelöscht";
-		}else {
-			return (moreThanOne ? "The sensors " + sensors + " were" : "The sensor " + sensors + " was") + " deleted from the list \"" + listName + "\"";
+		if (de) {
+			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde")
+					+ " aus der Liste \"" + listName + "\" gelöscht";
+		} else {
+			return (moreThanOne ? "The sensors " + sensors + " were" : "The sensor " + sensors + " was")
+					+ " deleted from the list \"" + listName + "\"";
 		}
 	}
 
 	public static String listContains(int sensorsSize, int selectedSensorsSize) {
-		if(de) {
-			return "(Enthält " + sensorsSize + (sensorsSize > 1 ? " Sensoren" : " Sensor") + ", davon ausgewählt: " + selectedSensorsSize + ")";
-		}else {
-			return "(Contains " + sensorsSize + (sensorsSize > 1 ? " sensors" : " sensor") + ", selected of these: " + selectedSensorsSize + ")";
+		if (de) {
+			return "(Enthält " + sensorsSize + (sensorsSize > 1 ? " Sensoren" : " Sensor") + ", davon ausgewählt: "
+					+ selectedSensorsSize + ")";
+		} else {
+			return "(Contains " + sensorsSize + (sensorsSize > 1 ? " sensors" : " sensor") + ", selected of these: "
+					+ selectedSensorsSize + ")";
 		}
 	}
 
 	public static String errorMessageAccuracy() {
-		if(de) {
+		if (de) {
 			return "Bitte gebe eine Zahl zwischen 0 und 10 ein";
-		}else {
+		} else {
 			return "Please enter a number between 0 and 10";
 		}
 	}
 
 	public static String errorMessageMaxSens() {
-		if(de) {
+		if (de) {
 			return "Bitte gebe eine Zahl zwischen 1 und 19999 ein";
-		}else {
+		} else {
 			return "Please enter a number between 1 and 19999";
 		}
 	}
 
 	public static String noSensorsSelected() {
-		if(de) {
+		if (de) {
 			return "Keine Sensoren ausgewählt";
-		}else {
+		} else {
 			return "No sensors selected";
 		}
 	}
 
 	public static String information() {
-		if(de) {
+		if (de) {
 			return "Information zeigen";
-		}else {
+		} else {
 			return "Show information";
 		}
 	}
-	
+
 	public static String searchTooltip() {
-		if(de) {
+		if (de) {
 			return "Sensoren anhand der angegeben Parameter suchen";
-		}else {
+		} else {
 			return "Search sensors on the basis of the given parameters";
 		}
 	}
-	
+
 	public static String selectAllTooltip() {
-		if(de) {
+		if (de) {
 			return "Alle Sensoren in der Liste auswählen";
-		}else {
+		} else {
 			return "Select all sensors displayed in the list";
 		}
 	}
-	
+
 	public static String deselectAllTooltip() {
-		if(de) {
+		if (de) {
 			return "Alle ausgewählten Sensoren abwählen";
-		}else {
+		} else {
 			return "Deselect all selected sensors";
 		}
 	}
-	
+
 	public static String showOnMapTooltip() {
-		if(de) {
+		if (de) {
 			return "Ausgewählte Sensoren auf der Karte anzeigen";
-		}else {
+		} else {
 			return "Show selected sensors on the map";
 		}
 	}
-	
+
 	public static String showValuesTooltip() {
-		if(de) {
+		if (de) {
 			return "Werte aller ausgewählten Sensoren im Diagramm anzeigen";
-		}else {
+		} else {
 			return "Show the values of the selected sensors in a chart";
 		}
 	}
-	
+
 	public static String addToListTooltip() {
-		if(de) {
+		if (de) {
 			return "Alle ausgewählten Sensoren zu einer Liste hinzufügen";
-		}else {
+		} else {
 			return "Add all selected sensors to a list";
 		}
 	}
-	
+
 	public static String favTooltip() {
-		if(de) {
+		if (de) {
 			return "Zu Favoriten hinzufügen";
-		}else {
+		} else {
 			return "Add to favorites";
 		}
 	}
-	
+
 	public static String infoTooltip() {
-		if(de) {
+		if (de) {
 			return "Informationen anzeigen";
-		}else {
+		} else {
 			return "Show information";
 		}
 	}
-	
+
 	public static String deleteTooltip() {
-		if(de) {
+		if (de) {
 			return "Aus der Liste löschen";
-		}else {
+		} else {
 			return "Delete from list";
 		}
 	}
-	
+
 	public static String showInSearchTooltip() {
-		if(de) {
+		if (de) {
 			return "Ausgewählte Sensoren in der Suche anzeigen";
-		}else {
+		} else {
 			return "Show selected sensors in the search view";
 		}
 	}
-	
+
 	public static String welcome() {
-		if(de) {
+		if (de) {
 			return "Willkommen: ";
-		}else {
+		} else {
 			return "Welcome: ";
 		}
 	}
 
 	public static String guest() {
-		if(de) {
+		if (de) {
 			return "Gast";
-		}else {
+		} else {
 			return "Guest";
+		}
+	}
+
+	public static String searchInfoText() {
+		if (de) {
+			return "Deutscher Text für SearchPage";
+		} else {
+			return "Englischer text für SearchPage";
+		}
+	}
+
+	public static String mapInfoText() {
+		if (de) {
+			return "Deutscher Text für MapPage";
+		} else {
+			return "Englischer text für MapPage";
+		}
+	}
+
+	public static String visuInfoText() {
+		if (de) {
+			return "Deutscher Text für VisuPage";
+		} else {
+			return "Englischer text für VisuPage";
+		}
+	}
+
+	public static String listInfoText() {
+		if (de) {
+			return "Deutscher Text für ListPage";
+		} else {
+			return "Englischer Text für ListPage";
 		}
 	}
 }

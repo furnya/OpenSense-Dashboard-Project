@@ -32,9 +32,14 @@
 		border: 2px solid #333;
 		border-color: hsla(0, 0%, 0%, 0.5);
 		border-radius: 5px;
+		position: relative;
 	}
 	
-	.grid-item>div:hover{
+	.grid-item>div>div {
+		overflow: hidden;
+	}
+		
+	.grid-item>div:hover {
 		background: #42DCA3;
 		border: 2px solid #333;
 		border-color: hsla(100, 100%, 100%, 10);
@@ -44,7 +49,6 @@
 	.grid-item-welcome {
 		height: 40vh;
 		width: 40vw;
-		
 	}
 	
 	.grid-item-welcome:hover {
@@ -85,20 +89,32 @@
 	
 	.header {
 		color: white;
-		margin-left: -10px;
-		margin-top: 55px;
+		left: 20px;
+		top: 30%;
 	}
 	
 	.userfield {
 		color: white;
-		margin-left: 10px;
-		margin-top: 64px;
+		margin-left: 15px;
+		margin-top: 27px;
 	}
 	
 	.icon-size {
 		width: 100px;
-		height: 50px;
+		height: 40% !important;
 	}
+	
+	.hidden-overflow {
+		overflow: hidden;
+	}
+	
+	.info-text-style {
+		left: 10px;
+		margin-top: 136px;
+		color: white;
+		position: absolute;
+	}
+	
 	</ui:style>
 
 	<bh:Div ui:field="grid"
@@ -106,7 +122,7 @@
 
 		<bh:Div ui:field="welcomeCard"
 			addStyleNames="{style.grid-item-welcome}">
-			<bh:Div addStyleNames="flex">
+			<bh:Div addStyleNames="flex {style.hidden-overflow}">
 				<m:MaterialImage
 					url="{gui.dashboardIcon.getSafeUri.asString}"
 					addStyleNames="{style.icon-size}" />
@@ -119,36 +135,51 @@
 
 		<bh:Div ui:field="searchCard"
 			addStyleNames="{style.grid-item-searchinfo}">
-			<m:MaterialImage
-				url="{gui.searchIconSvg.getSafeUri.asString}"
-				addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
-			<h:Span text="das hier ist ein test"></h:Span>
+			<bh:Div addStyleNames="flex">
+				<m:MaterialImage
+					url="{gui.searchIconSvg.getSafeUri.asString}"
+					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
+				<b:Heading ui:field="searchCardInfo"
+					addStyleNames="{style.userfield}" size="H5" />
+				<bh:Span ui:field="searchCardText" addStyleNames="{style.info-text-style}"></bh:Span>
+			</bh:Div>
 		</bh:Div>
-		
+
 		<bh:Div ui:field="mapCard"
 			addStyleNames="{style.grid-item-mapinfo}">
-			<m:MaterialImage
-				url="{gui.mapIconSvg.getSafeUri.asString}"
-				addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
-			<h:Span text="das hier ist ein test"></h:Span>
+			<bh:Div addStyleNames="flex">
+				<m:MaterialImage
+					url="{gui.mapIconSvg.getSafeUri.asString}"
+					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
+				<b:Heading ui:field="mapCardInfo"
+					addStyleNames="{style.userfield}" size="H5" />
+				<bh:Span ui:field="mapCardText" addStyleNames="{style.info-text-style}"></bh:Span>
+			</bh:Div>
 		</bh:Div>
 
 		<bh:Div ui:field="visuCard"
 			addStyleNames="{style.grid-item-visuinfo}">
-			<m:MaterialImage
-				url="{gui.diagramIconSvg.getSafeUri.asString}"
-				addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
-			<h:Span text="das hier ist ein test"></h:Span>
+			<bh:Div addStyleNames="flex">
+				<m:MaterialImage
+					url="{gui.diagramIconSvg.getSafeUri.asString}"
+					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
+				<b:Heading ui:field="visuCardInfo"
+					addStyleNames="{style.userfield}" size="H5" />
+				<bh:Span ui:field="visuCardText" addStyleNames="{style.info-text-style}"></bh:Span>
+			</bh:Div>
 		</bh:Div>
-		
+
 		<bh:Div ui:field="listCard"
 			addStyleNames="{style.grid-item-listeninfo}">
-			<m:MaterialImage
-				url="{gui.listIconSvg.getSafeUri.asString}"
-				addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
-			<h:Span text="das hier ist ein test"></h:Span>
+			<bh:Div addStyleNames="flex">
+				<m:MaterialImage
+					url="{gui.listIconSvg.getSafeUri.asString}"
+					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
+				<b:Heading ui:field="listCardInfo"
+					addStyleNames="{style.userfield}" size="H5" />
+				<bh:Span ui:field="listCardText" addStyleNames="{style.info-text-style}"></bh:Span>
+			</bh:Div>
 		</bh:Div>
-		
 	</bh:Div>
 
 </ui:UiBinder>
