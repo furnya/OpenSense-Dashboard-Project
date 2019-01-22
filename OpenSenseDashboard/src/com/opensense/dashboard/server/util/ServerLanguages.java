@@ -2,7 +2,7 @@ package com.opensense.dashboard.server.util;
 
 import com.opensense.dashboard.shared.MeasurandType;
 
-public class ServerLanguages{
+public class ServerLanguages {
 	/**
 	 * German or english
 	 */
@@ -46,126 +46,160 @@ public class ServerLanguages{
 
 	public static String getMeasurandName(MeasurandType measurandType) {
 		String measurandName = null;
-		switch(measurandType) {
+		switch (measurandType) {
 		case AIR_PRESSURE:
-			if(de) {
+			if (de) {
 				measurandName = "Luftdruck";
-			} else {
+			} else if (en) {
 				measurandName = "Air pressure";
+			} else {
+				measurandName = "Presi\u00F3n del aire";
 			}
 			break;
 		case BRIGHTNESS:
-			if(de) {
+			if (de) {
 				measurandName = "Helligkeit";
-			} else {
+			} else if (en) {
 				measurandName = "Brightness";
+			} else {
+				measurandName = "Brillo";
 			}
 			break;
 		case CLOUDINESS:
-			if(de) {
+			if (de) {
 				measurandName = "Bew\u00F6lkung";
-			} else {
+			} else if (en) {
 				measurandName = "Cloudiness";
+			} else {
+				measurandName = "Abundancia de nubes";
 			}
 			break;
 		case HUMIDITY:
-			if(de) {
+			if (de) {
 				measurandName = "Luftfeuchtigkeit";
-			} else {
+			} else if (en) {
 				measurandName = "Humidity";
+			} else {
+				measurandName = "Humedad";
 			}
 			break;
 		case NOISE:
-			if(de) {
+			if (de) {
 				measurandName = "Lautst\u00E4rke";
-			} else {
+			} else if (en) {
 				measurandName = "Noise";
+			}else {
+				measurandName = "Intensidad de sonido";
 			}
 			break;
 		case DEFAULT:
 			break;
 		case PM10:
-			if(de) {
+			if (de) {
 				measurandName = "PM10";
-			} else {
+			} else if (en) {
+				measurandName = "PM10";
+			}else {
 				measurandName = "PM10";
 			}
 			break;
 		case PM2_5:
-			if(de) {
+			if (de) {
 				measurandName = "PM2,5";
-			} else {
+			} else if (en) {
 				measurandName = "PM2.5";
+			}else {
+				measurandName = "PM2,5";
 			}
 			break;
 		case PRECIPITATION_AMOUNT:
-			if(de) {
+			if (de) {
 				measurandName = "Niederschlagsmenge";
-			} else {
+			} else if (en) {
 				measurandName = "Precipitation amount";
+			}else {
+				measurandName = "Cantidad de precipitaci\u00F3n";
 			}
 			break;
 		case PRECIPITATION_TYPE:
-			if(de) {
+			if (de) {
 				measurandName = "Niederschlagstyp";
-			} else {
+			} else if (en) {
 				measurandName = "Precipitation type";
+			}else {
+				measurandName = "Tipo de precipitaci\u00F3n";
 			}
 			break;
 		case TEMPERATURE:
-			if(de) {
+			if (de) {
 				measurandName = "Temperatur";
-			} else {
+			} else if (en) {
 				measurandName = "Temperature";
+			}else {
+				measurandName = "Temperatura";
 			}
 			break;
 		case WIND_DIRECTION:
-			if(de) {
+			if (de) {
 				measurandName = "Windrichtung";
-			} else {
+			} else if (en) {
 				measurandName = "Wind direction";
+			}else {
+				measurandName = "Direcci\u00F3n del viento";
 			}
 			break;
 		case WIND_SPEED:
-			if(de) {
+			if (de) {
 				measurandName = "Windgeschwindigkeit";
-			} else {
+			} else if (en) {
 				measurandName = "Wind speed";
+			}else {
+				measurandName = "Velocidad del viento";
 			}
 			break;
 		case CO:
-			if(de) {
+			if (de) {
 				measurandName = "Kohlenstoffmonoxid";
-			}else {
+			} else if (en) {
 				measurandName = "Carbon monoxide";
+			} else {
+				measurandName = "mon\u00F3xido de carb\u00F3n";
 			}
 			break;
 		case NO2:
-			if(de) {
+			if (de) {
 				measurandName = "Stickstoffdioxid";
-			}else {
+			} else if (en) {
 				measurandName = "Nitrogen dioxide";
+			} else {
+				measurandName = "Dioxido de nitrogeno";
 			}
 			break;
 		case O3:
-			if(de) {
+			if (de) {
 				measurandName = "Sauerstoff";
-			}else {
+			} else if (en) {
 				measurandName = "Oxygen";
+			} else {
+				measurandName = "Ox\u00EDgeno";
 			}
 			break;
 		case SO2:
-			if(de) {
+			if (de) {
 				measurandName = "Schwefeldioxid";
-			}else {
+			} else if (en) {
 				measurandName = "Sulfur dioxide";
+			}else {
+				measurandName = "Di\u00F3xido de azufre";
 			}
 			break;
 		case SOLAR_RADIATION:
-			if(de) {
+			if (de) {
 				measurandName = "Sonnenstrahlung";
-			}else {
+			} else if (en) {
 				measurandName = "Solar radiation";
+			}else {
+				measurandName = "Radiaci\u00F3n solar";
 			}
 			break;
 		default:
@@ -176,7 +210,7 @@ public class ServerLanguages{
 
 	public static String getUnitName(UnitType unitType) {
 		String unitName = null;
-		switch(unitType) {
+		switch (unitType) {
 		case CELSIUS:
 			unitName = "\u00BAC";
 			break;
@@ -239,18 +273,22 @@ public class ServerLanguages{
 	}
 
 	public static String newList() {
-		if(de) {
+		if (de) {
 			return "Neue Liste";
-		}else {
+		} else if (en) {
 			return "New list";
+		}else {
+			return "Lista nueva";
 		}
 	}
 
 	public static String wrongPassword() {
-		if(de) {
+		if (de) {
 			return "Das eingegebende Passwort ist nicht korrekt";
-		}else {
+		} else if (en) {
 			return "The entered password is not correct";
+		} else {
+			return "La contrase\u00F1a introducida es incorrecta";
 		}
 	}
 }
