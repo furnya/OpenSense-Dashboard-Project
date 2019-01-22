@@ -1,5 +1,7 @@
 package com.opensense.dashboard.client.utils;
 
+import java.util.List;
+
 import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Span;
 
@@ -10,6 +12,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -17,18 +20,27 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.event.AddToListEvent;
+import com.opensense.dashboard.client.event.AddToListEventHandler;
 import com.opensense.dashboard.client.event.ListNameChangedEvent;
 import com.opensense.dashboard.client.event.ListNameChangedEventHandler;
 import com.opensense.dashboard.client.event.SensorSelectionEvent;
 import com.opensense.dashboard.client.event.SensorSelectionEventHandler;
+import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.model.Size;
+import com.opensense.dashboard.client.presenter.ListManagerPresenter;
+import com.opensense.dashboard.client.view.ListManagerView;
+import com.opensense.dashboard.client.view.ListManagerViewImpl;
+import com.opensense.dashboard.shared.UserList;
 
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialCollapsibleHeader;
 import gwt.material.design.client.ui.MaterialCollapsibleItem;
 import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialImage;
+import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialTextBox;
+import gwt.material.design.client.ui.MaterialTooltip;
 
 public class ListCollapsibleItem extends Composite{
 
@@ -95,6 +107,15 @@ public class ListCollapsibleItem extends Composite{
 
 	@UiField
 	Span sensorDetails;
+	
+	@UiField
+	MaterialTooltip selectAllTooltip;
+	
+	@UiField
+	Spinner listDropDownSpinner;
+	
+	@UiField
+	MaterialLink favoriteLink;
 
 	private static ListCollapsibleItemUiBinder uiBinder = GWT.create(ListCollapsibleItemUiBinder.class);
 
@@ -105,8 +126,15 @@ public class ListCollapsibleItem extends Composite{
 		this.initWidget(uiBinder.createAndBindUi(this));
 		this.setSize(Size.MEDIUM);
 		this.showNoDataIndicator(false);
+		this.addDomHandler(event -> this.hideListDropDown(), MouseWheelEvent.getType());
+		this.listDropDown.addMouseWheelHandler(MouseWheelEvent::stopPropagation);
 	}
 
+	public void setActivators(int id) {
+		this.addToListButton.setActivates("ddact-"+id);
+		this.listDropDown.setActivator("ddact-"+id);
+	}
+	
 	public void setSpinnerSize(Size spinnerSize) {
 		this.listItemSpinner.setSize(spinnerSize);
 	}
@@ -251,8 +279,10 @@ public class ListCollapsibleItem extends Composite{
 	public void changeToSelectAll(boolean selectAll) {
 		if(selectAll) {
 			this.selectAllButton.setText(Languages.selectAllSensors());
+			this.selectAllTooltip.setText(Languages.selectAllTooltip());
 		}else {
 			this.selectAllButton.setText(Languages.deselectAllSensors());
+			this.selectAllTooltip.setText(Languages.deselectAllTooltip());
 		}
 	}
 
@@ -302,5 +332,38 @@ public class ListCollapsibleItem extends Composite{
 
 	public void setSensorDetails(String details) {
 		this.sensorDetails.setText(details);
+	}
+	
+	public void hideListDropDown() {
+		if(this.listDropDown.getElement().getAttribute("style").contains("display: block")){
+			this.listDropDown.getElement().getStyle().setDisplay(Display.NONE);
+		}
+	}
+	
+	public void showUserListsInDropDown(AddToListEventHandler handler, List<UserList> userLists) {
+		this.clearListsDropDown();
+		this.addToListButton.setEnabled(true);
+		this.showListDropDownSpinner(false);
+		this.favoriteLink.addClickHandler(event -> handler.onAddToListEvent(new AddToListEvent(DefaultListItem.FAVORITE_LIST_ID,Languages.favorites())));
+		userLists.forEach(userList -> {
+			MaterialLink link = new MaterialLink();
+			link.setText(userList.getListName());
+			link.addClickHandler(event -> handler.onAddToListEvent(new AddToListEvent(userList.getListId(),userList.getListName())));
+			this.listDropDown.add(link);
+		});
+	}
+
+	public void clearListsDropDown() {
+		for (int i = this.listDropDown.getChildren().size() - 1; i > 0; i--) {
+			this.listDropDown.remove(i);
+		}
+	}
+	
+	public void showListDropDownSpinner(boolean show) {
+		if(show) {
+			this.listDropDownSpinner.getElement().getStyle().setDisplay(Display.BLOCK);
+		} else {
+			this.listDropDownSpinner.getElement().getStyle().setDisplay(Display.NONE);
+		}
 	}
 }

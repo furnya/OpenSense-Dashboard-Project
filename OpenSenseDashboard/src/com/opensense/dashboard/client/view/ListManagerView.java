@@ -18,6 +18,8 @@ public interface ListManagerView {
 		ListManager getController();
 		void changeListName(int listId, String listName);
 		public void requestAllSensorInfo(int sensorId, List<Integer> idList);
+		void requestAndShowUserList(int listId);
+		void addSelectedSensorsToUserList(int listId, String listName, List<Integer> selectedSensors);
 	}
 
 	public Widget asWidget();
@@ -36,4 +38,7 @@ public interface ListManagerView {
 	public void setOldSelection();
 	public void setActiveItemId(Integer id);
 	public void showAllSensorInfo(int listId, List<Sensor> list);
+	public void showUserListDropdown(int listId, List<UserList> userLists);
+	int clearUserList(int id);
+	void addNewUserListItem(UserList userList, boolean editable, int index);
 }

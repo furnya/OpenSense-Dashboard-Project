@@ -151,7 +151,11 @@ public class DatabaseManager {
 				sensorsAsString = resultSet.getString("list_sensors");
 			}
 			ArrayList<Integer> sensorsAsArray = (ArrayList<Integer>) new SensorArrayFormatter().asArray(sensorsAsString);
-			sensorsAsArray.addAll(sensors);
+			sensors.forEach(sensor -> {
+				if(!sensorsAsArray.contains(sensor)) {
+					sensorsAsArray.add(sensor);
+				}
+			});
 			sql = "UPDATE user_lists SET list_sensors = ? WHERE user_id = ? AND list_id = ?;";
 			try (PreparedStatement statement = con.prepareStatement(sql)){
 				statement.setString(1, new SensorArrayFormatter().asString(sensorsAsArray));

@@ -68,6 +68,18 @@
 	overflow: hidden;
     white-space: nowrap;
 }
+.list-buttons{
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.drop-down-spinner{
+	position: absolute;
+    left: 22px;
+    top: 8px;
+}
+.drop-down{
+	max-height: 25vh !important;
+}
 </ui:style>
 
 <m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE" addStyleNames="collapsible-item">
@@ -85,32 +97,48 @@
 	</m:MaterialCollapsibleHeader>
 	<m:MaterialCollapsibleBody addStyleNames="{style.body}">
 		<bh:Div addStyleNames="margin-bottom-10">
-			<bh:Div addStyleNames="flex list-action-btns">
-				<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
-					<m:MaterialImage url="{gui.selectAll.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-				</m:MaterialButton>
-				<m:MaterialButton display="NONE" ui:field="showOnSearchButton" text="{lang.seletedShowOnSearch}" textColor="WHITE" addStyleNames="d-btn" enabled="false" >
-					<m:MaterialImage url="{gui.searchIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-				</m:MaterialButton>
-				<m:MaterialButton display="NONE" ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn" enabled="false" >
-					<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-				</m:MaterialButton>
-				<m:MaterialButton display="NONE" ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
-					<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-				</m:MaterialButton>
-				<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn" enabled="false" activates="dp-1">
-					<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-				</m:MaterialButton>
-				<m:MaterialDropDown ui:field="listDropDown" activator="dp-1" addStyleNames="round-corners">
+			<bh:Div addStyleNames="flex list-action-btns {style.list-buttons}">
+				<m:MaterialTooltip ui:field="selectAllTooltip" text="{lang.selectAllTooltip}">
+					<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
+						<m:MaterialImage url="{gui.selectAll.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+					</m:MaterialButton>
+				</m:MaterialTooltip>
+				<m:MaterialTooltip text="{lang.showInSearchTooltip}">
+					<m:MaterialButton display="NONE" ui:field="showOnSearchButton" text="{lang.seletedShowOnSearch}" textColor="WHITE" addStyleNames="d-btn" enabled="false" >
+						<m:MaterialImage url="{gui.searchIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+					</m:MaterialButton>
+				</m:MaterialTooltip>
+				<m:MaterialTooltip text="{lang.showOnMapTooltip}">
+					<m:MaterialButton display="NONE" ui:field="showOnMapButton" text="{lang.seletedShowOnMap}" textColor="WHITE" addStyleNames="d-btn" enabled="false" >
+						<m:MaterialImage url="{gui.mapIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+					</m:MaterialButton>
+				</m:MaterialTooltip>
+				<m:MaterialTooltip text="{lang.showValuesTooltip}">
+					<m:MaterialButton display="NONE" ui:field="showVisualizationsButton" text="{lang.selectedShowVisualisations}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
+						<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+					</m:MaterialButton>
+				</m:MaterialTooltip>
+				<m:MaterialTooltip text="{lang.addToListTooltip}">
+					<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
+						<d:Spinner display="NONE" addStyleNames="{style.drop-down-spinner}" size="SMALL" ui:field="listDropDownSpinner"/>
+						<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+					</m:MaterialButton>
+				</m:MaterialTooltip>
+				<m:MaterialDropDown ui:field="listDropDown" activator="dp" addStyleNames="round-corners {style.drop-down}">
+					<m:MaterialLink ui:field="favoriteLink" text="{lang.favorites}" >
+						<m:MaterialImage addStyleNames="{style.fav-img}" url="{gui.favoriteRed.getSafeUri.asString}"/>
+					</m:MaterialLink>
 				</m:MaterialDropDown>
-			</bh:Div>
-			<bh:Div addStyleNames="flex list-action-btns">
-				<m:MaterialButton display="NONE" ui:field="showInfoButton" text="{lang.information}" textColor="WHITE" addStyleNames="d-btn margin-top-10" enabled="false">
-					<m:MaterialImage url="{gui.info.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-				</m:MaterialButton>
-				<m:MaterialButton display="NONE" ui:field="deleteSensorsButton" text="{lang.deleteSensors}" textColor="WHITE" addStyleNames="d-btn margin-top-10" enabled="false">
-					<m:MaterialImage url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
-				</m:MaterialButton>
+				<m:MaterialTooltip text="{lang.infoTooltip}">
+					<m:MaterialButton display="NONE" ui:field="showInfoButton" text="{lang.information}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
+						<m:MaterialImage url="{gui.info.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+					</m:MaterialButton>
+				</m:MaterialTooltip>
+				<m:MaterialTooltip text="{lang.deleteTooltip}">
+					<m:MaterialButton display="NONE" ui:field="deleteSensorsButton" text="{lang.deleteSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
+						<m:MaterialImage url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+					</m:MaterialButton>
+				</m:MaterialTooltip>
 			</bh:Div>
 		</bh:Div>
 		<d:Pager ui:field="pagerTop" addStyleNames="pager"/>
