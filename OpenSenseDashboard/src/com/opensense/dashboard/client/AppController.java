@@ -317,24 +317,36 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		return idsAsString.toString();
 	}
 
-	public void switchLanguage() {
-		if(Languages.isGerman()) {
+	public void switchLanguage(String lang) {
+		if(lang.equals(Languages.getActualLanguageString())) {
+			return;
+		}
+		if(Languages.GERMAN.equals(lang)) {
+			Languages.setGerman();
+		}else if(Languages.ENGLISH.equals(lang)) {
 			Languages.setEnglish();
 		}else {
-			Languages.setGerman();
+			Languages.setSpanish();
 		}
 		CookieManager.writeLanguageCookie(Languages.getActualLanguageString());
 		Window.Location.reload();
 	}
 
 	private void setLanguageFromCookies() {
-		if ((CookieManager.getLanguage() != null) && "en".equals(CookieManager.getLanguage())) {
-			Languages.setEnglish();
+		String lang = CookieManager.getLanguage();
+		if ((lang != null)) {
+			if(Languages.GERMAN.equals(lang)) {
+				Languages.setGerman();
+			}else if(Languages.ENGLISH.equals(lang)) {
+				Languages.setEnglish();
+			}else {
+				Languages.setSpanish();
+			}
 		}else {
-			Languages.setGerman();
+			lang = Languages.getActualLanguageString(); // Default is german
 		}
 		// Sets the correct serverLanguage.
-		GeneralService.Util.getInstance().setServerLanguage(Languages.getActualLanguageString(), new DefaultAsyncCallback<Void>(result -> {}));
+		GeneralService.Util.getInstance().setServerLanguage(lang, new DefaultAsyncCallback<Void>(result -> {}));
 	}
 
 	public boolean isGuest() {
@@ -381,7 +393,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 	public static void showLongInfo(String message) {
 		MaterialToast.fireToast(message, 10000, "info-growl");
 	}
-	
+
 	public DataPanelPresenter getDataPanelPresenter() {
 		return this.dataPanelPresenter;
 	}
