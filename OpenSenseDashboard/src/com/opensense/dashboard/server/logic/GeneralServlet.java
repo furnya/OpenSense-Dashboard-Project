@@ -26,6 +26,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	private static final Logger LOGGER = Logger.getLogger(GeneralServlet.class.getName());
 
+	
 	@Override
 	public Response getDataFromRequest(Request searchRequest) {
 		Response response = new Response();
@@ -172,4 +173,12 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return new ActionResult(ActionResultType.SUCCESSFUL);
 		}
 	}
+	@Override
+	public String getUserName() {
+		if(!SessionUser.getInstance().isGuest()) {
+			return SessionUser.getInstance().getUsername();
+		}
+		return null;
+	}
+
 }

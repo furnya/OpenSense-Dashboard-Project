@@ -41,4 +41,5 @@ public interface GeneralService extends RemoteService {
 	ActionResult deleteSensorsFromUserList(int listId, List<Integer> sensors);
 	ActionResult createSensor(CreateSensorRequest request);
 	ActionResult deleteSensorsFromMySensors(List<Integer> sensorIds);
+	String getUserName();
 }

@@ -98,6 +98,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	}
 
 	private void sendRequest(final Request request) {
+		
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if ((result != null) && (result.getResultType() != null)
 					&& request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
