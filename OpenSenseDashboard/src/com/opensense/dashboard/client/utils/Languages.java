@@ -989,7 +989,7 @@ public class Languages {
 			return "Spanish";
 		}
 	}
-	
+
 	public static String delete() {
 		if(de) {
 			return "Löschen";
@@ -997,7 +997,7 @@ public class Languages {
 			return "Delete";
 		}
 	}
-	
+
 	public static String confirmDeleteQuestion() {
 		if(de) {
 			return "Möchten Sie die Liste wirklich löschen?";
@@ -1126,6 +1126,14 @@ public class Languages {
 			return "Das Passwort wurde erfolgreich geändert";
 		}else {
 			return "The password was successfully changed";
+		}
+	}
+
+	public static String successfullyCreatedAccout() {
+		if(de) {
+			return "Sie haben sich erfolgreich registriert";
+		}else {
+			return "";
 		}
 	}
 

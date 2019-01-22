@@ -55,7 +55,6 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		DatabaseManager.initPooling();
 		DatabaseManager db = new DatabaseManager();
 		String passwordDB = db.getPasswordFromUsername(username);
-		password = this.encryptPassword(password);
 		if(this.isPasswordCorrect(passwordDB, password)) {
 			String body = "{\"username\":\""+System.getenv("USERNAME")+"\",\"password\":\""+System.getenv("PASSWORD")+"\"}";
 			String token = ClientRequestHandler.getInstance().sendLoginRequest(body);
@@ -80,9 +79,6 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		DatabaseManager.initPooling();
 		DatabaseManager db = new DatabaseManager();
 		ActionResult result = db.createUserProfile(email, username, password);
-		if(ActionResultType.SUCCESSFUL.equals(result.getActionResultType())) {
-			SessionUser.getInstance().createUser(db.getUserIdFromUsername(username), username, null);
-		}
 		DatabaseManager.clearDataSource();
 		return result;
 	}

@@ -100,7 +100,8 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 		}
 		AuthenticationService.Util.getInstance().userRegisterRequest(username, password, email, new DefaultAsyncCallback<ActionResult>(result -> {
 			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())){
-				this.appController.onUserLoggedIn(true);
+				AppController.showSuccess(Languages.successfullyCreatedAccout());
+				this.view.resetViewElements();
 			}else{
 				AppController.showError(Languages.invalidParameters());
 			}
@@ -116,6 +117,7 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 		AuthenticationService.Util.getInstance().forgotPasswordRequest(email, new DefaultAsyncCallback<ActionResult>(result -> {
 			if((result != null) && ActionResultType.SUCCESSFUL.equals(result.getActionResultType())){
 				AppController.showSuccess(Languages.passwordResetSent());
+				this.view.resetViewElements();
 			}else{
 				AppController.showError(Languages.connectionError());
 			}

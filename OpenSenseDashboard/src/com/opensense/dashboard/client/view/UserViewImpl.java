@@ -199,6 +199,12 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 	public void resetViewElements() {
 		this.loginButton.setEnabled(true);
 		this.regiLabel.setEnabled(true);
+		this.regiLabel.setText(Languages.register());
+		this.loginButton.setText(Languages.login());
+		this.userName.getElement().getStyle().setDisplay(Display.BLOCK);
+		this.password.getElement().getStyle().setDisplay(Display.BLOCK);
+		this.passwordVerify.getElement().getStyle().setDisplay(Display.NONE);
+		this.email.getElement().getStyle().setDisplay(Display.NONE);
 		this.password.reset();
 		this.userName.reset();
 		this.spinner.getElement().getStyle().setDisplay(Display.NONE);
