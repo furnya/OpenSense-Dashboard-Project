@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -377,21 +379,40 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		this.dataPanelPresenter.onUserLoggedOut();
 		this.navigationPanelPresenter.onUserLoggedOut();
 	}
+	
+	private static final int MAX_TOASTS = 4;
+	private static final String TOAST_CONTAINER_ID = "toast-container";
 
 	public static void showError(String message) {
-		MaterialToast.fireToast(message, 4000, "error-growl");
+		Element toastContainer = Document.get().getElementById(TOAST_CONTAINER_ID);
+		int toastCount = (toastContainer!=null) ? toastContainer.getChildCount() : 0;
+		if(toastCount<=MAX_TOASTS) {
+			MaterialToast.fireToast(message, 4000, "error-growl");
+		}
 	}
 
 	public static void showSuccess(String message) {
-		MaterialToast.fireToast(message, 4000, "success-growl");
+		Element toastContainer = Document.get().getElementById(TOAST_CONTAINER_ID);
+		int toastCount = (toastContainer!=null) ? toastContainer.getChildCount() : 0;
+		if(toastCount<=MAX_TOASTS) {
+			MaterialToast.fireToast(message, 4000, "success-growl");
+		}
 	}
 
 	public static void showInfo(String message) {
-		MaterialToast.fireToast(message, 4000, "info-growl");
+		Element toastContainer = Document.get().getElementById(TOAST_CONTAINER_ID);
+		int toastCount = (toastContainer!=null) ? toastContainer.getChildCount() : 0;
+		if(toastCount<=MAX_TOASTS) {
+			MaterialToast.fireToast(message, 4000, "info-growl");
+		}
 	}
 
 	public static void showLongInfo(String message) {
-		MaterialToast.fireToast(message, 10000, "info-growl");
+		Element toastContainer = Document.get().getElementById(TOAST_CONTAINER_ID);
+		int toastCount = (toastContainer!=null) ? toastContainer.getChildCount() : 0;
+		if(toastCount<=MAX_TOASTS) {
+			MaterialToast.fireToast(message, 10000, "info-growl");
+		}
 	}
 
 	public DataPanelPresenter getDataPanelPresenter() {
