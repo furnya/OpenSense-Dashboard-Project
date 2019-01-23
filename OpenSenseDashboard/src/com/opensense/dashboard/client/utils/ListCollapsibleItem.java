@@ -340,15 +340,26 @@ public class ListCollapsibleItem extends Composite{
 		}
 	}
 	
+	private HandlerRegistration handlerRegistration = null;
+	
 	public void showUserListsInDropDown(AddToListEventHandler handler, List<UserList> userLists) {
 		this.clearListsDropDown();
 		this.addToListButton.setEnabled(true);
 		this.showListDropDownSpinner(false);
-		this.favoriteLink.addClickHandler(event -> handler.onAddToListEvent(new AddToListEvent(DefaultListItem.FAVORITE_LIST_ID,Languages.favorites())));
+		if(this.handlerRegistration!=null) {
+			this.handlerRegistration.removeHandler();
+		}
+		this.handlerRegistration = this.favoriteLink.addClickHandler(event -> {
+			this.hideListDropDown();
+			handler.onAddToListEvent(new AddToListEvent(DefaultListItem.FAVORITE_LIST_ID,Languages.favorites()));
+		});
 		userLists.forEach(userList -> {
 			MaterialLink link = new MaterialLink();
 			link.setText(userList.getListName());
-			link.addClickHandler(event -> handler.onAddToListEvent(new AddToListEvent(userList.getListId(),userList.getListName())));
+			link.addClickHandler(event -> {
+				this.hideListDropDown();
+				handler.onAddToListEvent(new AddToListEvent(userList.getListId(),userList.getListName()));
+			});
 			this.listDropDown.add(link);
 		});
 	}
