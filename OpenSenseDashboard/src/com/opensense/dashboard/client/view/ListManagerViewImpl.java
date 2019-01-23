@@ -130,6 +130,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		}
 		if(options.isShowAddToListButton()) {
 			item.addAddToListButtonButtonClickHandler(event -> {
+				item.prepareForDropdown();
 				item.clearListsDropDown();
 				this.presenter.requestAndShowUserList(listId);
 			});

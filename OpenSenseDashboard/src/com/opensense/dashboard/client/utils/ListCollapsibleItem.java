@@ -334,15 +334,24 @@ public class ListCollapsibleItem extends Composite{
 		this.sensorDetails.setText(details);
 	}
 	
+	public void prepareForDropdown() {
+		this.hideListDropDown();
+		this.showListDropDownSpinner(true);
+		this.addToListButton.setEnabled(false);
+	}
+	
 	public void hideListDropDown() {
-		if(this.listDropDown.getElement().getAttribute("style").contains("display: block")){
-			this.listDropDown.getElement().getStyle().setDisplay(Display.NONE);
-		}
+		this.listDropDown.getElement().addClassName("display-none-important");
+	}
+	
+	private void showListDropDown() {
+		this.listDropDown.getElement().removeClassName("display-none-important");
 	}
 	
 	private HandlerRegistration handlerRegistration = null;
 	
 	public void showUserListsInDropDown(AddToListEventHandler handler, List<UserList> userLists) {
+		this.showListDropDown();
 		this.clearListsDropDown();
 		this.addToListButton.setEnabled(true);
 		this.showListDropDownSpinner(false);

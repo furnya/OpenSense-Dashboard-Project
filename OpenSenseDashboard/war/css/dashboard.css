@@ -640,6 +640,9 @@ input:focus+label{
 .display-none{
 	display: none;
 }
+.display-none-important{
+	display: none !important;
+}
 .chart-height{
 	height: 38vw;
 	max-height: 75vh;

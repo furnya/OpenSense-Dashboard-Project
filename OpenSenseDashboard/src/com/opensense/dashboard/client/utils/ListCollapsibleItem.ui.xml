@@ -74,8 +74,6 @@
 }
 .drop-down-spinner{
 	position: absolute;
-    left: 22px;
-    top: 8px;
 }
 .drop-down{
 	max-height: 25vh !important;
