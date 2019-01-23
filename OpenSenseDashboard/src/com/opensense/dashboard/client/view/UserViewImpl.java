@@ -130,28 +130,20 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 				AppController.showError(Languages.invalidEmail());
 				return;
 			}
-			this.spinner.getElement().getStyle().clearDisplay();
-			this.loginButton.setEnabled(false);
-			this.regiLabel.setEnabled(false);
-			this.forgotPassword.setEnabled(false);
 			this.presenter.sendRegisterRequest(this.userName.getValue(),this.password.getValue(),this.email.getValue());
 		}else if(Languages.login().equals(this.loginButton.getText())){
-			this.spinner.getElement().getStyle().clearDisplay();
-			this.loginButton.setEnabled(false);
-			this.regiLabel.setEnabled(false);
-			this.forgotPassword.setEnabled(false);
 			this.presenter.sendLoginRequest(this.userName.getText(), this.password.getText());
 		}else if(Languages.send().equals(this.loginButton.getText())) {
 			if((this.email.getValue()==null) || !this.email.getValue().matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
 				AppController.showError(Languages.invalidEmail());
 				return;
 			}
-			this.spinner.getElement().getStyle().clearDisplay();
-			this.loginButton.setEnabled(false);
-			this.regiLabel.setEnabled(false);
-			this.forgotPassword.setEnabled(false);
 			this.presenter.sendForgotPasswordRequest(this.email.getValue());
 		}
+		this.spinner.getElement().getStyle().clearDisplay();
+		this.loginButton.setEnabled(false);
+		this.regiLabel.setEnabled(false);
+		this.forgotPassword.setEnabled(false);
 	}
 
 	@UiHandler("userName")
