@@ -1232,20 +1232,36 @@ public class Languages {
 			return "Hu\u00E9sped";
 		}
 	}
+	
+	public static String welcomeInfoText() {
+		if (de) {
+			return "";
+		} else if (en) {
+			return "";
+		} else {
+			return "";
+		}
+	}
+	
 
 	public static String searchInfoText() {
 		if (de) {
-			return "Deutscher Text für SearchPage";
+			return "Auf dieser Seite kannst du Sensoren suchen und ihre Informationen einsehen."+
+					"Die Sensoren können parametrisiert sowie Ortsabhängig gesucht werden.";
 		} else if (en) {
-			return "Englischer text für SearchPage";
+			return "On this page you can search the sensors.\r\n" + 
+					"The sensors can be parameterized and searched for location-dependent.";
 		} else {
-			return "Spanischer text für SearchPage";
+			return "En esta p\u00E1gina puedes buscar los sensores.\r\n" + 
+					"Los sensores pueden parametrizarse y buscarse seg\u00FAn la ubicaci\u00F3n.";
 		}
 	}
 
 	public static String mapInfoText() {
 		if (de) {
-			return "Deutscher Text für MapPage";
+			return "Auf der von Google bereitgestellten Karte kannst du dir deine Sensoren anzeigen lassen."+
+					"Die Sensoren werden abhängig von ihrem Typ mit einem anderen Symbol auf der Karte angezeigt."
+					+"Sollte sich mehrere Sensoren auf einer Stelle befinden so wird dies durch dieses Symbol deutlich:";
 		} else if (en) {
 			return "Englischer text für MapPage";
 		} else {
@@ -1255,7 +1271,9 @@ public class Languages {
 
 	public static String visuInfoText() {
 		if (de) {
-			return "Deutscher Text für VisuPage";
+			return "Die hier bereitgestellte Funktionalität ermöglicht es dir, die Werte der Sensoren je nach belieben (Tag, Monat, Jahr, oder spezifischer), in einem Diagramm darzustellen."+
+					"Dabei behälst du dank der farblichen Markierung der Angezeigten Sensoren immer den Überblick."+
+					"Bitte beachte dabei, dass du maximal 10 Sensoren zur gleichen Zeit in den Listen auswählen kannst.";
 		} else if (en) {
 			return "Englischer text für VisuPage";
 		} else {
@@ -1265,7 +1283,9 @@ public class Languages {
 
 	public static String listInfoText() {
 		if (de) {
-			return "Deutscher Text für ListPage";
+			return "Damit du nicht immer wieder die Selbe Sensoren auf der Suchseite suchen musst, kannst du dir deine eigenen Listen erstellen."+
+					"Erstelle eine Liste und füge über die Suchseite passende Sensoren hinzu."+
+					"Außerdem kannst du, wenn du einen Entsprechenden Account besitzt auch einfach deinen/deine eigenen Sensor/-en zu OpenSense hinzufügen.";
 		} else if (en) {
 			return "Englischer Text für ListPage";
 		} else {

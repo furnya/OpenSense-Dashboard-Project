@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 public class HomeViewImpl extends DataPanelPageView implements HomeView {
 
@@ -23,9 +24,11 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	private static HomeViewUiBinder uiBinder = GWT.create(HomeViewUiBinder.class);
 
 	protected Presenter presenter;
-
+	/*welcomePageCard*/
 	@UiField
 	Heading userInfo;
+	@UiField
+	Span welcomeText;
 	
 	/* searchPage */
 	@UiField
@@ -86,6 +89,11 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 		setMapCardText();
 		setVisuCardText();
 		setListCardText();
+	}
+	
+	public void setWelcomeCardText(){
+		this.welcomeText.setText(Languages.welcomeInfoText());
+		this.welcomeText.setColor(whiteColor);
 	}
 	
 	

@@ -8,7 +8,8 @@
 	xmlns:ma="urn:import:gwt.material.design.addins.client"
 	xmlns:h="urn:import:gwt.material.design.client.ui.html"
 	xmlns:c="urn:import:org.gwtbootstrap3.extras.card.client.ui"
-	xmlns:dom="urn:import:com.gargoylesoftware.htmlunit.javascript.host.dom">
+	xmlns:dom="urn:import:com.gargoylesoftware.htmlunit.javascript.host.dom"
+	xmlns:x="urn:import:com.sun.xml.internal.bind.v2.schemagen.xmlschema">
 
 	<ui:with type="com.opensense.dashboard.client.utils.Languages"
 		field="lang" />
@@ -26,6 +27,12 @@
 		clear: both;
 	}
 	
+	.grid-item-pages {
+		height: 45vh;
+		width: 30%;
+		overflow: hidden;
+	}
+	
 	.grid-item>div {
 		float: left;
 		background: #606060;
@@ -38,7 +45,7 @@
 	.grid-item>div>div {
 		overflow: hidden;
 	}
-		
+	
 	.grid-item>div:hover {
 		background: #42DCA3;
 		border: 2px solid #333;
@@ -47,8 +54,8 @@
 	}
 	
 	.grid-item-welcome {
-		height: 40vh;
-		width: 40vw;
+		height: 90vh;
+		width: 40%;
 	}
 	
 	.grid-item-welcome:hover {
@@ -57,27 +64,7 @@
 		border-color: hsla(0, 0%, 0%, 0.5) !important;
 		border-radius: 5px !important;
 	}
-	
-	.grid-item-mapinfo {
-		height: 51vh;
-		width: 29vw;
-	}
-	
-	.grid-item-searchinfo {
-		height: 40vh;
-		width: 48vw;
-	}
-	
-	.grid-item-visuinfo {
-		height: 51vh;
-		width: 30vw;
-	}
-	
-	.grid-item-listeninfo {
-		height: 51vh;
-		width: 29vw;
-	}
-	
+
 	.inverter {
 		filter: invert(100%);
 	}
@@ -90,13 +77,14 @@
 	.header {
 		color: white;
 		left: 20px;
-		top: 30%;
+		margin-top: 5%;
 	}
 	
 	.userfield {
 		color: white;
 		margin-left: 15px;
-		margin-top: 27px;
+		margin-top: 36px;
+		
 	}
 	
 	.icon-size {
@@ -113,8 +101,8 @@
 		margin-top: 136px;
 		color: white;
 		position: absolute;
+		font-size: 105%;
 	}
-	
 	</ui:style>
 
 	<bh:Div ui:field="grid"
@@ -130,54 +118,60 @@
 					addStyleNames="{style.header}" size="H4" />
 				<b:Heading ui:field="userInfo"
 					addStyleNames="{style.userfield}" size="H5" />
+				<bh:Span ui:field="welcomeText"
+					addStyleNames="{style.info-text-style}"></bh:Span>
 			</bh:Div>
 		</bh:Div>
 
 		<bh:Div ui:field="searchCard"
-			addStyleNames="{style.grid-item-searchinfo}">
+			addStyleNames="{style.grid-item-pages}">
 			<bh:Div addStyleNames="flex">
 				<m:MaterialImage
 					url="{gui.searchIconSvg.getSafeUri.asString}"
 					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
 				<b:Heading ui:field="searchCardInfo"
 					addStyleNames="{style.userfield}" size="H5" />
-				<bh:Span ui:field="searchCardText" addStyleNames="{style.info-text-style}"></bh:Span>
+				<bh:Span ui:field="searchCardText"
+					addStyleNames="{style.info-text-style}"></bh:Span>
 			</bh:Div>
 		</bh:Div>
 
 		<bh:Div ui:field="mapCard"
-			addStyleNames="{style.grid-item-mapinfo}">
+			addStyleNames="{style.grid-item-pages}">
 			<bh:Div addStyleNames="flex">
 				<m:MaterialImage
 					url="{gui.mapIconSvg.getSafeUri.asString}"
 					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
 				<b:Heading ui:field="mapCardInfo"
 					addStyleNames="{style.userfield}" size="H5" />
-				<bh:Span ui:field="mapCardText" addStyleNames="{style.info-text-style}"></bh:Span>
+				<bh:Span ui:field="mapCardText"
+					addStyleNames="{style.info-text-style}"></bh:Span>
 			</bh:Div>
 		</bh:Div>
 
 		<bh:Div ui:field="visuCard"
-			addStyleNames="{style.grid-item-visuinfo}">
+			addStyleNames="{style.grid-item-pages}">
 			<bh:Div addStyleNames="flex">
 				<m:MaterialImage
 					url="{gui.diagramIconSvg.getSafeUri.asString}"
 					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
 				<b:Heading ui:field="visuCardInfo"
 					addStyleNames="{style.userfield}" size="H5" />
-				<bh:Span ui:field="visuCardText" addStyleNames="{style.info-text-style}"></bh:Span>
+				<bh:Span ui:field="visuCardText"
+					addStyleNames="{style.info-text-style}"></bh:Span>
 			</bh:Div>
 		</bh:Div>
 
 		<bh:Div ui:field="listCard"
-			addStyleNames="{style.grid-item-listeninfo}">
+			addStyleNames="{style.grid-item-pages}">
 			<bh:Div addStyleNames="flex">
 				<m:MaterialImage
 					url="{gui.listIconSvg.getSafeUri.asString}"
 					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
 				<b:Heading ui:field="listCardInfo"
 					addStyleNames="{style.userfield}" size="H5" />
-				<bh:Span ui:field="listCardText" addStyleNames="{style.info-text-style}"></bh:Span>
+				<bh:Span ui:field="listCardText"
+					addStyleNames="{style.info-text-style}"></bh:Span>
 			</bh:Div>
 		</bh:Div>
 	</bh:Div>
