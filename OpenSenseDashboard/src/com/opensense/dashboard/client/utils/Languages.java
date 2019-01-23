@@ -1042,7 +1042,7 @@ public class Languages {
 			return (moreThanOne ? "The sensors " + sensors + " were" : "The sensor " + sensors + " was")
 					+ " added to the list \"" + listName + "\"";
 		} else {
-			return (moreThanOne ? "Los sensores" + sensors + "se han" : "EL sensor " + sensors + "se ha")
+			return (moreThanOne ? "Los sensores" + sensors + " ya se han" : "EL sensor " + sensors + "ya se ha")
 					+ " a\u00F1adido a la lista \"" + listName + "\"";
 		}
 	}
