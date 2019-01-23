@@ -74,9 +74,12 @@
 }
 .drop-down-spinner{
 	position: absolute;
+	top: 5px;
 }
 .drop-down{
 	max-height: 25vh !important;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
 }
 </ui:style>
 
@@ -117,12 +120,12 @@
 					</m:MaterialButton>
 				</m:MaterialTooltip>
 				<m:MaterialTooltip text="{lang.addToListTooltip}">
-					<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
+					<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn position-relative" enabled="false">
 						<d:Spinner display="NONE" addStyleNames="{style.drop-down-spinner}" size="SMALL" ui:field="listDropDownSpinner"/>
 						<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 					</m:MaterialButton>
 				</m:MaterialTooltip>
-				<m:MaterialDropDown ui:field="listDropDown" activator="dp" addStyleNames="round-corners {style.drop-down}">
+				<m:MaterialDropDown ui:field="listDropDown" activator="dp" addStyleNames="{style.drop-down}">
 					<m:MaterialLink ui:field="favoriteLink" text="{lang.favorites}" >
 						<m:MaterialImage addStyleNames="{style.fav-img}" url="{gui.favoriteRed.getSafeUri.asString}"/>
 					</m:MaterialLink>
