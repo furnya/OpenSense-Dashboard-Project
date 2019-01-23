@@ -12,6 +12,7 @@ import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
@@ -172,6 +173,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	public void onAddToListButtonClicked(ClickEvent e) {
 		this.showListDropDownSpinner(true);
 		this.addToListButton.setEnabled(false);
+		this.hideListDropDown();
 		this.clearListsDropDown();
 		this.presenter.getListsAndShow();
 	}
@@ -490,7 +492,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@Override
 	public void showUserListsInDropDown(List<UserList> userLists) {
-		GWT.debugger();
+		this.showListDropDown();
 		this.clearListsDropDown();
 		this.addToListButton.setEnabled(true);
 		this.showListDropDownSpinner(false);
@@ -514,9 +516,10 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@Override
 	public void hideListDropDown() {
-		if(this.listDropDown.getElement().getAttribute("style").contains("display: block")){
-			this.listDropDown.getElement().getStyle().setDisplay(Display.NONE);
-			this.blurElement(this.container.getElement()); //blur listDropDown
-		}
+		this.listDropDown.getElement().addClassName("display-none-important");
+	}
+	
+	private void showListDropDown() {
+		this.listDropDown.getElement().removeClassName("display-none-important");
 	}
 }
