@@ -544,10 +544,25 @@ input:focus+label{
 	border-radius: 6px;
 }
 
+.sensor-item-card[size="SMALL"] .card-header{
+    height: 30px;
+}
+
+.sensor-item-card[size="SMALL"] .card-header > div{
+    height: 20px !important;
+    width: 20px !important;
+    margin-top: -4px !important;
+}
+
 .sensor-item-card .header-label{
 	margin-top: 5px;
-	font-size: 20px;	
-    white-space: nowrap;
+	font-size: 20px;
+	white-space: nowrap;
+}
+
+.sensor-item-card[size="SMALL"] .header-label{
+  	font-size: 15px !important;
+  	margin-top: -4px !important;
 }
 
 .sensor-item-card .round-button{
@@ -556,6 +571,18 @@ input:focus+label{
 	height: 50px;
 	padding: unset;
 }
+
+.sensor-item-card .card-action-buttons[size="SMALL"] .round-button{
+	width: 30px !important;
+	height: 30px !important;
+	margin-top: -18px;
+}
+.sensor-item-card[class*="collapsed"] .card-action-buttons[size="SMALL"] .round-button{
+	width: 20px !important;
+	height: 20px !important;
+	margin-top: -5px !important;
+}
+
 .sensor-item-card[class*="collapsed"] .round-button{
 	border-radius: 25px;
 	width: 40px;
@@ -577,6 +604,17 @@ input:focus+label{
 	filter: invert(100%) brightness(100%);
 }
 
+.sensor-item-card .card-action-buttons[size="SMALL"] .round-button > img{
+  	width: 15px !important;
+  	height: 15px !important;
+  	margin-top: -8px;
+}
+
+.sensor-item-card[class*="collapsed"] .card-action-buttons[size="SMALL"] .round-button > img{
+  	width: 10px !important;
+  	height: 10px !important;
+  	margin-top: -15px;
+}
 .sensor-item-card[class*="collapsed"] .round-button > img{
 	width: 18px;
 	height: 18px;
@@ -620,7 +658,6 @@ input:focus+label{
 }
 
 .sensor-item-card[class*="collapsed"] .card-action-buttons > button{
-	top: 12%;
 }
 .sensor-item-card[class*="collapsed"] .card-action-buttons{
 	position: absolute;
@@ -641,7 +678,9 @@ input:focus+label{
 	margin-bottom: -15px;
 	background-color: inherit;
 }
-
+.sensor-item-card[class*="SMALL"] .accuracy-container > span{
+	font-size: 16px;
+}
 
 .display-none{
 	display: none;

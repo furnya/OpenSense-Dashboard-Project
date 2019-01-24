@@ -27,8 +27,11 @@
     width: 20px;
     position: absolute;
     right: 0px;
-    top: 10px;
+    top: 12px;
     filter: invert(20%);
+}
+.del-icon:hover{
+    filter: invert(50%) !important;
 }
 .float-right{
 	margin-left: 15px;

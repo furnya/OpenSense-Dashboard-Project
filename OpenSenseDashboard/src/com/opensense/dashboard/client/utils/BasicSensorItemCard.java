@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.ActiveChangeEvent;
 import com.opensense.dashboard.client.event.ActiveChangeEventHandler;
+import com.opensense.dashboard.client.model.Size;
 import com.opensense.dashboard.shared.Sensor;
 
 import gwt.material.design.client.ui.MaterialButton;
@@ -79,8 +80,8 @@ public class BasicSensorItemCard extends Composite{
 	@UiField
 	Div map;
 
-	private MapOptions mapOptions;
-	private MapWidget mapWidget;
+	@UiField
+	Div cardActionBtnContainer;
 
 	public BasicSensorItemCard() {
 		this.initWidget(uiBinder.createAndBindUi(this));
@@ -168,17 +169,17 @@ public class BasicSensorItemCard extends Composite{
 		}else {
 			this.addContentValue(Languages.values(), Languages.noValuePreviewData());
 		}
-		this.mapOptions = MapOptions.newInstance();
-		this.mapOptions.setMinZoom(2);
-		this.mapOptions.setMaxZoom(18);
-		this.mapOptions.setDraggable(true);
-		this.mapOptions.setScaleControl(true);
-		this.mapOptions.setStreetViewControl(false);
-		this.mapOptions.setMapTypeControl(false);
-		this.mapOptions.setScrollWheel(true);
-		this.mapOptions.setPanControl(false);
-		this.mapOptions.setZoomControl(true);
-		this.mapOptions.setDisableDoubleClickZoom(true);
+		MapOptions mapOptions = MapOptions.newInstance();
+		mapOptions.setMinZoom(2);
+		mapOptions.setMaxZoom(18);
+		mapOptions.setDraggable(true);
+		mapOptions.setScaleControl(true);
+		mapOptions.setStreetViewControl(false);
+		mapOptions.setMapTypeControl(false);
+		mapOptions.setScrollWheel(true);
+		mapOptions.setPanControl(false);
+		mapOptions.setZoomControl(true);
+		mapOptions.setDisableDoubleClickZoom(true);
 		MapTypeStyle mapStyle = MapTypeStyle.newInstance();
 		MapTypeStyle mapStyle2 = MapTypeStyle.newInstance();
 		mapStyle.setFeatureType(MapTypeStyleFeatureType.POI);
@@ -195,14 +196,14 @@ public class BasicSensorItemCard extends Composite{
 		MapTypeStyle[] mapStyleArray = new MapTypeStyle[2];
 		mapStyleArray[0] = mapStyle;
 		mapStyleArray[1] = mapStyle2;
-		this.mapOptions.setMapTypeStyles(mapStyleArray);
-		MapImpl mapImpl = MapImpl.newInstance(this.map.getElement(), this.mapOptions);
-		this.mapWidget = MapWidget.newInstance(mapImpl);
-		this.mapWidget.setVisible(true);
+		mapOptions.setMapTypeStyles(mapStyleArray);
+		MapImpl mapImpl = MapImpl.newInstance(this.map.getElement(), mapOptions);
+		MapWidget mapWidget = MapWidget.newInstance(mapImpl);
+		mapWidget.setVisible(true);
 		LatLng position = LatLng.newInstance(sensor.getLocation().getLat(),sensor.getLocation().getLon());
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
-		markerOpt.setMap(this.mapWidget);
+		markerOpt.setMap(mapWidget);
 		Marker marker = Marker.newInstance(markerOpt);
 		marker.setDraggable(false);
 		this.infoLoaded = true;
@@ -223,7 +224,7 @@ public class BasicSensorItemCard extends Composite{
 
 	public void setColor(String color) {
 		this.layout.removeStyleName("card-active");
-		this.layout.getElement().setAttribute("style",  "background-color: " + color);
+		this.headerContainer.getElement().setAttribute("style",  "background-color: " + color);
 	}
 
 	public void showLoadingIndicator(boolean show) {
@@ -232,6 +233,22 @@ public class BasicSensorItemCard extends Composite{
 
 	public Element getInfoButtonElement() {
 		return this.showInfoButton.getElement();
+	}
+
+	/**
+	 * sets the card size only small
+	 * @param size
+	 */
+	public void setSize(Size size) {
+		if(Size.SMALL.equals(size)) {
+			this.layout.getElement().setAttribute("size", size.name());
+			this.rating.setSize(size);
+			this.cardActionBtnContainer.getElement().setAttribute("size", size.name());
+		}
+	}
+
+	public void removeMap() {
+		this.map.removeFromParent();
 	}
 
 }

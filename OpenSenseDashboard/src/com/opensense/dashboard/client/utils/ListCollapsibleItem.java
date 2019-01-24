@@ -28,9 +28,6 @@ import com.opensense.dashboard.client.event.SensorSelectionEvent;
 import com.opensense.dashboard.client.event.SensorSelectionEventHandler;
 import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.model.Size;
-import com.opensense.dashboard.client.presenter.ListManagerPresenter;
-import com.opensense.dashboard.client.view.ListManagerView;
-import com.opensense.dashboard.client.view.ListManagerViewImpl;
 import com.opensense.dashboard.shared.UserList;
 
 import gwt.material.design.client.ui.MaterialButton;
@@ -107,13 +104,13 @@ public class ListCollapsibleItem extends Composite{
 
 	@UiField
 	Span sensorDetails;
-	
+
 	@UiField
 	MaterialTooltip selectAllTooltip;
-	
+
 	@UiField
 	Spinner listDropDownSpinner;
-	
+
 	@UiField
 	MaterialLink favoriteLink;
 
@@ -121,6 +118,7 @@ public class ListCollapsibleItem extends Composite{
 
 	private HandlerRegistration clickHandler;
 	private HandlerRegistration enterHandler;
+	private HandlerRegistration favoriteButtonHandler;
 
 	public ListCollapsibleItem() {
 		this.initWidget(uiBinder.createAndBindUi(this));
@@ -134,7 +132,7 @@ public class ListCollapsibleItem extends Composite{
 		this.addToListButton.setActivates("ddact-"+id);
 		this.listDropDown.setActivator("ddact-"+id);
 	}
-	
+
 	public void setSpinnerSize(Size spinnerSize) {
 		this.listItemSpinner.setSize(spinnerSize);
 	}
@@ -215,6 +213,7 @@ public class ListCollapsibleItem extends Composite{
 			this.listNameInput.setValue(this.listItemName.getText());
 			this.listNameInput.setSelectionRange(0, this.listItemName.getText().length());
 			this.deleteButton.getElement().getStyle().setDisplay(Display.NONE);
+			this.sensorDetails.getElement().getStyle().setDisplay(Display.NONE);
 			this.listNameInput.getElement().getStyle().clearDisplay();
 			this.focusElement(this.listNameInput.getElement());
 			this.enterHandler = RootPanel.get().addDomHandler(keyDownEvent -> {
@@ -235,6 +234,7 @@ public class ListCollapsibleItem extends Composite{
 		final String listName = this.listNameInput.getValue();
 		this.listItemName.setText(listName);
 		this.deleteButton.getElement().getStyle().clearDisplay();
+		this.sensorDetails.getElement().getStyle().clearDisplay();
 		this.listNameInput.getElement().getStyle().setDisplay(Display.NONE);
 		handler.onListNameChangedEvent(new ListNameChangedEvent(listName));
 	}
@@ -333,32 +333,30 @@ public class ListCollapsibleItem extends Composite{
 	public void setSensorDetails(String details) {
 		this.sensorDetails.setText(details);
 	}
-	
+
 	public void prepareForDropdown() {
 		this.hideListDropDown();
 		this.showListDropDownSpinner(true);
 		this.addToListButton.setEnabled(false);
 	}
-	
+
 	public void hideListDropDown() {
 		this.listDropDown.getElement().addClassName("display-none-important");
 	}
-	
+
 	private void showListDropDown() {
 		this.listDropDown.getElement().removeClassName("display-none-important");
 	}
-	
-	private HandlerRegistration handlerRegistration = null;
-	
+
 	public void showUserListsInDropDown(AddToListEventHandler handler, List<UserList> userLists) {
 		this.showListDropDown();
 		this.clearListsDropDown();
 		this.addToListButton.setEnabled(true);
 		this.showListDropDownSpinner(false);
-		if(this.handlerRegistration!=null) {
-			this.handlerRegistration.removeHandler();
+		if(this.favoriteButtonHandler!=null) {
+			this.favoriteButtonHandler.removeHandler();
 		}
-		this.handlerRegistration = this.favoriteLink.addClickHandler(event -> {
+		this.favoriteButtonHandler = this.favoriteLink.addClickHandler(event -> {
 			this.hideListDropDown();
 			handler.onAddToListEvent(new AddToListEvent(DefaultListItem.FAVORITE_LIST_ID,Languages.favorites()));
 		});
@@ -378,7 +376,7 @@ public class ListCollapsibleItem extends Composite{
 			this.listDropDown.remove(i);
 		}
 	}
-	
+
 	public void showListDropDownSpinner(boolean show) {
 		if(show) {
 			this.listDropDownSpinner.getElement().getStyle().setDisplay(Display.BLOCK);

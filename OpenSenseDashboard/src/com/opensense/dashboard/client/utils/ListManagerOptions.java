@@ -17,6 +17,8 @@ public class ListManagerOptions {
 	private int maxObjectOnPage = 10;
 	private Size spinnerSize = Size.MEDIUM;
 	private Integer maxSelectedObjects = null;
+	private Size sensorCardSize = Size.MEDIUM;
+	private boolean showMapInInfo = true;
 
 	private ListManagerOptions(HandlerManager eventBus, HasWidgets container) {
 		this.eventBus = eventBus;
@@ -103,7 +105,7 @@ public class ListManagerOptions {
 	 * @return the addToListButton
 	 */
 	public boolean isShowAddToListButton() {
-		return showAddToListButton;
+		return this.showAddToListButton;
 	}
 
 	/**
@@ -111,5 +113,21 @@ public class ListManagerOptions {
 	 */
 	public void setShowAddToListButton(boolean showAddToListButton) {
 		this.showAddToListButton = showAddToListButton;
+	}
+
+	public Size getSensorCardSize() {
+		return sensorCardSize;
+	}
+
+	public void setSensorCardSize(Size sensorCardSize) {
+		this.sensorCardSize = sensorCardSize;
+	}
+
+	public boolean isShowMapInInfo() {
+		return showMapInInfo;
+	}
+
+	public void setShowMapInInfo(boolean showMapInInfo) {
+		this.showMapInInfo = showMapInInfo;
 	}
 }

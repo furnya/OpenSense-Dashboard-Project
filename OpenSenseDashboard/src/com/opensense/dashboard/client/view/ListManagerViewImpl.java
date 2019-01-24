@@ -37,7 +37,6 @@ import com.opensense.dashboard.shared.MinimalSensor;
 import com.opensense.dashboard.shared.Sensor;
 import com.opensense.dashboard.shared.UserList;
 
-import gwt.material.design.client.constants.Display;
 import gwt.material.design.client.ui.MaterialCollapsible;
 
 public class ListManagerViewImpl extends Composite implements ListManagerView {
@@ -54,7 +53,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 
 	@UiField
 	MaterialCollapsible collapsible;
-	
+
 	@UiField
 	Spinner spinner;
 
@@ -96,7 +95,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
-	
+
 	@Override
 	public void addNewUserListItem(final UserList userList, boolean editable, int index) {
 		final int listId = userList.getListId();
@@ -175,6 +174,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 				final List<Integer> idList = new ArrayList<>();
 				idList.add(sensor.getSensorId());
 				final BasicSensorItemCard card = new BasicSensorItemCard();
+				card.setSize(this.presenter.getController().getOptions().getSensorCardSize());
 				card.setIcon(MeasurandIconHelper.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
 				card.setHeader("ID " + sensor.getSensorId() + " - " +  sensor.getMeasurand().getDisplayName());
 				card.addActiveChangeHandler(event -> {
@@ -198,6 +198,9 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 				}
 				if(listId != DefaultListItem.FAVORITE_LIST_ID) {
 					card.addFavButtonClickHandler(event -> this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(idList)));
+				}
+				if(!this.presenter.getController().getOptions().isShowMapInInfo()) {
+					card.removeMap();
 				}
 				card.addShowInfoButtonClickHandler(event -> this.presenter.requestAllSensorInfo(listId, idList));
 				sensorCards.put(sensor.getSensorId(), card);
@@ -289,10 +292,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			this.selectedSensorIdsInLists.remove(id);
 		});
 	}
-	
+
 	@Override
 	public int clearUserList(int id) {
-		if(this.collapsiblesItems.get(id)==null) return -1;
+		if(this.collapsiblesItems.get(id)==null) {
+			return -1;
+		}
 		int index = this.collapsible.getChildrenList().indexOf(this.collapsiblesItems.get(id));
 		this.collapsiblesItems.get(id).removeFromParent();
 		this.collapsiblesItems.remove(id);
@@ -430,7 +435,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			this.presenter.addSelectedSensorsToUserList(event.getListId(), event.getListName(), this.selectedSensorIdsInLists.get(listId));
 		}, userLists);
 	}
-	
+
 	@Override
 	public void showSpinner(boolean show){
 		if(show) {

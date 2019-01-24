@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.CheckForNull;
-
-import org.apache.jasper.runtime.ProtectedFunctionMapper;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.html.Div;
 
@@ -119,6 +116,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		listManagerOptions.setShowMapButton(false);
 		listManagerOptions.setShowSearchButton(true);
 		listManagerOptions.setShowVisualizationButton(true);
+		listManagerOptions.setSensorCardSize(com.opensense.dashboard.client.model.Size.SMALL);
+		listManagerOptions.setShowMapInInfo(false);
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
@@ -176,7 +175,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.recenterBtn.addStyleName("m-btn recenter-icon");
 		this.recenterBtn.setTitle("recenters map to fit bounds");
 		this.recenterBtn.addClickHandler(event -> this.recenterMap());
-		
+
 		this.mapWidget.setControls(ControlPosition.RIGHT_BOTTOM, this.recenterBtn);
 	}
 
@@ -391,7 +390,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		if (sensorList.isEmpty()) {
 			GWT.log("ERROR: Sensorlist is empty");
 		} else {
-			recenterMap();
+			this.recenterMap();
 		}
 
 	}
@@ -401,7 +400,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		if (!this.mList.isEmpty()) {
 			this.mList.clear();
 			this.presenter.getEventBus()
-					.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, new ArrayList<>()));
+			.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, new ArrayList<>()));
 			this.cluster.clearMarkers();
 			this.sensIds.clear();
 			GWT.log("clearing All clusters & markers");
@@ -427,7 +426,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			GWT.log("User tried to visualize a empty Markerlist");
 		}
 		this.presenter.getEventBus()
-				.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, this.sensIds));
+		.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, this.sensIds));
 	}
 
 	public void goToSearchPage() {

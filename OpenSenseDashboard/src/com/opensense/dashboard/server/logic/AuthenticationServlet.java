@@ -1,6 +1,5 @@
 package com.opensense.dashboard.server.logic;
 
-import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,7 +81,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		Integer id = null;
 		id = db.createUserProfile(email, username, password);
 		DatabaseManager.clearDataSource();
-		if(id==null || id<=0) {
+		if((id==null) || (id<=0)) {
 			ActionResult result = new ActionResult(ActionResultType.FAILED);
 			if(id==-1) {
 				result.setErrorMessage(ServerLanguages.usernameOrEmailExists());
@@ -98,7 +97,7 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 		DatabaseManager.initPooling();
 		DatabaseManager db = new DatabaseManager();
 		Integer userId = db.getUserIdFromEmail(email);
-		if(userId==null || userId==0) {
+		if((userId==null) || (userId==0)) {
 			DatabaseManager.clearDataSource();
 			return new ActionResult(ActionResultType.FAILED);
 		}else {
