@@ -13,6 +13,7 @@ import com.opensense.dashboard.client.event.PaginationEventHandler;
 import com.opensense.dashboard.client.model.Size;
 
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialTooltip;
 
 public class Pager extends Composite{
 
@@ -35,6 +36,18 @@ public class Pager extends Composite{
 
 	@UiField
 	MaterialButton forwardsStepByStepButton;
+	
+	@UiField
+	MaterialTooltip backwardsTooltip;
+	
+	@UiField
+	MaterialTooltip backwardsStepTooltip;
+	
+	@UiField
+	MaterialTooltip forwardTooltip;
+	
+	@UiField
+	MaterialTooltip forwardStepTooltip;
 
 	private int maxObjectsOnPage = 20;
 	private int page = 0;
@@ -95,11 +108,25 @@ public class Pager extends Composite{
 	}
 
 	private void setForwardsEnabled(boolean enabled) {
-		this.forwardsButton.setEnabled(enabled);
+		if(enabled) {
+			this.forwardTooltip = new MaterialTooltip(this.forwardsButton, Languages.forwards());
+			this.forwardStepTooltip = new MaterialTooltip(this.forwardsStepByStepButton, Languages.forwardsStepByStep());
+		}else {
+			this.forwardTooltip.remove();
+			this.forwardStepTooltip.remove();
+		}
 		this.forwardsStepByStepButton.setEnabled(enabled);
+		this.forwardsButton.setEnabled(enabled);
 	}
 
 	private void setBackwardsEnabled(boolean enabled) {
+		if(enabled) {
+			this.backwardsTooltip = new MaterialTooltip(this.backwardsButton, Languages.backwards());
+			this.backwardsStepTooltip = new MaterialTooltip(this.backwardsStepByStepButton, Languages.backwardsStepByStep());
+		}else {
+			this.backwardsTooltip.remove();
+			this.backwardsStepTooltip.remove();
+		}
 		this.backwardsButton.setEnabled(enabled);
 		this.backwardsStepByStepButton.setEnabled(enabled);
 	}
