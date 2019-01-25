@@ -17,6 +17,7 @@ import com.google.gwt.maps.client.maptypes.MapTypeStyleElementType;
 import com.google.gwt.maps.client.maptypes.MapTypeStyleFeatureType;
 import com.google.gwt.maps.client.maptypes.MapTypeStyler;
 import com.google.gwt.maps.client.overlays.Marker;
+import com.google.gwt.maps.client.overlays.MarkerImage;
 import com.google.gwt.maps.client.overlays.MarkerOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -172,6 +173,8 @@ public class BasicSensorItemCard extends Composite{
 			this.addContentValue(Languages.values(), Languages.noValuePreviewData());
 		}
 		MapOptions mapOptions = MapOptions.newInstance();
+		mapOptions.setCenter(LatLng.newInstance(sensor.getLocation().getLat(),sensor.getLocation().getLon()));
+		mapOptions.setZoom(10);
 		mapOptions.setMinZoom(2);
 		mapOptions.setMaxZoom(18);
 		mapOptions.setDraggable(true);
@@ -206,10 +209,14 @@ public class BasicSensorItemCard extends Composite{
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
 		markerOpt.setMap(mapWidget);
+		MarkerImage iconMap = MarkerImage.newInstance(MeasurandIconHelper.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
+		iconMap.setScaledSize(com.google.gwt.maps.client.base.Size.newInstance(30, 30));
+		markerOpt.setIcon(iconMap);
 		Marker marker = Marker.newInstance(markerOpt);
 		marker.setDraggable(false);
 		this.infoLoaded = true;
 		this.layout.getElement().removeClassName("collapsed");
+		this.map.addDomHandler(event -> event.stopPropagation(), ClickEvent.getType());
 	}
 
 	public void setActive(boolean active) {
