@@ -106,7 +106,7 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 		item.setSpinnerSize(options.getSpinnerSize());
 		item.addSelectAllButtonClickHandler(event -> this.selectAllSensorsInList(listId, event.isSelectAll()));
 		item.addHeaderClickedHandler(event -> this.onSelectedItemsChanged());
-		item.addShowInfoButtonButtonClickHandler(event -> this.selectedSensorIdsInLists.get(listId).forEach(sensorId -> this.clickElement(this.sensorCardsInLists.get(listId).get(sensorId).getInfoButtonElement())));
+		item.addShowInfoButtonButtonClickHandler(event -> this.presenter.requestAllSensorInfo(listId, this.selectedSensorIdsInLists.get(listId)));
 		if(editable && options.isEditingActive()) {
 			item.addListNameInputHandler(event -> this.presenter.changeListName(listId, event.getListName()));
 			item.addDeleteButtonClickHandler(event -> {

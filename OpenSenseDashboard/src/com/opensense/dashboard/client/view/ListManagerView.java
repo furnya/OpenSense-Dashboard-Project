@@ -17,7 +17,7 @@ public interface ListManagerView {
 		HandlerManager getEventBus();
 		ListManager getController();
 		void changeListName(int listId, String listName);
-		public void requestAllSensorInfo(int sensorId, List<Integer> idList);
+		public void requestAllSensorInfo(int listId, List<Integer> idList);
 		void requestAndShowUserList(int listId);
 		void addSelectedSensorsToUserList(int listId, String listName, List<Integer> selectedSensors);
 	}

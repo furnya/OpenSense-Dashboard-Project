@@ -109,7 +109,9 @@ public class BasicSensorItemCard extends Composite{
 			event.stopPropagation();
 			if(this.layout.getElement().getClassName().contains("collapsed") && this.infoLoaded) {
 				this.layout.getElement().removeClassName("collapsed");
+				this.showInfoButton.setTooltip(Languages.hideInformation());
 			}else {
+				this.showInfoButton.setTooltip(Languages.information());
 				if(this.infoLoaded) {
 					this.layout.getElement().addClassName("collapsed");
 				}else {

@@ -1502,5 +1502,15 @@ public class Languages {
 			return "Te has registrado exitosamente";
 		}
 	}
+	
+	public static String hideInformation() {
+		if (de) {
+			return "Informationen ausblenden";
+		} else if (en) {
+			return "Hide information";
+		} else {
+			return "Ocultar información";
+		}
+	}
 
 }
