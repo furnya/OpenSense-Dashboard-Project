@@ -211,7 +211,16 @@ public class TourStepRenderer extends Composite {
 			this.messageContainer.addStyleName(MIN_WIDTH);
 			this.nextButton.getElement().getStyle().clearDisplay();
 			this.nextButton.setEnabled(false);
-			this.javaSriptHandler = bindInputListener(this.element);
+			if(!this.element.toString().contains("Input")) {
+				Element emptyNode = new Div().getElement();
+				this.element.getChild(0).appendChild(emptyNode);
+				this.javaSriptHandler = bindInputListener(this.element.getChild(0).getChild(0).getParentElement());
+				this.element.getChild(0).getChild(0).getParentElement().focus();
+				emptyNode.removeFromParent();
+			}else {
+				this.javaSriptHandler = bindInputListener(this.element);
+				this.element.focus();
+			}
 			break;
 		default:
 			LOGGER.log(Level.WARNING, "The tourEventType can not be unset, use as defautlt Type.HINT");
@@ -255,11 +264,9 @@ public class TourStepRenderer extends Composite {
 	private native JavaScriptObject bindInputListener(Element elem) /*-{
 		var that = this;
 		var func = function(event) {
-			console.log("hier");
 			event.stopPropagation();
 			if(elem.value != ""){
 				if(event.key == "Enter"){
-					console.log("call");
 					that.@com.opensense.dashboard.client.utils.tourutils.TourStepRenderer::onNextButtonClicked(*)(null);
 				}else{
 					that.@com.opensense.dashboard.client.utils.tourutils.TourStepRenderer::setNextButtonEnabled(*)(true);
@@ -482,7 +489,17 @@ public class TourStepRenderer extends Composite {
 			this.windowResizeHandler.removeHandler();
 		}
 		if((this.element != null) && (this.javaSriptHandler != null)) {
-			removeListener(this.element, TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
+			if(!this.element.toString().contains("Input")) {
+				Element emptyNode = new Div().getElement();
+				this.element.getChild(0).appendChild(emptyNode);
+				removeListener(this.element.getChild(0).getChild(0).getParentElement(), TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
+				this.element.getChild(0).getChild(0).getParentElement().blur();
+				emptyNode.removeFromParent();
+			}else {
+				removeListener(this.element, TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
+				this.element.blur();
+			}
+
 		}
 		if(this.renderTimer != null) {
 			this.renderTimer.cancel();
