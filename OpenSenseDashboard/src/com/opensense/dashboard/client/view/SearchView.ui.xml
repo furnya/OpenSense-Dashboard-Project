@@ -96,16 +96,16 @@
 	<bh:Div ui:field="searchPanel" addStyleNames="{style.panel} round-corners">
 		<bh:Div addStyleNames="flex {style.margin}">
 			<m:MaterialNavBar ui:field="navBarSearch" width="33%" addStyleNames="{style.nav-bar} round-corners"> 
-		 		 <b:Input ui:field="searchInput" type="TEXT" placeholder="{lang.searchPlace}" addStyleNames="{style.input}"/>
+		 		 <b:Input b:id="place_search_input" ui:field="searchInput" type="TEXT" placeholder="{lang.searchPlace}" addStyleNames="{style.input}"/>
 		 	</m:MaterialNavBar>  
-			<m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" width="33%" textColor="WHITE" addStyleNames="{style.max} round-corners" />
-			<m:MaterialTextBox width="33%" textColor="WHITE" ui:field="maxSensors" label="{lang.maxSensors}"/>
+			<m:MaterialListBox b:id="measurand_search_listbox" placeholder="{lang.measurand}" ui:field="measurandList" width="33%" textColor="WHITE" addStyleNames="{style.max} round-corners" />
+			<m:MaterialTextBox b:id="maxsensor_search_textbox" width="33%" textColor="WHITE" ui:field="maxSensors" label="{lang.maxSensors}"/>
 		</bh:Div>
 		<bh:Div addStyleNames="flex {style.margin}">
-			<m:MaterialTextBox ui:field="minAccuracy" textColor="WHITE" width="33%" label="{lang.minAccuracy}"/>
+			<m:MaterialTextBox b:id="accuracy_search_textbox" ui:field="minAccuracy" textColor="WHITE" width="33%" label="{lang.minAccuracy}"/>
 			<m:MaterialTextBox ui:field="maxAccuracy" textColor="WHITE" width="33%" label="{lang.maxAccuracy}"/>
 			<m:MaterialTooltip text="{lang.searchTooltip}">
-				<m:MaterialButton  ui:field="searchButton" width="33%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
+				<m:MaterialButton b:id="search_search_button" ui:field="searchButton" width="33%" text="{lang.search}" textColor="WHITE" addStyleNames="d-btn margin-top-20"/>
 			</m:MaterialTooltip>
 		</bh:Div>
 	</bh:Div>	
@@ -139,7 +139,7 @@
 	</bh:Div>
 	<bh:Div ui:field="dataContent" addStyleNames="margin-top-10 {style.panel} round-corners {style.center}"> 
 		<d:Pager ui:field="pagerTop" addStyleNames="{style.center-text}"/>
-		<bh:Div addStyleNames="{style.value-checkbox}">
+		<bh:Div addStyleNames="{style.value-checkbox}" b:id="sensorwithvalues_search_div">
 			<m:MaterialCheckBox ui:field="onlySensorsWithValueBox" text="{lang.hideSensorWIithoutValues}"  type="FILLED" addStyleNames="{style.checkbox} white-checkbox" value="true"/>
 		</bh:Div>
 		<d:Spinner ui:field="spinner" size="SMALL" display="NONE" addStyleNames="margin-top-10"/>

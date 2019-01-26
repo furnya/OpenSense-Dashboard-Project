@@ -364,7 +364,9 @@ public class ClientRequestHandler {
 
 	public List<Integer> getMySensorIds(String token) throws IOException{
 		LinkedList<Integer> sensorIdList = new LinkedList<>();
-		if(token==null) return sensorIdList;
+		if(token==null) {
+			return sensorIdList;
+		}
 		RequestSender rs = new RequestSender();
 		JSONArray sensorArrayJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/mysensorids", token);
 		if(sensorArrayJSON==null) {
@@ -481,7 +483,7 @@ public class ClientRequestHandler {
 		RequestSender rs = new RequestSender();
 		return rs.deleteRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+SENSORS+sensorId, SessionUser.getInstance().getToken());
 	}
-	
+
 	public Integer getUserId(String token) throws IOException{
 		RequestSender rs = new RequestSender();
 		JSONArray profileJSON = rs.arrayGETRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+USER_PROFILE, token);

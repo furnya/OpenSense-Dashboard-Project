@@ -11,9 +11,10 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.event.StartTourEvent;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+import com.opensense.dashboard.client.utils.tourutils.Tours;
 
 public class HomeViewImpl extends DataPanelPageView implements HomeView {
 
@@ -29,7 +30,7 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	Heading userInfo;
 	@UiField
 	Span welcomeText;
-	
+
 	/* searchPage */
 	@UiField
 	Div searchCard;
@@ -37,7 +38,7 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	Heading searchCardInfo;
 	@UiField
 	Span searchCardText;
-	
+
 	/* mapPage */
 	@UiField
 	Div mapCard;
@@ -45,7 +46,7 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	Heading mapCardInfo;
 	@UiField
 	Span mapCardText;
-	
+
 	/* visuPage */
 	@UiField
 	Div visuCard;
@@ -53,7 +54,7 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	Heading visuCardInfo;
 	@UiField
 	Span visuCardText;
-	
+
 	/* listPage */
 	@UiField
 	Div listCard;
@@ -61,7 +62,7 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	Heading listCardInfo;
 	@UiField
 	Span listCardText;
-	
+
 	private String whiteColor = "white";
 
 	public HomeViewImpl() {
@@ -80,70 +81,71 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 		// init UI Elements if needed
 	}
 
+	@Override
 	public void setUserInfo(String userInfo) {
 		this.userInfo.setText(userInfo);
 	}
-	
+
 	public void setAllCardInfos() {
 		setSearchCardText();
 		setMapCardText();
 		setVisuCardText();
 		setListCardText();
 	}
-	
+
 	public void setWelcomeCardText(){
 		this.welcomeText.setText(Languages.welcomeInfoText());
-		this.welcomeText.setColor(whiteColor);
+		this.welcomeText.setColor(this.whiteColor);
 	}
-	
-	
+
+
 	public void setSearchCardText(){
-		this.searchCardInfo.setText(Languages.search());
+		this.searchCardInfo.setText("Rundgang für die Suche von Sensoren");
 		this.searchCardText.setText(Languages.searchInfoText());
-		this.searchCardInfo.setColor(whiteColor);
+		this.searchCardInfo.setColor(this.whiteColor);
 	}
-	
-	
+
+
 	public void setMapCardText(){
 		this.mapCardInfo.setText(Languages.map());
 		this.mapCardText.setText(Languages.mapInfoText());
-		this.mapCardInfo.setColor(whiteColor);
+		this.mapCardInfo.setColor(this.whiteColor);
 	}
-	
-	
-	
+
+
+
 	public void setVisuCardText(){
 		this.visuCardInfo.setText(Languages.graphics());
 		this.visuCardText.setText(Languages.visuInfoText());
-		this.visuCardInfo.setColor(whiteColor);
+		this.visuCardInfo.setColor(this.whiteColor);
 	}
-	
+
 	public void setListCardText(){
 		this.listCardInfo.setText(Languages.list());
 		this.listCardText.setText(Languages.listInfoText());
-		this.listCardInfo.setColor(whiteColor);
+		this.listCardInfo.setColor(this.whiteColor);
 	}
 
 	public void triggerEventOnCardClick() {
-		searchCard.addDomHandler(event -> {
-
-			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, null));
+		this.searchCard.addDomHandler(event -> {
+			this.presenter.getEventBus().fireEvent(new StartTourEvent(Tours.SEARCH_PAGE, true));
+			//			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, null));
 
 		}, ClickEvent.getType());
 
-		mapCard.addDomHandler(event -> {
+		this.mapCard.addDomHandler(event -> {
 
 			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, null));
 
 		}, ClickEvent.getType());
 
-		listCard.addDomHandler(event -> {
+		this.listCard.addDomHandler(event -> {
 
 			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.LISTS, true, null));
 
 		}, ClickEvent.getType());
 
-		visuCard.addDomHandler(event -> {
+		this.visuCard.addDomHandler(event -> {
 
 			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, null));
 

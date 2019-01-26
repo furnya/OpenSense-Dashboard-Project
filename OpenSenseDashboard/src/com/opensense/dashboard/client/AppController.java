@@ -19,8 +19,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
+import com.opensense.dashboard.client.event.CloseTourEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.event.RemoveSensorsFromFavoriteListEvent;
+import com.opensense.dashboard.client.event.StartTourEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
@@ -34,6 +36,7 @@ import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.client.utils.tourutils.TourBuilder;
 import com.opensense.dashboard.client.view.DataPanelViewImpl;
 import com.opensense.dashboard.client.view.FooterViewImpl;
 import com.opensense.dashboard.client.view.NavigationPanelViewImpl;
@@ -161,6 +164,23 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			showSuccess(Languages.removeSensorsFromList(string.toString().substring(0, string.length() - 2), Languages.favorites(), event.getIds().size() > 1));
 			CookieManager.writeFavoriteListCookie(favIds);
 			this.dataPanelPresenter.updateFavoriteList();
+		});
+
+		this.eventBus.addHandler(StartTourEvent.TYPE,  event -> {
+			//			if(event.getUserStartedTourEvent() || (this.preferences.getShowAutomaticallyTours() && !this.preferences.getFinishedTours().contains(event.getTour().name()))){
+			//				if(!this.preferences.getFinishedTours().contains(event.getTour().name())) {
+			//					this.preferences.getFinishedTours().add(event.getTour().name());
+			//					savePreferencesFromEvent(new SavePreferencesEvent(false));
+			//				}
+			TourBuilder.getInstance(this.eventBus).startTour(event.getTour(), event.getUserStartedTourEvent());
+			//			}
+		});
+
+		this.eventBus.addHandler(CloseTourEvent.TYPE,  event -> {
+			//			if((event.getNeverShowToursAgain() != null) && event.getNeverShowToursAgain()) {
+			//				setShowToursAutomatically(false);
+			//			}
+			TourBuilder.getInstance(this.eventBus).closeTour();
 		});
 	}
 
@@ -382,7 +402,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		this.navigationPanelPresenter.setLastButtonActive(false);
 		this.dataPanelPresenter.onUserLoggedOut();
 	}
-	
+
 	private static final int MAX_TOASTS = 4;
 	private static final String TOAST_CONTAINER_ID = "toast-container";
 

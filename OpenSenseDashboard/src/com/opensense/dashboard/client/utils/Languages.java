@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * The languages are set to german by default to change it use the setter
- * 
+ *
  * @author Roeber
  */
 public class Languages {
@@ -500,25 +500,25 @@ public class Languages {
 				return "0-0 von 0";
 			}
 			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
-					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
-							: size)
-					+ " von " + Integer.toString(size);
+			+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+					: size)
+			+ " von " + Integer.toString(size);
 		} else if (en) {
 			if (size == 0) {
 				return "0-0 of 0";
 			}
 			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
-					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
-							: size)
-					+ " of " + Integer.toString(size);
+			+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+					: size)
+			+ " of " + Integer.toString(size);
 		} else {
 			if (size == 0) {
 				return "0-0 de 0";
 			}
 			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
-					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
-							: size)
-					+ " de " + Integer.toString(size);
+			+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+					: size)
+			+ " de " + Integer.toString(size);
 		}
 	}
 
@@ -1232,7 +1232,7 @@ public class Languages {
 			return "Hu\u00E9sped";
 		}
 	}
-	
+
 	public static String welcomeInfoText() {
 		if (de) {
 			return "";
@@ -1242,17 +1242,17 @@ public class Languages {
 			return "";
 		}
 	}
-	
+
 
 	public static String searchInfoText() {
 		if (de) {
 			return "Auf dieser Seite kannst du Sensoren suchen und ihre Informationen einsehen."+
 					"Die Sensoren können parametrisiert sowie Ortsabhängig gesucht werden.";
 		} else if (en) {
-			return "On this page you can search the sensors.\r\n" + 
+			return "On this page you can search the sensors.\r\n" +
 					"The sensors can be parameterized and searched for location-dependent.";
 		} else {
-			return "En esta p\u00E1gina puedes buscar los sensores.\r\n" + 
+			return "En esta p\u00E1gina puedes buscar los sensores.\r\n" +
 					"Los sensores pueden parametrizarse y buscarse seg\u00FAn la ubicaci\u00F3n.";
 		}
 	}
@@ -1502,7 +1502,7 @@ public class Languages {
 			return "Te has registrado exitosamente";
 		}
 	}
-	
+
 	public static String hideInformation() {
 		if (de) {
 			return "Informationen ausblenden";
@@ -1510,6 +1510,154 @@ public class Languages {
 			return "Hide information";
 		} else {
 			return "Ocultar información";
+		}
+	}
+
+	public static String tourError() {
+		if(de) {
+			return "Beim ausführen der Tour ist ein Fehler aufgetreten. Versuchen Sie unter Hilfe die Tour erneut zu starten. "
+					+ "Sollte der Fehler immer noch auftreten, kontaktieren Sie uns bitte!";
+		}else {
+			return "While running the tour an error occues. Please try to start the tour again at the help page. If the error"
+					+ " still occurs, please contact us!";
+		}
+	}
+
+	public static String exitTourFirst() {
+		if(de) {
+			return "Zum beenden des Rundgangs";
+		}else {
+			return "Press";
+		}
+	}
+
+	public static String exitTourSecond() {
+		if(de) {
+			return "drücken";
+		}else {
+			return "to exit the tour";
+		}
+	}
+
+	public static String startTour() {
+		if(de) {
+			return "Tour starten";
+		}else {
+			return "Start tour";
+		}
+	}
+
+	public static String continueStep() {
+		if(de){
+			return "Weiter";
+		}else{
+			return "Continue";
+		}
+	}
+
+	public static String noTourData() {
+		if(de) {
+			return "Keine Touren verfügbar";
+		}else {
+			return "No tours available";
+		}
+	}
+
+	public static String closeTour() {
+		if(de) {
+			return "Tour beenden";
+		}else {
+			return "Exit tour";
+		}
+	}
+
+	public static String dontShowTours() {
+		if(de) {
+			return "Keine Touren mehr anzeigen";
+		}else {
+			return "Do not show any tours";
+		}
+	}
+
+	public static String tourHeader(int tourStep, int tourSteps) {
+		if(de) {
+			return "Rundgang: Schritt " + tourStep + " von " + tourSteps;
+		}else {
+			return "Tour: Step " + tourStep + " of " + tourSteps;
+		}
+	}
+
+	public static String showTourOnPage() {
+		if(de) {
+			return "Touren automatisch anzeigen, wenn der Startpunkt aufgerufen wird";
+		}else {
+			return "Show tours automaticaly if you reaching the startpoint";
+		}
+	}
+
+	public static String clearFinishedTours() {
+		if(de) {
+			return "Alle Rundgänge erneut starten";
+		}else {
+			return "Start all tours again";
+		}
+	}
+
+	public static String infoTours() {
+		if(de) {
+			return "Hinweis: Rundgänge starten automatisch, wenn Sie das erste mal auf die Seite kommen. "
+					+ "Wenn Sie alle Rundgänge erneut starten, bekommen Sie bereits beendete erneut angezeigt.";
+		}else {
+			return "";
+		}
+	}
+
+	public static String measurandsTour() {
+		if(de) {
+			return "Wenn Sie nur nach Sensoren mit einer bestimmten Messgröße suchen wollen, können Sie diese in der Liste auswählen.";
+		}else {
+			return "";
+		}
+	}
+
+	public static String placeInputTour() {
+		if(de) {
+			return "Sie können Sensoren ortbezogen suchen.";
+		}else {
+			return "";
+		}
+	}
+
+	public static String maxSensorsTour() {
+		if(de) {
+			return "Geben Sie immer eine maximale Anzahl von Sensoren ein, sonst dauern Anfragen sehr lange. Wir empfehlen außerdem niemals mehr als 1000 Sensoren anzufragen, da sie bis zu 5 Minuten dauern kann." +
+					"Tragen Sie beispielweise 50 ein und drücken \"Weiter\".";
+		}else {
+			return "";
+		}
+	}
+
+	public static String accuracyTour() {
+		if(de) {
+			return "Sie können eine Geauigkeit der Sensoren angeben auf einer Skala von 0-10. Die Genauigkeit wird Ihnen als Sternebewertung in den Sensoren angezeigt.";
+		}else {
+			return "";
+		}
+	}
+
+	public static String searchButtonTour() {
+		if(de) {
+			return "Suchen Sie Sensoren anhand der gewählten Parameter indem Sie den Knopf betätigen.";
+		}else {
+			return "";
+		}
+	}
+
+	public static String sensorsWithValuesTour() {
+		if(de) {
+			return "Wenn Sie Sensoren, welche keine Werte gesammelt haben ausschließen möchten, lassen Sie das Kontrollkästchen ausgewählt.";
+		}else {
+			return "";
 		}
 	}
 

@@ -147,7 +147,7 @@ public interface GUIImageBundle extends ClientBundle {
 
 	@Source("icons/information.svg")
 	SVGResource info();
-	
+
 	@Source("icons/dashboard-icon.svg")
 	SVGResource dashboardIcon();
 
@@ -159,4 +159,7 @@ public interface GUIImageBundle extends ClientBundle {
 
 	@Source("icons/spanish-flag.svg")
 	SVGResource spanishFlag();
+
+	@Source("icons/cross.svg")
+	SVGResource cross();
 }
