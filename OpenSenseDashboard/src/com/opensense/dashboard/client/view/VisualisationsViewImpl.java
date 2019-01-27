@@ -20,6 +20,7 @@ import org.pepstock.charba.client.enums.InteractionMode;
 import org.pepstock.charba.client.enums.ScaleBounds;
 import org.pepstock.charba.client.enums.ScaleDistribution;
 import org.pepstock.charba.client.enums.TimeUnit;
+import org.pepstock.charba.client.enums.TooltipPosition;
 import org.pepstock.charba.client.items.TooltipItem;
 import org.pepstock.charba.client.options.scales.CartesianLinearAxis;
 import org.pepstock.charba.client.options.scales.CartesianTimeAxis;
@@ -190,7 +191,8 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.chart.getOptions().setMaintainAspectRatio(false);
 		this.chart.getOptions().setShowLines(true);
 		this.chart.getOptions().getTooltips().setIntersect(false);
-		this.chart.getOptions().getTooltips().setMode(InteractionMode.index);
+		this.chart.getOptions().getTooltips().setMode(InteractionMode.point);
+		this.chart.getOptions().getTooltips().setPosition(TooltipPosition.nearest);
 		this.chart.getOptions().getTooltips().getCallbacks().setLabelCallback(new TooltipLabelCallback() {
 
 			@Override
