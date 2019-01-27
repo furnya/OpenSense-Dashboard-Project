@@ -109,13 +109,13 @@
 
 <bh:Div ui:field="container" addStyleNames="window-height flex">
 	<bh:Div ui:field="dataContainer" addStyleNames="{style.dataContainer}">
-		<bh:Div addStyleNames="{style.panel} {style.visPanel} visPanel round-corners">
+		<bh:Div b:id="timespan_vis_panel" addStyleNames="{style.panel} {style.visPanel} visPanel round-corners">
 			<m:MaterialLabel textColor="WHITE" text="{lang.timespan}"/>
 			<m:MaterialTooltip text="{lang.customRange}">
 				<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn {style.range-button}"/>
 			</m:MaterialTooltip>
 			<!-- >dp:DateBox ui:field="newdp" title="{lang.from}"></dp:DateBox-->
-			<m:MaterialDatePicker ui:field="startingDate" textColor="WHITE" autoClose="true" placeholder="{lang.from}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
+			<m:MaterialDatePicker b:id="start_vis_picker" ui:field="startingDate" textColor="WHITE" autoClose="true" placeholder="{lang.from}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
 			<!-- ma:timepicker.MaterialTimePicker ui:field="startingTime" placeholder="Time"/-->
 			<m:MaterialDatePicker ui:field="endingDate" textColor="WHITE" autoClose="true" placeholder="{lang.to}" selectionType="YEAR" yearsToDisplay="100" addStyleNames="{style.datepicker}"/>
 			<!-- ma:timepicker.MaterialTimePicker ui:field="endingTime" placeholder="Time"/-->
@@ -133,13 +133,15 @@
 			</m:MaterialTooltip>
 		</bh:Div>
 		<d:Spinner size="MEDIUM" ui:field="viewSpinner" display="NONE" />
-		<bh:Div ui:field="noDatasetsDiv" addStyleNames="{style.no-data-div} round-corners">
-			<m:MaterialLabel ui:field="noDataLabel" textColor="WHITE" text="{lang.noSensorsSelected}" addStyleNames="{style.no-data-label}"/>
+		<bh:Div b:id="chart_vis_container">
+			<bh:Div ui:field="noDatasetsDiv" addStyleNames="{style.no-data-div} round-corners">
+				<m:MaterialLabel ui:field="noDataLabel" textColor="WHITE" text="{lang.noSensorsSelected}" addStyleNames="{style.no-data-label}"/>
+			</bh:Div>
+			<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>
 		</bh:Div>
-		<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>	
 	</bh:Div>
 	<bh:Div addStyleNames= "{style.sensor-container}">
-		<bh:Div ui:field="listContainer" addStyleNames="{style.sensor-container-inner} round-corners"/>
+		<bh:Div b:id="list_vis_container" ui:field="listContainer" addStyleNames="{style.sensor-container-inner} round-corners"/>
 	</bh:Div>
 </bh:Div>
 
