@@ -125,7 +125,11 @@ public class ClientRequestHandler {
 			if(s == null) {
 				continue;
 			}
-			s.setValuePreview(this.getValuePreview(s.getSensorId()));
+			try{
+				s.setValuePreview(this.getValuePreview(s.getSensorId()));
+			}catch (IOException e) {
+				s.setValuePreview(null);
+			}
 			sensorList.add(s);
 		}
 		return sensorList;
