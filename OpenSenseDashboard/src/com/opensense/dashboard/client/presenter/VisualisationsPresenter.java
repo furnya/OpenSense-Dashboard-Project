@@ -337,7 +337,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		requestMap.put(request.getIds().get(0),request.hashCode());
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getValues() != null && result.getSensors() != null) {
-				if(requestMap.get(request.getIds().get(0))!=request.hashCode()) {
+				if(requestMap.get(request.getIds().get(0))!=request.hashCode() || !this.sensorIds.contains(request.getIds().get(0))) {
 					return;
 				}
 				requestMap.remove(request.getIds().get(0));
