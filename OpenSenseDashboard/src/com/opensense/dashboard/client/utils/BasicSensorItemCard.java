@@ -224,7 +224,7 @@ public class BasicSensorItemCard extends Composite{
 			this.layout.addStyleName("card-active");
 			this.check.getElement().getStyle().clearDisplay();
 		}else {
-			this.layout.getElement().getStyle().clearBackgroundColor();
+			this.headerContainer.getElement().getStyle().clearBackgroundColor();
 			this.layout.removeStyleName("card-active");
 			this.check.getElement().getStyle().setDisplay(Display.NONE);
 		}
