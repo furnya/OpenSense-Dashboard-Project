@@ -35,6 +35,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 	public void onPageReturn() {
 		this.view.getListManager().setUserLoggedInAndUpdate(!this.appController.isGuest());
 		this.view.setCreateListButtonEnabled(!this.appController.isGuest());
+		this.view.setCreateSensorButtonEnabled(!this.appController.isGuest());
 	}
 
 	@Override
@@ -56,6 +57,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 	public void waitUntilViewInit(final Runnable runnable) {
 		this.view.initView(runnable, !this.appController.isGuest());
 		this.view.setCreateListButtonEnabled(!this.appController.isGuest());
+		this.view.setCreateSensorButtonEnabled(!this.appController.isGuest());
 	}
 
 	public void updateFavoriteList() {
