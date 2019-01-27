@@ -12,12 +12,21 @@
 		type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 
 	<ui:style>
+	.list-width {
+		width: 40% !important;
+		padding-left: 10px;
+	}
+	
+	.map-width{
+	  width: 60% !important;
+	}
+	
 	</ui:style>
 
 	<bh:Div addStyleNames="flex">
-		<bh:Div ui:field="map" b:id="map" addStyleNames="round-corners"/>
-		<bh:Div>
-			<bh:Div ui:field="sensorContainer" addStyleNames="list-container round-corners" />
-		</bh:Div>
+		<bh:Div ui:field="map" b:id="map" addStyleNames="{style.map-width} round-corners" />
+
+		<bh:Div ui:field="sensorContainer"
+			addStyleNames="{style.list-width} round-corners " />
 	</bh:Div>
 </ui:UiBinder>

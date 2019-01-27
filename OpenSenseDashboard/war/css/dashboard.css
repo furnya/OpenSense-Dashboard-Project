@@ -170,7 +170,7 @@
 
 #map {
      height: calc(100vh - 65px);
-     width: 65vw !important;
+     width: 60% !important;
 }
 
 #content{
