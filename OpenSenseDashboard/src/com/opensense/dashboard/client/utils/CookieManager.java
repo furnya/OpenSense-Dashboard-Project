@@ -14,7 +14,9 @@ public class CookieManager {
 	private static final Logger LOGGER = Logger.getLogger(CookieManager.class.getName());
 
 	public static final String DASHBOARD_LANGUAGE = "dashboard_language";
-	public static final String DASHBOARD_COOKIE = "dashboard_cookie";
+	public static final String DASHBOARD_FAVORITES = "dashboard_favorites";
+	public static final String DASHBOARD_SHOW_TOURS = "dashboard_show_tours";
+	public static final String DASHBOARD_FINISHED_TOURS = "dashboard_finished_tours";
 
 	@SuppressWarnings("unused")
 	private static AppController appController;
@@ -50,12 +52,12 @@ public class CookieManager {
 			listAsString.append(item);
 			listAsString.append(",");
 		});
-		Cookies.setCookie(DASHBOARD_COOKIE, listAsString.substring(0, listAsString.length() - 1), date);
+		Cookies.setCookie(DASHBOARD_FAVORITES, listAsString.substring(0, listAsString.length() - 1), date);
 	}
 
 	public static List<Integer> getFavoriteList() {
 		List<Integer> idList = new ArrayList<>();
-		String name = DASHBOARD_COOKIE;
+		String name = DASHBOARD_FAVORITES;
 		String cookieString = Cookies.getCookie(name);
 		if((cookieString != null) && !cookieString.isEmpty()) {
 			String[] slittedString = cookieString.split(",");
@@ -66,5 +68,48 @@ public class CookieManager {
 			}
 		}
 		return idList;
+	}
+
+	public static boolean getShowAutomaticallyTours() {
+		String name = DASHBOARD_SHOW_TOURS;
+		if(Cookies.getCookie(name) != null) {
+			Boolean bool = Boolean.valueOf(Cookies.getCookie(name));
+			if(bool != null){
+				return bool;
+			}
+		}
+		return true;
+	}
+
+	public static List<String> getFinishedTours() {
+		List<String> idList = new ArrayList<>();
+		String name = DASHBOARD_FINISHED_TOURS;
+		String cookieString = Cookies.getCookie(name);
+		if((cookieString != null) && !cookieString.isEmpty()) {
+			String[] slittedString = cookieString.split(",");
+			for(String value : slittedString) {
+				idList.add(value);
+			}
+		}
+		return idList;
+	}
+
+	@SuppressWarnings("deprecation")
+	public static void saveFinishTours(List<String> finshedTours) {
+		Date date = new Date();
+		date.setDate(date.getDate() + 91);
+		StringBuilder listAsString = new StringBuilder();
+		finshedTours.forEach(item -> {
+			listAsString.append(item);
+			listAsString.append(",");
+		});
+		Cookies.setCookie(DASHBOARD_FINISHED_TOURS, listAsString.substring(0, listAsString.length() - 1), date);
+	}
+
+	@SuppressWarnings("deprecation")
+	public static void setShowToursAutomatically(boolean show) {
+		Date date = new Date();
+		date.setDate(date.getDate() + 91);
+		Cookies.setCookie(DASHBOARD_SHOW_TOURS, String.valueOf(show), date);
 	}
 }

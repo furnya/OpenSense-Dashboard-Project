@@ -167,19 +167,20 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 		});
 
 		this.eventBus.addHandler(StartTourEvent.TYPE,  event -> {
-			//			if(event.getUserStartedTourEvent() || (this.preferences.getShowAutomaticallyTours() && !this.preferences.getFinishedTours().contains(event.getTour().name()))){
-			//				if(!this.preferences.getFinishedTours().contains(event.getTour().name())) {
-			//					this.preferences.getFinishedTours().add(event.getTour().name());
-			//					savePreferencesFromEvent(new SavePreferencesEvent(false));
-			//				}
-			TourBuilder.getInstance(this.eventBus).startTour(event.getTour(), event.getUserStartedTourEvent());
-			//			}
+			final List<String> finshedTours = CookieManager.getFinishedTours();
+			if(event.getUserStartedTourEvent() || (CookieManager.getShowAutomaticallyTours() && !finshedTours.contains(event.getTour().name()))){
+				if(!finshedTours.contains(event.getTour().name())) {
+					finshedTours.add(event.getTour().name());
+					CookieManager.saveFinishTours(finshedTours);
+				}
+				TourBuilder.getInstance(this.eventBus).startTour(event.getTour(), event.getUserStartedTourEvent());
+			}
 		});
 
 		this.eventBus.addHandler(CloseTourEvent.TYPE,  event -> {
-			//			if((event.getNeverShowToursAgain() != null) && event.getNeverShowToursAgain()) {
-			//				setShowToursAutomatically(false);
-			//			}
+			if((event.getNeverShowToursAgain() != null) && event.getNeverShowToursAgain()) {
+				CookieManager.setShowToursAutomatically(false);
+			}
 			TourBuilder.getInstance(this.eventBus).closeTour();
 		});
 	}

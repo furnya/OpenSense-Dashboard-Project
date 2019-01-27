@@ -202,6 +202,9 @@
 .btn.d-btn:hover, .btn.d-btn.active{
 	background-color: #42DCA3;
 }
+.cc-window.cc-banner {
+	z-index: 10000;
+}
 
 input:focus{
     border-bottom: 1px solid #42DCA3;
