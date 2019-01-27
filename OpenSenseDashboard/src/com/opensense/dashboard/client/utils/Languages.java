@@ -1660,5 +1660,37 @@ public class Languages {
 			return "";
 		}
 	}
+	
+	public static String timespanPanelTour() {
+		if(de) {
+			return "Hier können Sie die Zeitspanne für die angezeigten Werte auswählen.\n Vorausgewählt ist der Zeitraum \"Letzte Woche\".";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String listContainerVisTour() {
+		if(de) {
+			return "Hier werden alle ihre Listen angezeigt. Im Diagramm werden immer die Daten der ausgewählten Sensoren in der jeweils ausgeklappten Liste angezeigt.\nWählen Sie nun einen oder mehrere Sensoren in der Favoriten-Liste aus, um seine/ihre Daten zu sehen.";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String startVisPickerTour() {
+		if(de) {
+			return "Hier können Sie gegebenenfalls ein Datum auswählen, wenn Sie Daten für einen bestimmten Zeitraum anzeigen lassen möchten.";
+		}else {
+			return "";
+		}
+	}
+	
+	public static String chartVisContainerTour() {
+		if(de) {
+			return "Hier werden die Daten der Sensoren in einem Liniendiagramm angezeigt. Wenn Sie die Maus über das Diagramm bewegen, werden Ihnen die genauen Werte in einem Tooltip angezeigt. Falls keine Diagramm angezeigt wird, existieren für die ausgewählten Sensoren und den ausgewählten Zeitraum keine Daten.";
+		}else {
+			return "";
+		}
+	}
 
 }
