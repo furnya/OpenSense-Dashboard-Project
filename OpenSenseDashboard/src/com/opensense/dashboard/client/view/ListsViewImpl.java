@@ -77,5 +77,10 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	public void setCreateListButtonEnabled(boolean enabled) {
 		this.createListButton.setEnabled(enabled);
 	}
+	
+	@Override
+	public void setCreateSensorButtonEnabled(boolean enabled) {
+		this.createSensor.setEnabled(enabled);
+	}
 
 }

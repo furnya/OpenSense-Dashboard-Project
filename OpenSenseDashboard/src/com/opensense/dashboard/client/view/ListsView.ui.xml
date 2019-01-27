@@ -33,7 +33,7 @@
 			</m:MaterialButton>
 		</m:MaterialTooltip>
 		<m:MaterialTooltip text="{lang.createSensor}">
-			<m:MaterialButton enabled="true" ui:field="createSensor" text="{lang.createSensor}" textColor="WHITE" addStyleNames="d-btn">
+			<m:MaterialButton enabled="false" ui:field="createSensor" text="{lang.createSensor}" textColor="WHITE" addStyleNames="d-btn">
 				<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 			</m:MaterialButton>
 		</m:MaterialTooltip>
