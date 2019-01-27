@@ -19,6 +19,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.event.StartTourEvent;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.GeneralService;
@@ -30,6 +31,7 @@ import com.opensense.dashboard.client.utils.MinMaxValueHandler;
 import com.opensense.dashboard.client.utils.RequestBuilder;
 import com.opensense.dashboard.client.utils.UnitMapper;
 import com.opensense.dashboard.client.utils.ValueHandler;
+import com.opensense.dashboard.client.utils.tourutils.Tours;
 import com.opensense.dashboard.client.view.VisualisationsView;
 import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Request;
@@ -80,6 +82,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
+		this.eventBus.fireEvent(new StartTourEvent(Tours.VIS_PAGE, false));
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class VisPageTourHelper implements ITourHelper{
 		if(!favs.contains(47790)) favs.add(0, 47790);
 		if(!favs.contains(47785)) favs.add(0, 47785);
 		CookieManager.writeFavoriteListCookie(favs);
-		History.newItem(DataPanelPage.VISUALISATIONS.name());
+		History.newItem(DataPanelPage.VISUALISATIONS.name(), true);
 		new Timer() {
 			@Override
 			public void run() {
