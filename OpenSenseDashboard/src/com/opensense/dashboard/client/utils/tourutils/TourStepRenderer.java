@@ -96,7 +96,7 @@ public class TourStepRenderer extends Composite {
 	private int triesToRender = 0;
 
 	private TourStepRenderer(HandlerManager eventBus) {
-		initWidget(uiBinder.createAndBindUi(this));
+		this.initWidget(uiBinder.createAndBindUi(this));
 		this.eventBus = eventBus;
 	}
 
@@ -109,12 +109,12 @@ public class TourStepRenderer extends Composite {
 
 	@UiHandler("closeTour")
 	public void onCloseTourButtonClicked(ClickEvent e) {
-		fireCloseEvent();
+		this.fireCloseEvent();
 	}
 
 	@UiHandler("closeButton")
 	public void onCloseButtonClicked(ClickEvent e) {
-		fireCloseEvent();
+		this.fireCloseEvent();
 	}
 
 	@UiHandler("nextButton")
@@ -122,7 +122,7 @@ public class TourStepRenderer extends Composite {
 		if(e != null) {
 			e.stopPropagation();
 		}
-		runCallbackRunnable();
+		this.runCallbackRunnable();
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class TourStepRenderer extends Composite {
 		this.overlayContainer.clear();
 		this.placement = tourData.getPlacement();
 
-		bindHandler(tourStep == tourSteps);
+		this.bindHandler(tourStep == tourSteps);
 		if(tourData.getMessage() != null) {
 			this.headerText.setText(Languages.tourHeader(tourStep, tourSteps));
 			this.messageSpan.setText(tourData.getMessage());
@@ -159,15 +159,15 @@ public class TourStepRenderer extends Composite {
 		this.triesToRender = 0;
 		this.renderTimer = new Timer() {@Override public void run() {
 			try {
-				renderIfTheElementHasAPosition();
+				TourStepRenderer.this.renderIfTheElementHasAPosition();
 			} catch (Exception e) {
-				clearTourStep();
+				TourStepRenderer.this.clearTourStep();
 				this.cancel();
 				AppController.showError(Languages.tourError());
 				LOGGER.log(Level.WARNING, e.getMessage(), e);
 			}
 		}};
-		renderIfTheElementHasAPosition();
+		this.renderIfTheElementHasAPosition();
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class TourStepRenderer extends Composite {
 	 */
 	private void bindHandler(final boolean isLastStep) {
 
-		this.windowResizeHandler = Window.addResizeHandler(event -> rerenderTourStep());
+		this.windowResizeHandler = Window.addResizeHandler(event -> this.rerenderTourStep());
 
 		this.keyUpHandler = RootPanel.get().addDomHandler(event -> {
 			if(event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
@@ -187,7 +187,7 @@ public class TourStepRenderer extends Composite {
 
 		switch (this.tourEventType) {
 		case CLICK:
-			this.javaSriptHandler = bindClickListener(this.element, false);
+			this.javaSriptHandler = this.bindClickListener(this.element, false);
 			break;
 		case HINT_TRY_OUT:
 			if(!isLastStep) {
@@ -203,9 +203,9 @@ public class TourStepRenderer extends Composite {
 			}
 			this.nextButton.setEnabled(true);
 			if(this.messageContainerHandler == null) {
-				this.messageContainerHandler = preventDefaultAndStopPropagation(this.messageContainer);
+				this.messageContainerHandler = this.preventDefaultAndStopPropagation(this.messageContainer);
 			}
-			this.javaSriptHandler = bindClickListener(this.element, true);
+			this.javaSriptHandler = this.bindClickListener(this.element, true);
 			break;
 		case INPUT:
 			this.messageContainer.addStyleName(MIN_WIDTH);
@@ -214,11 +214,11 @@ public class TourStepRenderer extends Composite {
 			if(!this.element.toString().contains("Input")) {
 				Element emptyNode = new Div().getElement();
 				this.element.getChild(0).appendChild(emptyNode);
-				this.javaSriptHandler = bindInputListener(this.element.getChild(0).getChild(0).getParentElement());
+				this.javaSriptHandler = this.bindInputListener(this.element.getChild(0).getChild(0).getParentElement());
 				this.element.getChild(0).getChild(0).getParentElement().focus();
 				emptyNode.removeFromParent();
 			}else {
-				this.javaSriptHandler = bindInputListener(this.element);
+				this.javaSriptHandler = this.bindInputListener(this.element);
 				this.element.focus();
 			}
 			break;
@@ -293,7 +293,7 @@ public class TourStepRenderer extends Composite {
 	 * The method gets called from the javaScript listener and if the next button was clicked
 	 */
 	private void runCallbackRunnable() {
-		clearTourStep();
+		this.clearTourStep();
 		if(this.callbackRunnable != null) {
 			this.callbackRunnable.run();
 		}
@@ -317,39 +317,39 @@ public class TourStepRenderer extends Composite {
 	 * @throws ElementNotRenderedException
 	 */
 	private void renderIfTheElementHasAPosition() throws Exception {
-		String[] values = getPositionAndSize(this.element).split(";");
+		String[] values = this.getPositionAndSize(this.element).split(";");
 		Rectangle oldRectangle = this.containerRectangle;
 		if((values != null) && (values.length == 4)) {
 			this.containerRectangle = new Rectangle(Double.valueOf(values[0]), Double.valueOf(values[1]), Double.valueOf(values[2]), Double.valueOf(values[3]));
 		}
-		if(positionIsDefault() || !positionIsEqual(oldRectangle)) {
+		if(this.positionIsDefault() || !this.positionIsEqual(oldRectangle)) {
 			this.triesToRender++;
 			if(this.triesToRender < TRIES_TO_RENDER) {
 				this.renderTimer.schedule(100);
 			}else {
-				clearTourStep();
+				this.clearTourStep();
 				AppController.showError(Languages.tourError());
 				throw new Exception("The element with the id = \"" + this.element.getId() + "\" is not rendered.");
 			}
 		}else {
 			this.renderTimer.cancel();
-			renderAtPosition();
+			this.renderAtPosition();
 		}
 	}
 
 	private void rerenderTourStep() {
 		try {
 			this.overlayContainer.clear();
-			String[] values = getPositionAndSize(this.element).split(";");
+			String[] values = this.getPositionAndSize(this.element).split(";");
 			if((values != null) && (values.length == 4)) {
 				this.containerRectangle = new Rectangle(Double.valueOf(values[0]), Double.valueOf(values[1]), Double.valueOf(values[2]), Double.valueOf(values[3]));
 			}
 		} catch (Exception e) {
-			clearTourStep();
+			this.clearTourStep();
 			AppController.showError(Languages.tourError());
 			LOGGER.log(Level.WARNING, e.getMessage(), e);
 		}
-		renderAtPosition();
+		this.renderAtPosition();
 	}
 
 	private native String getPositionAndSize(Element element) /*-{
@@ -383,7 +383,7 @@ public class TourStepRenderer extends Composite {
 		int windowHeight = Window.getClientHeight();
 
 		Div shadowBottom = new Div();
-		preventDefaultAndStopPropagation(shadowBottom);
+		this.preventDefaultAndStopPropagation(shadowBottom);
 		shadowBottom.addStyleName("tour-element-shadow");
 		shadowBottom.getElement().getStyle().setLeft(this.containerRectangle.getLeft()  + 5, Unit.PX);
 		shadowBottom.getElement().getStyle().setTop(this.containerRectangle.getTop() + this.containerRectangle.getHeight(), Unit.PX);
@@ -392,7 +392,7 @@ public class TourStepRenderer extends Composite {
 		this.overlayContainer.add(shadowBottom);
 
 		Div shadowRight = new Div();
-		preventDefaultAndStopPropagation(shadowRight);
+		this.preventDefaultAndStopPropagation(shadowRight);
 		shadowRight.addStyleName("tour-element-shadow");
 		shadowRight.getElement().getStyle().setLeft(this.containerRectangle.getLeft() + this.containerRectangle.getWidth(), Unit.PX);
 		shadowRight.getElement().getStyle().setTop(this.containerRectangle.getTop() + 5, Unit.PX);
@@ -401,7 +401,7 @@ public class TourStepRenderer extends Composite {
 		this.overlayContainer.add(shadowRight);
 
 		Div upperCon = new Div();
-		preventDefaultAndStopPropagation(upperCon);
+		this.preventDefaultAndStopPropagation(upperCon);
 		upperCon.addStyleName(TOUR_OVERLAY);
 		upperCon.getElement().getStyle().setTop(0, Unit.PX);
 		upperCon.getElement().getStyle().setWidth(100, Unit.PCT);
@@ -409,7 +409,7 @@ public class TourStepRenderer extends Composite {
 		this.overlayContainer.add(upperCon);
 
 		Div lowerCon = new Div();
-		preventDefaultAndStopPropagation(lowerCon);
+		this.preventDefaultAndStopPropagation(lowerCon);
 		lowerCon.addStyleName(TOUR_OVERLAY);
 		lowerCon.getElement().getStyle().setTop(this.containerRectangle.getTop() + this.containerRectangle.getHeight(), Unit.PX);
 		lowerCon.getElement().getStyle().setWidth(100, Unit.PCT);
@@ -417,7 +417,7 @@ public class TourStepRenderer extends Composite {
 		this.overlayContainer.add(lowerCon);
 
 		Div leftCon = new Div();
-		preventDefaultAndStopPropagation(leftCon);
+		this.preventDefaultAndStopPropagation(leftCon);
 		leftCon.addStyleName(TOUR_OVERLAY);
 		leftCon.getElement().getStyle().setTop(this.containerRectangle.getTop(), Unit.PX);
 		leftCon.getElement().getStyle().setLeft(0, Unit.PX);
@@ -426,7 +426,7 @@ public class TourStepRenderer extends Composite {
 		this.overlayContainer.add(leftCon);
 
 		Div rightCon = new Div();
-		preventDefaultAndStopPropagation(rightCon);
+		this.preventDefaultAndStopPropagation(rightCon);
 		rightCon.addStyleName(TOUR_OVERLAY);
 		rightCon.getElement().getStyle().setTop(this.containerRectangle.getTop(), Unit.PX);
 		rightCon.getElement().getStyle().setRight(0, Unit.PX);
@@ -434,7 +434,7 @@ public class TourStepRenderer extends Composite {
 		rightCon.getElement().getStyle().setHeight(this.containerRectangle.getHeight(), Unit.PX);
 		this.overlayContainer.add(rightCon);
 
-		showTourStep();
+		this.showTourStep();
 	}
 
 
@@ -445,7 +445,7 @@ public class TourStepRenderer extends Composite {
 		this.content.getElement().getStyle().clearDisplay();
 		if((this.messageContainer != null) && (this.placement != null)) {
 			this.messageContainer.getElement().getStyle().clearDisplay();
-			setMessagePlacement(this.placement);
+			this.setMessagePlacement(this.placement);
 		}
 	}
 
@@ -492,11 +492,11 @@ public class TourStepRenderer extends Composite {
 			if(!this.element.toString().contains("Input")) {
 				Element emptyNode = new Div().getElement();
 				this.element.getChild(0).appendChild(emptyNode);
-				removeListener(this.element.getChild(0).getChild(0).getParentElement(), TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
+				this.removeListener(this.element.getChild(0).getChild(0).getParentElement(), TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
 				this.element.getChild(0).getChild(0).getParentElement().blur();
 				emptyNode.removeFromParent();
 			}else {
-				removeListener(this.element, TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
+				this.removeListener(this.element, TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
 				this.element.blur();
 			}
 
@@ -511,6 +511,7 @@ public class TourStepRenderer extends Composite {
 		this.content.getElement().getStyle().setDisplay(Display.NONE);
 		this.messageContainer.getElement().getStyle().setDisplay(Display.NONE);
 		this.messageContainer.removeStyleName(MIN_WIDTH);
+		this.nextButton.setEnabled(true);
 		this.tourContainer.clear();
 	}
 
