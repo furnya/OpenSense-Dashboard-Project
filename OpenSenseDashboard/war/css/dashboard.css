@@ -688,8 +688,7 @@ input:focus+label{
 	display: none !important;
 }
 .chart-height{
-	height: 38vw;
-	max-height: 75vh;
+	height: 75vh;
 }
 
 .footer-right-container{
