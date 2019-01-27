@@ -30,7 +30,7 @@ import com.opensense.dashboard.shared.ValuePreview;
 
 public class ClientRequestHandler {
 
-	private static final boolean USE_DEFAULT_URL = false;
+	private static final boolean USE_DEFAULT_URL = true;
 
 	private static final String BASE_URL = "https://www.opensense.network/beta/api/v1.0";
 	private static final String BASE_URL_DEFAULT = "https://www.opensense.network/progprak/beta/api/v1.0";
