@@ -10,6 +10,7 @@ import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapWidget;
@@ -35,6 +36,7 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
@@ -234,6 +236,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		}
 		InfoWindowOptions iwOptions = InfoWindowOptions.newInstance();
 		MarkerInfoWindow infoWindow = new MarkerInfoWindow();
+		
 		infoWindow.setHeader(si.getSensorModel() + " " + si.getSensorId());
 		infoWindow.setInfoWindowRating(si.getAccuracy());
 		ArrayList<String> sensorData = new ArrayList<>();
@@ -260,6 +263,11 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.lastOpened = iw;
 		this.iwsFromMarkers.put(si.getSensorId(), infoWindow);
 		iw.open(this.mapWidget, marker);
+		List<Integer> currentSensorIdList = new ArrayList<>();
+		currentSensorIdList.add(si.getSensorId());
+		infoWindow.getFavImage().addDomHandler(event -> {
+			 this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(currentSensorIdList));
+	}, ClickEvent.getType());
 	}
 
 	private void setMarkers(Sensor sensor) {

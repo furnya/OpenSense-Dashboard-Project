@@ -43,13 +43,55 @@
 		margin-top: 6px !important;
 	}
 	
+	.fav-image {
+		height: 30px !important;
+		margin-top: 10px;
+	}
+	
+	.fav-image:hover{
+		animation: heartbeat 1s infinite;
+	}
+	
+	@keyframes heartbeat
+  {
+  0%
+  {
+    transform: scale( .75 );
+  }
+  20%
+  {
+    transform: scale( 1 );
+  }
+  40%
+  {
+    transform: scale( .75 );
+  }
+  60%
+  {
+    transform: scale( 1 );
+  }
+  80%
+  {
+    transform: scale( .75 );
+  }
+  100%
+  {
+    transform: scale( .75 );
+  }
+}
+	
 	</ui:style>
 
 	<bh:Div ui:field="infoBox" addStyleNames="{style.insidewindow}">
 		<bh:Div addStyleNames="flex">
 			<b:Heading ui:field="header" addStyleNames="{style.header}"
 				size="H5" />
-			<d:Rating ui:field="rating" rating="0" addStyleNames="{style.ratingdown}"/>
+			<d:Rating ui:field="rating" rating="0"
+				addStyleNames="{style.ratingdown}" />
+			<m:MaterialImage
+				ui:field="cardfav"
+				url="{gui.favoriteRed.getSafeUri.asString}"
+				addStyleNames="{style.fav-image}" />
 		</bh:Div>
 		<bh:Div addStyleNames="flex">
 			<bh:Div ui:field="datadescriptor"

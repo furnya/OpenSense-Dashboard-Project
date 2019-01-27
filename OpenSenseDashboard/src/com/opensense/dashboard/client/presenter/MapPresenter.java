@@ -106,7 +106,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 					this.eventBus
 					.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, request.getParameters(), false));
 				} else if (request.getIds() != null) {
-					this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, request.getIds()));
+					this.eventBus.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP,false));
 				}
 				this.view.showMarkers(result.getSensors());
 			} else {
