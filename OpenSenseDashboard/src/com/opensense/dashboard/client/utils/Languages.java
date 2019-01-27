@@ -1525,48 +1525,60 @@ public class Languages {
 	public static String exitTourFirst() {
 		if (de) {
 			return "Zum beenden des Rundgangs";
-		} else {
+		} else if(en) {
 			return "Press";
+		} else {
+			return "Presiona";
 		}
 	}
 
 	public static String exitTourSecond() {
 		if (de) {
 			return "drücken";
-		} else {
+		} else if(en) {
 			return "to exit the tour";
+		} else {
+			return "para terminar el recorrido";
 		}
 	}
 
 	public static String startTour() {
 		if (de) {
 			return "Tour starten";
-		} else {
+		} else if(en) {
 			return "Start tour";
+		}else {
+			return "Empezar recorrido";
 		}
 	}
 
 	public static String continueStep() {
 		if (de) {
 			return "Weiter";
-		} else {
+		} else if(en) {
 			return "Continue";
+		}else {
+			return "Continuar";
 		}
 	}
 
 	public static String noTourData() {
 		if (de) {
 			return "Keine Touren verfügbar";
-		} else {
+		} else if(en) {
 			return "No tours available";
+		} else {
+			return "No hay tour disponible";
 		}
 	}
 
 	public static String closeTour() {
 		if (de) {
 			return "Tour beenden";
-		} else {
+		} else if(en) {
 			return "Exit tour";
+		}else {
+			return "Terminar el recorrido";
 		}
 	}
 
@@ -1664,19 +1676,29 @@ public class Languages {
 		if (de) {
 			return "Sie können eine neue Liste erstellen und sie beliebig benennen. Wenn Sie ihrer Liste dann Sensoren hinzufügen möchten, dann gehen Sie bitte auf die Suchseite und fügen dort die entsprechenden Sensoren ein.";
 		} else if (en) {
-			return "You have successfully registered";
+			return "You can create a new list and name it as you like. If you would like to add sensors to your list, then please go to the search page and insert the appropriate sensors there.";
 		} else {
-			return "Te has registrado exitosamente";
+			return "Puedes crear una nueva lista y nombrarla como quieras. Si desea agregar sensores a su lista, por favor vaya a la p\u00E1gina de b\u00FAsqueda e inserte los sensores apropiados all\u00ED.";
 		}
 	}
 
 	public static String createSensorButtonTour() {
 		if (de) {
-			return "Sie können einen Sensor zu Opensense hinzufügen. Bitte achten Sie darauf ihre Daten vor dem Abschicken noch einmal zu Überprüfen. Ihre eigenen Sensoren können sie anschließend jeder Zeit hier auf der Suchseite einsehen und löschen.";
+			return "Sie k\u00F6nnen einen Sensor zu erstellen welcher zu OpenseSense hinzugef\u00FCgt wird. Bitte achten Sie darauf ihre Daten vor dem Abschicken noch einmal zu Überprüfen. Ihre eigenen Sensoren können sie anschließend jeder Zeit hier auf der Listseite einsehen und löschen.";
 		} else if (en) {
-			return "You have successfully registered";
+			return "You can create a sensor which will be added to OpenseSense. Please make sure to check your data again before submitting. You can then view and delete your own sensors here on the list page at any time.";
 		} else {
-			return "Te has registrado exitosamente";
+			return "Usted puede crear un sensor que se agregar\u00E1 a OpenseSense.Por favor, aseg\u00FArese de verificar sus datos nuevamente antes de enviar. Usted puede ver y eliminar sus propios sensores aqu\u00ED en la p\u00E1gina de listas en cualquier momento.";
+		}
+	}
+	
+	public static String listContainerTour() {
+		if (de) {
+			return "Ihre selbst erstellten Listen können sie hier umbenennen und ihre enthaltene Sensoren einsehen. Sie können Sensoren auswählen und diese löschen oder aber auf einen der Knöpfe drücken um sie auf der entsprechend anderen Seite anzeigen zu lassen.";
+		} else if (en) {
+			return "You can rename your own lists here and see their included sensors. You can select sensors and delete them, or press one of the buttons to display them on another page.";
+		} else {
+			return "Puede cambiar el nombre de sus propias listas aqu\u00ED y ver sus sensores incluidos. Usted puede seleccionar sensores y eliminarlos, o presionar uno de los botones para mostrarlos en otra p\u00E1gina.";
 		}
 	}
 
