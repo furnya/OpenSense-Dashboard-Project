@@ -39,7 +39,7 @@
 	</ui:style>
 
 	<m:MaterialModal ui:field="modal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="800" addStyleNames="{style.add-sensor-modal}">
-       <m:MaterialModalContent>
+       <m:MaterialModalContent ui:field="content">
            <m:MaterialLabel text="{lang.createSensor}" addStyleNames="{style.modalHeader}"/>
            <m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
            <m:MaterialListBox placeholder="{lang.unit}" ui:field="unitList" textColor="BLACK" addStyleNames="{style.max} round-corners" />

@@ -1,52 +1,54 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>OpenSenseDashboard</groupId>
-  <artifactId>OpenSenseDashboard</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <build>
-    <sourceDirectory>src</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
-    <plugins>
-      <plugin>
-      	<groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>2.8.1</version>
-		<executions>
-			<execution>
-				<goals>
-					<goal>compile</goal>
-				</goals>
-			</execution>
-		</executions>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-          <runTarget>OpenSenseDashboard.html</runTarget>
-		  <hostedWebapp>${basedir}/war</hostedWebapp>
-		  <webappDirectory>${basedir}/war/WEB-INF/classes</webappDirectory>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  <distributionManagement>
-	<downloadUrl>http://www.vectomatic.org/libs/lib-gwt-svg</downloadUrl>
-  </distributionManagement>
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>OpenSenseDashboard</groupId>
+	<artifactId>OpenSenseDashboard</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>2.8.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<runTarget>OpenSenseDashboard.html</runTarget>
+					<hostedWebapp>${basedir}/war</hostedWebapp>
+					<webappDirectory>${basedir}/war/WEB-INF/classes</webappDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<distributionManagement>
+		<downloadUrl>http://www.vectomatic.org/libs/lib-gwt-svg</downloadUrl>
+	</distributionManagement>
+	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 	</properties>
-  <dependencies>
- 		<!-- GWT -->
+	<dependencies>
+		<!-- GWT -->
 		<!-- https://mvnrepository.com/artifact/com.google.gwt/gwt-user -->
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -81,14 +83,14 @@
 			<artifactId>gwtbootstrap3-extras</artifactId>
 			<version>0.9.3</version>
 		</dependency>
-				<!-- JSON -->
+		<!-- JSON -->
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20180813</version>
 		</dependency>
-				<!-- WEBSOCKET -->
+		<!-- WEBSOCKET -->
 		<!-- https://mvnrepository.com/artifact/javax.websocket/javax.websocket-api -->
 		<dependency>
 			<groupId>javax.websocket</groupId>
@@ -103,11 +105,11 @@
 			<version>4.12</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.vectomatic/lib-gwt-svg -->
-	 	<dependency>
-		    <groupId>org.vectomatic</groupId>
-		    <artifactId>lib-gwt-svg</artifactId>
-		    <version>0.5.15</version>
-		</dependency> 
+		<dependency>
+			<groupId>org.vectomatic</groupId>
+			<artifactId>lib-gwt-svg</artifactId>
+			<version>0.5.15</version>
+		</dependency>
 		<!-- Material design -->
 		<dependency>
 			<groupId>com.github.gwtmaterialdesign</groupId>
@@ -128,11 +130,11 @@
 			<groupId>com.github.gwtmaterialdesign</groupId>
 			<artifactId>gwt-material-jquery</artifactId>
 			<version>2.1.1</version>
-		</dependency> 
+		</dependency>
 		<dependency>
-    		<groupId>com.github.gwtmaterialdesign</groupId>
-   			<artifactId>gwt-material</artifactId>
-   			 <version>2.0-rc5</version>
+			<groupId>com.github.gwtmaterialdesign</groupId>
+			<artifactId>gwt-material</artifactId>
+			<version>2.0-rc5</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.gwt.google-apis/gwt-maps -->
 		<!-- https://mvnrepository.com/artifact/com.github.branflake2267/gwt-maps-api -->
@@ -144,38 +146,44 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.branflake2267/gwt-maps-utility-markerclustererplus -->
 		<dependency>
-	  	 	 <groupId>com.github.branflake2267</groupId>
-	  		 <artifactId>gwt-maps-utility-markerclustererplus</artifactId>
-	  	  	 <version>3.10.0-alpha-7</version>
+			<groupId>com.github.branflake2267</groupId>
+			<artifactId>gwt-maps-utility-markerclustererplus</artifactId>
+			<version>3.10.0-alpha-7</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.mindrot.bcrypt/bcrypt -->
 		<dependency>
-    		<groupId>org.pepstock</groupId>
-    		<artifactId>charba</artifactId>
-    		<version>1.6</version>
+			<groupId>org.pepstock</groupId>
+			<artifactId>charba</artifactId>
+			<version>1.6</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.googlecode.gwt-crypto/gwt-crypto -->
 		<dependency>
-		    <groupId>com.googlecode.gwt-crypto</groupId>
-		    <artifactId>gwt-crypto</artifactId>
-		    <version>2.3.0</version>
+			<groupId>com.googlecode.gwt-crypto</groupId>
+			<artifactId>gwt-crypto</artifactId>
+			<version>2.3.0</version>
 		</dependency>
 		<dependency>
-    		<groupId>com.github.gwtd3</groupId>
-    		<artifactId>gwt-d3-api</artifactId>
-    		<version>1.3.0</version>
-    		<scope>provided</scope>
-  		</dependency>
-  		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+			<groupId>com.github.gwtd3</groupId>
+			<artifactId>gwt-d3-api</artifactId>
+			<version>1.3.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-		    <version>8.0.13</version>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.13</version>
 		</dependency>
 		<dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.6.2</version>
-        </dependency>
-  </dependencies>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3</version>
+		</dependency>
+
+	</dependencies>
 </project>
