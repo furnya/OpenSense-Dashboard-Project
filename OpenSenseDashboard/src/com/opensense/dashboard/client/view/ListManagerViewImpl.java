@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -434,10 +433,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			}
 		});
 	}
-
-	private native void clickElement(Element infoButtonElement) /*-{
-		infoButtonElement.click();
-	}-*/;
 
 	@Override
 	public void showUserListDropdown(int listId, List<UserList> userLists) {
