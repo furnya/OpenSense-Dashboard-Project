@@ -452,7 +452,7 @@ public class ClientRequestHandler {
 		return licenseMap;
 	}
 
-	public String sendCreateSensorRequest(CreateSensorRequest request, List<Value> values) throws IOException {
+	public String sendCreateSensorRequest(CreateSensorRequest request) throws IOException {
 		RequestSender rs = new RequestSender();
 		JSONObject bodyJSON = new JSONObject();
 		bodyJSON.put(JsonAttributes.MEASURAND_ID.getNameString(), request.getMeasurandId());
@@ -470,17 +470,43 @@ public class ClientRequestHandler {
 		bodyJSON.put(JsonAttributes.ATTRIBUTION_TEXT.getNameString(), request.getAttributionText());
 		bodyJSON.put(JsonAttributes.ATTRIBUTION_URL.getNameString(), request.getAttributionURL());
 
-		if((values != null) && !values.isEmpty()) {
-			values.forEach(System.out::println);
-			//TODO: addValues
-		}
-
 		String body = bodyJSON.toString();
 		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/addSensor", body, SessionUser.getInstance().getToken());
 		if(idJSON==null) {
 			return null;
 		}
 		return idJSON.toString();
+	}
+	
+	public String addValues(int sensorId, List<Value> values) throws IOException {
+		RequestSender rs = new RequestSender();
+		JSONObject bodyJSON = new JSONObject();
+		JSONArray valuesJSON = new JSONArray();
+		
+		boolean parseFailed = false;
+		for(Value value : values) {
+			try {
+				JSONObject valueJSON = new JSONObject();
+				valueJSON.put(JsonAttributes.SENSOR_ID.getNameString(), sensorId);
+				valueJSON.put(JsonAttributes.TIMESTAMP.getNameString(), value.getTimestamp().toString());
+				valueJSON.put(JsonAttributes.NUMBER_VALUE.getNameString(), value.getNumberValue());
+				valuesJSON.put(valueJSON);
+			}catch(Exception e) {
+				parseFailed = true;
+			}
+		}
+		if(valuesJSON.length()==0) {
+			return ServerLanguages.noValuesParsed();
+		}
+		
+		bodyJSON.put(JsonAttributes.COLLAPSED_MESSAGES.getNameString(), valuesJSON);
+		String body = bodyJSON.toString();
+		String response = rs.sendPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/addMultipleValues", body, SessionUser.getInstance().getToken());
+		if("OK".equals(response)) {
+			return (parseFailed ? ServerLanguages.someValuesNotParsed() : ServerLanguages.allValueParsed());
+		}else {
+			return ServerLanguages.noValuesParsed();
+		}
 	}
 
 	public List<UserList> getUserLists() {

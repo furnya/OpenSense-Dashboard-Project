@@ -95,8 +95,8 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 	public void requestDataAndShowCreateSensorModal() {
 		AddSensorModal modal = new AddSensorModal(this);
 		this.requestLicenses(modal);
-		this.requestUnits(modal);
 		this.requestMeasurands(modal);
+		this.requestUnits(modal);
 		RootPanel.get().add(modal);
 		modal.open();
 	}
