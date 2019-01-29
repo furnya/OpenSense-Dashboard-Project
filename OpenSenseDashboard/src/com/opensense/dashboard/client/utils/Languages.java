@@ -1693,11 +1693,11 @@ public class Languages {
 		}
 	}
 
-	public static String successfull() {
+	public static String successful() {
 		if(de) {
 			return "erfolgreich";
 		} else {
-			return "successfull";
+			return "successful";
 		}
 	}
 

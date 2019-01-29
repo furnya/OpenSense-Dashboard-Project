@@ -141,10 +141,12 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return ar;
 		}
 		String withID = "";
+		int sensorId = 0;
 		try{
-			String response = ClientRequestHandler.getInstance().sendCreateSensorRequest(request, CSVFileParser.parseValues());
+			String response = ClientRequestHandler.getInstance().sendCreateSensorRequest(request);
 			JSONObject sensor = new JSONObject(response);
-			withID = " "+Languages.with()+" ID "+sensor.getInt(JsonAttributes.ID.getNameString());
+			sensorId = sensor.getInt(JsonAttributes.ID.getNameString());
+			withID = " "+Languages.with()+" ID "+sensorId;
 		}catch(IOException e) {
 			ActionResult ar = new ActionResult(ActionResultType.FAILED);
 			ar.setErrorMessage(Languages.invalidParameters());
@@ -152,7 +154,17 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}
 
 		ActionResult ar = new ActionResult(ActionResultType.SUCCESSFUL);
-		ar.setErrorMessage(Languages.sensorCreated()+withID);
+		if(request.isValuesAttached() && sensorId!=0) {
+			String valuesParsed = ServerLanguages.noValuesParsed();
+			try {
+				valuesParsed = ClientRequestHandler.getInstance().addValues(sensorId, CSVFileParser.parseValues());
+			}catch(IOException e) {
+				valuesParsed = ServerLanguages.noValuesParsed();
+			}
+			ar.setErrorMessage(Languages.sensorCreated()+withID+", "+valuesParsed);
+		}else {
+			ar.setErrorMessage(Languages.sensorCreated()+withID);
+		}
 		return ar;
 	}
 

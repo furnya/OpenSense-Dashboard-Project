@@ -308,5 +308,29 @@ public class ServerLanguages {
 			return "The file get succesfully uploaded";
 		}
 	}
+	
+	public static String noValuesParsed() {
+		if(de) {
+			return "Es konnten keine Werte eingelesen werden";
+		}else {
+			return "No values were successfully parsed";
+		}
+	}
+	
+	public static String someValuesNotParsed() {
+		if(de) {
+			return "Es konnten nicht alle Werte eingelesen werden";
+		}else {
+			return "Some values were not successfully parsed";
+		}
+	}
+	
+	public static String allValueParsed() {
+		if(de) {
+			return "Es konnten alle Werte eingelesen werden";
+		}else {
+			return "All values were successfully parsed";
+		}
+	}
 
 }

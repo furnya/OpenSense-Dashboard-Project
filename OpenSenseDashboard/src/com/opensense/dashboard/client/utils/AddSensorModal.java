@@ -160,32 +160,42 @@ public class AddSensorModal extends Composite {
 		this.uploadForm.setMethod(FormPanel.METHOD_POST);
 		this.uploadForm.addSubmitHandler(event -> {
 			String filename = this.fileUpload.getFilename();
-			if ((filename.length() == 0) && !filename.endsWith(".csv")) {
+			if(filename.length()==0) {
+				event.cancel();
+				this.sendCreateSensorRequest(false);
+				return;
+			}
+			if (!filename.endsWith(".csv")) {
 				event.cancel();
 				AppController.showInfo("Es können nur Datein im csv Format hochgeladen werden");
 			}
 		});
 		this.uploadForm.addSubmitCompleteHandler(event -> {
-			if(event.getResults().contains(Languages.successfull())) {
-				CreateSensorRequest request = new CreateSensorRequest();
-				request.setAccuracy(Double.valueOf(this.accuracyBox.getValue()));
-				request.setAltitudeAboveGround(Double.valueOf(this.altitudeBox.getValue()));
-				request.setAttributionText(this.attributionTextBox.getValue());
-				request.setAttributionURL(this.attributionUrlBox.getValue());
-				request.setDirectionHorizontal(Double.valueOf(this.directionHorizontalBox.getValue()));
-				request.setDirectionVertical(Double.valueOf(this.directionVerticalBox.getValue()));
-				request.setLatitude(Double.valueOf(this.latitudeBox.getValue()));
-				request.setLongitude(Double.valueOf(this.longitudeBox.getValue()));
-				request.setLicenseId(Integer.valueOf(this.licenseList.getValue()));
-				request.setMeasurandId(Integer.valueOf(this.measurandList.getValue()));
-				request.setSensorModel(this.sensorModelBox.getValue());
-				request.setUnitId(Integer.valueOf(this.unitList.getValue()));
-				this.presenter.createSensorRequest(request);
-				this.modal.close();
+			if(event.getResults().contains(Languages.successful())) {
+				this.sendCreateSensorRequest(true);
 			}else {
 				AppController.showError(event.getResults());
 			}
 		});
+	}
+	
+	private void sendCreateSensorRequest(boolean valuesAttached) {
+		CreateSensorRequest request = new CreateSensorRequest();
+		request.setValuesAttached(valuesAttached);
+		request.setAccuracy(Double.valueOf(this.accuracyBox.getValue()));
+		request.setAltitudeAboveGround(Double.valueOf(this.altitudeBox.getValue()));
+		request.setAttributionText(this.attributionTextBox.getValue());
+		request.setAttributionURL(this.attributionUrlBox.getValue());
+		request.setDirectionHorizontal(Double.valueOf(this.directionHorizontalBox.getValue()));
+		request.setDirectionVertical(Double.valueOf(this.directionVerticalBox.getValue()));
+		request.setLatitude(Double.valueOf(this.latitudeBox.getValue()));
+		request.setLongitude(Double.valueOf(this.longitudeBox.getValue()));
+		request.setLicenseId(Integer.valueOf(this.licenseList.getValue()));
+		request.setMeasurandId(Integer.valueOf(this.measurandList.getValue()));
+		request.setSensorModel(this.sensorModelBox.getValue());
+		request.setUnitId(Integer.valueOf(this.unitList.getValue()));
+		this.presenter.createSensorRequest(request);
+		this.modal.close();
 	}
 
 	private void initValidMap() {

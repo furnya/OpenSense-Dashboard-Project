@@ -16,6 +16,7 @@ public class CreateSensorRequest implements IsSerializable{
 	private double accuracy;
 	private String attributionText;
 	private String attributionURL;
+	private boolean valuesAttached;
 
 	public CreateSensorRequest() {
 	}
@@ -186,5 +187,19 @@ public class CreateSensorRequest implements IsSerializable{
 	 */
 	public void setAttributionURL(String attributionURL) {
 		this.attributionURL = attributionURL;
+	}
+
+	/**
+	 * @return the valuesAttached
+	 */
+	public boolean isValuesAttached() {
+		return valuesAttached;
+	}
+
+	/**
+	 * @param valuesAttached the valuesAttached to set
+	 */
+	public void setValuesAttached(boolean valuesAttached) {
+		this.valuesAttached = valuesAttached;
 	}
 }

@@ -2,6 +2,7 @@ package com.opensense.dashboard.server.util;
 
 public enum JsonAttributes {
 	ID("id"),
+	SENSOR_ID("sensorId"),
 	NAME("name"),
 	MEASURAND_ID("measurandId"),
 	DEFAULT_UNIT_ID("defaultUnitId"),
@@ -20,7 +21,8 @@ public enum JsonAttributes {
 	LNG("lng"),
 	NUMBER_VALUE("numberValue"),
 	TIMESTAMP("timestamp"),
-	FULL_NAME("fullName");
+	FULL_NAME("fullName"),
+	COLLAPSED_MESSAGES("collapsedMessages");
 	
 	private final String nameString;
 	
