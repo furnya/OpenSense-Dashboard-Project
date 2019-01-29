@@ -742,3 +742,13 @@ input:focus+label{
 	border: none;
 	box-shadow: none;
 }
+
+.upload-info-container{
+	position: absolute;
+	width: 50%;
+	background: #404040;
+	color: white;
+	height: fit-content;
+	padding: 10px;
+	bottom: 30px;
+}
