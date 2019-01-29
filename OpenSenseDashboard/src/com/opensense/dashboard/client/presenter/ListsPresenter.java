@@ -96,6 +96,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 		AddSensorModal modal = new AddSensorModal(this);
 		this.requestLicenses(modal);
 		this.requestMeasurands(modal);
+		this.requestUnits(modal);
 		RootPanel.get().add(modal);
 		modal.open();
 	}
@@ -140,7 +141,6 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 							&& requestBuilder.getRequest().getRequestType().equals(result.getResultType())
 							&& (result.getMeasurands() != null)) {
 						modal.setMeasurands(result.getMeasurands());
-						this.requestUnits(modal);
 					} else {
 						LOGGER.log(Level.WARNING, "Failure requesting the measurands.");
 					}
