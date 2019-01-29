@@ -212,7 +212,7 @@
 	 background-color: #606060;
 	 overflow: hidden;
 }
-.btn.d-btn:hover, .btn.d-btn.active{
+.btn.d-btn:hover{
 	background-color: #42DCA3;
 }
 .cc-window.cc-banner {

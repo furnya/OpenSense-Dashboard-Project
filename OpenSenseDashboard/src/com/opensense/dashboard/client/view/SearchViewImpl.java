@@ -11,7 +11,6 @@ import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
@@ -124,20 +123,18 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@UiField
 	MaterialTooltip selectAllTooltip;
 
+	@UiField
+	MaterialTooltip addToListToolTip;
+
 	private static SearchViewUiBinder uiBinder = GWT.create(SearchViewUiBinder.class);
 
 	protected Presenter presenter;
 
 	private Autocomplete autoComplete;
-
 	private static final String AUTO_COMPLETE = "autocomplete";
-
 	private List<Integer> selectedSensors = new ArrayList<>();
-
 	private Map<Integer, Sensor> sensors = new HashMap<>();
-
 	private LinkedList<Integer> shownSensorIds = new LinkedList<>();
-
 	private Map<Integer, SensorItemCard> sensorViews = new HashMap<>();
 
 	public SearchViewImpl() {
@@ -152,9 +149,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		this.addToListButton.add(new Image(GUIImageBundle.INSTANCE.listIconSvg().getSafeUri().asString()));
 
 		this.container.addDomHandler(event -> this.hideListDropDown(), MouseWheelEvent.getType());
-
-		Window.addResizeHandler(event -> this.hideListDropDown());
-
+		Window.addResizeHandler(event ->  this.hideListDropDown());
 		this.listDropDown.addMouseWheelHandler(MouseWheelEvent::stopPropagation);
 	}
 
@@ -170,6 +165,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 
 	@UiHandler("addToListButton")
 	public void onAddToListButtonClicked(ClickEvent e) {
+		this.addToListToolTip.remove();
 		this.showListDropDownSpinner(true);
 		this.addToListButton.setEnabled(false);
 		this.hideListDropDown();
@@ -509,13 +505,11 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		}
 	}
 
-	private native void blurElement(Element elem) /*-{
-		elem.click();
-	}-*/;
-
 	@Override
 	public void hideListDropDown() {
+		this.addToListButton.getElement().blur();
 		this.listDropDown.getElement().addClassName("display-none-important");
+		this.addToListToolTip.reinitialize();
 	}
 
 	private void showListDropDown() {
