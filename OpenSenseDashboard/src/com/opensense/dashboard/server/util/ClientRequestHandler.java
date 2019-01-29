@@ -452,7 +452,7 @@ public class ClientRequestHandler {
 		return licenseMap;
 	}
 
-	public String sendCreateSensorRequest(CreateSensorRequest request) throws IOException {
+	public String sendCreateSensorRequest(CreateSensorRequest request, List<Value> values) throws IOException {
 		RequestSender rs = new RequestSender();
 		JSONObject bodyJSON = new JSONObject();
 		bodyJSON.put(JsonAttributes.MEASURAND_ID.getNameString(), request.getMeasurandId());
@@ -469,6 +469,12 @@ public class ClientRequestHandler {
 		bodyJSON.put(JsonAttributes.ACCURACY.getNameString(), request.getAccuracy());
 		bodyJSON.put(JsonAttributes.ATTRIBUTION_TEXT.getNameString(), request.getAttributionText());
 		bodyJSON.put(JsonAttributes.ATTRIBUTION_URL.getNameString(), request.getAttributionURL());
+
+		if((values != null) && !values.isEmpty()) {
+			values.forEach(System.out::println);
+			//TODO: addValues
+		}
+
 		String body = bodyJSON.toString();
 		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/addSensor", body, SessionUser.getInstance().getToken());
 		if(idJSON==null) {
@@ -483,11 +489,10 @@ public class ClientRequestHandler {
 			DatabaseManager db = new DatabaseManager();
 			return db.getUserLists(SessionUser.getInstance().getUserId());
 		}
-		System.out.println("GUEST MODE DETECTED");
 		return new LinkedList<>();
 	}
 
-	public String sendDeleteSensorRequest(Integer sensorId) throws IOException{
+	public String sendDeleteSensorRequest(int sensorId) throws IOException{
 		RequestSender rs = new RequestSender();
 		return rs.deleteRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+SENSORS+sensorId, SessionUser.getInstance().getToken());
 	}
@@ -500,5 +505,4 @@ public class ClientRequestHandler {
 		}
 		return ((JSONObject) profileJSON.get(0)).getInt(JsonAttributes.ID.getNameString());
 	}
-
 }

@@ -10,7 +10,6 @@ import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
@@ -30,13 +29,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
@@ -53,7 +50,6 @@ import gwt.material.design.client.ui.MaterialListBox;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialModalContent;
 import gwt.material.design.client.ui.MaterialTextBox;
-import gwt.material.design.client.ui.MaterialToast;
 
 public class AddSensorModal extends Composite {
 
@@ -131,57 +127,82 @@ public class AddSensorModal extends Composite {
 	@UiField
 	MaterialModalContent content;
 
+	@UiField
+	FormPanel uploadForm;
+
+	@UiField
+	FileUpload fileUpload;
+
 	public AddSensorModal(ListManager listManager) {
 		this.listManager = listManager;
-		initWidget(uiBinder.createAndBindUi(this));
-		requestMeasurands();
+		this.initWidget(uiBinder.createAndBindUi(this));
+		this.requestMeasurands();
 		this.measurandList.addValueChangeHandler(event -> {
 			this.filterUnits(Integer.valueOf(event.getValue()));
 		});
-		requestLicenses();
+		this.requestLicenses();
 		this.initMap();
 		this.initAutoComplete();
 		this.initMarker();
 		this.addValidators();
 		this.initValidMap();
 		this.addFileUpload();
+		//Remove the modal from DOM to prevent multiple modal which stays forever in the DOM
+	}
+
+	@UiHandler("closeButton")
+	public void onCloseButtonClicked(ClickEvent e) {
+		this.modal.close();
+		this.modal.removeFromParent();
+	}
+
+	@UiHandler("confirmButton")
+	public void onConfirmButtonClicked(ClickEvent e) {
+		this.uploadForm.submit();
 	}
 
 	private void addFileUpload() {
-		VerticalPanel panel = new VerticalPanel();
-		final FormPanel form = new FormPanel();
-		final FileUpload fileUpload = new FileUpload();
-		Button uploadButton = new Button("Upload File");
-		form.setAction(GWT.getHostPageBaseURL() + "fileupload");
-		form.setEncoding(FormPanel.ENCODING_MULTIPART);
-		form.setMethod(FormPanel.METHOD_POST);
-		fileUpload.setName("fileName");
-		panel.add(fileUpload);
-		panel.add(uploadButton);
-		uploadButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				String filename = fileUpload.getFilename();
-				if (filename.length() == 0) {
-					GWT.log("No File Specified!");
-				} else {
-					form.submit();
-				}
+		this.uploadForm.setAction(GWT.getHostPageBaseURL() + "fileupload");
+		this.uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
+		this.uploadForm.setMethod(FormPanel.METHOD_POST);
+		this.uploadForm.addSubmitHandler(event -> {
+			String filename = this.fileUpload.getFilename();
+			if ((filename.length() == 0) && !filename.endsWith(".csv")) {
+				event.cancel();
+				AppController.showInfo("Es können nur Datein im csv Format hochgeladen werden");
 			}
 		});
-
-		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-			@Override
-			public void onSubmitComplete(SubmitCompleteEvent event) {
-	        	
-				GWT.log(event.getResults());
+		this.uploadForm.addSubmitCompleteHandler(event -> {
+			if(event.getResults().contains(Languages.successfull())) {
+				CreateSensorRequest request = new CreateSensorRequest();
+				request.setAccuracy(Double.valueOf(this.accuracyBox.getValue()));
+				request.setAltitudeAboveGround(Double.valueOf(this.altitudeBox.getValue()));
+				request.setAttributionText(this.attributionTextBox.getValue());
+				request.setAttributionURL(this.attributionUrlBox.getValue());
+				request.setDirectionHorizontal(Double.valueOf(this.directionHorizontalBox.getValue()));
+				request.setDirectionVertical(Double.valueOf(this.directionVerticalBox.getValue()));
+				request.setLatitude(Double.valueOf(this.latitudeBox.getValue()));
+				request.setLongitude(Double.valueOf(this.longitudeBox.getValue()));
+				request.setLicenseId(Integer.valueOf(this.licenseList.getValue()));
+				request.setMeasurandId(Integer.valueOf(this.measurandList.getValue()));
+				request.setSensorModel(this.sensorModelBox.getValue());
+				request.setUnitId(Integer.valueOf(this.unitList.getValue()));
+				GeneralService.Util.getInstance().createSensor(request, new DefaultAsyncCallback<ActionResult>(result -> {
+					if (result.getActionResultType() == ActionResultType.SUCCESSFUL) {
+						this.modal.close();
+						this.modal.removeFromParent();
+						this.listManager.updateLists();
+						AppController.showSuccess(result.getErrorMessage());
+					}else {
+						AppController.showError(result.getErrorMessage());
+					}
+				}, caught -> {
+					LOGGER.log(Level.WARNING, "Failure creating the sensor.");
+				}, false));
+			}else {
+				AppController.showError(event.getResults());
 			}
 		});
-
-		// Add form to the root panel.
-		form.add(panel);
-
-		this.content.add(form);
 	}
 
 	private void initValidMap() {
@@ -197,25 +218,25 @@ public class AddSensorModal extends Composite {
 	}
 
 	private void addValidators() {
-		this.latitudeBox.addValidator(createDoubleValidator(-90, 90));
-		this.latitudeBox.addValueChangeHandler(createLatLngValueChangeHandler(this.latitudeBox));
-		this.longitudeBox.addValidator(createDoubleValidator(-180, 180));
-		this.longitudeBox.addValueChangeHandler(createLatLngValueChangeHandler(this.longitudeBox));
-		BlankValidator<String> vString = createStringValidator();
+		this.latitudeBox.addValidator(this.createDoubleValidator(-90, 90));
+		this.latitudeBox.addValueChangeHandler(this.createLatLngValueChangeHandler(this.latitudeBox));
+		this.longitudeBox.addValidator(this.createDoubleValidator(-180, 180));
+		this.longitudeBox.addValueChangeHandler(this.createLatLngValueChangeHandler(this.longitudeBox));
+		BlankValidator<String> vString = this.createStringValidator();
 		this.sensorModelBox.addValidator(vString);
-		this.sensorModelBox.addValueChangeHandler(createStringValueChangeHandler(this.sensorModelBox));
+		this.sensorModelBox.addValueChangeHandler(this.createStringValueChangeHandler(this.sensorModelBox));
 		this.attributionTextBox.addValidator(vString);
-		this.attributionTextBox.addValueChangeHandler(createStringValueChangeHandler(this.attributionTextBox));
+		this.attributionTextBox.addValueChangeHandler(this.createStringValueChangeHandler(this.attributionTextBox));
 		this.attributionUrlBox.addValidator(vString);
-		this.attributionUrlBox.addValueChangeHandler(createStringValueChangeHandler(this.attributionUrlBox));
-		this.altitudeBox.addValidator(createDoubleValidator(0, Double.POSITIVE_INFINITY));
-		this.altitudeBox.addValueChangeHandler(createStringValueChangeHandler(this.altitudeBox));
-		this.directionVerticalBox.addValidator(createDoubleValidator(-360, 360));
-		this.directionVerticalBox.addValueChangeHandler(createStringValueChangeHandler(this.directionVerticalBox));
-		this.directionHorizontalBox.addValidator(createDoubleValidator(-360, 360));
-		this.directionHorizontalBox.addValueChangeHandler(createStringValueChangeHandler(this.directionHorizontalBox));
-		this.accuracyBox.addValidator(createDoubleValidator(0, 10));
-		this.accuracyBox.addValueChangeHandler(createStringValueChangeHandler(this.accuracyBox));
+		this.attributionUrlBox.addValueChangeHandler(this.createStringValueChangeHandler(this.attributionUrlBox));
+		this.altitudeBox.addValidator(this.createDoubleValidator(0, Double.POSITIVE_INFINITY));
+		this.altitudeBox.addValueChangeHandler(this.createStringValueChangeHandler(this.altitudeBox));
+		this.directionVerticalBox.addValidator(this.createDoubleValidator(-360, 360));
+		this.directionVerticalBox.addValueChangeHandler(this.createStringValueChangeHandler(this.directionVerticalBox));
+		this.directionHorizontalBox.addValidator(this.createDoubleValidator(-360, 360));
+		this.directionHorizontalBox.addValueChangeHandler(this.createStringValueChangeHandler(this.directionHorizontalBox));
+		this.accuracyBox.addValidator(this.createDoubleValidator(0, 10));
+		this.accuracyBox.addValueChangeHandler(this.createStringValueChangeHandler(this.accuracyBox));
 	}
 
 	private BlankValidator<String> createDoubleValidator(double min, double max) {
@@ -367,7 +388,7 @@ public class AddSensorModal extends Composite {
 						this.measurandList.setSelectedIndex(0);
 						this.measurandMap.entrySet().forEach(entry -> this.measurandList
 								.addItem(entry.getKey().toString(), entry.getValue().getDisplayName()));
-						requestUnits();
+						this.requestUnits();
 					} else {
 						LOGGER.log(Level.WARNING, "Failure requesting the measurands.");
 					}
@@ -417,41 +438,11 @@ public class AddSensorModal extends Composite {
 		this.unitList.clear();
 		this.unitList.setSelectedIndex(0);
 		this.unitMap.entrySet().stream().filter(entry -> entry.getValue().getMeasurandId() == measurandId)
-				.forEach(entry -> this.unitList.addItem(entry.getKey().toString(), entry.getValue().getDisplayName()));
+		.forEach(entry -> this.unitList.addItem(entry.getKey().toString(), entry.getValue().getDisplayName()));
 	}
 
 	public void open() {
 		this.modal.open();
 	}
 
-	@UiHandler("closeButton")
-	public void onCloseButtonClicked(ClickEvent e) {
-		this.modal.close();
-	}
-
-	@UiHandler("confirmButton")
-	public void onConfirmButtonClicked(ClickEvent e) {
-		CreateSensorRequest request = new CreateSensorRequest();
-		request.setAccuracy(Double.valueOf(this.accuracyBox.getValue()));
-		request.setAltitudeAboveGround(Double.valueOf(this.altitudeBox.getValue()));
-		request.setAttributionText(this.attributionTextBox.getValue());
-		request.setAttributionURL(this.attributionUrlBox.getValue());
-		request.setDirectionHorizontal(Double.valueOf(this.directionHorizontalBox.getValue()));
-		request.setDirectionVertical(Double.valueOf(this.directionVerticalBox.getValue()));
-		request.setLatitude(Double.valueOf(this.latitudeBox.getValue()));
-		request.setLongitude(Double.valueOf(this.longitudeBox.getValue()));
-		request.setLicenseId(Integer.valueOf(this.licenseList.getValue()));
-		request.setMeasurandId(Integer.valueOf(this.measurandList.getValue()));
-		request.setSensorModel(this.sensorModelBox.getValue());
-		request.setUnitId(Integer.valueOf(this.unitList.getValue()));
-		GeneralService.Util.getInstance().createSensor(request, new DefaultAsyncCallback<ActionResult>(result -> {
-			MaterialToast.fireToast(result.getErrorMessage());
-			if (result.getActionResultType() == ActionResultType.SUCCESSFUL) {
-				this.modal.close();
-				this.listManager.updateLists();
-			}
-		}, caught -> {
-			LOGGER.log(Level.WARNING, "Failure creating the sensor.");
-		}, false));
-	}
 }

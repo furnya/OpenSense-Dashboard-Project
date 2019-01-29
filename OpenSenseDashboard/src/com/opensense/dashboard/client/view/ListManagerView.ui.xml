@@ -16,9 +16,11 @@
 	}
 </ui:style>
 
-<bh:Div addStyleNames="{style.center}">
+<bh:Div>
 	<m:MaterialCollapsible ui:field="collapsible" addStyleNames="list-collapsible {style.margin}"/>
-	<d:Spinner ui:field="spinner" size="LARGE" display="NONE" addStyleNames="margin-top-10 {style.center}"/>
+	<bh:Div addStyleNames="{style.center}">
+		<d:Spinner ui:field="spinner" size="LARGE" display="NONE" addStyleNames="margin-top-10 {style.center}"/>
+	</bh:Div>
 </bh:Div>
 
 </ui:UiBinder>

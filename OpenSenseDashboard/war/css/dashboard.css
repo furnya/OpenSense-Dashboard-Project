@@ -195,6 +195,19 @@
     background-color: #404040;
 }
 
+.modal > ::-webkit-scrollbar {
+   	width: 8px;
+    background-color: #F5F5F5;
+}
+.modal > ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #404040;
+}
+.modal > ::-webkit-scrollbar-track {
+    background-color: #fff;
+}
+
 .btn.d-btn, .btn.d-btn:active, .btn.d-btn:focus, .btn.d-btn:visited{
 	 background-color: #606060;
 	 overflow: hidden;
@@ -725,3 +738,7 @@ input:focus+label{
 	-webkit-filter: blur(3px);
 }
 
+.modal input:focus {
+	border: none;
+	box-shadow: none;
+}

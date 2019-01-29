@@ -12,10 +12,8 @@
 		type="com.opensense.dashboard.client.gui.GUIImageBundle" field="gui" />
 
 	<ui:style>
-	.add-sensor-modal{
-	}
 	.max> div > ul {
-    max-height: 125px!important;
+   		 max-height: 125px!important;
 	}
 	.mapContainer{
 		width: 60%;
@@ -32,19 +30,19 @@
 	.locBoxContainer > *{
 		width: 100%;
 	}
-	.modalHeader{
+	.modalHeader{ 
 		font-size: 200%;
 		text-transform: uppercase;
 	}
 	</ui:style>
 
-	<m:MaterialModal ui:field="modal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="800" addStyleNames="{style.add-sensor-modal}">
+	<m:MaterialModal ui:field="modal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="800" addStyleNames="modal">
        <m:MaterialModalContent ui:field="content">
            <m:MaterialLabel text="{lang.createSensor}" addStyleNames="{style.modalHeader}"/>
            <m:MaterialListBox placeholder="{lang.measurand}" ui:field="measurandList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
            <m:MaterialListBox placeholder="{lang.unit}" ui:field="unitList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
            <m:MaterialListBox placeholder="{lang.license}" ui:field="licenseList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
-           <bh:Div addStyleNames="flex {style.locContainer}">
+           <bh:Div addStyleNames="flex ontainer}">
 	           <bh:Div ui:field="map" addStyleNames="round-corners {style.mapContainer}"/>
 	           <bh:Div addStyleNames="{style.locBoxContainer}">
 		   	   		<m:MaterialTextBox textColor="BLACK" ui:field="latitudeBox" label="{lang.latitude}" />
@@ -59,6 +57,11 @@
            <m:MaterialTextBox textColor="BLACK" ui:field="accuracyBox" label="{lang.accuracy} (0-10)"/>
            <m:MaterialTextBox textColor="BLACK" ui:field="attributionTextBox" label="{lang.attributionText}"/>
            <m:MaterialTextBox textColor="BLACK" ui:field="attributionUrlBox" label="{lang.attributionURL}"/>
+       	   <g:VerticalPanel>
+       	   		<g:FormPanel ui:field="uploadForm">
+       	   			<g:FileUpload ui:field="fileUpload" name="filename"/>
+       	   		</g:FormPanel>
+       	   </g:VerticalPanel>
        </m:MaterialModalContent>
        <m:MaterialModalFooter>
            <m:MaterialButton ui:field="confirmButton" enabled="false" text="{lang.confirm}" addStyleNames="d-btn"/>
