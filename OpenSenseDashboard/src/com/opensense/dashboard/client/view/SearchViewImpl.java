@@ -6,13 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.maps.client.base.LatLngBounds;
@@ -27,7 +28,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.event.AddSensorsToFavoriteListEvent;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
-import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.MeasurandIconHelper;
@@ -142,15 +142,9 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		this.initPager();
 		this.showNoDataIndicator(false);
 		this.showDataContainer(false);
-		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
-		autoOptions.setTypes(AutocompleteType.GEOCODE);
-		this.autoComplete = Autocomplete.newInstance(this.searchInput.getElement(), autoOptions);
+		this.initAutoComplete();
 		this.buildValidators();
-		this.addToListButton.add(new Image(GUIImageBundle.INSTANCE.listIconSvg().getSafeUri().asString()));
-
-		this.container.addDomHandler(event -> this.hideListDropDown(), MouseWheelEvent.getType());
-		Window.addResizeHandler(event ->  this.hideListDropDown());
-		this.listDropDown.addMouseWheelHandler(MouseWheelEvent::stopPropagation);
+		this.bindHandler();
 	}
 
 	@UiHandler("searchButton")
@@ -229,6 +223,17 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 		this.onSelectedSensorsChanged();
 	}
 
+	private void bindHandler() {
+		this.maxSensors.addKeyUpHandler(event -> {
+			if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				this.clickElement(this.searchButton.getElement());
+			}
+		});
+		this.container.addDomHandler(event -> this.hideListDropDown(), MouseWheelEvent.getType());
+		Window.addResizeHandler(event ->  this.hideListDropDown());
+		this.listDropDown.addMouseWheelHandler(MouseWheelEvent::stopPropagation);
+	}
+
 	private void onShownSensorsChanged() {
 		this.selectAllButton.setEnabled(!this.shownSensorIds.isEmpty());
 	}
@@ -241,6 +246,12 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	@Override
 	public void initView() {
 		// init UI Elements if needed
+	}
+
+	public void initAutoComplete() {
+		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
+		autoOptions.setTypes(AutocompleteType.GEOCODE);
+		this.autoComplete = Autocomplete.newInstance(this.searchInput.getElement(), autoOptions);
 	}
 
 	@Override
@@ -515,4 +526,8 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 	private void showListDropDown() {
 		this.listDropDown.getElement().removeClassName("display-none-important");
 	}
+
+	private native void clickElement(Element element) /*-{
+		element.click();
+	}-*/;
 }

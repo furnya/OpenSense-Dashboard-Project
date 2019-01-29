@@ -50,13 +50,7 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 
 	private static final Logger LOGGER = Logger.getLogger(AppController.class.getName());
 
-	private static final int MAX_FAVORITE_SENSORS = 1500;
-
-	/**
-	 * Final reference to this object so the appController's functions can be used in event handlers
-	 */
-	@SuppressWarnings("unused")
-	private final AppController instance = this;
+	private static final int MAX_FAVORITE_SENSORS = 1000;
 
 	/**
 	 * Handler manager mechanism for passing events and registering to be
@@ -305,7 +299,6 @@ public class AppController implements IPresenter, ValueChangeHandler<String> {
 			}
 		}
 		return idsAsList;
-
 	}
 
 	/**

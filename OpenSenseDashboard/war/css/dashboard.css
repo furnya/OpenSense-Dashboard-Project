@@ -178,7 +178,11 @@
     height: 100%;
     max-height: calc(100vh - 65px);
     max-width: calc(100vw - 90px);
-    /* overflow: auto; */
+    overflow: auto;
+}
+
+#toast-container{
+	max-width: 40% !important;
 }
 
 ::-webkit-scrollbar {
@@ -521,6 +525,7 @@ input:focus+label{
 }
 
 .info-growl{
+	max-width: 40vw;
 	background-color: #42DCA3 !important;
 	border-radius: 6px !important;
 }
