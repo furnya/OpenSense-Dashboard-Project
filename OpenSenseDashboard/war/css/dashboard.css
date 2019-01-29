@@ -407,7 +407,6 @@ input:focus+label{
 }
 .visPanel > * {
 	flex: 1 0 21%;
-	width: max-content;
 }
 .visPanel > button {
 	line-height: 2em;

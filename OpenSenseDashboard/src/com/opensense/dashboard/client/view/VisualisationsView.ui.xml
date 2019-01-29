@@ -67,6 +67,7 @@
 .datepicker{
 	margin-top: 0;
 	margin-right: 10px;
+	margin-left: 10px;
 	height: 5vh;
 }
 .visPanel {
@@ -110,7 +111,7 @@
 <bh:Div ui:field="container" addStyleNames="window-height flex">
 	<bh:Div ui:field="dataContainer" addStyleNames="{style.dataContainer}">
 		<bh:Div b:id="timespan_vis_panel" addStyleNames="{style.panel} {style.visPanel} visPanel round-corners">
-			<m:MaterialLabel textColor="WHITE" text="{lang.timespan}"/>
+			<m:MaterialLabel textColor="WHITE" text="{lang.timespan}" addStyleNames="margin-right-10 margin-left-10"/>
 			<m:MaterialTooltip text="{lang.customRange}">
 				<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn {style.range-button}"/>
 			</m:MaterialTooltip>
