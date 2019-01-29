@@ -208,6 +208,9 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return ar;
 		}
 		ar.setErrorMessage(valuesParsed);
+		if(ServerLanguages.noValuesParsed().equals(valuesParsed)) {
+			ar.setActionResultType(ActionResultType.FAILED);
+		}
 		return ar;
 	}
 
