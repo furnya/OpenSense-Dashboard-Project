@@ -8,9 +8,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.opensense.dashboard.client.utils.AddSensorModal;
 import com.opensense.dashboard.client.utils.ListManager;
 import com.opensense.dashboard.client.utils.ListManagerOptions;
 
@@ -33,7 +31,7 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 
 	@UiField
 	MaterialButton createListButton;
-	
+
 	@UiField
 	MaterialButton createSensor;
 
@@ -45,12 +43,10 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	public void onCreateListButtonClicked(ClickEvent e) {
 		this.listManager.createNewList();
 	}
-	
+
 	@UiHandler("createSensor")
 	public void onCreateSensorClicked(ClickEvent e) {
-		AddSensorModal modal = new AddSensorModal(this.listManager);
-		RootPanel.get().add(modal);
-		modal.open();
+		this.presenter.requestDataAndShowCreateSensorModal();
 	}
 
 	@Override
@@ -77,7 +73,7 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	public void setCreateListButtonEnabled(boolean enabled) {
 		this.createListButton.setEnabled(enabled);
 	}
-	
+
 	@Override
 	public void setCreateSensorButtonEnabled(boolean enabled) {
 		this.createSensor.setEnabled(enabled);

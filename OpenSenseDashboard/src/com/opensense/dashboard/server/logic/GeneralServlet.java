@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.server.util.CSVFileParser;
 import com.opensense.dashboard.server.util.ClientRequestHandler;
 import com.opensense.dashboard.server.util.DatabaseManager;
 import com.opensense.dashboard.server.util.JsonAttributes;
@@ -26,7 +27,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	private static final Logger LOGGER = Logger.getLogger(GeneralServlet.class.getName());
 
-	
+
 	@Override
 	public Response getDataFromRequest(Request searchRequest) {
 		Response response = new Response();
@@ -141,7 +142,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}
 		String withID = "";
 		try{
-			String response = ClientRequestHandler.getInstance().sendCreateSensorRequest(request);
+			String response = ClientRequestHandler.getInstance().sendCreateSensorRequest(request, CSVFileParser.parseValues());
 			JSONObject sensor = new JSONObject(response);
 			withID = " "+Languages.with()+" ID "+sensor.getInt(JsonAttributes.ID.getNameString());
 		}catch(IOException e) {
@@ -149,6 +150,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			ar.setErrorMessage(Languages.invalidParameters());
 			return ar;
 		}
+
 		ActionResult ar = new ActionResult(ActionResultType.SUCCESSFUL);
 		ar.setErrorMessage(Languages.sensorCreated()+withID);
 		return ar;

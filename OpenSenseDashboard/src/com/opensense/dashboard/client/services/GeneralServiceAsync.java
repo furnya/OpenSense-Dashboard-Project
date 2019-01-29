@@ -4,7 +4,6 @@ package com.opensense.dashboard.client.services;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.Request;

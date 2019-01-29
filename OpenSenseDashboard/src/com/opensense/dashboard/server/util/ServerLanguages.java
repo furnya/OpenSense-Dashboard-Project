@@ -291,7 +291,7 @@ public class ServerLanguages {
 			return "La contrase\u00F1a introducida es incorrecta";
 		}
 	}
-	
+
 	public static String usernameOrEmailExists() {
 		if(de) {
 			return "Es existiert schon ein Benutzer mit dieser Email-Adresse oder diesem Benutzernamen";
@@ -299,4 +299,14 @@ public class ServerLanguages {
 			return "A user with this email or this username already exists";
 		}
 	}
+
+
+	public static String succesfullyUploadedFile() {
+		if(de) {
+			return "Datei wurde erfolgreich hochgeladen";
+		}else {
+			return "The file get succesfully uploaded";
+		}
+	}
+
 }
