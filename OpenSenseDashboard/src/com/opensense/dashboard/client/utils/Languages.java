@@ -1717,4 +1717,20 @@ public class Languages {
 			return "Upload file";
 		}
 	}
+	
+	public static String addValues() {
+		if(de) {
+			return "Werte zu einem Sensor hinzufügen";
+		} else {
+			return "Add values for a sensor";
+		}
+	}
+	
+	public static String addValuesShort() {
+		if(de) {
+			return "Werte hinzufügen";
+		} else {
+			return "Add values";
+		}
+	}
 }

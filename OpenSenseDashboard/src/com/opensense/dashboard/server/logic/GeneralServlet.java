@@ -18,6 +18,7 @@ import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.server.util.SessionUser;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
+import com.opensense.dashboard.shared.AddValuesRequest;
 import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
@@ -193,6 +194,21 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return SessionUser.getInstance().getUsername();
 		}
 		return null;
+	}
+
+	@Override
+	public ActionResult addValues(AddValuesRequest request) {
+		ActionResult ar = new ActionResult(ActionResultType.SUCCESSFUL);
+		String valuesParsed = ServerLanguages.allValueParsed();
+		try {
+			valuesParsed = ClientRequestHandler.getInstance().addValues(request.getSensorId(), CSVFileParser.parseValues());
+		}catch(IOException e) {
+			ar.setActionResultType(ActionResultType.FAILED);
+			ar.setErrorMessage(ServerLanguages.noValuesParsed());
+			return ar;
+		}
+		ar.setErrorMessage(valuesParsed);
+		return ar;
 	}
 
 }

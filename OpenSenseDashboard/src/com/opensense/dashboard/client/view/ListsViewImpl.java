@@ -34,6 +34,9 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 
 	@UiField
 	MaterialButton createSensor;
+	
+	@UiField
+	MaterialButton addValuesButton;
 
 	public ListsViewImpl() {
 		this.initWidget(uiBinder.createAndBindUi(this));
@@ -47,6 +50,11 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	@UiHandler("createSensor")
 	public void onCreateSensorClicked(ClickEvent e) {
 		this.presenter.requestDataAndShowCreateSensorModal();
+	}
+	
+	@UiHandler("addValuesButton")
+	public void onAddValuesButtonClicked(ClickEvent e) {
+		this.presenter.requestMySensorsAndShowAddValuesModal();
 	}
 
 	@Override
@@ -77,6 +85,11 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	@Override
 	public void setCreateSensorButtonEnabled(boolean enabled) {
 		this.createSensor.setEnabled(enabled);
+	}
+	
+	@Override
+	public void setAddValuesButtonEnabled(boolean enabled) {
+		this.addValuesButton.setEnabled(enabled);
 	}
 
 }
