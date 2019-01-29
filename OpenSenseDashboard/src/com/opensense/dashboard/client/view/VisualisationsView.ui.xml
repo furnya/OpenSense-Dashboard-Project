@@ -92,7 +92,7 @@
 .no-data-div{
 	background: #606060;
 	height: 38vw;
-	max-height: 75vh;
+    max-height: 73vh;
 	padding: 0 10%;
 }
 .no-data-label{

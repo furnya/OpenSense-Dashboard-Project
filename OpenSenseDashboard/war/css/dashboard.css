@@ -178,7 +178,7 @@
     height: 100%;
     max-height: calc(100vh - 65px);
     max-width: calc(100vw - 90px);
-    overflow: auto;
+    /* overflow: auto; */
 }
 
 ::-webkit-scrollbar {

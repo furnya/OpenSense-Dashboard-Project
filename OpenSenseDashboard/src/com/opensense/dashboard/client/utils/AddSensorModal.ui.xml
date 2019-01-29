@@ -16,8 +16,8 @@
    		 max-height: 125px!important;
 	}
 	.mapContainer{
-		width: 60%;
-		height: 100%;
+	    width: 400px;
+    	height: 225px;
 	}
 	.locContainer{
 		width: 100%;
