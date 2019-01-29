@@ -46,6 +46,7 @@ public class CSVFileParser {
 			}
 		}
 		br.close();
+		new File(System.getenv("tmp"), SessionUser.getInstance().getUserId() + "_" + SessionUser.getInstance().getUsername()+".txt").delete();
 		return values;
 	}
 

@@ -2,8 +2,6 @@ package com.opensense.dashboard.client.utils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.gwtbootstrap3.client.ui.Input;
 import org.gwtbootstrap3.client.ui.html.Div;
@@ -32,20 +30,18 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.AppController;
-import com.opensense.dashboard.client.services.GeneralService;
-import com.opensense.dashboard.shared.ActionResult;
-import com.opensense.dashboard.shared.ActionResultType;
+import com.opensense.dashboard.client.view.ListsView.Presenter;
 import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.License;
 import com.opensense.dashboard.shared.Measurand;
-import com.opensense.dashboard.shared.Response;
-import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.Unit;
 
 import gwt.material.design.client.base.validator.BlankValidator;
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialListBox;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialModalContent;
@@ -59,25 +55,20 @@ public class AddSensorModal extends Composite {
 
 	private static AddSensorModalUiBinder uiBinder = GWT.create(AddSensorModalUiBinder.class);
 
-	private static final Logger LOGGER = Logger.getLogger(AddSensorModal.class.getName());
-
-	private Map<Integer, Measurand> measurandMap;
 	private Map<Integer, Unit> unitMap;
-	private Map<Integer, License> licenseMap;
 	private Map<MaterialTextBox, Boolean> validMap = new HashMap<>();
 
 	private MapOptions mapOptions;
 	private MapWidget mapWidget;
-	private Autocomplete autoComplete;
 	private Marker marker;
+
+	private Presenter presenter;
 
 	@UiField
 	Div map;
 
 	@UiField
 	Input placeBox;
-
-	private ListManager listManager;
 
 	@UiField
 	MaterialModal modal;
@@ -133,27 +124,29 @@ public class AddSensorModal extends Composite {
 	@UiField
 	FileUpload fileUpload;
 
-	public AddSensorModal(ListManager listManager) {
-		this.listManager = listManager;
+	@UiField
+	MaterialImage infoIcon;
+
+	public AddSensorModal(Presenter presenter) {
+		this.presenter = presenter;
 		this.initWidget(uiBinder.createAndBindUi(this));
-		this.requestMeasurands();
 		this.measurandList.addValueChangeHandler(event -> {
 			this.filterUnits(Integer.valueOf(event.getValue()));
 		});
-		this.requestLicenses();
+		this.modal.setId("dashboard-modal");
 		this.initMap();
 		this.initAutoComplete();
 		this.initMarker();
 		this.addValidators();
 		this.initValidMap();
-		this.addFileUpload();
+		this.initFileUpload();
 		//Remove the modal from DOM to prevent multiple modal which stays forever in the DOM
+		this.modal.addCloseHandler(event -> RootPanel.get().remove(RootPanel.get("dashboard-modal")));
 	}
 
 	@UiHandler("closeButton")
 	public void onCloseButtonClicked(ClickEvent e) {
 		this.modal.close();
-		this.modal.removeFromParent();
 	}
 
 	@UiHandler("confirmButton")
@@ -161,7 +154,7 @@ public class AddSensorModal extends Composite {
 		this.uploadForm.submit();
 	}
 
-	private void addFileUpload() {
+	private void initFileUpload() {
 		this.uploadForm.setAction(GWT.getHostPageBaseURL() + "fileupload");
 		this.uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
 		this.uploadForm.setMethod(FormPanel.METHOD_POST);
@@ -187,18 +180,8 @@ public class AddSensorModal extends Composite {
 				request.setMeasurandId(Integer.valueOf(this.measurandList.getValue()));
 				request.setSensorModel(this.sensorModelBox.getValue());
 				request.setUnitId(Integer.valueOf(this.unitList.getValue()));
-				GeneralService.Util.getInstance().createSensor(request, new DefaultAsyncCallback<ActionResult>(result -> {
-					if (result.getActionResultType() == ActionResultType.SUCCESSFUL) {
-						this.modal.close();
-						this.modal.removeFromParent();
-						this.listManager.updateLists();
-						AppController.showSuccess(result.getErrorMessage());
-					}else {
-						AppController.showError(result.getErrorMessage());
-					}
-				}, caught -> {
-					LOGGER.log(Level.WARNING, "Failure creating the sensor.");
-				}, false));
+				this.presenter.createSensorRequest(request);
+				this.modal.close();
 			}else {
 				AppController.showError(event.getResults());
 			}
@@ -329,10 +312,11 @@ public class AddSensorModal extends Composite {
 	private void initAutoComplete() {
 		AutocompleteOptions autoOptions = AutocompleteOptions.newInstance();
 		autoOptions.setTypes(AutocompleteType.GEOCODE);
-		this.autoComplete = Autocomplete.newInstance(this.placeBox.getElement(), autoOptions);
-		this.autoComplete.addPlaceChangeHandler(event -> {
-			if ((this.autoComplete.getPlace() != null) && (this.autoComplete.getPlace().getGeometry() != null)) {
-				LatLngBounds bounds = this.autoComplete.getPlace().getGeometry().getViewPort();
+
+		Autocomplete autoComplete = Autocomplete.newInstance(this.placeBox.getElement(), autoOptions);
+		autoComplete.addPlaceChangeHandler(event -> {
+			if ((autoComplete.getPlace() != null) && (autoComplete.getPlace().getGeometry() != null)) {
+				LatLngBounds bounds = autoComplete.getPlace().getGeometry().getViewPort();
 				this.mapWidget.fitBounds(bounds);
 			}
 		});
@@ -376,64 +360,6 @@ public class AddSensorModal extends Composite {
 		this.mapWidget.setVisible(true);
 	}
 
-	private void requestMeasurands() {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MEASURAND, false);
-		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(),
-				new DefaultAsyncCallback<Response>(result -> {
-					if ((result != null) && (result.getResultType() != null)
-							&& requestBuilder.getRequest().getRequestType().equals(result.getResultType())
-							&& (result.getMeasurands() != null)) {
-						this.measurandMap = result.getMeasurands();
-						this.measurandList.clear();
-						this.measurandList.setSelectedIndex(0);
-						this.measurandMap.entrySet().forEach(entry -> this.measurandList
-								.addItem(entry.getKey().toString(), entry.getValue().getDisplayName()));
-						this.requestUnits();
-					} else {
-						LOGGER.log(Level.WARNING, "Failure requesting the measurands.");
-					}
-				}, caught -> {
-					LOGGER.log(Level.WARNING, "Failure requesting the measurands.");
-				}, false));
-	}
-
-	private void requestUnits() {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.UNIT, false);
-		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(),
-				new DefaultAsyncCallback<Response>(result -> {
-					if ((result != null) && (result.getResultType() != null)
-							&& requestBuilder.getRequest().getRequestType().equals(result.getResultType())
-							&& (result.getUnits() != null)) {
-						this.unitMap = result.getUnits();
-						this.filterUnits(Integer.valueOf(this.measurandList.getValue()));
-					} else {
-						LOGGER.log(Level.WARNING, "Failure requesting the units.");
-					}
-				}, caught -> {
-					LOGGER.log(Level.WARNING, "Failure requesting the units.");
-				}, false));
-	}
-
-	private void requestLicenses() {
-		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.LICENSE, false);
-		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(),
-				new DefaultAsyncCallback<Response>(result -> {
-					if ((result != null) && (result.getResultType() != null)
-							&& requestBuilder.getRequest().getRequestType().equals(result.getResultType())
-							&& (result.getLicenses() != null)) {
-						this.licenseMap = result.getLicenses();
-						this.licenseList.clear();
-						this.licenseList.setSelectedIndex(0);
-						this.licenseMap.entrySet().forEach(entry -> this.licenseList.addItem(entry.getKey().toString(),
-								entry.getValue().getFullName()));
-					} else {
-						LOGGER.log(Level.WARNING, "Failure requesting the units.");
-					}
-				}, caught -> {
-					LOGGER.log(Level.WARNING, "Failure requesting the units.");
-				}, false));
-	}
-
 	public void filterUnits(Integer measurandId) {
 		this.unitList.clear();
 		this.unitList.setSelectedIndex(0);
@@ -443,6 +369,25 @@ public class AddSensorModal extends Composite {
 
 	public void open() {
 		this.modal.open();
+	}
+
+	public void setMeasurands(Map<Integer, Measurand> measurands) {
+		this.measurandList.clear();
+		this.measurandList.setSelectedIndex(0);
+		measurands.entrySet().forEach(entry -> this.measurandList
+				.addItem(entry.getKey().toString(), entry.getValue().getDisplayName()));
+	}
+
+	public void setUnits(Map<Integer, Unit> units) {
+		this.unitMap = units;
+		this.filterUnits(Integer.valueOf(this.measurandList.getValue()));
+	}
+
+	public void setLicences(Map<Integer, License> licenses) {
+		this.licenseList.clear();
+		this.licenseList.setSelectedIndex(0);
+		licenses.entrySet().forEach(entry -> this.licenseList.addItem(entry.getKey().toString(),
+				entry.getValue().getFullName()));
 	}
 
 }
