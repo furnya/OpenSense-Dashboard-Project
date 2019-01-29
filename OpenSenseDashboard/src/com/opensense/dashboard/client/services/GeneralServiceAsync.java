@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.AddValuesRequest;
 import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
@@ -21,4 +22,5 @@ public interface GeneralServiceAsync {
 	void createSensor(CreateSensorRequest request, AsyncCallback<ActionResult> asyncCallback);
 	void deleteSensorsFromMySensors(List<Integer> sensorIds, AsyncCallback<ActionResult> asyncCallback);
 	void getUserName(AsyncCallback<String> asyncCallback);
+	void addValues(AddValuesRequest request, AsyncCallback<ActionResult> asyncCallback);
 }

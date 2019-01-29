@@ -6,6 +6,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.opensense.dashboard.shared.ActionResult;
+import com.opensense.dashboard.shared.AddValuesRequest;
 import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
@@ -40,6 +41,7 @@ public interface GeneralService extends RemoteService {
 	ActionResult addSensorsToUserList(int listId, List<Integer> sensors);
 	ActionResult deleteSensorsFromUserList(int listId, List<Integer> sensors);
 	ActionResult createSensor(CreateSensorRequest request);
+	ActionResult addValues(AddValuesRequest request);
 	ActionResult deleteSensorsFromMySensors(List<Integer> sensorIds);
 	String getUserName();
 }
