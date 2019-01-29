@@ -127,19 +127,22 @@ public class AddSensorModal extends Composite {
 	@UiField
 	MaterialImage infoIcon;
 
+	@UiField
+	Div infoContainer;
+
 	public AddSensorModal(Presenter presenter) {
 		this.presenter = presenter;
 		this.initWidget(uiBinder.createAndBindUi(this));
-		this.measurandList.addValueChangeHandler(event -> {
-			this.filterUnits(Integer.valueOf(event.getValue()));
-		});
 		this.modal.setId("dashboard-modal");
+
 		this.initMap();
 		this.initAutoComplete();
 		this.initMarker();
 		this.addValidators();
 		this.initValidMap();
 		this.initFileUpload();
+		this.initInfoContainer();
+		this.measurandList.addValueChangeHandler(event -> this.filterUnits(Integer.valueOf(event.getValue())));
 		//Remove the modal from DOM to prevent multiple modal which stays forever in the DOM
 		this.modal.addCloseHandler(event -> RootPanel.get().remove(RootPanel.get("dashboard-modal")));
 	}
@@ -376,11 +379,16 @@ public class AddSensorModal extends Composite {
 		this.measurandList.setSelectedIndex(0);
 		measurands.entrySet().forEach(entry -> this.measurandList
 				.addItem(entry.getKey().toString(), entry.getValue().getDisplayName()));
+		if((this.measurandList.getValue() != null) && (this.unitMap != null)) {
+			this.filterUnits(Integer.valueOf(this.measurandList.getValue()));
+		}
 	}
 
 	public void setUnits(Map<Integer, Unit> units) {
 		this.unitMap = units;
-		this.filterUnits(Integer.valueOf(this.measurandList.getValue()));
+		if(this.measurandList.getValue() != null) {
+			this.filterUnits(Integer.valueOf(this.measurandList.getValue()));
+		}
 	}
 
 	public void setLicences(Map<Integer, License> licenses) {
@@ -390,4 +398,13 @@ public class AddSensorModal extends Composite {
 				entry.getValue().getFullName()));
 	}
 
+	private void initInfoContainer() {
+		this.infoContainer.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
+		this.infoIcon.addMouseOverHandler(event -> {
+			this.infoContainer.getElement().getStyle().clearDisplay();
+		});
+		this.infoIcon.addMouseOutHandler(event -> {
+			this.infoContainer.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
+		});
+	}
 }

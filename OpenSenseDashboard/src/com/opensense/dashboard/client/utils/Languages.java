@@ -1708,4 +1708,13 @@ public class Languages {
 			return "Upload file";
 		}
 	}
+
+	public static String uploadInfo() {
+		if(de) {
+			return "Laden Sie eine Datei im CSV-Format hoch, in dem Werte mit Zeitstempel für den Sensor stehen. Spalten sollten wie folgt aussehen  "
+					+ "[Zeitstempel];[WERT] -> MM.DD.YYYY,HH:mm:ss;Z.z. Zum Bespiel 01.01.2000,12:01:00;24.4 ";
+		} else {
+			return "Upload file";
+		}
+	}
 }
