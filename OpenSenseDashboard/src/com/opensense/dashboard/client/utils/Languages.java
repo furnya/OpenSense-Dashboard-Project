@@ -1757,4 +1757,12 @@ public class Languages {
 			return "This field cannot be empty";
 		}
 	}
+	
+	public static String invalidPassword() {
+		if(de) {
+			return "Das Password muss mindestens 8 Zeichen, eine Zahl, einen Groß- und einen Kleinbuchstaben enthalten.";
+		} else {
+			return "The password must be at least 8 characters long and contain one or more numbers, lowercase and uppercase letters.";
+		}
+	}
 }
