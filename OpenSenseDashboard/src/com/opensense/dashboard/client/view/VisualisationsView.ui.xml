@@ -83,6 +83,7 @@
 .dataContainer {
 	margin-right: 10px;
 	width: 60%!important;
+	height: 93vh;
 }
 .chartContainer > *{
 	width:100% !important;
@@ -92,8 +93,8 @@
 }
 .no-data-div{
 	background: #606060;
-	height: 38vw;
-    max-height: 73vh;
+	width: 100%;
+	height: 100%;
 	padding: 0 10%;
 }
 .no-data-label{
@@ -110,7 +111,7 @@
 
 <bh:Div ui:field="container" addStyleNames="window-height flex">
 	<bh:Div ui:field="dataContainer" addStyleNames="{style.dataContainer}">
-		<bh:Div b:id="timespan_vis_panel" addStyleNames="{style.panel} {style.visPanel} visPanel round-corners">
+		<bh:Div ui:field="visPanel" b:id="timespan_vis_panel" addStyleNames="{style.panel} {style.visPanel} visPanel round-corners">
 			<m:MaterialLabel textColor="WHITE" text="{lang.timespan}" addStyleNames="margin-right-10 margin-left-10"/>
 			<m:MaterialTooltip text="{lang.customRange}">
 				<m:MaterialButton ui:field="customRange" text="{lang.customRange}" textColor="WHITE" waves="LIGHT" addStyleNames="d-btn {style.range-button}"/>
@@ -134,11 +135,11 @@
 			</m:MaterialTooltip>
 		</bh:Div>
 		<d:Spinner size="MEDIUM" ui:field="viewSpinner" display="NONE" />
-		<bh:Div b:id="chart_vis_container">
+		<bh:Div ui:field="chartOrLabelContainer" b:id="chart_vis_container" height="77vh">
 			<bh:Div ui:field="noDatasetsDiv" addStyleNames="{style.no-data-div} round-corners">
 				<m:MaterialLabel ui:field="noDataLabel" textColor="WHITE" text="{lang.noSensorsSelected}" addStyleNames="{style.no-data-label}"/>
 			</bh:Div>
-			<bh:Div ui:field="chartContainer" width="100%" addStyleNames="{style.chartContainer}"/>
+			<bh:Div ui:field="chartContainer" width="100%" height="inherit" addStyleNames="display-none {style.chartContainer}"/>
 		</bh:Div>
 	</bh:Div>
 	<bh:Div addStyleNames= "{style.sensor-container}">

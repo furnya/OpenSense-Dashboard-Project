@@ -35,6 +35,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.model.Size;
 import com.opensense.dashboard.client.utils.ChartBounds;
@@ -95,6 +96,15 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	@UiField
 	MaterialLabel noDataLabel;
+	
+	@UiField
+	Div chartOrLabelContainer;
+	
+	@UiField
+	Div visPanel;
+	
+	@UiField
+	Div dataContainer;
 
 	private static VisualisationsViewUiBinder uiBinder = GWT.create(VisualisationsViewUiBinder.class);
 
@@ -137,6 +147,14 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 			this.presenter.onSelectedSensorsChange(event.getSelectedIds());
 		});
 		this.presenter.setListManager(this.listManager);
+		this.addResizeHandler();
+	}
+	
+	private void addResizeHandler() {
+		Window.addResizeHandler(event -> {
+			this.chartOrLabelContainer.setWidth("100%");
+			this.chartOrLabelContainer.setHeight((this.dataContainer.getOffsetHeight()-10-this.visPanel.getOffsetHeight())+"px");
+		});
 	}
 
 	@UiHandler("customRange")
@@ -187,7 +205,6 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		Defaults.getGlobal().getAnimation().setDuration(0);
 		Defaults.getScale().getGrideLines().setColor("rgba(0,0,0,0.5)");
 		this.chart = new LineChart();
-		this.chart.getCanvas().addClassName("chart-height");
 		this.chart.getOptions().setMaintainAspectRatio(false);
 		this.chart.getOptions().setShowLines(true);
 		this.chart.getOptions().getTooltips().setIntersect(false);
@@ -246,9 +263,11 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.hideLoadingIndicator();
 		this.chartContainer.clear();
 		if((datasetMap==null) || datasetMap.isEmpty()) {
+			this.chartContainer.addStyleName("display-none");
 			this.showNoDatasetsIndicator(true);
 			return false;
 		}
+		this.chartContainer.removeStyleName("display-none");
 		this.showNoDatasetsIndicator(false);
 		this.setChartAxisX(chartBounds.getMinTimestamp(), chartBounds.getMaxTimestamp());
 		this.setChartAxisY(chartBounds.getMinValue(), chartBounds.getMaxValue());
@@ -320,7 +339,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	@Override
 	public void highlightDateRange(DateRange dateRange) {
-		String active = "active";
+		String active = "vis-button-active";
 		this.customRange.getElement().removeClassName(active);
 		this.past24Hours.getElement().removeClassName(active);
 		this.pastMonth.getElement().removeClassName(active);

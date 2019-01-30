@@ -1733,4 +1733,36 @@ public class Languages {
 			return "Add values";
 		}
 	}
+	
+	public static String numberBetween(double low, double high) {
+		if(de) {
+			return "Bitte geben Sie eine Zahl zwischen "+low+" und "+high+" ein!";
+		} else {
+			return "Please enter a number between "+low+" and "+high+"!";
+		}
+	}
+	
+	public static String validNumber() {
+		if(de) {
+			return "Bitte geben Sie eine gültige Zahl ein!";
+		} else {
+			return "Please enter a valid number!";
+		}
+	}
+	
+	public static String cannotBeEmpty() {
+		if(de) {
+			return "Dieses Feld darf nicht leer sein";
+		} else {
+			return "This field cannot be empty";
+		}
+	}
+	
+	public static String invalidPassword() {
+		if(de) {
+			return "Das Password muss mindestens 8 Zeichen, eine Zahl, einen Groß- und einen Kleinbuchstaben enthalten.";
+		} else {
+			return "The password must be at least 8 characters long and contain one or more numbers, lowercase and uppercase letters.";
+		}
+	}
 }

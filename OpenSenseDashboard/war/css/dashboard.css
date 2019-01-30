@@ -704,10 +704,6 @@ input:focus+label{
 .display-none-important{
 	display: none !important;
 }
-.chart-height{
-	height: 75vh;
-}
-
 .footer-right-container{
 	position: absolute;
 	right: 10px;
@@ -755,4 +751,7 @@ input:focus+label{
 	height: fit-content;
 	padding: 10px;
 	bottom: 30px;
+}
+.vis-button-active{
+	background-color: #42DCA3 !important;
 }
