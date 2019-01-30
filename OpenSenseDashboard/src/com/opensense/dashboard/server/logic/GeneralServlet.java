@@ -155,14 +155,14 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 		}
 
 		ActionResult ar = new ActionResult(ActionResultType.SUCCESSFUL);
-		if(request.isValuesAttached() && sensorId!=0) {
+		if(request.isValuesAttached() && (sensorId!=0)) {
 			String valuesParsed = ServerLanguages.noValuesParsed();
 			try {
 				valuesParsed = ClientRequestHandler.getInstance().addValues(sensorId, CSVFileParser.parseValues());
 			}catch(IOException e) {
 				valuesParsed = ServerLanguages.noValuesParsed();
 			}
-			ar.setErrorMessage(Languages.sensorCreated()+withID+", "+valuesParsed);
+			ar.setErrorMessage(Languages.sensorCreated()+withID+". "+valuesParsed);
 		}else {
 			ar.setErrorMessage(Languages.sensorCreated()+withID);
 		}
