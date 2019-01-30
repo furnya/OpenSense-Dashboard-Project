@@ -17,6 +17,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -113,6 +114,12 @@ public class ListCollapsibleItem extends Composite{
 
 	@UiField
 	MaterialLink favoriteLink;
+	
+	@UiField
+	MaterialTooltip addToListTooltip;
+	
+	@UiField
+	MaterialTooltip deleteSensorsTooltip;
 
 	private static ListCollapsibleItemUiBinder uiBinder = GWT.create(ListCollapsibleItemUiBinder.class);
 
@@ -124,6 +131,7 @@ public class ListCollapsibleItem extends Composite{
 		this.initWidget(uiBinder.createAndBindUi(this));
 		this.setSize(Size.MEDIUM);
 		this.showNoDataIndicator(false);
+		Window.addResizeHandler(event ->  this.hideListDropDown());
 		this.addDomHandler(event -> this.hideListDropDown(), MouseWheelEvent.getType());
 		this.listDropDown.addMouseWheelHandler(MouseWheelEvent::stopPropagation);
 	}
@@ -190,6 +198,11 @@ public class ListCollapsibleItem extends Composite{
 		this.addToListButton.setEnabled(enabled);
 		this.deleteSensorsButton.setEnabled(enabled);
 		this.showInfoButton.setEnabled(enabled);
+		if(enabled) {
+			this.deleteSensorsTooltip.reinitialize();
+		}else {
+			this.deleteSensorsTooltip.remove();
+		}
 	}
 
 	public void addDeleteButtonClickHandler(ClickHandler handler) {
@@ -335,6 +348,7 @@ public class ListCollapsibleItem extends Composite{
 	}
 
 	public void prepareForDropdown() {
+		this.addToListTooltip.remove();
 		this.hideListDropDown();
 		this.showListDropDownSpinner(true);
 		this.addToListButton.setEnabled(false);
@@ -342,6 +356,7 @@ public class ListCollapsibleItem extends Composite{
 
 	public void hideListDropDown() {
 		this.listDropDown.getElement().addClassName("display-none-important");
+		this.addToListTooltip.reinitialize();
 	}
 
 	private void showListDropDown() {

@@ -141,13 +141,13 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 
 		this.listCard.addDomHandler(event -> {
 
-			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.LISTS, true, null));
+			this.presenter.getEventBus().fireEvent(new StartTourEvent(Tours.LIST_PAGE, true));
 
 		}, ClickEvent.getType());
 
 		this.visuCard.addDomHandler(event -> {
-
-			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, null));
+			this.presenter.getEventBus().fireEvent(new StartTourEvent(Tours.VIS_PAGE, true));
+//			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, null));
 
 		}, ClickEvent.getType());
 

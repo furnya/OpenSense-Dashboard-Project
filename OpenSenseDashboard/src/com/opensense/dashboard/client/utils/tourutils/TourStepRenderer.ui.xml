@@ -54,9 +54,11 @@
 		float: left;
 	}
 	.checkbox{
-	    margin-top: 7px;
-    	color: #FFF;	
+	    margin-bottom: 10px;
 	}	
+	.checkbox label{
+		color: #FFF;	
+	}
 	.display-block{
 		display: block !important;
 	}
@@ -80,8 +82,8 @@
 				</bh:Div>
 				<bh:Span ui:field="messageSpan" color="white" addStyleNames="{style.content-text}"/>
 				<bh:Div addStyleNames="margin-top-20 {style.display-block}">
-					<bh:Div addStyleNames="{style.flaot-left}">
-						<b:CheckBox ui:field="tourCheckBox" text="{lang.dontShowTours}" value="false" addStyleNames="{style.checkbox}"/>
+					<bh:Div addStyleNames="{style.flaot-right}">
+						<m:MaterialCheckBox ui:field="tourCheckBox" text="{lang.dontShowTours}" value="false" addStyleNames="{style.checkbox}"/>
 					</bh:Div>
 					<bh:Div addStyleNames="{style.flaot-right}">
 						<b:ButtonGroup>

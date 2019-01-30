@@ -3,7 +3,6 @@ package com.opensense.dashboard.client.utils.tourutils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.gwtbootstrap3.client.ui.CheckBox;
 import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.constants.Placement;
 import org.gwtbootstrap3.client.ui.html.Div;
@@ -37,6 +36,7 @@ import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.Rectangle;
 
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialCheckBox;
 
 public class TourStepRenderer extends Composite {
 
@@ -69,7 +69,7 @@ public class TourStepRenderer extends Composite {
 	MaterialButton closeTour;
 
 	@UiField
-	CheckBox tourCheckBox;
+	MaterialCheckBox tourCheckBox;
 
 	@UiField
 	Span headerText;
@@ -211,16 +211,8 @@ public class TourStepRenderer extends Composite {
 			this.messageContainer.addStyleName(MIN_WIDTH);
 			this.nextButton.getElement().getStyle().clearDisplay();
 			this.nextButton.setEnabled(false);
-			if(!this.element.toString().contains("Input")) {
-				Element emptyNode = new Div().getElement();
-				this.element.getChild(0).appendChild(emptyNode);
-				this.javaSriptHandler = this.bindInputListener(this.element.getChild(0).getChild(0).getParentElement());
-				this.element.getChild(0).getChild(0).getParentElement().focus();
-				emptyNode.removeFromParent();
-			}else {
-				this.javaSriptHandler = this.bindInputListener(this.element);
-				this.element.focus();
-			}
+			this.javaSriptHandler = this.bindInputListener(this.element);
+			this.element.focus();
 			break;
 		default:
 			LOGGER.log(Level.WARNING, "The tourEventType can not be unset, use as defautlt Type.HINT");
@@ -489,17 +481,8 @@ public class TourStepRenderer extends Composite {
 			this.windowResizeHandler.removeHandler();
 		}
 		if((this.element != null) && (this.javaSriptHandler != null)) {
-			if(!this.element.toString().contains("Input")) {
-				Element emptyNode = new Div().getElement();
-				this.element.getChild(0).appendChild(emptyNode);
-				this.removeListener(this.element.getChild(0).getChild(0).getParentElement(), TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
-				this.element.getChild(0).getChild(0).getParentElement().blur();
-				emptyNode.removeFromParent();
-			}else {
-				this.removeListener(this.element, TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
-				this.element.blur();
-			}
-
+			this.removeListener(this.element, TourEventType.CLICK.equals(this.tourEventType) ? "click" : "keyup", this.javaSriptHandler);
+			this.element.blur();
 		}
 		if(this.renderTimer != null) {
 			this.renderTimer.cancel();
@@ -511,7 +494,6 @@ public class TourStepRenderer extends Composite {
 		this.content.getElement().getStyle().setDisplay(Display.NONE);
 		this.messageContainer.getElement().getStyle().setDisplay(Display.NONE);
 		this.messageContainer.removeStyleName(MIN_WIDTH);
-		this.nextButton.setEnabled(true);
 		this.tourContainer.clear();
 	}
 

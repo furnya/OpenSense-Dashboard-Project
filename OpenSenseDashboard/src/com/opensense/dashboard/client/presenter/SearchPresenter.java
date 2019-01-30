@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
+import com.opensense.dashboard.client.event.StartTourEvent;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.DefaultListItem;
 import com.opensense.dashboard.client.model.ParamType;
@@ -21,6 +21,7 @@ import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.RequestBuilder;
+import com.opensense.dashboard.client.utils.tourutils.Tours;
 import com.opensense.dashboard.client.view.SearchView;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
@@ -139,6 +140,7 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 			}else {
 				AppController.showError(Languages.connectionError());
 			}
+			this.eventBus.fireEvent(new StartTourEvent(Tours.SEARCH_PAGE, false));
 			runnable.run();
 		},caucht -> {
 			runnable.run();

@@ -1,7 +1,5 @@
 package com.opensense.dashboard.shared;
 
-import java.util.List;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class CreateSensorRequest implements IsSerializable{
@@ -18,6 +16,7 @@ public class CreateSensorRequest implements IsSerializable{
 	private double accuracy;
 	private String attributionText;
 	private String attributionURL;
+	private boolean valuesAttached;
 
 	public CreateSensorRequest() {
 	}
@@ -26,7 +25,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the measurandId
 	 */
 	public int getMeasurandId() {
-		return measurandId;
+		return this.measurandId;
 	}
 
 	/**
@@ -40,7 +39,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the unitId
 	 */
 	public int getUnitId() {
-		return unitId;
+		return this.unitId;
 	}
 
 	/**
@@ -54,7 +53,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the licenseId
 	 */
 	public int getLicenseId() {
-		return licenseId;
+		return this.licenseId;
 	}
 
 	/**
@@ -68,7 +67,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the latitude
 	 */
 	public double getLatitude() {
-		return latitude;
+		return this.latitude;
 	}
 
 	/**
@@ -82,7 +81,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the longitude
 	 */
 	public double getLongitude() {
-		return longitude;
+		return this.longitude;
 	}
 
 	/**
@@ -96,7 +95,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the altitudeAboveGround
 	 */
 	public double getAltitudeAboveGround() {
-		return altitudeAboveGround;
+		return this.altitudeAboveGround;
 	}
 
 	/**
@@ -110,7 +109,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the directionVertical
 	 */
 	public double getDirectionVertical() {
-		return directionVertical;
+		return this.directionVertical;
 	}
 
 	/**
@@ -124,7 +123,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the directionHorizontal
 	 */
 	public double getDirectionHorizontal() {
-		return directionHorizontal;
+		return this.directionHorizontal;
 	}
 
 	/**
@@ -138,7 +137,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the sensorModel
 	 */
 	public String getSensorModel() {
-		return sensorModel;
+		return this.sensorModel;
 	}
 
 	/**
@@ -152,7 +151,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the accuracy
 	 */
 	public double getAccuracy() {
-		return accuracy;
+		return this.accuracy;
 	}
 
 	/**
@@ -166,7 +165,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the attributionText
 	 */
 	public String getAttributionText() {
-		return attributionText;
+		return this.attributionText;
 	}
 
 	/**
@@ -180,7 +179,7 @@ public class CreateSensorRequest implements IsSerializable{
 	 * @return the attributionURL
 	 */
 	public String getAttributionURL() {
-		return attributionURL;
+		return this.attributionURL;
 	}
 
 	/**
@@ -188,5 +187,19 @@ public class CreateSensorRequest implements IsSerializable{
 	 */
 	public void setAttributionURL(String attributionURL) {
 		this.attributionURL = attributionURL;
+	}
+
+	/**
+	 * @return the valuesAttached
+	 */
+	public boolean isValuesAttached() {
+		return valuesAttached;
+	}
+
+	/**
+	 * @param valuesAttached the valuesAttached to set
+	 */
+	public void setValuesAttached(boolean valuesAttached) {
+		this.valuesAttached = valuesAttached;
 	}
 }

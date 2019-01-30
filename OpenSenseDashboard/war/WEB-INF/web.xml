@@ -26,6 +26,16 @@
     <url-pattern>/authentication</url-pattern>
   </servlet-mapping>
   
+	<servlet>
+    	<servlet-name>fileUploaderServlet</servlet-name>
+    	<servlet-class>com.opensense.dashboard.server.util.FileUpload</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+  		<servlet-name>fileUploaderServlet</servlet-name>
+  		<url-pattern>/fileupload</url-pattern>
+	</servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>OpenSenseDashboard.html</welcome-file>
