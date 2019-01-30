@@ -33,7 +33,12 @@
 			</m:MaterialButton>
 		</m:MaterialTooltip>
 		<m:MaterialTooltip text="{lang.createSensor}">
-			<m:MaterialButton enabled="true" b:id="list_createSensor_button" ui:field="createSensor" text="{lang.createSensor}" textColor="WHITE" addStyleNames="d-btn">
+			<m:MaterialButton enabled="false" ui:field="createSensor" b:id="list_createSensor_button" text="{lang.createSensor}" textColor="WHITE" addStyleNames="d-btn margin-right-15">
+				<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
+			</m:MaterialButton>
+		</m:MaterialTooltip>
+		<m:MaterialTooltip text="{lang.addValues}">
+			<m:MaterialButton enabled="false" ui:field="addValuesButton" text="{lang.addValuesShort}" textColor="WHITE" addStyleNames="d-btn">
 				<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 			</m:MaterialButton>
 		</m:MaterialTooltip>

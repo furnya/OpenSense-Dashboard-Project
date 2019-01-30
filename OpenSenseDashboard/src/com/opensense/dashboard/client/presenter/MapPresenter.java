@@ -5,10 +5,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.maps.client.overlays.Marker;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
@@ -58,12 +56,10 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 
 	@Override
 	public void onPageLeave() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void handleParamters(Map<ParamType, String> parameters) {
-		GWT.log("sorry you can't do that");
 	}
 
 	@Override
@@ -89,7 +85,6 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 		this.view.getListManager().onUserLoggedOut();
 	}
 
-	// get Sensor Data from Server
 	@Override
 	public void buildSensorRequestFromIdsAndShowMarkers(List<Integer> markerIds) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.SENSOR, false);
@@ -98,7 +93,7 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 	}
 
 	private void sendRequest(final Request request) {
-		
+
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
 			if ((result != null) && (result.getResultType() != null)
 					&& request.getRequestType().equals(result.getResultType()) && (result.getSensors() != null)) {
@@ -137,22 +132,9 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 		});
 		var that = this;
 
-		//destroy MarkerPopup whenever the spiderfier does some action:
-		oms
-				.addListener(
-						'spiderfy',
-						function(marker) {
-							console.log("spiderfy");
-
-						});
-
-		oms
-				.addListener(
-						'unspiderfy',
-						function(marker) {
-							console.log("unspiderfy");
-							that.@com.opensense.dashboard.client.presenter.MapPresenter::addPlusCluster(*)(marker);
-						});
+		oms.addListener('unspiderfy', function(marker) {
+			that.@com.opensense.dashboard.client.presenter.MapPresenter::addPlusCluster(*)();
+		});
 
 		return oms;
 	}-*/;
@@ -162,10 +144,8 @@ public class MapPresenter extends DataPanelPagePresenter implements IPresenter, 
 		return this.markerSpiderfier;
 	}
 
-	public void addPlusCluster(Marker marker) {
+	public void addPlusCluster() {
 		this.view.checkForSpiderfierMarkers();
-		//		this.view.addPlusCluster(marker);//TODO: this should work but the marker is
-		// not correct
 	}
 
 }

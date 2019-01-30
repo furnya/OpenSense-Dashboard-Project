@@ -1702,4 +1702,108 @@ public class Languages {
 		}
 	}
 
+	public static String timespanPanelTour() {
+		if(de) {
+			return "Hier können Sie die Zeitspanne für die angezeigten Werte auswählen.\n Vorausgewählt ist der Zeitraum \"Letzte Woche\".";
+		}else {
+			return "";
+		}
+	}
+
+	public static String listContainerVisTour() {
+		if(de) {
+			return "Hier werden alle ihre Listen angezeigt. Im Diagramm werden immer die Daten der ausgewählten Sensoren in der jeweils ausgeklappten Liste angezeigt.\nWählen Sie nun einen oder mehrere Sensoren in der Favoriten-Liste aus, um seine/ihre Daten zu sehen.";
+		}else {
+			return "";
+		}
+	}
+
+	public static String startVisPickerTour() {
+		if(de) {
+			return "Hier können Sie gegebenenfalls ein Datum auswählen, wenn Sie Daten für einen bestimmten Zeitraum anzeigen lassen möchten.";
+		}else {
+			return "";
+		}
+	}
+
+	public static String chartVisContainerTour() {
+		if(de) {
+			return "Hier werden die Daten der Sensoren in einem Liniendiagramm angezeigt. Wenn Sie die Maus über das Diagramm bewegen, werden Ihnen die genauen Werte in einem Tooltip angezeigt. Falls keine Diagramm angezeigt wird, existieren für die ausgewählten Sensoren und den ausgewählten Zeitraum keine Daten.";
+		}else {
+			return "";
+		}
+	}
+
+	public static String successful() {
+		if(de) {
+			return "erfolgreich";
+		} else {
+			return "successful";
+		}
+	}
+
+	public static String uplaodFile() {
+		if(de) {
+			return "Datei hochladen";
+		} else {
+			return "Upload file";
+		}
+	}
+
+	public static String uploadInfo() {
+		if(de) {
+			return "Laden Sie eine Datei im CSV-Format hoch, in dem Werte mit Zeitstempel für den Sensor stehen. Spalten sollten wie folgt aussehen  "
+					+ "[Zeitstempel];[WERT] -> MM.DD.YYYY,HH:mm:ss;Z.z. Zum Bespiel 01.01.2000,12:01:00;24.4 ";
+		} else {
+			return "Upload file";
+		}
+	}
+
+	public static String addValues() {
+		if(de) {
+			return "Werte zu einem Sensor hinzufügen";
+		} else {
+			return "Add values for a sensor";
+		}
+	}
+
+	public static String addValuesShort() {
+		if(de) {
+			return "Werte hinzufügen";
+		} else {
+			return "Add values";
+		}
+	}
+	
+	public static String numberBetween(double low, double high) {
+		if(de) {
+			return "Bitte geben Sie eine Zahl zwischen "+low+" und "+high+" ein!";
+		} else {
+			return "Please enter a number between "+low+" and "+high+"!";
+		}
+	}
+	
+	public static String validNumber() {
+		if(de) {
+			return "Bitte geben Sie eine gültige Zahl ein!";
+		} else {
+			return "Please enter a valid number!";
+		}
+	}
+	
+	public static String cannotBeEmpty() {
+		if(de) {
+			return "Dieses Feld darf nicht leer sein";
+		} else {
+			return "This field cannot be empty";
+		}
+	}
+	
+	public static String invalidPassword() {
+		if(de) {
+			return "Das Password muss mindestens 8 Zeichen, eine Zahl, einen Groß- und einen Kleinbuchstaben enthalten.";
+		} else {
+			return "The password must be at least 8 characters long and contain one or more numbers, lowercase and uppercase letters.";
+		}
+	}
 }

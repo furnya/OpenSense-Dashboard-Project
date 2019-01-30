@@ -122,7 +122,7 @@
 						<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 					</m:MaterialButton>
 				</m:MaterialTooltip>
-				<m:MaterialTooltip text="{lang.addToListTooltip}">
+				<m:MaterialTooltip ui:field="addToListTooltip" text="{lang.addToListTooltip}">
 					<m:MaterialButton display="NONE" ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn position-relative" enabled="false">
 						<d:Spinner display="NONE" addStyleNames="{style.drop-down-spinner}" size="SMALL" ui:field="listDropDownSpinner"/>
 						<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
@@ -138,7 +138,7 @@
 						<m:MaterialImage url="{gui.info.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 					</m:MaterialButton>
 				</m:MaterialTooltip>
-				<m:MaterialTooltip text="{lang.deleteTooltip}">
+				<m:MaterialTooltip ui:field="deleteSensorsTooltip" text="{lang.deleteTooltip}">
 					<m:MaterialButton display="NONE" ui:field="deleteSensorsButton" text="{lang.deleteSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
 						<m:MaterialImage url="{gui.trash.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 					</m:MaterialButton>

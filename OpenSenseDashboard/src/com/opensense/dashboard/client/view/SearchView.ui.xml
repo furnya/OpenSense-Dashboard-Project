@@ -125,7 +125,7 @@
 				<m:MaterialImage url="{gui.diagramIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 			</m:MaterialButton>
 		</m:MaterialTooltip>
-		<m:MaterialTooltip text="{lang.addToListTooltip}">
+		<m:MaterialTooltip text="{lang.addToListTooltip}" ui:field="addToListToolTip">
 			<m:MaterialButton ui:field="addToListButton" text="{lang.selectedAddToList}" textColor="WHITE" addStyleNames="d-btn search-action-btn position-relative" enabled="false" activates="dp-1">
 				<d:Spinner display="NONE" addStyleNames="{style.drop-down-spinner}" size="SMALL" ui:field="listDropDownSpinner"/>
 				<m:MaterialImage url="{gui.listIconSvg.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>

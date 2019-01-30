@@ -109,8 +109,8 @@ public class Pager extends Composite{
 
 	private void setForwardsEnabled(boolean enabled) {
 		if(enabled) {
-			this.forwardTooltip = new MaterialTooltip(this.forwardsButton, Languages.forwards());
-			this.forwardStepTooltip = new MaterialTooltip(this.forwardsStepByStepButton, Languages.forwardsStepByStep());
+			this.forwardTooltip.reinitialize();
+			this.forwardStepTooltip.reinitialize();
 		}else {
 			this.forwardTooltip.remove();
 			this.forwardStepTooltip.remove();
@@ -121,8 +121,8 @@ public class Pager extends Composite{
 
 	private void setBackwardsEnabled(boolean enabled) {
 		if(enabled) {
-			this.backwardsTooltip = new MaterialTooltip(this.backwardsButton, Languages.backwards());
-			this.backwardsStepTooltip = new MaterialTooltip(this.backwardsStepByStepButton, Languages.backwardsStepByStep());
+			this.backwardsTooltip.reinitialize();
+			this.backwardsStepTooltip.reinitialize();
 		}else {
 			this.backwardsTooltip.remove();
 			this.backwardsStepTooltip.remove();

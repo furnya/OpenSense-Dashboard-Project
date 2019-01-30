@@ -3,8 +3,11 @@ package com.opensense.dashboard.client.view;
 import org.gwtbootstrap3.client.ui.html.Div;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -82,7 +85,32 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 
 	public UserViewImpl() {
 		this.initWidget(uiBinder.createAndBindUi(this));
+		this.bindHandler();
 	}
+
+	private void bindHandler() {
+		KeyUpHandler handler = event -> {
+			if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				this.clickElement(this.loginButton.getElement());
+			}
+		};
+		this.userName.addKeyUpHandler(handler);
+		this.password.addKeyUpHandler(handler);
+		this.passwordVerify.addKeyUpHandler(handler);
+		this.email.addKeyUpHandler(handler);
+		KeyUpHandler handler2 = event -> {
+			if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				this.clickElement(this.saveButton.getElement());
+			}
+		};
+		this.oldPassword.addKeyUpHandler(handler2);
+		this.newPassword.addKeyUpHandler(handler2);
+		this.verifyNewPassword.addKeyUpHandler(handler2);
+	}
+	
+	private native void clickElement(Element element) /*-{
+	element.click();
+}-*/;
 
 	@UiHandler("forgotPassword")
 	public void onForgotPasswordClicked(ClickEvent e) {
@@ -128,6 +156,10 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 			}
 			if((this.email.getValue()==null) || !this.email.getValue().matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
 				AppController.showError(Languages.invalidEmail());
+				return;
+			}
+			if(!this.password.getValue().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$")){
+				AppController.showError(Languages.invalidPassword());
 				return;
 			}
 			this.presenter.sendRegisterRequest(this.userName.getValue(),this.password.getValue(),this.email.getValue());
@@ -181,6 +213,10 @@ public class UserViewImpl extends DataPanelPageView implements UserView {
 		}
 		if((this.newPassword.getValue()==null) || (this.verifyNewPassword.getValue()==null) || this.newPassword.getValue().isEmpty() || this.verifyNewPassword.getValue().isEmpty() || (this.newPassword.getValue()!=this.verifyNewPassword.getValue())) {
 			AppController.showError(Languages.passwordsDontMatch());
+			return;
+		}
+		if(!this.newPassword.getValue().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$")){
+			AppController.showError(Languages.invalidPassword());
 			return;
 		}
 		this.showSaveButtonSpinner(true);

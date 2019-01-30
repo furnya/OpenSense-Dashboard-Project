@@ -291,7 +291,7 @@ public class ServerLanguages {
 			return "La contrase\u00F1a introducida es incorrecta";
 		}
 	}
-	
+
 	public static String usernameOrEmailExists() {
 		if(de) {
 			return "Es existiert schon ein Benutzer mit dieser Email-Adresse oder diesem Benutzernamen";
@@ -299,4 +299,38 @@ public class ServerLanguages {
 			return "A user with this email or this username already exists";
 		}
 	}
+
+
+	public static String succesfullyUploadedFile() {
+		if(de) {
+			return "Datei wurde erfolgreich hochgeladen";
+		}else {
+			return "The file get succesfully uploaded";
+		}
+	}
+	
+	public static String noValuesParsed() {
+		if(de) {
+			return "Es konnten keine Werte eingelesen werden";
+		}else {
+			return "No values were successfully parsed";
+		}
+	}
+	
+	public static String someValuesNotParsed() {
+		if(de) {
+			return "Es konnten nicht alle Werte eingelesen werden";
+		}else {
+			return "Some values were not successfully parsed";
+		}
+	}
+	
+	public static String allValueParsed() {
+		if(de) {
+			return "Es konnten alle Werte eingelesen werden";
+		}else {
+			return "All values were successfully parsed";
+		}
+	}
+
 }

@@ -125,7 +125,11 @@ public class ClientRequestHandler {
 			if(s == null) {
 				continue;
 			}
-			s.setValuePreview(this.getValuePreview(s.getSensorId()));
+			try{
+				s.setValuePreview(this.getValuePreview(s.getSensorId()));
+			}catch (IOException e) {
+				s.setValuePreview(null);
+			}
 			sensorList.add(s);
 		}
 		return sensorList;
@@ -465,12 +469,44 @@ public class ClientRequestHandler {
 		bodyJSON.put(JsonAttributes.ACCURACY.getNameString(), request.getAccuracy());
 		bodyJSON.put(JsonAttributes.ATTRIBUTION_TEXT.getNameString(), request.getAttributionText());
 		bodyJSON.put(JsonAttributes.ATTRIBUTION_URL.getNameString(), request.getAttributionURL());
+
 		String body = bodyJSON.toString();
 		JSONObject idJSON = rs.objectPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/addSensor", body, SessionUser.getInstance().getToken());
 		if(idJSON==null) {
 			return null;
 		}
 		return idJSON.toString();
+	}
+	
+	public String addValues(int sensorId, List<Value> values) throws IOException {
+		RequestSender rs = new RequestSender();
+		JSONObject bodyJSON = new JSONObject();
+		JSONArray valuesJSON = new JSONArray();
+		
+		boolean parseFailed = false;
+		for(Value value : values) {
+			try {
+				JSONObject valueJSON = new JSONObject();
+				valueJSON.put(JsonAttributes.SENSOR_ID.getNameString(), sensorId);
+				valueJSON.put(JsonAttributes.TIMESTAMP.getNameString(), value.getTimestamp().toString());
+				valueJSON.put(JsonAttributes.NUMBER_VALUE.getNameString(), value.getNumberValue());
+				valuesJSON.put(valueJSON);
+			}catch(Exception e) {
+				parseFailed = true;
+			}
+		}
+		if(valuesJSON.length()==0) {
+			return ServerLanguages.noValuesParsed();
+		}
+		
+		bodyJSON.put(JsonAttributes.COLLAPSED_MESSAGES.getNameString(), valuesJSON);
+		String body = bodyJSON.toString();
+		String response = rs.sendPOSTRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+"/sensors/addMultipleValues", body, SessionUser.getInstance().getToken());
+		if("OK".equals(response)) {
+			return (parseFailed ? ServerLanguages.someValuesNotParsed() : ServerLanguages.allValueParsed());
+		}else {
+			return ServerLanguages.noValuesParsed();
+		}
 	}
 
 	public List<UserList> getUserLists() {
@@ -479,11 +515,10 @@ public class ClientRequestHandler {
 			DatabaseManager db = new DatabaseManager();
 			return db.getUserLists(SessionUser.getInstance().getUserId());
 		}
-		System.out.println("GUEST MODE DETECTED");
 		return new LinkedList<>();
 	}
 
-	public String sendDeleteSensorRequest(Integer sensorId) throws IOException{
+	public String sendDeleteSensorRequest(int sensorId) throws IOException{
 		RequestSender rs = new RequestSender();
 		return rs.deleteRequest((USE_DEFAULT_URL ? BASE_URL_DEFAULT : BASE_URL)+SENSORS+sensorId, SessionUser.getInstance().getToken());
 	}
@@ -496,5 +531,4 @@ public class ClientRequestHandler {
 		}
 		return ((JSONObject) profileJSON.get(0)).getInt(JsonAttributes.ID.getNameString());
 	}
-
 }

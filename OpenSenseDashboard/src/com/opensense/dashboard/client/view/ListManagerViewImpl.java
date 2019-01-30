@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -163,6 +162,10 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 	public void setSensorsInList(final int listId, final List<MinimalSensor> sensors) {
 		final Map<Integer, BasicSensorItemCard> sensorCards = new HashMap<>();
 		final List<Integer> showSensorIds = new ArrayList<>();
+		if(this.collapsiblesItems.get(listId)==null) {
+			LOGGER.log(Level.WARNING, "collapsible item for list id "+listId+" does not exist");
+			return;
+		}
 		this.collapsiblesItems.get(listId).showItemSpinner(false);
 		this.collapsiblesItems.get(listId).changeToSelectAll(true);
 		if(sensors.isEmpty()) {
@@ -291,6 +294,12 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			this.sensorCardsInLists.remove(id);
 			this.selectedSensorIdsInLists.remove(id);
 		});
+		int size = this.collapsible.getChildrenList().size();
+		for(int i=3;i<size;i++) {
+			if(this.collapsible.getChildrenList().get(3)!=null) {
+				this.collapsible.getChildrenList().get(3).removeFromParent();
+			}
+		}
 	}
 
 	@Override
@@ -424,10 +433,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 			}
 		});
 	}
-
-	private native void clickElement(Element infoButtonElement) /*-{
-		infoButtonElement.click();
-	}-*/;
 
 	@Override
 	public void showUserListDropdown(int listId, List<UserList> userLists) {

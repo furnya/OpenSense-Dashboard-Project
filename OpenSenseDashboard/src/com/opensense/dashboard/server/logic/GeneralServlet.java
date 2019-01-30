@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.Languages;
+import com.opensense.dashboard.server.util.CSVFileParser;
 import com.opensense.dashboard.server.util.ClientRequestHandler;
 import com.opensense.dashboard.server.util.DatabaseManager;
 import com.opensense.dashboard.server.util.JsonAttributes;
@@ -17,6 +18,7 @@ import com.opensense.dashboard.server.util.ServerLanguages;
 import com.opensense.dashboard.server.util.SessionUser;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
+import com.opensense.dashboard.shared.AddValuesRequest;
 import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
@@ -26,7 +28,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 
 	private static final Logger LOGGER = Logger.getLogger(GeneralServlet.class.getName());
 
-	
+
 	@Override
 	public Response getDataFromRequest(Request searchRequest) {
 		Response response = new Response();
@@ -140,17 +142,30 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return ar;
 		}
 		String withID = "";
+		int sensorId = 0;
 		try{
 			String response = ClientRequestHandler.getInstance().sendCreateSensorRequest(request);
 			JSONObject sensor = new JSONObject(response);
-			withID = " "+Languages.with()+" ID "+sensor.getInt(JsonAttributes.ID.getNameString());
+			sensorId = sensor.getInt(JsonAttributes.ID.getNameString());
+			withID = " "+Languages.with()+" ID "+sensorId;
 		}catch(IOException e) {
 			ActionResult ar = new ActionResult(ActionResultType.FAILED);
 			ar.setErrorMessage(Languages.invalidParameters());
 			return ar;
 		}
+
 		ActionResult ar = new ActionResult(ActionResultType.SUCCESSFUL);
-		ar.setErrorMessage(Languages.sensorCreated()+withID);
+		if(request.isValuesAttached() && (sensorId!=0)) {
+			String valuesParsed = ServerLanguages.noValuesParsed();
+			try {
+				valuesParsed = ClientRequestHandler.getInstance().addValues(sensorId, CSVFileParser.parseValues());
+			}catch(IOException e) {
+				valuesParsed = ServerLanguages.noValuesParsed();
+			}
+			ar.setErrorMessage(Languages.sensorCreated()+withID+". "+valuesParsed);
+		}else {
+			ar.setErrorMessage(Languages.sensorCreated()+withID);
+		}
 		return ar;
 	}
 
@@ -179,6 +194,24 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 			return SessionUser.getInstance().getUsername();
 		}
 		return null;
+	}
+
+	@Override
+	public ActionResult addValues(AddValuesRequest request) {
+		ActionResult ar = new ActionResult(ActionResultType.SUCCESSFUL);
+		String valuesParsed = ServerLanguages.allValueParsed();
+		try {
+			valuesParsed = ClientRequestHandler.getInstance().addValues(request.getSensorId(), CSVFileParser.parseValues());
+		}catch(IOException e) {
+			ar.setActionResultType(ActionResultType.FAILED);
+			ar.setErrorMessage(ServerLanguages.noValuesParsed());
+			return ar;
+		}
+		ar.setErrorMessage(valuesParsed);
+		if(ServerLanguages.noValuesParsed().equals(valuesParsed)) {
+			ar.setActionResultType(ActionResultType.FAILED);
+		}
+		return ar;
 	}
 
 }
