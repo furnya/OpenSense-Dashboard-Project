@@ -214,29 +214,29 @@ public class AddSensorModal extends Composite {
 	}
 
 	private void addValidators() {
-		this.latitudeBox.addValidator(this.createDoubleValidator(-90, 90));
+		this.latitudeBox.addValidator(this.createDoubleValidator(-90, 90,Languages.numberBetween(-90, 90)));
 		this.latitudeBox.addValueChangeHandler(this.createLatLngValueChangeHandler(this.latitudeBox));
-		this.longitudeBox.addValidator(this.createDoubleValidator(-180, 180));
+		this.longitudeBox.addValidator(this.createDoubleValidator(-180, 180,Languages.numberBetween(-180, 180)));
 		this.longitudeBox.addValueChangeHandler(this.createLatLngValueChangeHandler(this.longitudeBox));
-		BlankValidator<String> vString = this.createStringValidator();
+		BlankValidator<String> vString = this.createStringValidator(Languages.cannotBeEmpty());
 		this.sensorModelBox.addValidator(vString);
 		this.sensorModelBox.addValueChangeHandler(this.createStringValueChangeHandler(this.sensorModelBox));
 		this.attributionTextBox.addValidator(vString);
 		this.attributionTextBox.addValueChangeHandler(this.createStringValueChangeHandler(this.attributionTextBox));
 		this.attributionUrlBox.addValidator(vString);
 		this.attributionUrlBox.addValueChangeHandler(this.createStringValueChangeHandler(this.attributionUrlBox));
-		this.altitudeBox.addValidator(this.createDoubleValidator(0, Double.POSITIVE_INFINITY));
+		this.altitudeBox.addValidator(this.createDoubleValidator(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Languages.validNumber()));
 		this.altitudeBox.addValueChangeHandler(this.createStringValueChangeHandler(this.altitudeBox));
-		this.directionVerticalBox.addValidator(this.createDoubleValidator(-360, 360));
+		this.directionVerticalBox.addValidator(this.createDoubleValidator(-360, 360,Languages.numberBetween(-360, 360)));
 		this.directionVerticalBox.addValueChangeHandler(this.createStringValueChangeHandler(this.directionVerticalBox));
-		this.directionHorizontalBox.addValidator(this.createDoubleValidator(-360, 360));
+		this.directionHorizontalBox.addValidator(this.createDoubleValidator(-360, 360,Languages.numberBetween(-360, 360)));
 		this.directionHorizontalBox.addValueChangeHandler(this.createStringValueChangeHandler(this.directionHorizontalBox));
-		this.accuracyBox.addValidator(this.createDoubleValidator(0, 10));
+		this.accuracyBox.addValidator(this.createDoubleValidator(0, 10,Languages.numberBetween(0, 10)));
 		this.accuracyBox.addValueChangeHandler(this.createStringValueChangeHandler(this.accuracyBox));
 	}
 
-	private BlankValidator<String> createDoubleValidator(double min, double max) {
-		return new BlankValidator<String>("Invalid value") {
+	private BlankValidator<String> createDoubleValidator(double min, double max, String errorMessage) {
+		return new BlankValidator<String>(errorMessage) {
 			@Override
 			public boolean isValid(String value) {
 				if (value == null) {
@@ -256,11 +256,11 @@ public class AddSensorModal extends Composite {
 		};
 	}
 
-	private BlankValidator<String> createStringValidator() {
-		return new BlankValidator<String>("Invalid value") {
+	private BlankValidator<String> createStringValidator(String errorMessage) {
+		return new BlankValidator<String>(errorMessage) {
 			@Override
 			public boolean isValid(String value) {
-				return ((value != null) && (value != ""));
+				return ((value != null) && !value.trim().isEmpty());
 			}
 		};
 	}
