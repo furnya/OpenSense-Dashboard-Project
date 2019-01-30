@@ -500,25 +500,25 @@ public class Languages {
 				return "0-0 von 0";
 			}
 			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
-			+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
-					: size)
-			+ " von " + Integer.toString(size);
+					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+							: size)
+					+ " von " + Integer.toString(size);
 		} else if (en) {
 			if (size == 0) {
 				return "0-0 of 0";
 			}
 			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
-			+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
-					: size)
-			+ " of " + Integer.toString(size);
+					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+							: size)
+					+ " of " + Integer.toString(size);
 		} else {
 			if (size == 0) {
 				return "0-0 de 0";
 			}
 			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
-			+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
-					: size)
-			+ " de " + Integer.toString(size);
+					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+							: size)
+					+ " de " + Integer.toString(size);
 		}
 	}
 
@@ -1243,25 +1243,24 @@ public class Languages {
 		}
 	}
 
-
 	public static String searchInfoText() {
 		if (de) {
-			return "Auf dieser Seite kannst du Sensoren suchen und ihre Informationen einsehen."+
-					"Die Sensoren können parametrisiert sowie Ortsabhängig gesucht werden.";
+			return "Auf dieser Seite kannst du Sensoren suchen und ihre Informationen einsehen."
+					+ "Die Sensoren können parametrisiert sowie Ortsabhängig gesucht werden.";
 		} else if (en) {
-			return "On this page you can search the sensors.\r\n" +
-					"The sensors can be parameterized and searched for location-dependent.";
+			return "On this page you can search the sensors.\r\n"
+					+ "The sensors can be parameterized and searched for location-dependent.";
 		} else {
-			return "En esta p\u00E1gina puedes buscar los sensores.\r\n" +
-					"Los sensores pueden parametrizarse y buscarse seg\u00FAn la ubicaci\u00F3n.";
+			return "En esta p\u00E1gina puedes buscar los sensores.\r\n"
+					+ "Los sensores pueden parametrizarse y buscarse seg\u00FAn la ubicaci\u00F3n.";
 		}
 	}
 
 	public static String mapInfoText() {
 		if (de) {
-			return "Auf der von Google bereitgestellten Karte kannst du dir deine Sensoren anzeigen lassen."+
-					"Die Sensoren werden abhängig von ihrem Typ mit einem anderen Symbol auf der Karte angezeigt."
-					+"Sollte sich mehrere Sensoren auf einer Stelle befinden so wird dies durch dieses Symbol deutlich:";
+			return "Auf der von Google bereitgestellten Karte kannst du dir deine Sensoren anzeigen lassen."
+					+ "Die Sensoren werden abhängig von ihrem Typ mit einem anderen Symbol auf der Karte angezeigt."
+					+ "Sollte sich mehrere Sensoren auf einer Stelle befinden so wird dies durch dieses Symbol deutlich:";
 		} else if (en) {
 			return "Englischer text für MapPage";
 		} else {
@@ -1271,9 +1270,9 @@ public class Languages {
 
 	public static String visuInfoText() {
 		if (de) {
-			return "Die hier bereitgestellte Funktionalität ermöglicht es dir, die Werte der Sensoren je nach belieben (Tag, Monat, Jahr, oder spezifischer), in einem Diagramm darzustellen."+
-					"Dabei behälst du dank der farblichen Markierung der Angezeigten Sensoren immer den Überblick."+
-					"Bitte beachte dabei, dass du maximal 10 Sensoren zur gleichen Zeit in den Listen auswählen kannst.";
+			return "Die hier bereitgestellte Funktionalität ermöglicht es dir, die Werte der Sensoren je nach belieben (Tag, Monat, Jahr, oder spezifischer), in einem Diagramm darzustellen."
+					+ "Dabei behälst du dank der farblichen Markierung der Angezeigten Sensoren immer den Überblick."
+					+ "Bitte beachte dabei, dass du maximal 10 Sensoren zur gleichen Zeit in den Listen auswählen kannst.";
 		} else if (en) {
 			return "Englischer text für VisuPage";
 		} else {
@@ -1283,9 +1282,9 @@ public class Languages {
 
 	public static String listInfoText() {
 		if (de) {
-			return "Damit du nicht immer wieder die Selbe Sensoren auf der Suchseite suchen musst, kannst du dir deine eigenen Listen erstellen."+
-					"Erstelle eine Liste und füge über die Suchseite passende Sensoren hinzu."+
-					"Außerdem kannst du, wenn du einen Entsprechenden Account besitzt auch einfach deinen/deine eigenen Sensor/-en zu OpenSense hinzufügen.";
+			return "Damit du nicht immer wieder die Selbe Sensoren auf der Suchseite suchen musst, kannst du dir deine eigenen Listen erstellen."
+					+ "Erstelle eine Liste und füge über die Suchseite passende Sensoren hinzu."
+					+ "Außerdem kannst du, wenn du einen Entsprechenden Account besitzt auch einfach deinen/deine eigenen Sensor/-en zu OpenSense hinzufügen.";
 		} else if (en) {
 			return "Englischer Text für ListPage";
 		} else {
@@ -1514,150 +1513,192 @@ public class Languages {
 	}
 
 	public static String tourError() {
-		if(de) {
+		if (de) {
 			return "Beim ausführen der Tour ist ein Fehler aufgetreten. Versuchen Sie unter Hilfe die Tour erneut zu starten. "
 					+ "Sollte der Fehler immer noch auftreten, kontaktieren Sie uns bitte!";
-		}else {
+		} else {
 			return "While running the tour an error occues. Please try to start the tour again at the help page. If the error"
 					+ " still occurs, please contact us!";
 		}
 	}
 
 	public static String exitTourFirst() {
-		if(de) {
+		if (de) {
 			return "Zum beenden des Rundgangs";
-		}else {
+		} else if(en) {
 			return "Press";
+		} else {
+			return "Presiona";
 		}
 	}
 
 	public static String exitTourSecond() {
-		if(de) {
+		if (de) {
 			return "drücken";
-		}else {
+		} else if(en) {
 			return "to exit the tour";
+		} else {
+			return "para terminar el recorrido";
 		}
 	}
 
 	public static String startTour() {
-		if(de) {
+		if (de) {
 			return "Tour starten";
-		}else {
+		} else if(en) {
 			return "Start tour";
+		}else {
+			return "Empezar recorrido";
 		}
 	}
 
 	public static String continueStep() {
-		if(de){
+		if (de) {
 			return "Weiter";
-		}else{
+		} else if(en) {
 			return "Continue";
+		}else {
+			return "Continuar";
 		}
 	}
 
 	public static String noTourData() {
-		if(de) {
+		if (de) {
 			return "Keine Touren verfügbar";
-		}else {
+		} else if(en) {
 			return "No tours available";
+		} else {
+			return "No hay tour disponible";
 		}
 	}
 
 	public static String closeTour() {
-		if(de) {
+		if (de) {
 			return "Tour beenden";
-		}else {
+		} else if(en) {
 			return "Exit tour";
+		}else {
+			return "Terminar el recorrido";
 		}
 	}
 
 	public static String dontShowTours() {
-		if(de) {
+		if (de) {
 			return "Keine Touren mehr anzeigen";
-		}else {
+		} else {
 			return "Do not show any tours";
 		}
 	}
 
 	public static String tourHeader(int tourStep, int tourSteps) {
-		if(de) {
+		if (de) {
 			return "Rundgang: Schritt " + tourStep + " von " + tourSteps;
-		}else {
+		} else {
 			return "Tour: Step " + tourStep + " of " + tourSteps;
 		}
 	}
 
 	public static String showTourOnPage() {
-		if(de) {
+		if (de) {
 			return "Touren automatisch anzeigen, wenn der Startpunkt aufgerufen wird";
-		}else {
+		} else {
 			return "Show tours automaticaly if you reaching the startpoint";
 		}
 	}
 
 	public static String clearFinishedTours() {
-		if(de) {
+		if (de) {
 			return "Alle Rundgänge erneut starten";
-		}else {
+		} else {
 			return "Start all tours again";
 		}
 	}
 
 	public static String infoTours() {
-		if(de) {
+		if (de) {
 			return "Hinweis: Rundgänge starten automatisch, wenn Sie das erste mal auf die Seite kommen. "
 					+ "Wenn Sie alle Rundgänge erneut starten, bekommen Sie bereits beendete erneut angezeigt.";
-		}else {
+		} else {
 			return "";
 		}
 	}
 
 	public static String measurandsTour() {
-		if(de) {
+		if (de) {
 			return "Wenn Sie nur nach Sensoren mit einer bestimmten Messgröße suchen wollen, können Sie diese in der Liste auswählen.";
-		}else {
+		} else {
 			return "";
 		}
 	}
 
 	public static String placeInputTour() {
-		if(de) {
+		if (de) {
 			return "Sie können Sensoren ortbezogen suchen.";
-		}else {
+		} else {
 			return "";
 		}
 	}
 
 	public static String maxSensorsTour() {
-		if(de) {
-			return "Geben Sie immer eine maximale Anzahl von Sensoren ein, sonst dauern Anfragen sehr lange. Wir empfehlen außerdem niemals mehr als 1000 Sensoren anzufragen, da sie bis zu 5 Minuten dauern kann." +
-					"Tragen Sie beispielweise 50 ein und drücken \"Weiter\".";
-		}else {
+		if (de) {
+			return "Geben Sie immer eine maximale Anzahl von Sensoren ein, sonst dauern Anfragen sehr lange. Wir empfehlen außerdem niemals mehr als 1000 Sensoren anzufragen, da sie bis zu 5 Minuten dauern kann."
+					+ "Tragen Sie beispielweise 50 ein und drücken \"Weiter\".";
+		} else {
 			return "";
 		}
 	}
 
 	public static String accuracyTour() {
-		if(de) {
+		if (de) {
 			return "Sie können eine Geauigkeit der Sensoren angeben auf einer Skala von 0-10. Die Genauigkeit wird Ihnen als Sternebewertung in den Sensoren angezeigt.";
-		}else {
+		} else {
 			return "";
 		}
 	}
 
 	public static String searchButtonTour() {
-		if(de) {
+		if (de) {
 			return "Suchen Sie Sensoren anhand der gewählten Parameter indem Sie den Knopf betätigen.";
-		}else {
+		} else {
 			return "";
 		}
 	}
 
 	public static String sensorsWithValuesTour() {
-		if(de) {
+		if (de) {
 			return "Wenn Sie Sensoren, welche keine Werte gesammelt haben ausschließen möchten, lassen Sie das Kontrollkästchen ausgewählt.";
-		}else {
+		} else {
 			return "";
+		}
+	}
+
+	public static String createListButtonTour() {
+		if (de) {
+			return "Sie können eine neue Liste erstellen und sie beliebig benennen. Wenn Sie ihrer Liste dann Sensoren hinzufügen möchten, dann gehen Sie bitte auf die Suchseite und fügen dort die entsprechenden Sensoren ein.";
+		} else if (en) {
+			return "You can create a new list and name it as you like. If you would like to add sensors to your list, then please go to the search page and insert the appropriate sensors there.";
+		} else {
+			return "Puedes crear una nueva lista y nombrarla como quieras. Si desea agregar sensores a su lista, por favor vaya a la p\u00E1gina de b\u00FAsqueda e inserte los sensores apropiados all\u00ED.";
+		}
+	}
+
+	public static String createSensorButtonTour() {
+		if (de) {
+			return "Sie k\u00F6nnen einen Sensor zu erstellen welcher zu OpenseSense hinzugef\u00FCgt wird. Bitte achten Sie darauf ihre Daten vor dem Abschicken noch einmal zu Überprüfen. Ihre eigenen Sensoren können sie anschließend jeder Zeit hier auf der Listseite einsehen und löschen.";
+		} else if (en) {
+			return "You can create a sensor which will be added to OpenseSense. Please make sure to check your data again before submitting. You can then view and delete your own sensors here on the list page at any time.";
+		} else {
+			return "Usted puede crear un sensor que se agregar\u00E1 a OpenseSense.Por favor, aseg\u00FArese de verificar sus datos nuevamente antes de enviar. Usted puede ver y eliminar sus propios sensores aqu\u00ED en la p\u00E1gina de listas en cualquier momento.";
+		}
+	}
+	
+	public static String listContainerTour() {
+		if (de) {
+			return "Ihre selbst erstellten Listen können sie hier umbenennen und ihre enthaltene Sensoren einsehen. Sie können Sensoren auswählen und diese löschen oder aber auf einen der Knöpfe drücken um sie auf der entsprechend anderen Seite anzeigen zu lassen.";
+		} else if (en) {
+			return "You can rename your own lists here and see their included sensors. You can select sensors and delete them, or press one of the buttons to display them on another page.";
+		} else {
+			return "Puede cambiar el nombre de sus propias listas aqu\u00ED y ver sus sensores incluidos. Usted puede seleccionar sensores y eliminarlos, o presionar uno de los botones para mostrarlos en otra p\u00E1gina.";
 		}
 	}
 
