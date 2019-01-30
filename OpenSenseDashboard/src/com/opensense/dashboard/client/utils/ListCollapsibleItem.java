@@ -113,6 +113,12 @@ public class ListCollapsibleItem extends Composite{
 
 	@UiField
 	MaterialLink favoriteLink;
+	
+	@UiField
+	MaterialTooltip addToListTooltip;
+	
+	@UiField
+	MaterialTooltip deleteSensorsTooltip;
 
 	private static ListCollapsibleItemUiBinder uiBinder = GWT.create(ListCollapsibleItemUiBinder.class);
 
@@ -190,6 +196,11 @@ public class ListCollapsibleItem extends Composite{
 		this.addToListButton.setEnabled(enabled);
 		this.deleteSensorsButton.setEnabled(enabled);
 		this.showInfoButton.setEnabled(enabled);
+		if(enabled) {
+			this.deleteSensorsTooltip.reinitialize();
+		}else {
+			this.deleteSensorsTooltip.remove();
+		}
 	}
 
 	public void addDeleteButtonClickHandler(ClickHandler handler) {
@@ -335,6 +346,7 @@ public class ListCollapsibleItem extends Composite{
 	}
 
 	public void prepareForDropdown() {
+		this.addToListTooltip.remove();
 		this.hideListDropDown();
 		this.showListDropDownSpinner(true);
 		this.addToListButton.setEnabled(false);
@@ -342,6 +354,7 @@ public class ListCollapsibleItem extends Composite{
 
 	public void hideListDropDown() {
 		this.listDropDown.getElement().addClassName("display-none-important");
+		this.addToListTooltip.reinitialize();
 	}
 
 	private void showListDropDown() {
