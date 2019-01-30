@@ -135,7 +135,7 @@
 			</m:MaterialTooltip>
 		</bh:Div>
 		<d:Spinner size="MEDIUM" ui:field="viewSpinner" display="NONE" />
-		<bh:Div ui:field="chartOrLabelContainer" b:id="chart_vis_container" height="77vh">
+		<bh:Div ui:field="chartOrLabelContainer" b:id="chart_vis_container" height="70vh">
 			<bh:Div ui:field="noDatasetsDiv" addStyleNames="{style.no-data-div} round-corners">
 				<m:MaterialLabel ui:field="noDataLabel" textColor="WHITE" text="{lang.noSensorsSelected}" addStyleNames="{style.no-data-label}"/>
 			</bh:Div>
