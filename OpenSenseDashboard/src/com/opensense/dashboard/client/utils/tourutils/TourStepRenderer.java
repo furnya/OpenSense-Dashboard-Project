@@ -3,7 +3,6 @@ package com.opensense.dashboard.client.utils.tourutils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.gwtbootstrap3.client.ui.CheckBox;
 import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.constants.Placement;
 import org.gwtbootstrap3.client.ui.html.Div;
@@ -37,6 +36,7 @@ import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.Rectangle;
 
 import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialCheckBox;
 
 public class TourStepRenderer extends Composite {
 
@@ -69,7 +69,7 @@ public class TourStepRenderer extends Composite {
 	MaterialButton closeTour;
 
 	@UiField
-	CheckBox tourCheckBox;
+	MaterialCheckBox tourCheckBox;
 
 	@UiField
 	Span headerText;
