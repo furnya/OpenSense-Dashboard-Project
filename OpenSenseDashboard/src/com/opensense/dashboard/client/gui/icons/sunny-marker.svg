@@ -1,0 +1,27 @@
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="502" height="502" id="canvas_background" fill="none"/>
+  <g id="canvasGrid" display="none">
+   <rect id="svg_1" width="100%" height="100%" x="0" y="0" stroke-width="0" fill="url(#gridpattern)"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path d="m249.999992,17.39914c-96.340368,0 -174.450644,78.110276 -174.450644,174.450644s145.375537,290.751074 174.450644,290.751074s174.450644,-194.410706 174.450644,-290.751074s-78.110276,-174.450644 -174.450644,-174.450644zm0,290.751074c-64.139687,0 -116.30043,-52.189818 -116.30043,-116.30043s52.160743,-116.30043 116.30043,-116.30043s116.30043,52.189818 116.30043,116.30043s-52.160743,116.30043 -116.30043,116.30043z" id="svg_6"/>
+  <g transform="matrix(0.3928707117063585,0,0,0.3928707117063585,-613.8052853669878,-475.740129767355) " id="svg_7">
+   <circle id="svg_8" stroke-width="30" stroke-miterlimit="10" stroke="#000000" r="105.706001" fill="none" cy="1687.84854" cx="2198.600185"/>
+   <line id="svg_9" y2="1546.39854" y1="1489.39854" x2="2197.701185" x1="2197.701185" stroke-width="30" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <line id="svg_10" y2="1687.39854" y1="1687.39854" x2="2056.701185" x1="1998.701185" stroke-width="30" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <line id="svg_11" y2="1687.39854" y1="1687.39854" x2="2398.701185" x1="2341.701185" stroke-width="30" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <line id="svg_12" y2="1885.39854" y1="1828.39854" x2="2197.701185" x1="2197.701185" stroke-width="30" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <line id="svg_13" y2="1549.74654" y1="1590.51654" x2="2338.505185" x1="2297.735185" stroke-width="30" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <line id="svg_14" y2="1828.35454" y1="1787.58454" x2="2338.505185" x1="2297.735185" stroke-width="30" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <line id="svg_15" y2="1787.58454" y1="1828.35454" x2="2093.460185" x1="2052.690185" stroke-width="30" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+   <line id="svg_16" y2="1590.51654" y1="1549.74654" x2="2093.460185" x1="2052.690185" stroke-width="30" stroke-miterlimit="10" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_17"/>
+ </g>
+</svg>

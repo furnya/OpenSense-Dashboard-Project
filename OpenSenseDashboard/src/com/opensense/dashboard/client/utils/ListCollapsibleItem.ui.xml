@@ -84,6 +84,9 @@
 	border-bottom-left-radius: 6px;
 	border-bottom-right-radius: 6px;
 }
+.selectall > img{
+    margin-top: 12px;
+}
 </ui:style>
 
 <m:MaterialCollapsibleItem ui:field="sensorItem" display="NONE" addStyleNames="collapsible-item">
@@ -103,7 +106,7 @@
 		<bh:Div addStyleNames="margin-bottom-10">
 			<bh:Div addStyleNames="flex list-action-btns {style.list-buttons}">
 				<m:MaterialTooltip ui:field="selectAllTooltip" text="{lang.selectAllTooltip}">
-					<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn" enabled="false">
+					<m:MaterialButton display="NONE" ui:field="selectAllButton" text="{lang.selectAllSensors}" textColor="WHITE" addStyleNames="d-btn {style.selectall}" enabled="false">
 						<m:MaterialImage url="{gui.selectAll.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 					</m:MaterialButton>
 				</m:MaterialTooltip>

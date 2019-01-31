@@ -209,7 +209,7 @@ public class BasicSensorItemCard extends Composite{
 		MarkerOptions markerOpt = MarkerOptions.newInstance();
 		markerOpt.setPosition(position);
 		markerOpt.setMap(mapWidget);
-		MarkerImage iconMap = MarkerImage.newInstance(MeasurandIconHelper.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
+		MarkerImage iconMap = MarkerImage.newInstance(MeasurandIconHelper.getIconMarkerUrlFromType(sensor.getMeasurand().getMeasurandType()));
 		iconMap.setScaledSize(com.google.gwt.maps.client.base.Size.newInstance(30, 30));
 		markerOpt.setIcon(iconMap);
 		Marker marker = Marker.newInstance(markerOpt);

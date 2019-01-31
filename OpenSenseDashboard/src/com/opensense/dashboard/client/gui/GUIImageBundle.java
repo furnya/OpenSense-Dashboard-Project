@@ -54,9 +54,6 @@ public interface GUIImageBundle extends ClientBundle {
 	@Source("icons/temp.svg")
 	SVGResource tempIconSvg();
 
-	@Source("icons/testtemp.svg")
-	SVGResource testtempIconSvg();
-
 	@Source("icons/wind-speed.svg")
 	SVGResource windSpeedIconSvg();
 
@@ -86,6 +83,39 @@ public interface GUIImageBundle extends ClientBundle {
 
 	@Source("icons/clouds.svg")
 	SVGResource cloudsIconSvg();
+
+	@Source("icons/temp-marker.svg")
+	SVGResource tempIconMarkerSvg();
+
+	@Source("icons/wind-speed-marker.svg")
+	SVGResource windSpeedIconMarkerSvg();
+
+	@Source("icons/wind-direction-marker.svg")
+	SVGResource windDirectionIconMarkerSvg();
+
+	@Source("icons/sunny-marker.svg")
+	SVGResource sunnyIconMarkerSvg();
+
+	@Source("icons/pressure-marker.svg")
+	SVGResource pressureIconMarkerSvg();
+
+	@Source("icons/pracipitation-marker.svg")
+	SVGResource precipitaionIconMarkerSvg();
+
+	@Source("icons/pracipitation-type-marker.svg")
+	SVGResource precipitationTypeIconMarkerSvg();
+
+	@Source("icons/particulars-marker.svg")
+	SVGResource particularsIconMarkerSvg();
+
+	@Source("icons/noise-marker.svg")
+	SVGResource noiseIconMarkerSvg();
+
+	@Source("icons/humidity-marker.svg")
+	SVGResource humidityIconMarkerSvg();
+
+	@Source("icons/clouds-marker.svg")
+	SVGResource cloudsIconMarkerSvg();
 
 	@Source("icons/question.svg")
 	SVGResource questionIconSvg();
@@ -162,4 +192,7 @@ public interface GUIImageBundle extends ClientBundle {
 
 	@Source("icons/cross.svg")
 	SVGResource cross();
+
+	@Source("icons/question-marker.svg")
+	SVGResource questionMarker();
 }

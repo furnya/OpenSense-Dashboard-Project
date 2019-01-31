@@ -268,8 +268,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		markerOpt.setPosition(position);
 		final Marker markerBasic = Marker.newInstance(markerOpt);
 		MarkerImage icon = MarkerImage
-				.newInstance(MeasurandIconHelper.getIconUrlFromType(sensor.getMeasurand().getMeasurandType()));
-		icon.setScaledSize(Size.newInstance(30, 30));
+				.newInstance(MeasurandIconHelper.getIconMarkerUrlFromType(sensor.getMeasurand().getMeasurandType()));
+		icon.setScaledSize(Size.newInstance(40, 40));
 		markerBasic.setIcon(icon);
 		markerBasic.setDraggable(false);
 		this.mList.add(markerBasic);
@@ -304,7 +304,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		final Marker plusMarker = Marker.newInstance(plusOpt);
 		plusMarker.setMap(this.mapWidget);
 		MarkerImage plusIcon = MarkerImage.newInstance(GUIImageBundle.INSTANCE.m1Plus().getSafeUri().asString());
-		plusIcon.setScaledSize(Size.newInstance(70, 60));
+		plusIcon.setScaledSize(Size.newInstance(80, 70));
 		plusIcon.setAnchor(Point.newInstance(45, 45));
 		plusMarker.setZindex(10000);
 		plusMarker.setIcon(plusIcon);
