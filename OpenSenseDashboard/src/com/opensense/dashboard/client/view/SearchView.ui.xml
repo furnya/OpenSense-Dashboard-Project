@@ -56,6 +56,9 @@
 .no-sensor{
 	background-color: #fff;
 	height: 20px;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .btn-image{
     width: 25px;

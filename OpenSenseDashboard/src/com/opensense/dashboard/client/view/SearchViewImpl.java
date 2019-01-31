@@ -486,6 +486,7 @@ public class SearchViewImpl extends DataPanelPageView implements SearchView {
 			SensorItemCard card = this.sensorViews.get(this.shownSensorIds.get(i));
 			this.sensorContainer.add(card);
 		}
+		showNoDataIndicator(this.shownSensorIds.isEmpty());
 	}
 
 	public void showListDropDownSpinner(boolean show) {
