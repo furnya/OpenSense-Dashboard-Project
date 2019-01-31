@@ -504,6 +504,13 @@ input:focus+label{
 	flex: 1 0 20%;
 	min-width: 23%;
 	margin: 10px;
+	display: flex;
+	place-content: center;
+}
+.list-action-btns > button > span{
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 .list-container {
 	max-height: calc(100vh - 65px);
