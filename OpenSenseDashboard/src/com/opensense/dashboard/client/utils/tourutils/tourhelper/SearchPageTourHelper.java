@@ -37,7 +37,7 @@ public class SearchPageTourHelper implements ITourHelper{
 		LinkedList<TourStepData> tours = new LinkedList<>();
 		tours.addLast(new TourStepData("place_search_input", Languages.placeInputTour(), Placement.BOTTOM, TourEventType.HINT));
 		tours.addLast(new TourStepData("measurand_search_listbox", Languages.measurandsTour(), Placement.BOTTOM, new Rectangle(-5,0,5,-15), TourEventType.HINT_TRY_OUT));
-		tours.addLast(new TourStepData("maxsensor_search_textbox", Languages.maxSensorsTour(), Placement.BOTTOM, new Rectangle(-5,0,5,-15), TourEventType.HINT));
+		tours.addLast(new TourStepData("maxsensor_search_textbox", Languages.maxSensorsTour(), Placement.BOTTOM, new Rectangle(-5,0,5,-15), TourEventType.HINT_TRY_OUT));
 		tours.addLast(new TourStepData("accuracy_search_textbox", Languages.accuracyTour(), Placement.BOTTOM, new Rectangle(-5,0,5,-15), TourEventType.HINT));
 		tours.addLast(new TourStepData("search_search_button", Languages.searchButtonTour(), Placement.BOTTOM));
 		tours.addLast(new TourStepData("sensorwithvalues_search_div", Languages.sensorsWithValuesTour(), Placement.LEFT, new Rectangle(-5,0,5,0), TourEventType.HINT_TRY_OUT));

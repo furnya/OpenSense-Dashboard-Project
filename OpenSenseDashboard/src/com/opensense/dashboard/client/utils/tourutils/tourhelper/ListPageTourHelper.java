@@ -32,6 +32,7 @@ public class ListPageTourHelper implements ITourHelper{
 		LinkedList<TourStepData> tours = new LinkedList<>();
 		tours.addLast(new TourStepData("list_createList_button", Languages.createListButtonTour(), Placement.BOTTOM, TourEventType.HINT));
 		tours.addLast(new TourStepData("list_createSensor_button", Languages.createSensorButtonTour(), Placement.BOTTOM, TourEventType.HINT));
+		tours.addLast(new TourStepData("list_addvalues_button", Languages.addValuesButtonTour(), Placement.BOTTOM, TourEventType.HINT));
 		tours.addLast(new TourStepData("list_list_container", Languages.listContainerTour(), Placement.BOTTOM,TourEventType.HINT));
 		return tours;
 	}
