@@ -295,8 +295,10 @@ public class ServerLanguages {
 	public static String usernameOrEmailExists() {
 		if(de) {
 			return "Es existiert schon ein Benutzer mit dieser Email-Adresse oder diesem Benutzernamen";
-		}else {
+		}else if(en) {
 			return "A user with this email or this username already exists";
+		} else {
+			return "Ya hay un usuario con esta direcci\u00F3n de correo electr\u00F3nico o este nombre de usuario";
 		}
 	}
 
@@ -304,32 +306,40 @@ public class ServerLanguages {
 	public static String succesfullyUploadedFile() {
 		if(de) {
 			return "Datei wurde erfolgreich hochgeladen";
-		}else {
+		}else if(en) {
 			return "The file get succesfully uploaded";
+		}else {
+			return "El archivo fue subido exitosamente";
 		}
 	}
 	
 	public static String noValuesParsed() {
 		if(de) {
 			return "Es konnten keine Werte eingelesen werden";
-		}else {
+		}else if(en) {
 			return "No values were successfully parsed";
+		}else {
+			return "No se pudieron leer valores.";
 		}
 	}
 	
 	public static String someValuesNotParsed() {
 		if(de) {
 			return "Es konnten nicht alle Werte eingelesen werden";
-		}else {
+		}else if(en) {
 			return "Some values were not successfully parsed";
+		} else {
+			return "No todos los valores pudieron leerse";
 		}
 	}
 	
 	public static String allValueParsed() {
 		if(de) {
 			return "Es konnten alle Werte eingelesen werden";
-		}else {
+		}else if(en) {
 			return "All values were successfully parsed";
+		} else {
+			return "Todos los valores fueron analizados con \u00E9xito";
 		}
 	}
 
