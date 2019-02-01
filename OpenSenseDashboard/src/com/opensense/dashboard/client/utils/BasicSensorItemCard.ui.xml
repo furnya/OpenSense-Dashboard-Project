@@ -19,9 +19,12 @@
     white-space: nowrap;
 }
 .mapContainer{
-	width: 240px;
-    height: 240px;
+	width: 405px;
+    height: 246px;
+    margin-left: 125px;
+    margin-top: -25px;
 }
+
 </ui:style>
 
 <bh:Div ui:field="layout" addStyleNames="user-select-none round-corners sensor-item-card collapsed">
