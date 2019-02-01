@@ -224,7 +224,6 @@ public class ListManagerViewImpl extends Composite implements ListManagerView {
 					this.selectedSensorIdsInLists.get(listId).remove(i);
 				}
 			}
-			this.presenter.getController().onSelectedSensorsChangeEvent(new SelectedSensorsChangeEvent(this.selectedSensorIdsInLists.get(listId)));
 		}else {
 			this.selectedSensorIdsInLists.put(listId, new ArrayList<>());
 		}

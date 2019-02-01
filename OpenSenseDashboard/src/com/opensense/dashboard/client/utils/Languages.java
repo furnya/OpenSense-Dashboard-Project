@@ -500,25 +500,25 @@ public class Languages {
 				return "0-0 von 0";
 			}
 			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
-					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
-							: size)
-					+ " von " + Integer.toString(size);
+			+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+					: size)
+			+ " von " + Integer.toString(size);
 		} else if (en) {
 			if (size == 0) {
 				return "0-0 of 0";
 			}
 			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
-					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
-							: size)
-					+ " of " + Integer.toString(size);
+			+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+					: size)
+			+ " of " + Integer.toString(size);
 		} else {
 			if (size == 0) {
 				return "0-0 de 0";
 			}
 			return Integer.toString((page * maxObjectsOnPage) + 1) + "-"
-					+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
-							: size)
-					+ " de " + Integer.toString(size);
+			+ ((size > ((page + 1) * maxObjectsOnPage)) ? Integer.toString((page + 1) * maxObjectsOnPage)
+					: size)
+			+ " de " + Integer.toString(size);
 		}
 	}
 
@@ -534,9 +534,9 @@ public class Languages {
 
 	public static String noData() {
 		if (de) {
-			return "Es konnten keine Daten zu den gewählten Suchparametern gefunden werden";
+			return "Es konnten keine Sensoren zu den gewählten Suchparametern oder mit Werten gefunden werden";
 		} else if (en) {
-			return "No data was found for the chosen parameters";
+			return "No sensors found for the chosen parameters or with data";
 		} else {
 			return "No se encontraron datos para los par\u00E1metros seleccionados";
 		}
@@ -1691,7 +1691,7 @@ public class Languages {
 			return "Usted puede crear un sensor que se agregar\u00E1 a OpenseSense.Por favor, aseg\u00FArese de verificar sus datos nuevamente antes de enviar. Usted puede ver y eliminar sus propios sensores aqu\u00ED en la p\u00E1gina de listas en cualquier momento.";
 		}
 	}
-	
+
 	public static String listContainerTour() {
 		if (de) {
 			return "Ihre selbst erstellten Listen können sie hier umbenennen und ihre enthaltene Sensoren einsehen. Sie können Sensoren auswählen und diese löschen oder aber auf einen der Knöpfe drücken um sie auf der entsprechend anderen Seite anzeigen zu lassen.";
@@ -1774,7 +1774,7 @@ public class Languages {
 			return "Add values";
 		}
 	}
-	
+
 	public static String numberBetween(double low, double high) {
 		if(de) {
 			return "Bitte geben Sie eine Zahl zwischen "+low+" und "+high+" ein!";
@@ -1782,7 +1782,7 @@ public class Languages {
 			return "Please enter a number between "+low+" and "+high+"!";
 		}
 	}
-	
+
 	public static String validNumber() {
 		if(de) {
 			return "Bitte geben Sie eine gültige Zahl ein!";
@@ -1790,7 +1790,7 @@ public class Languages {
 			return "Please enter a valid number!";
 		}
 	}
-	
+
 	public static String cannotBeEmpty() {
 		if(de) {
 			return "Dieses Feld darf nicht leer sein";
@@ -1798,7 +1798,7 @@ public class Languages {
 			return "This field cannot be empty";
 		}
 	}
-	
+
 	public static String invalidPassword() {
 		if(de) {
 			return "Das Password muss mindestens 8 Zeichen, eine Zahl, einen Groß- und einen Kleinbuchstaben enthalten.";
