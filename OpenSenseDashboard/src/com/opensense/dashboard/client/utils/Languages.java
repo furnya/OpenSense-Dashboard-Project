@@ -1062,13 +1062,13 @@ public class Languages {
 
 	public static String listContains(int sensorsSize, int selectedSensorsSize) {
 		if (de) {
-			return "(Enthält " + sensorsSize + (sensorsSize > 1 ? " Sensoren" : " Sensor") + ", davon ausgewählt: "
+			return "(Enthält " + sensorsSize + (sensorsSize != 1 ? " Sensoren" : " Sensor") + ", davon ausgewählt: "
 					+ selectedSensorsSize + ")";
 		} else if (en) {
-			return "(Contains " + sensorsSize + (sensorsSize > 1 ? " sensors" : " sensor") + ", selected of these: "
+			return "(Contains " + sensorsSize + (sensorsSize != 1 ? " sensors" : " sensor") + ", selected of these: "
 					+ selectedSensorsSize + ")";
 		} else {
-			return "(Contiene " + sensorsSize + (sensorsSize > 1 ? " sensores" : " sensor")
+			return "(Contiene " + sensorsSize + (sensorsSize != 1 ? " sensores" : " sensor")
 					+ ", seleccionado de estos: " + selectedSensorsSize + ")";
 		}
 	}
@@ -1660,7 +1660,7 @@ public class Languages {
 		if (de) {
 			return "Wenn Sie nur nach Sensoren mit einer bestimmten Messgröße suchen wollen, können Sie diese in der Liste auswählen.";
 		} else {
-			return "";
+			return "You can choose a specific measurand from the list if you only want to search for sensors that measure this measurand.";
 		}
 	}
 
@@ -1668,7 +1668,7 @@ public class Languages {
 		if (de) {
 			return "Sie können Sensoren ortbezogen suchen.";
 		} else {
-			return "";
+			return "Here you can search for a certain place. The search will only return sensors at this place.";
 		}
 	}
 
@@ -1677,7 +1677,7 @@ public class Languages {
 			return "Geben Sie immer eine maximale Anzahl von Sensoren ein, sonst dauern Anfragen sehr lange. Wir empfehlen außerdem niemals mehr als 1000 Sensoren anzufragen, da sie bis zu 5 Minuten dauern kann."
 					+ "Tragen Sie beispielweise 50 ein und drücken \"Weiter\".";
 		} else {
-			return "";
+			return "Enter a number (e.g. 50) to limit the amount of sensors that the search will return. Lower numbers will result in faster searches. Once you have entered a number, press \"Continue\".";
 		}
 	}
 
@@ -1685,7 +1685,7 @@ public class Languages {
 		if (de) {
 			return "Sie können eine Geauigkeit der Sensoren angeben auf einer Skala von 0-10. Die Genauigkeit wird Ihnen als Sternebewertung in den Sensoren angezeigt.";
 		} else {
-			return "";
+			return "You can enter a minimum or maximum accuracy (0-10) for the sensors here. The accuracy will be displayed as a \"x out of 5 stars\" rating.";
 		}
 	}
 
@@ -1693,7 +1693,7 @@ public class Languages {
 		if (de) {
 			return "Suchen Sie Sensoren anhand der gewählten Parameter indem Sie den Knopf betätigen.";
 		} else {
-			return "";
+			return "Start the search by clicking this button.";
 		}
 	}
 
@@ -1701,7 +1701,7 @@ public class Languages {
 		if (de) {
 			return "Wenn Sie Sensoren, welche keine Werte gesammelt haben ausschließen möchten, lassen Sie das Kontrollkästchen ausgewählt.";
 		} else {
-			return "";
+			return "If you don't want to see any sensors without values in the search result, check this box.";
 		}
 	}
 
@@ -1724,6 +1724,14 @@ public class Languages {
 			return "Usted puede crear un sensor que se agregar\u00E1 a OpenseSense.Por favor, aseg\u00FArese de verificar sus datos nuevamente antes de enviar. Usted puede ver y eliminar sus propios sensores aqu\u00ED en la p\u00E1gina de listas en cualquier momento.";
 		}
 	}
+	
+	public static String addValuesButtonTour() {
+		if (de) {
+			return "Hier können Sie Werte (in einem bestimmten Format) zu einem von IHNEN erstellten Sensoren hinzufügen.";
+		} else {
+			return "Here you can add values (in a certain format) for sensors that YOU created.";
+		}
+	}
 
 	public static String listContainerTour() {
 		if (de) {
@@ -1739,7 +1747,7 @@ public class Languages {
 		if(de) {
 			return "Hier können Sie die Zeitspanne für die angezeigten Werte auswählen.\n Vorausgewählt ist der Zeitraum \"Letzte Woche\".";
 		}else {
-			return "";
+			return "Here you can choose the timespan for the shown values.\n The preselected timespan is \"last week\".";
 		}
 	}
 
@@ -1747,7 +1755,7 @@ public class Languages {
 		if(de) {
 			return "Hier werden alle ihre Listen angezeigt. Im Diagramm werden immer die Daten der ausgewählten Sensoren in der jeweils ausgeklappten Liste angezeigt.\nWählen Sie nun einen oder mehrere Sensoren in der Favoriten-Liste aus, um seine/ihre Daten zu sehen.";
 		}else {
-			return "";
+			return "All your lists will be displayed here. The data in the diagram always corresponds to the currently selected sensors in the expanded list.\n Select one or more sensors in the Favorites list now in order to see their values.";
 		}
 	}
 
@@ -1755,15 +1763,15 @@ public class Languages {
 		if(de) {
 			return "Hier können Sie gegebenenfalls ein Datum auswählen, wenn Sie Daten für einen bestimmten Zeitraum anzeigen lassen möchten.";
 		}else {
-			return "";
+			return "If you want to see data from a specific timespan, you can choose it here.";
 		}
 	}
 
 	public static String chartVisContainerTour() {
 		if(de) {
-			return "Hier werden die Daten der Sensoren in einem Liniendiagramm angezeigt. Wenn Sie die Maus über das Diagramm bewegen, werden Ihnen die genauen Werte in einem Tooltip angezeigt. Falls keine Diagramm angezeigt wird, existieren für die ausgewählten Sensoren und den ausgewählten Zeitraum keine Daten.";
+			return "Hier werden die Daten der Sensoren in einem Liniendiagramm angezeigt. Wenn Sie die Maus über einen Datenpunkt bewegen, werden Ihnen die genauen Werte in einem Tooltip angezeigt. Falls keine Diagramm angezeigt wird, existieren für die ausgewählten Sensoren und den ausgewählten Zeitraum keine Daten.";
 		}else {
-			return "";
+			return "The sensor data is displayed in a line chart here. If you hover over a data point, the exact value will be displayed in a tooltip. If no chart is displayed, there is no data available for the currently selected sensors and the selected timespan.";
 		}
 	}
 

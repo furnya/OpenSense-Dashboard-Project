@@ -38,7 +38,7 @@
 			</m:MaterialButton>
 		</m:MaterialTooltip>
 		<m:MaterialTooltip text="{lang.addValues}">
-			<m:MaterialButton enabled="false" ui:field="addValuesButton" b:id="list_addValues_button" text="{lang.addValuesShort}" textColor="WHITE" addStyleNames="d-btn">
+			<m:MaterialButton enabled="false" ui:field="addValuesButton" b:id="list_addvalues_button" text="{lang.addValuesShort}" textColor="WHITE" addStyleNames="d-btn">
 				<m:MaterialImage url="{gui.plus.getSafeUri.asString}" addStyleNames="{style.btn-image}"/>
 			</m:MaterialButton>
 		</m:MaterialTooltip>
