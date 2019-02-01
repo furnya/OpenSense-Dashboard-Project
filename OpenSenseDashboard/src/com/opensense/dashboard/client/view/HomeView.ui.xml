@@ -103,6 +103,7 @@
 		position: absolute;
 		font-size: 105%;
 	}
+	
 	</ui:style>
 
 	<bh:Div ui:field="grid"

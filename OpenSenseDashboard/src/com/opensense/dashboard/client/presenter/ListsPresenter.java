@@ -10,12 +10,14 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.opensense.dashboard.client.AppController;
+import com.opensense.dashboard.client.event.StartTourEvent;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.AddSensorModal;
 import com.opensense.dashboard.client.utils.AddValuesModal;
 import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.RequestBuilder;
+import com.opensense.dashboard.client.utils.tourutils.Tours;
 import com.opensense.dashboard.client.view.ListsView;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
@@ -46,6 +48,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 		container.clear();
 		container.add(this.view.asWidget());
 		Document.get().getElementById("content").addClassName("padding-right-10");
+		this.eventBus.fireEvent(new StartTourEvent(Tours.LIST_PAGE, false));
 	}
 
 	@Override

@@ -446,7 +446,7 @@ public class Languages {
 
 	public static String deselectAllSensors() {
 		if (de) {
-			return "Alle abwählen";
+			return "Alle abwählen"; 
 		} else if (en) {
 			return "Deselect all";
 		} else {
@@ -945,7 +945,7 @@ public class Languages {
 		if (de) {
 			return "Es ist ein Fehler aufgetreten. Wiederholen Sie Ihre Anfrage oder versuchen Sie es zu einem späterem Zeitpunkt erneut.";
 		} else if (en) {
-			return "";
+			return "An error has occurred. Repeat your request or try again later.";
 		} else {
 			return "Ha ocurrido un error. Repita su solicitud o intente de nuevo m\u00E1s tarde";
 		}
@@ -955,7 +955,7 @@ public class Languages {
 		if (de) {
 			return "Es ist ein Fehler beim auswählen der Liste aufgetreten.";
 		} else if (en) {
-			return "";
+			return "There was an error while selecting the list.";
 		} else {
 			return "Hubo un error al seleccionar la lista.";
 		}
@@ -975,7 +975,7 @@ public class Languages {
 		if (de) {
 			return "Die Favoriten dürfen maximal " + maxSensors + " enthalten.";
 		} else if (en) {
-			return "";
+			return "Your favorites may contain a maximum of"+ maxSensors + "sensors";
 		} else {
 			return "Su lista de favoritos puede contener un m\u00E1ximo de " + maxSensors + " sensores";
 		}
@@ -1232,61 +1232,94 @@ public class Languages {
 			return "Hu\u00E9sped";
 		}
 	}
-
+ 
 	public static String welcomeInfoText() {
 		if (de) {
-			return "";
-		} else if (en) {
-			return "";
+			return "Herzlichen Willkommen beim OpenSense-Dashboard, hier können Sie die Daten von Weltweit verteilten Sensoren einsehen. "
+					+ "Da es sich um mehrere 10 tausend Sensoren handelt, bieten wir mit OpenSense-Dashboard eine Plattform in der Sie nach "
+					+ "bestimmten Sensormessgrößen, Ortsabhängig und unkompliziert suchen können."
+					+ "Falls ihnen dabei einige Sensoren besonder wichtig sind und Sie nicht jedes Mal erneut nach ihnen suchen wollen, "
+					+ "bieten wir ihnen zusätzlich die Möglichkeit eigene Listen zu erstellen in die Sie dann die Sensoren einfügen können."
+					+ "Damit Sie die Sensordaten nicht nur in Textform sehen, können Sie die Sensoren auf OpenSense-Dashboard auch auf "
+					+ "einer von Google Maps bereitgestellten Karte einsehen, oder aber die dazugehörigen Daten einfach in einem Diagramm einsehen.";
+		} else if (en) { 
+			return "Welcome to the OpenSense Dashboard, where you can view the data from Global Sensors."
+					+ "With tens of thousands of sensors, OpenSense Dashboard provides a platform where you can search for specific sensor readings,"
+					+ " location-dependent, and uncomplicated."
+					+ "If some sensors are of particular importance to you and you do not want to search for them again and again,"
+					+ " we also offer you the possibility to create your own lists in which you can then insert the sensors."
+					+ "So that you do not only see the sensor data in text form, you can also view the sensors on a map provided by Google Maps,"
+					+ " or simply view the corresponding data in a diagram.";
 		} else {
-			return "";
+			return "Bienvenido a OpenSense Dashboard, donde puede ver los datos de sensores distribuidos globalmente."
+					+ "Con decenas de miles de sensores, OpenSense Dashboard proporciona una plataforma donde puede buscar sensores"
+					+ " con medidas espec\u00EDficas,"
+					+ " dependientes de la ubicaci\u00F3n y sin complicaciones."
+					+ " Si algunos sensores son de particular importancia para usted y no desea buscarlos una y otra vez, tambi\u00E9n le ofrecemos la posibilidad"
+					+ " de crear sus propias listas en las que puede insertar los sensores ."
+					+ " Para no solo ver los datos de los sensores en forma de texto, tambi\u00E9n puede ver los sensores en un mapa proporcionado por Google Maps,"
+					+ " o simplemente ver los datos correspondientes en un diagrama.";
 		}
 	}
 
 	public static String searchInfoText() {
 		if (de) {
-			return "Auf dieser Seite kannst du Sensoren suchen und ihre Informationen einsehen."
+			return "Auf dieser Seite können Sie Sensoren suchen und ihre Informationen einsehen."
 					+ "Die Sensoren können parametrisiert sowie Ortsabhängig gesucht werden.";
 		} else if (en) {
 			return "On this page you can search the sensors.\r\n"
 					+ "The sensors can be parameterized and searched for location-dependent.";
 		} else {
-			return "En esta p\u00E1gina puedes buscar los sensores.\r\n"
+			return "En esta p\u00E1gina puede buscar los sensores.\r\n"
 					+ "Los sensores pueden parametrizarse y buscarse seg\u00FAn la ubicaci\u00F3n.";
 		}
 	}
 
 	public static String mapInfoText() {
 		if (de) {
-			return "Auf der von Google bereitgestellten Karte kannst du dir deine Sensoren anzeigen lassen."
+			return "Auf der von Google bereitgestellten Karte können Sie ihre Sensoren anzeigen lassen."
 					+ "Die Sensoren werden abhängig von ihrem Typ mit einem anderen Symbol auf der Karte angezeigt."
-					+ "Sollte sich mehrere Sensoren auf einer Stelle befinden so wird dies durch dieses Symbol deutlich:";
+					+ "Sollte sich mehrere Sensoren auf einer Stelle befinden so wird dies durch ein gro\u00DFes plus zeichen deutlich.";
 		} else if (en) {
-			return "Englischer text für MapPage";
+			return "You can have your sensors displayed on the map provided by Google."
+					+ " The sensors are displayed with a different symbol on the map depending on their type"
+					+ " If several sensors are in one place, this is indicated by a large plus sign.";
 		} else {
-			return "Spanischer text für MapPage";
+			return "Puede tener sus sensores mostrados en el mapa provisto por Google. "
+					+ "Los sensores se muestran con un s\u00EDmbolo diferente en el mapa dependiendo de su tipo "
+					+ "Si hay varios sensores en un solo lugar, esto se indica por un signo de m\u00E1s.";
 		}
 	}
 
 	public static String visuInfoText() {
 		if (de) {
-			return "Die hier bereitgestellte Funktionalität ermöglicht es dir, die Werte der Sensoren je nach belieben (Tag, Monat, Jahr, oder spezifischer), in einem Diagramm darzustellen."
-					+ "Dabei behälst du dank der farblichen Markierung der Angezeigten Sensoren immer den Überblick."
-					+ "Bitte beachte dabei, dass du maximal 10 Sensoren zur gleichen Zeit in den Listen auswählen kannst.";
+			return "Die hier bereitgestellte Funktionalität ermöglicht es ihnen,"
+					+ " die Werte der Sensoren je nach belieben (Tag, Monat, Jahr, oder spezifischer), in einem Diagramm darzustellen."
+					+ "Dabei behalten Sie dank der farblichen Markierung der Angezeigten Sensoren immer den Überblick."
+					+ "Bitte beachten Sie dabei, dass Sie hier maximal 10 Sensoren zur gleichen Zeit in den Listen auswählen kannst.";
 		} else if (en) {
-			return "Englischer text für VisuPage";
+			return "The functionality provided here allows you to display the values of the sensors as you like (day, month, year, or more specific) in a diagram."
+					+ " Thanks to the colored marking of the displayed sensors, you always have the overview."
+					+ " Please note that you can select a maximum of 10 sensors here at the same time in the lists.";
 		} else {
-			return "Spanischer text für VisuPage";
+			return "La funcionalidad proporcionada aqu\u00ED le permite ver los valores de los sensores como desee"
+					+ " (d\u00EDa, mes, a\u00F1o o m\u00E1s espec\u00EDficos) en un diagrama."
+					+ " Gracias a la marca de color de los sensores mostrados, siempre tiene la visi\u00F3n general."
+					+ " Por favor tenga en cuenta que puede seleccionar un m\u00E1ximo de 10 sensores al mismo tiempo aqui en las listas.";
 		}
 	}
 
 	public static String listInfoText() {
 		if (de) {
-			return "Damit du nicht immer wieder die Selbe Sensoren auf der Suchseite suchen musst, kannst du dir deine eigenen Listen erstellen."
-					+ "Erstelle eine Liste und füge über die Suchseite passende Sensoren hinzu."
-					+ "Außerdem kannst du, wenn du einen Entsprechenden Account besitzt auch einfach deinen/deine eigenen Sensor/-en zu OpenSense hinzufügen.";
+			return "Damit Sie nicht immer wieder dieselben Sensoren auf der Suchseite suchen m\u00FCssen, k\u00F6nnen Sie eigene Listen erstellen. "
+					+ "Erstellen Sie eine Liste und fügen Sie über die Suchseite passende Sensoren hinzu."
+					+ "Außerdem können Sie, wenn Sie einen entsprechenden Account besitzen, auch einfach ihre eigenen Sensoren zu OpenSense hinzufügen."
+					+ "Um das importieren ihrer Sensordaten einfacher zu gestalen, können ihre Sensordaten als \".csv\" Datei im Format \" ADDFORMATHERE \" hochladen.";
 		} else if (en) {
-			return "Englischer Text für ListPage";
+			return "To avoid having to search for the same sensors on the search page again and again, you can create your own lists."
+					+ " Create a list and add suitable sensors via the search page."
+					+ " Plus, if you have an account, you can easily add your own sensors to OpenSense."
+					+ " To make the import of your sensor data easier, you can upload your sensor data as a \\ \".csv \\\" file in the format \\ \"ADDFORMATHERE \\\".";
 		} else {
 			return "Spanischer text für ListPage";
 		}

@@ -87,6 +87,7 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	}
 
 	public void setAllCardInfos() {
+		setWelcomeCardText();
 		setSearchCardText();
 		setMapCardText();
 		setVisuCardText();
@@ -96,6 +97,8 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	public void setWelcomeCardText(){
 		this.welcomeText.setText(Languages.welcomeInfoText());
 		this.welcomeText.setColor(this.whiteColor);
+		this.welcomeText.setMarginLeft(40);
+		this.welcomeText.setMarginRight(40);
 	}
 
 
