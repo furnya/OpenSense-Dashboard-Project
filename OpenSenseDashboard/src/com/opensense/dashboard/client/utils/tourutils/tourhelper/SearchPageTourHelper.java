@@ -9,6 +9,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.opensense.dashboard.client.model.DataPanelPage;
+import com.opensense.dashboard.client.utils.CookieManager;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.utils.Rectangle;
 import com.opensense.dashboard.client.utils.tourutils.TourEventType;
@@ -19,6 +20,10 @@ public class SearchPageTourHelper implements ITourHelper{
 	@Override
 	public void prepare(Runnable runnable) {
 		History.newItem(DataPanelPage.SEARCH.name());
+		List<Integer> favs = CookieManager.getFavoriteList();
+		if(!favs.contains(301574)) favs.add(0, 301574);
+		if(!favs.contains(332713)) favs.add(0, 332713);
+		CookieManager.writeFavoriteListCookie(favs);
 		this.checkItemInDOM(runnable);
 	}
 

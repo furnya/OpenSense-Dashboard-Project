@@ -26,7 +26,6 @@
 	<bh:Div addStyleNames="flex">
 		<bh:Div ui:field="map" b:id="map" addStyleNames="{style.map-width} round-corners" />
 
-		<bh:Div ui:field="sensorContainer"
-			addStyleNames="{style.list-width} round-corners " />
+		<bh:Div ui:field="sensorContainer" b:id="list_map_container" addStyleNames="{style.list-width} round-corners " />
 	</bh:Div>
 </ui:UiBinder>

@@ -5,6 +5,7 @@ import java.util.List;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.client.utils.tourutils.tourhelper.ITourHelper;
 import com.opensense.dashboard.client.utils.tourutils.tourhelper.ListPageTourHelper;
+import com.opensense.dashboard.client.utils.tourutils.tourhelper.MapPageTourHelper;
 import com.opensense.dashboard.client.utils.tourutils.tourhelper.SearchPageTourHelper;
 import com.opensense.dashboard.client.utils.tourutils.tourhelper.VisPageTourHelper;
 
@@ -27,6 +28,12 @@ public enum Tours implements ITourHelper{
 		@Override public String getTitle() { return ""; }
 		@Override public String getDescription() { return ""; }
 		@Override public String getCardImageUrl() { return GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString(); }	
+	},
+		MAP_PAGE{
+		@Override public ITourHelper createTourHelperInstance() { return new MapPageTourHelper(); }
+		@Override public String getTitle() { return ""; }
+		@Override public String getDescription() { return ""; }
+		@Override public String getCardImageUrl() { return GUIImageBundle.INSTANCE.mapIconSvg().getSafeUri().asString(); }	
 	};
 	
 

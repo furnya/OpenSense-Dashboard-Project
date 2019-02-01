@@ -138,7 +138,7 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 
 		this.mapCard.addDomHandler(event -> {
 
-			this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, true, null));
+			this.presenter.getEventBus().fireEvent(new StartTourEvent(Tours.MAP_PAGE, true));
 
 		}, ClickEvent.getType());
 

@@ -1908,4 +1908,33 @@ public class Languages {
 			return "La contrase\u00F1a debe contener al menos 8 caracteres, un n\u00FAmero, una letra may\u00FAscula y una letra min\u00FAscula.";
 		}
 	}
+	
+	public static String mapPageTourStep1() {
+		if(de) {
+			return "Wählen Sie hier aus einen der Listen Sensoren. Falls die Listen noch leer sind können Sie über die Suchseite sensoren hinzufügen."
+					+ " Ausgewählte Sensoren werden dann auf der Karte angzeigt.";
+		} else if(en) {
+			return "Choose from one of the lists Sensors. If the lists are still empty, you can add sensors via the search page."
+					+ "Selected sensors will then be displayed on the map.";
+		} else {
+			return "Elige entre una de las listas de Sensores. Si las listas siguen vac\u00EDas, puede agregar sensores a trav\u00E9s de la p\u00E1gina de b\u00FAsqueda."
+					+ "Los sensores seleccionados se mostrar\u00E1n en el mapa.";
+		}
+	}
+	
+	public static String mapPageTourStep2() {
+		if(de) {
+			return "Drücken Sie auf einen Sensor um einen kurzen Überblick über diesen zu erhalten."
+					+ "Wenn Sie viele Sensoren ausgewählt haben, dann werden diese zur besseren Übersicht in bunte Bündel gepackt. Klicken Sie"
+					+ " die auf die Bündel um näher herein zu zoomen.";
+		} else if(en) {
+			return "Press on a sensor to get a brief overview of it. If you have selected many sensors, "
+					+ "then these are packed into colorful bundles for a better overview."
+					+ " Click on the bundles to zoom in. \"";
+		} else {
+			return "Presione sobre un sensor para obtener una breve descripci\u00F3n de \u00E9l. Si ha seleccionado muchos sensores,"
+					+ " estos est\u00E1n empaquetados en coloridos paquetes para una mejor visi\u00F3n general."
+					+ " Haga clic en los paquetes para ampliar.";
+		}
+	}
 }
