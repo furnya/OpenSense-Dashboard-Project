@@ -1321,7 +1321,10 @@ public class Languages {
 					+ " Plus, if you have an account, you can easily add your own sensors to OpenSense."
 					+ " To make the import of your sensor data easier, you can upload your sensor data as a \\ \".csv \\\" file in the format \\ \"ADDFORMATHERE \\\".";
 		} else {
-			return "Spanischer text für ListPage";
+			return "Para evitar tener que buscar los mismos sensores en la p\u00E1gina de b\u00FAsqueda una y otra vez, puede crear sus propias listas."
+					+ " Cree una lista y agregue sensores adecuados a trav\u00E9s de la p\u00E1gina de b\u00FAsqueda."
+					+ " Adem\u00E1s, si tiene una cuenta, puede agregar f\u00E1cilmente sus propios sensores a OpenSense."
+					+ " Para facilitar la importaci\u00F3n de los datos de su sensor, puede cargar sus datos de sensor como un archivo .csv en el formato \"ADDFORMATHERE\".";
 		}
 	}
 
