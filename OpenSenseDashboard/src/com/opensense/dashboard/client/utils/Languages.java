@@ -1314,17 +1314,17 @@ public class Languages {
 			return "Damit Sie nicht immer wieder dieselben Sensoren auf der Suchseite suchen m\u00FCssen, k\u00F6nnen Sie eigene Listen erstellen. "
 					+ "Erstellen Sie eine Liste und fügen Sie über die Suchseite passende Sensoren hinzu."
 					+ "Außerdem können Sie, wenn Sie einen entsprechenden Account besitzen, auch einfach ihre eigenen Sensoren zu OpenSense hinzufügen."
-					+ "Um das importieren ihrer Sensordaten einfacher zu gestalen, können ihre Sensordaten als \".csv\" Datei im Format \" \"[Zeitstempel];[WERT] -> MM.DD.YYYY,HH:mm:ss;Z.z. Zum Bespiel 01.01.2000,12:01:00;24.4 \" \" hochladen.";
+					+ "Um das importieren ihrer Sensordaten einfacher zu gestalen, können Sie ihre Sensordaten als \".csv\" Datei hochladen.";
 		} else if (en) {
 			return "To avoid having to search for the same sensors on the search page again and again, you can create your own lists."
-					+ " Create a list and add suitable sensors via the search page."
+					+ " Create a list and add suitable sensors via the search page. "
 					+ " Plus, if you have an account, you can easily add your own sensors to OpenSense."
-					+ " To make the import of your sensor data easier, you can upload your sensor data as a \\ \".csv \\\" file in the format \\ \"\"[DATE,TIME];[VALUE] -> MM.DD.YYYY,HH:mm:ss;Z.z. for example 01.01.2000,12:01:00;24.4 \" \\\".";
+					+ " To make the import of your sensor data easier, you can upload your sensor data as a \".csv \" file.";
 		} else {
 			return "Para evitar tener que buscar los mismos sensores en la p\u00E1gina de b\u00FAsqueda una y otra vez, puede crear sus propias listas."
 					+ " Cree una lista y agregue sensores adecuados a trav\u00E9s de la p\u00E1gina de b\u00FAsqueda."
 					+ " Adem\u00E1s, si tiene una cuenta, puede agregar f\u00E1cilmente sus propios sensores a OpenSense."
-					+ " Para facilitar la importaci\u00F3n de los datos de su sensor, puede cargar sus datos de sensor como un archivo .csv en el formato \"\"[FECHA,HORA];[VALOR] -> MM.DD.YYYY,HH:mm:ss;Z.z. por ejemplo 01.01.2000,12:01:00;24.4 \"\".";
+					+ " Para facilitar la importaci\u00F3n de los datos de su sensor, puede cargar sus datos de sensor como un archivo \".csv\" .";
 		}
 	}
 
