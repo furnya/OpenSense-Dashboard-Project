@@ -1314,17 +1314,17 @@ public class Languages {
 			return "Damit Sie nicht immer wieder dieselben Sensoren auf der Suchseite suchen m\u00FCssen, k\u00F6nnen Sie eigene Listen erstellen. "
 					+ "Erstellen Sie eine Liste und fügen Sie über die Suchseite passende Sensoren hinzu."
 					+ "Außerdem können Sie, wenn Sie einen entsprechenden Account besitzen, auch einfach ihre eigenen Sensoren zu OpenSense hinzufügen."
-					+ "Um das importieren ihrer Sensordaten einfacher zu gestalen, können ihre Sensordaten als \".csv\" Datei im Format \" ADDFORMATHERE \" hochladen.";
+					+ "Um das importieren ihrer Sensordaten einfacher zu gestalen, können ihre Sensordaten als \".csv\" Datei im Format \" \"[Zeitstempel];[WERT] -> MM.DD.YYYY,HH:mm:ss;Z.z. Zum Bespiel 01.01.2000,12:01:00;24.4 \" \" hochladen.";
 		} else if (en) {
 			return "To avoid having to search for the same sensors on the search page again and again, you can create your own lists."
 					+ " Create a list and add suitable sensors via the search page."
 					+ " Plus, if you have an account, you can easily add your own sensors to OpenSense."
-					+ " To make the import of your sensor data easier, you can upload your sensor data as a \\ \".csv \\\" file in the format \\ \"ADDFORMATHERE \\\".";
+					+ " To make the import of your sensor data easier, you can upload your sensor data as a \\ \".csv \\\" file in the format \\ \"\"[DATE,TIME];[VALUE] -> MM.DD.YYYY,HH:mm:ss;Z.z. for example 01.01.2000,12:01:00;24.4 \" \\\".";
 		} else {
 			return "Para evitar tener que buscar los mismos sensores en la p\u00E1gina de b\u00FAsqueda una y otra vez, puede crear sus propias listas."
 					+ " Cree una lista y agregue sensores adecuados a trav\u00E9s de la p\u00E1gina de b\u00FAsqueda."
 					+ " Adem\u00E1s, si tiene una cuenta, puede agregar f\u00E1cilmente sus propios sensores a OpenSense."
-					+ " Para facilitar la importaci\u00F3n de los datos de su sensor, puede cargar sus datos de sensor como un archivo .csv en el formato \"ADDFORMATHERE\".";
+					+ " Para facilitar la importaci\u00F3n de los datos de su sensor, puede cargar sus datos de sensor como un archivo .csv en el formato \"\"[FECHA,HORA];[VALOR] -> MM.DD.YYYY,HH:mm:ss;Z.z. por ejemplo 01.01.2000,12:01:00;24.4 \"\".";
 		}
 	}
 
@@ -1552,9 +1552,11 @@ public class Languages {
 		if (de) {
 			return "Beim ausführen der Tour ist ein Fehler aufgetreten. Versuchen Sie unter Hilfe die Tour erneut zu starten. "
 					+ "Sollte der Fehler immer noch auftreten, kontaktieren Sie uns bitte!";
-		} else {
+		} else if (en) {
 			return "While running the tour an error occues. Please try to start the tour again at the help page. If the error"
 					+ " still occurs, please contact us!";
+		} else {
+			return "Durante la ejecuci\u00F3n del recorrido se produjo un error. Por favor, intente comenzar el recorrido nuevamente en la p\u00E1gina de ayuda. Si el error persiste, cont\u00E1ctenos!";
 		}
 	}
 
@@ -1621,57 +1623,73 @@ public class Languages {
 	public static String dontShowTours() {
 		if (de) {
 			return "Keine Touren mehr anzeigen";
-		} else {
+		} else if(en) {
 			return "Do not show any tours";
+		}else {
+			return "No mostrar ning\u00FAn recorrido";
 		}
 	}
 
 	public static String tourHeader(int tourStep, int tourSteps) {
 		if (de) {
 			return "Rundgang: Schritt " + tourStep + " von " + tourSteps;
-		} else {
+		} else if(en) {
 			return "Tour: Step " + tourStep + " of " + tourSteps;
+		}else {
+			return "Tour: Paso" + tourStep + " de "+ tourSteps;
 		}
 	}
 
 	public static String showTourOnPage() {
 		if (de) {
 			return "Touren automatisch anzeigen, wenn der Startpunkt aufgerufen wird";
-		} else {
+		} else if(en) {
 			return "Show tours automaticaly if you reaching the startpoint";
+		}else {
+			return "Mostrar recorridos autom\u00E1ticamente al llegar al punto de inicio.";
 		}
 	}
 
 	public static String clearFinishedTours() {
 		if (de) {
 			return "Alle Rundgänge erneut starten";
-		} else {
+		} else if(en) {
 			return "Start all tours again";
+		} else {
+			return "Reiniciar todos los recorridos";
 		}
 	}
 
 	public static String infoTours() {
 		if (de) {
 			return "Hinweis: Rundgänge starten automatisch, wenn Sie das erste mal auf die Seite kommen. "
-					+ "Wenn Sie alle Rundgänge erneut starten, bekommen Sie bereits beendete erneut angezeigt.";
-		} else {
-			return "";
+					+ "Wenn Sie alle Rundgänge erneut starten, bekommen Sie bereits beendet erneut angezeigt.";
+		} else if(en) {
+			return "Note: Tours start automatically when you first come to the page."
+					+ "If you start all tours again, you will get displayed already finished again.";
+		}else {
+			return "Nota: los tours comienzan autom\u00E1ticamente cuando usted llega a la p\u00E1gina."
+					+ "Si vuelve a iniciar todos los recorridos, se mostrar\u00E1 ya terminado otra vez.";
 		}
 	}
 
 	public static String measurandsTour() {
 		if (de) {
 			return "Wenn Sie nur nach Sensoren mit einer bestimmten Messgröße suchen wollen, können Sie diese in der Liste auswählen.";
-		} else {
+		} else if(en) {
 			return "You can choose a specific measurand from the list if you only want to search for sensors that measure this measurand.";
+		} else {
+			return "Puede elegir un mensurando espec\u00EDfico de la lista si solo desea buscar sensores que midan este mensurando.";
 		}
 	}
 
 	public static String placeInputTour() {
 		if (de) {
-			return "Sie können Sensoren ortbezogen suchen.";
-		} else {
+			return "Hier k\u00F6nnen Sie nach einem bestimmten Ort suchen. Die Suche gibt nur Sensoren an dieser Stelle zur\u00FCck.";
+		} else if(en) {
 			return "Here you can search for a certain place. The search will only return sensors at this place.";
+		}else {
+			return "Aqu\u00ED puede buscar un lugar determinado. La b\u00FAsqueda solo devolver\u00E1 sensores en este lugar.";
 		}
 	}
 
@@ -1679,32 +1697,42 @@ public class Languages {
 		if (de) {
 			return "Geben Sie immer eine maximale Anzahl von Sensoren ein, sonst dauern Anfragen sehr lange. Wir empfehlen außerdem niemals mehr als 1000 Sensoren anzufragen, da sie bis zu 5 Minuten dauern kann."
 					+ "Tragen Sie beispielweise 50 ein und drücken \"Weiter\".";
-		} else {
+		} else if(en) {
 			return "Enter a number (e.g. 50) to limit the amount of sensors that the search will return. Lower numbers will result in faster searches. Once you have entered a number, press \"Continue\".";
+		} else {
+			return "Siempre ingrese un n\u00FAmero m\u00E1ximo de sensores, de lo contrario las solicitudes tomar\u00E1n mucho tiempo."
+					+ " Tambi\u00E9n recomendamos nunca pedir m\u00E1s de 1000 sensores, ya que puede demorar hasta 5 minutos."
+					+ "Por ejemplo, ingrese 50 y presione \"Continuar \".";
 		}
 	}
 
 	public static String accuracyTour() {
 		if (de) {
-			return "Sie können eine Geauigkeit der Sensoren angeben auf einer Skala von 0-10. Die Genauigkeit wird Ihnen als Sternebewertung in den Sensoren angezeigt.";
-		} else {
+			return "Sie können eine Genauigkeit der Sensoren angeben auf einer Skala von 0-10. Die Genauigkeit wird Ihnen als Sternebewertung in den Sensoren angezeigt.";
+		} else if(en) {
 			return "You can enter a minimum or maximum accuracy (0-10) for the sensors here. The accuracy will be displayed as a \"x out of 5 stars\" rating.";
+		} else {
+			return "Puede especificar una precisi\u00F3n de los sensores en una escala de 0-10. La precisi\u00F3n se muestra como una calificaci\u00F3n de estrellas en los sensores.";
 		}
 	}
 
 	public static String searchButtonTour() {
 		if (de) {
 			return "Suchen Sie Sensoren anhand der gewählten Parameter indem Sie den Knopf betätigen.";
-		} else {
+		} else if(en) {
 			return "Start the search by clicking this button.";
+		} else {
+			return "Encuentra sensores basados en los par\u00E1metros seleccionados presionando el bot\u00F3n.";
 		}
 	}
 
 	public static String sensorsWithValuesTour() {
 		if (de) {
 			return "Wenn Sie Sensoren, welche keine Werte gesammelt haben ausschließen möchten, lassen Sie das Kontrollkästchen ausgewählt.";
-		} else {
+		} else if (en) {
 			return "If you don't want to see any sensors without values in the search result, check this box.";
+		} else {
+			return "Si no desea ver ning\u00FAn sensor sin valores en el resultado de b\u00FAsqueda, marque esta casilla.";
 		}
 	}
 
@@ -1731,8 +1759,10 @@ public class Languages {
 	public static String addValuesButtonTour() {
 		if (de) {
 			return "Hier können Sie Werte (in einem bestimmten Format) zu einem von IHNEN erstellten Sensoren hinzufügen.";
-		} else {
+		} else if(en) {
 			return "Here you can add values (in a certain format) for sensors that YOU created.";
+		} else {
+			return "Aqu\u00ED puede agregar valores (en un formato determinado) para los sensores que USTED cre\u00F3.";
 		}
 	}
 
@@ -1749,48 +1779,60 @@ public class Languages {
 	public static String timespanPanelTour() {
 		if(de) {
 			return "Hier können Sie die Zeitspanne für die angezeigten Werte auswählen.\n Vorausgewählt ist der Zeitraum \"Letzte Woche\".";
-		}else {
+		}else if (en) {
 			return "Here you can choose the timespan for the shown values.\n The preselected timespan is \"last week\".";
+		} else {
+			return "Aqu\u00ED puede seleccionar el intervalo de tiempo para los valores mostrados.  \n Preseleccionado es el per\u00EDodo  \"\u00DAltima semana \".";
 		}
 	}
 
 	public static String listContainerVisTour() {
 		if(de) {
 			return "Hier werden alle ihre Listen angezeigt. Im Diagramm werden immer die Daten der ausgewählten Sensoren in der jeweils ausgeklappten Liste angezeigt.\nWählen Sie nun einen oder mehrere Sensoren in der Favoriten-Liste aus, um seine/ihre Daten zu sehen.";
-		}else {
+		}else if(en) {
 			return "All your lists will be displayed here. The data in the diagram always corresponds to the currently selected sensors in the expanded list.\n Select one or more sensors in the Favorites list now in order to see their values.";
+		} else {
+			return "Aqu\u00ED se muestran todas sus listas. El diagrama siempre muestra los datos de los sensores seleccionados en la lista desplegada. Ahora seleccione uno o m\u00E1s sensores en la lista de Favoritos para ver sus datos.";
 		}
 	}
 
 	public static String startVisPickerTour() {
 		if(de) {
 			return "Hier können Sie gegebenenfalls ein Datum auswählen, wenn Sie Daten für einen bestimmten Zeitraum anzeigen lassen möchten.";
-		}else {
+		}else if(en) {
 			return "If you want to see data from a specific timespan, you can choose it here.";
+		}else {
+			return "Si desea leer datos de un per\u00EDodo de tiempo espec\u00EDfico, puede elegirlos aqu\u00ED.";
 		}
 	}
 
 	public static String chartVisContainerTour() {
 		if(de) {
 			return "Hier werden die Daten der Sensoren in einem Liniendiagramm angezeigt. Wenn Sie die Maus über einen Datenpunkt bewegen, werden Ihnen die genauen Werte in einem Tooltip angezeigt. Falls keine Diagramm angezeigt wird, existieren für die ausgewählten Sensoren und den ausgewählten Zeitraum keine Daten.";
-		}else {
+		}else if(en) {
 			return "The sensor data is displayed in a line chart here. If you hover over a data point, the exact value will be displayed in a tooltip. If no chart is displayed, there is no data available for the currently selected sensors and the selected timespan.";
+		} else {
+			return "Aqu\u00ED los datos de los sensores se muestran en un diagrama de l\u00EDneas. Cuando mueve el mouse sobre un punto de datos, los valores exactos se muestran en una informaci\u00F3n sobre herramientas. Si no se muestra ning\u00FAn gr\u00E1fico, no existen datos para los sensores seleccionados y el per\u00EDodo seleccionado.";
 		}
 	}
 
 	public static String successful() {
 		if(de) {
 			return "erfolgreich";
-		} else {
+		} else if(en) {
 			return "successful";
+		} else {
+			return "exitoso";
 		}
 	}
 
 	public static String uplaodFile() {
 		if(de) {
 			return "Datei hochladen";
-		} else {
+		} else if(en) {
 			return "Upload file";
+		} else {
+			return "Subir archivo";
 		}
 	}
 
@@ -1798,56 +1840,72 @@ public class Languages {
 		if(de) {
 			return "Laden Sie eine Datei im CSV-Format hoch, in dem Werte mit Zeitstempel für den Sensor stehen. Spalten sollten wie folgt aussehen  "
 					+ "[Zeitstempel];[WERT] -> MM.DD.YYYY,HH:mm:ss;Z.z. Zum Bespiel 01.01.2000,12:01:00;24.4 ";
-		} else {
-			return "Upload file";
+		} else if(en) {
+			return "Upload a file in CSV format with timestamp values for the sensor. Columns should look like this"
+					+ "\\\"\\\"[DATE,TIME];[VALUE] -> MM.DD.YYYY,HH:mm:ss;Z.z. for example 01.01.2000,12:01:00;24.4 \\\" \\\\\\\".";
+		}else {
+			return "Cargue un archivo en formato CSV con valores de marca de tiempo para el sensor. Las columnas deben verse as\u00ED  "
+					+ "\"\"[FECHA,HORA];[VALOR] -> MM.DD.YYYY,HH:mm:ss;Z.z. por ejemplo 01.01.2000,12:01:00;24.4 \"\".\"";
 		}
 	}
 
 	public static String addValues() {
 		if(de) {
 			return "Werte zu einem Sensor hinzufügen";
-		} else {
+		} else if(en) {
 			return "Add values for a sensor";
+		}else {
+			return "A\u00F1adir valores para un sensor";
 		}
 	}
 
 	public static String addValuesShort() {
 		if(de) {
 			return "Werte hinzufügen";
-		} else {
+		} else if(en) {
 			return "Add values";
+		} else {
+			return "A\u00F1adir valores";
 		}
 	}
 
 	public static String numberBetween(double low, double high) {
 		if(de) {
 			return "Bitte geben Sie eine Zahl zwischen "+low+" und "+high+" ein!";
-		} else {
+		} else if(en) {
 			return "Please enter a number between "+low+" and "+high+"!";
+		} else {
+			return "Por favor, ingrese un n\u00FAmero entre "+ low +" y "+ high +"! \"";
 		}
 	}
 
 	public static String validNumber() {
 		if(de) {
 			return "Bitte geben Sie eine gültige Zahl ein!";
-		} else {
+		} else if(en) {
 			return "Please enter a valid number!";
+		} else  {
+			return "\u00A1Por favor ingrese un n\u00FAmero valido!";
 		}
 	}
 
 	public static String cannotBeEmpty() {
 		if(de) {
 			return "Dieses Feld darf nicht leer sein";
-		} else {
+		} else if(en) {
 			return "This field cannot be empty";
+		} else {
+			return "Este campo no puede estar vac\u00EDo";
 		}
 	}
 
 	public static String invalidPassword() {
 		if(de) {
-			return "Das Password muss mindestens 8 Zeichen, eine Zahl, einen Groß- und einen Kleinbuchstaben enthalten.";
-		} else {
+			return "Das Passwort muss mindestens 8 Zeichen, eine Zahl, einen Groß- und einen Kleinbuchstaben enthalten.";
+		} else if(en) {
 			return "The password must be at least 8 characters long and contain one or more numbers, lowercase and uppercase letters.";
+		} else {
+			return "La contrase\u00F1a debe contener al menos 8 caracteres, un n\u00FAmero, una letra may\u00FAscula y una letra min\u00FAscula.";
 		}
 	}
 }
