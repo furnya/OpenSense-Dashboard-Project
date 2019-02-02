@@ -593,7 +593,7 @@ public class Languages {
 
 	public static String lastValue() {
 		if (de) {
-			return "Letzer Messung";
+			return "Letze Messung";
 		} else if (en) {
 			return "Last measurement";
 		} else {
@@ -1075,7 +1075,7 @@ public class Languages {
 
 	public static String errorMessageAccuracy() {
 		if (de) {
-			return "Bitte gebe eine Zahl zwischen 0 und 10 ein";
+			return "Bitte geben Sie eine Zahl zwischen 0 und 10 ein";
 		} else if (en) {
 			return "Please enter a number between 0 and 10";
 		} else {
@@ -1085,7 +1085,7 @@ public class Languages {
 
 	public static String errorMessageMaxSens() {
 		if (de) {
-			return "Bitte gebe eine Zahl zwischen 1 und 19999 ein";
+			return "Bitte geben Sie eine Zahl zwischen 1 und 19999 ein";
 		} else if (en) {
 			return "Please enter a number between 1 and 19999";
 		} else {
@@ -1935,6 +1935,36 @@ public class Languages {
 			return "Presione sobre un sensor para obtener una breve descripci\u00F3n de \u00E9l. Si ha seleccionado muchos sensores,"
 					+ " estos est\u00E1n empaquetados en coloridos paquetes para una mejor visi\u00F3n general."
 					+ " Haga clic en los paquetes para ampliar.";
+		}
+	}
+	
+	public static String alwaysShowTour() {
+		if(de) {
+			return "Touren sollen immer starten.";
+		} else if(en) {
+			return "Tours should always start.";
+		} else {
+			return "Los recorridos siempre deben comenzar.";
+		}
+	}
+	
+	public static String resetTourCookies() {
+		if(de) {
+			return "Tour Cookies zurücksetzen";
+		} else if(en) {
+			return "Reset tour cookies";
+		} else {
+			return "Restablecer los cookies";
+		}
+	}
+	
+	public static String recenterToBounds() {
+		if(de) {
+			return "Setzt die Karte zurück auf den Ursprung";
+		} else if(en) {
+			return "Recenters Map back to bounds";
+		} else {
+			return "Devuelve la carta al origen";
 		}
 	}
 }

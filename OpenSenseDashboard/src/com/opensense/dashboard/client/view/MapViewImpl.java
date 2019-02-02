@@ -175,7 +175,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		}
 		this.recenterBtn.add(new Image(GUIImageBundle.INSTANCE.recenter().getSafeUri().asString()));
 		this.recenterBtn.addStyleName("m-btn recenter-icon");
-		this.recenterBtn.setTitle("recenters map to fit bounds");
+		this.recenterBtn.setTitle(Languages.recenterToBounds());
 		this.recenterBtn.addClickHandler(event -> this.recenterMap());
 
 		this.mapWidget.setControls(ControlPosition.RIGHT_BOTTOM, this.recenterBtn);
@@ -243,13 +243,19 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		ArrayList<String> dataDesriptors = new ArrayList<>();
 		dataDesriptors.add(Languages.measurand() + ": ");
 		dataDesriptors.add(Languages.sensorTyp() + ": ");
-		dataDesriptors.add(Languages.altitudeAboveGround() + " ");
-		dataDesriptors.add(Languages.origin() + " ");
+		dataDesriptors.add(Languages.origin() + ": ");
+		dataDesriptors.add(Languages.firstValue()+": ");
+		dataDesriptors.add(Languages.lastValue() + ": ");
 		infoWindow.setDataDescriptor(dataDesriptors);
 		sensorData.add(si.getMeasurand().getDisplayName());
 		sensorData.add(si.getSensorModel());
-		sensorData.add("" + si.getAltitudeAboveGround()+ "m");
 		sensorData.add(si.getAttributionText());
+		double firstValue = Math.round(si.getValuePreview().getMinValue().getNumberValue()*100);
+		double lastValue = Math.round(si.getValuePreview().getMaxValue().getNumberValue()*100);
+		firstValue = firstValue/100;
+		lastValue = lastValue/100;
+		sensorData.add("" + firstValue+ si.getUnit().getDisplayName());
+		sensorData.add("" + lastValue+ si.getUnit().getDisplayName());
 		infoWindow.setData(sensorData);
 		iwOptions.setContent(infoWindow);
 		iwOptions.setDisableAutoPan(true);
