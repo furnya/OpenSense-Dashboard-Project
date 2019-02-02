@@ -46,15 +46,22 @@
 .star-container[size=small] .last-star {
 	margin: -15px -75px -10px -180px !important;
 }
+.inherit{
+	background-color: inherit;	
+}
 </ui:style>
 
-<bh:Div ui:field="starContainer" addStyleNames="{style.star-container}">
-	<d:Star/>
-	<d:Star/>
-	<d:Star/>
-	<d:Star/>
-	<d:Star addStyleNames="{style.last-star}"/>
-	<bh:Div ui:field="overlay" addStyleNames="{style.overlay}"/>
+<bh:Div addStyleNames="{style.inherit}">
+	<m:MaterialTooltip ui:field="toolip">
+		<bh:Div ui:field="starContainer" addStyleNames="{style.star-container}">
+			<d:Star/>
+			<d:Star/>
+			<d:Star/>
+			<d:Star/>
+			<d:Star addStyleNames="{style.last-star}"/>
+			<bh:Div ui:field="overlay" addStyleNames="{style.overlay}"/>
+		</bh:Div>
+	</m:MaterialTooltip>
 </bh:Div>
 
 </ui:UiBinder>

@@ -762,3 +762,7 @@ input:focus+label{
 .vis-button-active{
 	background-color: #42DCA3 !important;
 }
+
+.material-tooltip {
+   border-radius: 6px !important;
+}
