@@ -56,6 +56,7 @@
 	.grid-item-welcome {
 		height: 90vh;
 		width: 40%;
+		position: relative;
 	}
 	
 	.grid-item-welcome:hover {
@@ -104,6 +105,27 @@
 		font-size: 105%;
 	}
 	
+	.checkbox > label::before{
+    	margin-top: 4px;
+	}	
+	
+	.checkbox > label::after{
+		margin-top: 2px;
+	}
+	
+	.cookiebtn{
+		background:gray;
+		position: absolute;
+		bottom: 45px;
+    	left: 15px;
+	}
+	
+	.checkboxpos{
+		position: absolute;
+		bottom: 15px;
+    	left: 25px;
+	}
+	
 	</ui:style>
 
 	<bh:Div ui:field="grid"
@@ -121,6 +143,8 @@
 					addStyleNames="{style.userfield}" size="H5" />
 				<bh:Span ui:field="welcomeText"
 					addStyleNames="{style.info-text-style}"></bh:Span>
+				<m:MaterialCheckBox ui:field="alwaysShowCookiesCheckBox" text="{lang.alwaysShowTour}" type="FILLED" addStyleNames="{style.checkbox} {style.checkboxpos} white-checkbox" value="true"/>
+				<m:MaterialButton ui:field="resetCookiesButton" addStyleNames="{style.cookiebtn} d-btn" text="{lang.resetTourCookies}"/>
 			</bh:Div>
 		</bh:Div>
 

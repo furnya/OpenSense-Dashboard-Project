@@ -5,16 +5,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 public interface HomeView extends IDataPanelPageView {
 	public interface Presenter {
-
 		boolean isUserLoggedIn();
 		HandlerManager getEventBus();
 	}
-
 	public void setPresenter(Presenter presenter);
-
+	@Override
 	public Widget asWidget();
-
 	public void initView();
-
 	public void setUserInfo(String result);
+	public void setCheckboxValue();
 }

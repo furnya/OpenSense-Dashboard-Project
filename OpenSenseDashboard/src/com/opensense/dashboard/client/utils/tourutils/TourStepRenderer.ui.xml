@@ -56,6 +56,12 @@
 	.checkbox{
 	    margin-bottom: 10px;
 	}	
+	.checkbox > label::before{
+    margin-top: 4px;
+	}
+	.checkbox > label::after{
+		margin-top: 2px;
+	}
 	.checkbox label{
 		color: #FFF;	
 	}
@@ -83,7 +89,7 @@
 				<bh:Span ui:field="messageSpan" color="white" addStyleNames="{style.content-text}"/>
 				<bh:Div addStyleNames="margin-top-20 {style.display-block}">
 					<bh:Div addStyleNames="{style.flaot-right}">
-						<m:MaterialCheckBox ui:field="tourCheckBox" text="{lang.dontShowTours}" value="false" addStyleNames="{style.checkbox}"/>
+						<m:MaterialCheckBox ui:field="tourCheckBox" text="{lang.dontShowTours}" value="false" type="FILLED" addStyleNames="{style.checkbox} white-checkbox"/>
 					</bh:Div>
 					<bh:Div addStyleNames="{style.flaot-right}">
 						<b:ButtonGroup>
