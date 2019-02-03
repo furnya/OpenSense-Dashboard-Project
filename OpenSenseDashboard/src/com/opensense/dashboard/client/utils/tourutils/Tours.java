@@ -21,21 +21,21 @@ public enum Tours implements ITourHelper{
 		@Override public ITourHelper createTourHelperInstance() { return new VisPageTourHelper(); }
 		@Override public String getTitle() { return ""; }
 		@Override public String getDescription() { return ""; }
-		@Override public String getCardImageUrl() { return GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString(); }	
+		@Override public String getCardImageUrl() { return GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString(); }
 	},
-		LIST_PAGE{
+	LIST_PAGE{
 		@Override public ITourHelper createTourHelperInstance() { return new ListPageTourHelper(); }
 		@Override public String getTitle() { return ""; }
 		@Override public String getDescription() { return ""; }
-		@Override public String getCardImageUrl() { return GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString(); }	
+		@Override public String getCardImageUrl() { return GUIImageBundle.INSTANCE.searchIconSvg().getSafeUri().asString(); }
 	},
-		MAP_PAGE{
+	MAP_PAGE{
 		@Override public ITourHelper createTourHelperInstance() { return new MapPageTourHelper(); }
 		@Override public String getTitle() { return ""; }
 		@Override public String getDescription() { return ""; }
-		@Override public String getCardImageUrl() { return GUIImageBundle.INSTANCE.mapIconSvg().getSafeUri().asString(); }	
+		@Override public String getCardImageUrl() { return GUIImageBundle.INSTANCE.mapIconSvg().getSafeUri().asString(); }
 	};
-	
+
 
 	public abstract ITourHelper createTourHelperInstance();
 
@@ -47,7 +47,7 @@ public enum Tours implements ITourHelper{
 
 	@Override
 	public List<TourStepData> getTourData() {
-		return createTourHelperInstance().getTourData();
+		return this.createTourHelperInstance().getTourData();
 	}
 
 	/**
@@ -55,7 +55,7 @@ public enum Tours implements ITourHelper{
 	 */
 	@Override
 	public void cleanUp() {
-		createTourHelperInstance().cleanUp();
+		this.createTourHelperInstance().cleanUp();
 	}
 
 	/**
@@ -63,6 +63,6 @@ public enum Tours implements ITourHelper{
 	 */
 	@Override
 	public void prepare(Runnable runnable) {
-		createTourHelperInstance().prepare(runnable);
+		this.createTourHelperInstance().prepare(runnable);
 	}
 }
