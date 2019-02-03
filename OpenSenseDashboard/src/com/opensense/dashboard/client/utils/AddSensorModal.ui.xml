@@ -67,14 +67,16 @@
            <m:MaterialTextBox textColor="BLACK" ui:field="attributionTextBox" label="{lang.attributionText} *"/>
            <m:MaterialTextBox textColor="BLACK" ui:field="attributionUrlBox" label="{lang.attributionURL} *"/>
   	   	   <g:FormPanel ui:field="uploadForm" addStyleNames="{style.center}">
-   	   			<g:FileUpload ui:field="fileUpload" name="filename"/>
+  	   	   		<bh:Div addStyleNames="flex-center">
+  	   	   		<bh:Div addStyleNames="position-relative">
+  	   	   				<bh:Div ui:field="infoContainer" addStyleNames="upload-info-container round-corners">
+	   	   					<bh:Span text="{lang.uploadInfo}"/>
+	   	   				</bh:Div>
+	   					<m:MaterialImage ui:field="infoIcon" height="20px" width="20px" url="{gui.info.getSafeUri.asString}" addStyleNames="margin-right-5"/>
+       				</bh:Div>
+  	   	   			<g:FileUpload ui:field="fileUpload" name="filename"/>
+  	   	   		</bh:Div>
    	   		</g:FormPanel>
-   	   		<bh:Div addStyleNames="position-relative">
-	   	   		<bh:Div ui:field="infoContainer" addStyleNames="upload-info-container round-corners">
-	   	   			<bh:Span text="{lang.uploadInfo}"/>
-	   	   		</bh:Div>
-	   			<m:MaterialImage ui:field="infoIcon" height="20px" width="20px" url="{gui.info.getSafeUri.asString}" addStyleNames="{style.info-icon}"/>
-       		</bh:Div>
        </m:MaterialModalContent>
        <m:MaterialModalFooter>
            <m:MaterialButton ui:field="confirmButton" enabled="false" text="{lang.confirm}" addStyleNames="d-btn"/>

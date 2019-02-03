@@ -1039,8 +1039,8 @@ public class Languages {
 			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde")
 					+ " bereits zur Liste \"" + listName + "\" hinzugefügt";
 		} else if (en) {
-			return (moreThanOne ? "The sensors " + sensors + " were" : "The sensor " + sensors + " was")
-					+ " added to the list \"" + listName + "\"";
+			return (moreThanOne ? "The sensors " + sensors + " have" : "The sensor " + sensors + " has")
+					+ " already been added to the list \"" + listName + "\"";
 		} else {
 			return (moreThanOne ? "Los sensores" + sensors + " ya se han" : "EL sensor " + sensors + "ya se ha")
 					+ " a\u00F1adido a la lista \"" + listName + "\"";
@@ -1838,10 +1838,10 @@ public class Languages {
 
 	public static String uploadInfo() {
 		if(de) {
-			return "Laden Sie eine Datei im CSV-Format hoch, in dem Werte mit Zeitstempel für den Sensor stehen. Jede Zeile sollte wie folgt aussehen:\"[Zeitstempel(MM.DD.YYYY,HH:mm:ss)];[Wert]\". Beispiel: 01.01.2000,12:01:00;24.4 ";
+			return "Laden Sie eine Datei im CSV-Format hoch, in dem Werte mit Zeitstempel für den Sensor stehen. Jede Zeile sollte wie folgt aussehen: \"[Zeitstempel(MM.DD.YYYY,HH:mm:ss)];[Wert]\". Beispiel: 01.01.2000,12:01:00;24.4 ";
 		} else if(en) {
 			return "Upload a file in CSV format with timestamp values for the sensor. Each line should look like this:"
-					+ "\"[Timestamp(MM.DD.YYYY,HH:mm:ss)];[Value]\"."
+					+ " \"[Timestamp(MM.DD.YYYY,HH:mm:ss)];[Value]\"."
 					+ " Example: 01.01.2000,12:01:00;24.4 ";
 		}else {
 			return "Cargue un archivo en formato CSV con valores de marca de tiempo para el sensor. Las columnas deben verse as\u00ED  "

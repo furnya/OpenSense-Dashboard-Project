@@ -306,6 +306,10 @@ input:focus+label{
 .flex{
 	display: flex;
 }
+.flex-center{
+	display: flex;
+	place-content: center;
+}
 
 .position-relative{
 	position: relative;
@@ -761,7 +765,7 @@ input:focus+label{
 
 .upload-info-container{
 	position: absolute;
-	width: 50%;
+	width: 350px;
 	background: #404040;
 	color: white;
 	height: fit-content;
