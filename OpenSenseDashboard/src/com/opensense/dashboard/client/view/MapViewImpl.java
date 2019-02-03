@@ -67,6 +67,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private MapWidget mapWidget;
 
 	private final LatLng defaultCenter = LatLng.newInstance(52.521918, 13.413215);
+	
+	private List<Integer> requestedLists = new ArrayList<>();
 
 	// ########################################################################
 	/*
@@ -123,6 +125,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
+			requestedLists.clear();
+			requestedLists.addAll(event.getSelectedIds());
 			if (!event.getSelectedIds().isEmpty()) {
 				this.presenter.buildSensorRequestFromIdsAndShowMarkers(event.getSelectedIds());
 			} else {
@@ -357,6 +361,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			this.resetMarkerAndCluster();
 		}
 		if (!sensorList.isEmpty()) {
+			if(!sensorList.stream().map(sensor -> sensor.getSensorId()).allMatch(id -> this.requestedLists.contains(id))) {
+				this.resetMarkerAndCluster();
+				return;
+			}
 			sensorList.forEach(item -> {
 				GWT.log(item.getLocation().getLat() + " " + item.getLocation().getLon() + " SensorID: "
 						+ item.getSensorId());
