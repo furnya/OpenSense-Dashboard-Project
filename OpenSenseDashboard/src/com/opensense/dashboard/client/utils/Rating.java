@@ -11,6 +11,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.opensense.dashboard.client.model.Size;
 
+import gwt.material.design.client.ui.MaterialTooltip;
+
 public class Rating extends Composite{
 
 	@UiTemplate("Rating.ui.xml")
@@ -29,6 +31,9 @@ public class Rating extends Composite{
 	@UiField
 	Div overlay;
 
+	@UiField
+	MaterialTooltip toolip;
+
 	private static RatingUiBinder uiBinder = GWT.create(RatingUiBinder.class);
 
 	public Rating() {
@@ -40,7 +45,7 @@ public class Rating extends Composite{
 	 */
 	public void setRating(double rating) {
 		this.overlay.setWidth((this.starWidth * ((5 * (100 - rating)) / 100)) + this.addToWidth + "" + Unit.PX);
-		this.starContainer.setTitle(Languages.rating(5 * (rating / 100)));
+		this.toolip.setText(Languages.rating(5 * (rating / 100)));
 	}
 
 	/**

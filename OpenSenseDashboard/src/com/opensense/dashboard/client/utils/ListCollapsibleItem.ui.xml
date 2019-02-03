@@ -65,7 +65,8 @@
     width: 25px;
     margin-left: -20px;
     margin-right: 25px;
-    filter: invert(100%);	
+    filter: invert(100%);
+    margin-top: 5px;	
 }
 .header{
 	overflow: hidden;

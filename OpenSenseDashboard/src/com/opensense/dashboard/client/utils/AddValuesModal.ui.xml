@@ -44,7 +44,7 @@
 	}
 	</ui:style>
 
-	<m:MaterialModal ui:field="modal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="800" addStyleNames="modal">
+	<m:MaterialModal ui:field="modal" type="FIXED_FOOTER" dismissible="true" inDuration="500" outDuration="800" height="30%" addStyleNames="modal">
        <m:MaterialModalContent ui:field="content">
            <m:MaterialLabel text="{lang.addValues}" addStyleNames="{style.modalHeader}"/>
            <m:MaterialListBox placeholder="{lang.sensorId}" ui:field="sensorIdList" textColor="BLACK" addStyleNames="{style.max} round-corners" />
@@ -60,7 +60,7 @@
        </m:MaterialModalContent>
        <m:MaterialModalFooter>
            <m:MaterialButton ui:field="confirmButton" enabled="true" text="{lang.confirm}" addStyleNames="d-btn"/>
-           <m:MaterialButton ui:field="closeButton" text="{lang.cancel}" addStyleNames="d-btn"/>
+           <m:MaterialButton ui:field="closeButton" text="{lang.cancel}" addStyleNames="d-btn margin-right-10-important"/>
        </m:MaterialModalFooter>
    </m:MaterialModal>
 

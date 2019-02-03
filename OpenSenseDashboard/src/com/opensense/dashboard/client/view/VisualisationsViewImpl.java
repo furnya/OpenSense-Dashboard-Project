@@ -430,6 +430,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	@Override
 	public void showNoSensorsSelected() {
+		this.chartContainer.addStyleName("display-none");
 		this.chartContainer.clear();
 		this.noDatasetsDiv.removeStyleName("display-none");
 		this.noDataLabel.setText(Languages.noSensorsSelected());
