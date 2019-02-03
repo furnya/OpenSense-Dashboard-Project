@@ -125,7 +125,7 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 
 
 	public void setSearchCardText(){
-		this.searchCardInfo.setText("Rundgang für die Suche von Sensoren");
+		this.searchCardInfo.setText(Languages.search());
 		this.searchCardText.setText(Languages.searchInfoText());
 		this.searchCardInfo.setColor(WHITE_COLOR);
 	}
