@@ -1039,8 +1039,8 @@ public class Languages {
 			return (moreThanOne ? "Die Sensoren " + sensors + " wurden" : "Der Sensor " + sensors + " wurde")
 					+ " bereits zur Liste \"" + listName + "\" hinzugefügt";
 		} else if (en) {
-			return (moreThanOne ? "The sensors " + sensors + " were" : "The sensor " + sensors + " was")
-					+ " added to the list \"" + listName + "\"";
+			return (moreThanOne ? "The sensors " + sensors + " have" : "The sensor " + sensors + " has")
+					+ " already been added to the list \"" + listName + "\"";
 		} else {
 			return (moreThanOne ? "Los sensores" + sensors + " ya se han" : "EL sensor " + sensors + "ya se ha")
 					+ " a\u00F1adido a la lista \"" + listName + "\"";
