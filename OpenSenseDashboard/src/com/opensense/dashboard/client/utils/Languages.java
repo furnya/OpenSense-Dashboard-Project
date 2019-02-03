@@ -446,7 +446,7 @@ public class Languages {
 
 	public static String deselectAllSensors() {
 		if (de) {
-			return "Alle abwählen"; 
+			return "Alle abwählen";
 		} else if (en) {
 			return "Deselect all";
 		} else {
@@ -1232,7 +1232,7 @@ public class Languages {
 			return "Hu\u00E9sped";
 		}
 	}
- 
+
 	public static String welcomeInfoText() {
 		if (de) {
 			return "Herzlichen Willkommen beim OpenSense-Dashboard, hier können Sie die Daten von Weltweit verteilten Sensoren einsehen. "
@@ -1242,7 +1242,7 @@ public class Languages {
 					+ "bieten wir ihnen zusätzlich die Möglichkeit eigene Listen zu erstellen in die Sie dann die Sensoren einfügen können."
 					+ "Damit Sie die Sensordaten nicht nur in Textform sehen, können Sie die Sensoren auf OpenSense-Dashboard auch auf "
 					+ "einer von Google Maps bereitgestellten Karte einsehen, oder aber die dazugehörigen Daten einfach in einem Diagramm einsehen.";
-		} else if (en) { 
+		} else if (en) {
 			return "Welcome to the OpenSense Dashboard, where you can view the data from Global Sensors."
 					+ "With tens of thousands of sensors, OpenSense Dashboard provides a platform where you can search for specific sensor readings,"
 					+ " location-dependent, and uncomplicated."
@@ -1755,7 +1755,7 @@ public class Languages {
 			return "Usted puede crear un sensor que se agregar\u00E1 a OpenseSense.Por favor, aseg\u00FArese de verificar sus datos nuevamente antes de enviar. Usted puede ver y eliminar sus propios sensores aqu\u00ED en la p\u00E1gina de listas en cualquier momento.";
 		}
 	}
-	
+
 	public static String addValuesButtonTour() {
 		if (de) {
 			return "Hier können Sie Werte (in einem bestimmten Format) zu einem von IHNEN erstellten Sensoren hinzufügen.";
@@ -1908,7 +1908,7 @@ public class Languages {
 			return "La contrase\u00F1a debe contener al menos 8 caracteres, un n\u00FAmero, una letra may\u00FAscula y una letra min\u00FAscula.";
 		}
 	}
-	
+
 	public static String mapPageTourStep1() {
 		if(de) {
 			return "Wählen Sie hier aus einen der Listen Sensoren. Falls die Listen noch leer sind können Sie über die Suchseite sensoren hinzufügen."
@@ -1921,7 +1921,7 @@ public class Languages {
 					+ "Los sensores seleccionados se mostrar\u00E1n en el mapa.";
 		}
 	}
-	
+
 	public static String mapPageTourStep2() {
 		if(de) {
 			return "Drücken Sie auf einen Sensor um einen kurzen Überblick über diesen zu erhalten."
@@ -1937,27 +1937,27 @@ public class Languages {
 					+ " Haga clic en los paquetes para ampliar.";
 		}
 	}
-	
+
 	public static String alwaysShowTour() {
 		if(de) {
-			return "Touren sollen immer starten.";
+			return "Rundgänge automatisch starten";
 		} else if(en) {
-			return "Tours should always start.";
+			return "Start tours automatically";
 		} else {
-			return "Los recorridos siempre deben comenzar.";
+			return "Los recorridos siempre deben comenzar";
 		}
 	}
-	
+
 	public static String resetTourCookies() {
 		if(de) {
-			return "Tour Cookies zurücksetzen";
+			return "Rundgänge zurücksetzen";
 		} else if(en) {
-			return "Reset tour cookies";
+			return "Reset tours";
 		} else {
-			return "Restablecer los cookies";
+			return "Restablecer";
 		}
 	}
-	
+
 	public static String recenterToBounds() {
 		if(de) {
 			return "Setzt die Karte zurück auf den Ursprung";

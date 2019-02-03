@@ -202,9 +202,9 @@ public class TourStepRenderer extends Composite {
 				this.nextButton.getElement().getStyle().clearDisplay();
 			}
 			this.nextButton.setEnabled(true);
-			if(this.messageContainerHandler == null) {
-				this.messageContainerHandler = this.preventDefaultAndStopPropagation(this.messageContainer);
-			}
+			//			if(this.messageContainerHandler == null) {
+			//				this.messageContainerHandler = this.preventDefaultAndStopPropagation(this.messageContainer);
+			//			}
 			this.javaSriptHandler = this.bindClickListener(this.element, true);
 			break;
 		case INPUT:

@@ -26,18 +26,17 @@ public class HomePresenter extends DataPanelPagePresenter implements HomeView.Pr
 	@Override
 	public void go(HasWidgets container) {
 		container.clear();
-		container.add(view.asWidget());
-		getUserName();
+		container.add(this.view.asWidget());
+		this.getUserName();
 	}
 
 	@Override
 	public void onPageLeave() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void onPageReturn() {
-		// TODO Auto-generated method stub
+		this.view.setCheckboxValue();
 	}
 
 	@Override
@@ -52,31 +51,32 @@ public class HomePresenter extends DataPanelPagePresenter implements HomeView.Pr
 
 	@Override
 	public void waitUntilViewInit(final Runnable runnable) {
-		view.initView();
+		this.view.initView();
 		runnable.run();
 	}
-	
+
 	public void getUserName() {
-		if (isUserLoggedIn()) {
+		if (this.isUserLoggedIn()) {
 			GeneralService.Util.getInstance()
-					.getUserName(new DefaultAsyncCallback<String>(result -> view.setUserInfo(result)));
+			.getUserName(new DefaultAsyncCallback<String>(result -> this.view.setUserInfo(result)));
 		} else {
-			view.setUserInfo(Languages.guest());
+			this.view.setUserInfo(Languages.guest());
 		}
 	}
 
+	@Override
 	public boolean isUserLoggedIn() {
-		return !appController.isGuest();
+		return !this.appController.isGuest();
 	}
 
 	public void onUserLoggedIn() {
 		GWT.log("hier");
 		GeneralService.Util.getInstance()
-				.getUserName(new DefaultAsyncCallback<String>(result ->{  view.setUserInfo(result);}));
+		.getUserName(new DefaultAsyncCallback<String>(result ->{  this.view.setUserInfo(result);}));
 	}
 
 	public void onUserLoggedOut() {
-		view.setUserInfo(Languages.guest());
+		this.view.setUserInfo(Languages.guest());
 	}
 
 }

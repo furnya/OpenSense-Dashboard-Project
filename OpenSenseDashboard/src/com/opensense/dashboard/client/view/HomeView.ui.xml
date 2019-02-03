@@ -143,8 +143,8 @@
 					addStyleNames="{style.userfield}" size="H5" />
 				<bh:Span ui:field="welcomeText"
 					addStyleNames="{style.info-text-style}"></bh:Span>
-				<m:MaterialButton ui:field="resetCookiesButton" addStyleNames="{style.cookiebtn}" text="{lang.resetTourCookies}"></m:MaterialButton>
-				<m:MaterialCheckBox ui:field="alwaysShowCookiesCheckBox" text="{lang.alwaysShowTour}" addStyleNames="{style.checkbox} {style.checkboxpos} white-checkbox" value="true"/>
+				<m:MaterialCheckBox ui:field="alwaysShowCookiesCheckBox" text="{lang.alwaysShowTour}" type="FILLED" addStyleNames="{style.checkbox} {style.checkboxpos} white-checkbox" value="true"/>
+				<m:MaterialButton ui:field="resetCookiesButton" addStyleNames="{style.cookiebtn} d-btn" text="{lang.resetTourCookies}"/>
 			</bh:Div>
 		</bh:Div>
 
