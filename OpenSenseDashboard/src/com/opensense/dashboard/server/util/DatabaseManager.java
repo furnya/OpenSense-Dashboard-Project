@@ -13,7 +13,6 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
 import com.opensense.dashboard.shared.UserList;
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 
 public class DatabaseManager {
 
@@ -200,9 +199,9 @@ public class DatabaseManager {
 	}
 
 	public Integer createUserProfile(String email, String username, String password) {
-		Integer usernameId = getUserIdFromUsername(username);
-		Integer emailId = getUserIdFromEmail(email);
-		if((usernameId!=null && usernameId!=0) || (emailId!=null && emailId!=0)) {
+		Integer usernameId = this.getUserIdFromUsername(username);
+		Integer emailId = this.getUserIdFromEmail(email);
+		if(((usernameId!=null) && (usernameId!=0)) || ((emailId!=null) && (emailId!=0))) {
 			return -1;
 		}
 		String sql = "INSERT INTO user_profiles (email, password, username) VALUES (?, ?, ?);";
