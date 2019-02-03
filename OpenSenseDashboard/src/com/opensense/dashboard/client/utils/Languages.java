@@ -1838,11 +1838,11 @@ public class Languages {
 
 	public static String uploadInfo() {
 		if(de) {
-			return "Laden Sie eine Datei im CSV-Format hoch, in dem Werte mit Zeitstempel für den Sensor stehen. Spalten sollten wie folgt aussehen  "
-					+ "[Zeitstempel];[WERT] -> MM.DD.YYYY,HH:mm:ss;Z.z. Zum Bespiel 01.01.2000,12:01:00;24.4 ";
+			return "Laden Sie eine Datei im CSV-Format hoch, in dem Werte mit Zeitstempel für den Sensor stehen. Jede Zeile sollte wie folgt aussehen:\"[Zeitstempel(MM.DD.YYYY,HH:mm:ss)];[Wert]\". Beispiel: 01.01.2000,12:01:00;24.4 ";
 		} else if(en) {
-			return "Upload a file in CSV format with timestamp values for the sensor. Columns should look like this"
-					+ "\\\"\\\"[DATE,TIME];[VALUE] -> MM.DD.YYYY,HH:mm:ss;Z.z. for example 01.01.2000,12:01:00;24.4 \\\" \\\\\\\".";
+			return "Upload a file in CSV format with timestamp values for the sensor. Each line should look like this:"
+					+ "\"[Timestamp(MM.DD.YYYY,HH:mm:ss)];[Value]\"."
+					+ " Example: 01.01.2000,12:01:00;24.4 ";
 		}else {
 			return "Cargue un archivo en formato CSV con valores de marca de tiempo para el sensor. Las columnas deben verse as\u00ED  "
 					+ "\"\"[FECHA,HORA];[VALOR] -> MM.DD.YYYY,HH:mm:ss;Z.z. por ejemplo 01.01.2000,12:01:00;24.4 \"\".\"";
@@ -1935,6 +1935,16 @@ public class Languages {
 			return "Presione sobre un sensor para obtener una breve descripci\u00F3n de \u00E9l. Si ha seleccionado muchos sensores,"
 					+ " estos est\u00E1n empaquetados en coloridos paquetes para una mejor visi\u00F3n general."
 					+ " Haga clic en los paquetes para ampliar.";
+		}
+	}
+	
+	public static String markerTip() {
+		if(de) {
+			return "Tipp: Sie können den Marker an eine andere Position ziehen oder dort doppelklicken, um ihn zu bewegen.";
+		} else if(en) {
+			return "Tip: You can drag the marker to a new position or double-click somewhere to move the marker there.";
+		} else {
+			return "";
 		}
 	}
 }
