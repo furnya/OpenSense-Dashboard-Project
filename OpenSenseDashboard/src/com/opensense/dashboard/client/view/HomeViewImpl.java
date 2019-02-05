@@ -37,6 +37,10 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	Heading userInfo;
 	@UiField
 	Span welcomeText;
+	@UiField
+	Span welcomeText1;
+	@UiField
+	Span welcomeText2;
 
 	/* searchPage */
 	@UiField
@@ -74,7 +78,7 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	MaterialCheckBox alwaysShowCookiesCheckBox;
 	@UiField
 	MaterialButton resetCookiesButton;
-
+	
 	private static final String WHITE_COLOR = "white";
 
 	public HomeViewImpl() {
@@ -117,10 +121,12 @@ public class HomeViewImpl extends DataPanelPageView implements HomeView {
 	}
 
 	public void setWelcomeCardText(){
-		this.welcomeText.setText(Languages.welcomeInfoText());
-		this.welcomeText.setColor(WHITE_COLOR);
-		this.welcomeText.setMarginLeft(40);
-		this.welcomeText.setMarginRight(40);
+		Span[] welcomeTexts = {welcomeText,welcomeText1,welcomeText2};
+		String[] welcomeInfoTexts = {Languages.welcomeInfoText(),Languages.welcomeInfoText1(),Languages.welcomeInfoText2()};
+		for (int i = 0; i < welcomeTexts.length; i++) {
+			welcomeTexts[i].setText(welcomeInfoTexts[i]);
+			welcomeTexts[i].setColor(WHITE_COLOR);
+		}
 	}
 
 

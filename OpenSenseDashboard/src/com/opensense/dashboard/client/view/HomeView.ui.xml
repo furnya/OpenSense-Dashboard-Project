@@ -57,6 +57,7 @@
 		height: 90vh;
 		width: 40%;
 		position: relative;
+		display:block;
 	}
 	
 	.grid-item-welcome:hover {
@@ -75,6 +76,11 @@
 		margin-top: 10px;
 	}
 	
+	.icon-margin-visu {
+		 margin-top: -20px;
+		 margin-left: -25px; 
+	}
+
 	.header {
 		color: white;
 		left: 20px;
@@ -84,13 +90,19 @@
 	.userfield {
 		color: white;
 		margin-left: 15px;
-		margin-top: 36px;
-		
+		margin-top: 5%;	
 	}
 	
-	.icon-size {
-		width: 100px;
-		height: 40% !important;
+	.cardfield {
+		color: white;
+		margin-left: 15px;
+		margin-top: 7%;	
+	}
+	
+	.visu-field {
+		color: white;
+		margin-left: -17px;
+		margin-top: 7%;	
 	}
 	
 	.hidden-overflow {
@@ -102,7 +114,16 @@
 		margin-top: 136px;
 		color: white;
 		position: absolute;
-		font-size: 105%;
+		font-size: 140%;
+	}
+	
+	.welcometext-style {
+		margin-left: 20px;
+		margin-top: 12px;
+		margin-right: 20px;
+		color: white;
+		font-size: 165%;
+		display: block;
 	}
 	
 	.checkbox > label::before{
@@ -136,13 +157,22 @@
 			<bh:Div addStyleNames="flex {style.hidden-overflow}">
 				<m:MaterialImage
 					url="{gui.dashboardIcon.getSafeUri.asString}"
-					addStyleNames="{style.icon-size}" />
+					height="100px" width="92px" />
 				<b:Heading ui:field="header" text="{lang.welcome}"
 					addStyleNames="{style.header}" size="H4" />
 				<b:Heading ui:field="userInfo"
-					addStyleNames="{style.userfield}" size="H5" />
-				<bh:Span ui:field="welcomeText"
-					addStyleNames="{style.info-text-style}"></bh:Span>
+					addStyleNames="{style.userfield}" size="H4" />
+			</bh:Div>
+			<bh:Div addStyleNames="{style.welcometext-style}">
+				<bh:Span ui:field="welcomeText"></bh:Span>
+			</bh:Div>
+			<bh:Div addStyleNames="{style.welcometext-style}">
+				<bh:Span ui:field="welcomeText1"></bh:Span>
+			</bh:Div>
+			<bh:Div addStyleNames="{style.welcometext-style}">
+				<bh:Span ui:field="welcomeText2"></bh:Span>
+			</bh:Div>
+			<bh:Div>
 				<m:MaterialCheckBox ui:field="alwaysShowCookiesCheckBox" text="{lang.alwaysShowTour}" type="FILLED" addStyleNames="{style.checkbox} {style.checkboxpos} white-checkbox" value="true"/>
 				<m:MaterialButton ui:field="resetCookiesButton" addStyleNames="{style.cookiebtn} d-btn" text="{lang.resetTourCookies}"/>
 			</bh:Div>
@@ -153,9 +183,10 @@
 			<bh:Div addStyleNames="flex">
 				<m:MaterialImage
 					url="{gui.searchIconSvg.getSafeUri.asString}"
-					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
+					addStyleNames="{style.inverter} {style.icon-margin}"
+					height="91px" width="97px" />
 				<b:Heading ui:field="searchCardInfo"
-					addStyleNames="{style.userfield}" size="H5" />
+					addStyleNames="{style.cardfield}" size="H5" />
 				<bh:Span ui:field="searchCardText"
 					addStyleNames="{style.info-text-style}"></bh:Span>
 			</bh:Div>
@@ -166,9 +197,10 @@
 			<bh:Div addStyleNames="flex">
 				<m:MaterialImage
 					url="{gui.mapIconSvg.getSafeUri.asString}"
-					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
+					addStyleNames="{style.inverter} {style.icon-margin}" 
+					height="80px" width="92px" />
 				<b:Heading ui:field="mapCardInfo"
-					addStyleNames="{style.userfield}" size="H5" />
+					addStyleNames="{style.cardfield}" size="H5" />
 				<bh:Span ui:field="mapCardText"
 					addStyleNames="{style.info-text-style}"></bh:Span>
 			</bh:Div>
@@ -179,9 +211,10 @@
 			<bh:Div addStyleNames="flex">
 				<m:MaterialImage
 					url="{gui.diagramIconSvg.getSafeUri.asString}"
-					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
+					addStyleNames="{style.inverter} {style.icon-margin-visu}"
+					    width="180px" height="144px"/>
 				<b:Heading ui:field="visuCardInfo"
-					addStyleNames="{style.userfield}" size="H5" />
+					addStyleNames="{style.visu-field}" size="H5" />
 				<bh:Span ui:field="visuCardText"
 					addStyleNames="{style.info-text-style}"></bh:Span>
 			</bh:Div>
@@ -192,9 +225,10 @@
 			<bh:Div addStyleNames="flex">
 				<m:MaterialImage
 					url="{gui.listIconSvg.getSafeUri.asString}"
-					addStyleNames="{style.inverter} {style.icon-margin} {style.icon-size}" />
+					addStyleNames="{style.inverter} {style.icon-margin}" 
+					height="80px" width="92px" />
 				<b:Heading ui:field="listCardInfo"
-					addStyleNames="{style.userfield}" size="H5" />
+					addStyleNames="{style.cardfield}" size="H5" />
 				<bh:Span ui:field="listCardText"
 					addStyleNames="{style.info-text-style}"></bh:Span>
 			</bh:Div>

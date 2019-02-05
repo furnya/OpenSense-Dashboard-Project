@@ -1237,10 +1237,54 @@ public class Languages {
 		if (de) {
 			return "Herzlichen Willkommen beim OpenSense-Dashboard, hier können Sie die Daten von Weltweit verteilten Sensoren einsehen. "
 					+ "Da es sich um mehrere 10 tausend Sensoren handelt, bieten wir mit OpenSense-Dashboard eine Plattform in der Sie nach "
-					+ "bestimmten Sensormessgrößen, Ortsabhängig und unkompliziert suchen können."
-					+ "Falls ihnen dabei einige Sensoren besonder wichtig sind und Sie nicht jedes Mal erneut nach ihnen suchen wollen, "
-					+ "bieten wir ihnen zusätzlich die Möglichkeit eigene Listen zu erstellen in die Sie dann die Sensoren einfügen können."
-					+ "Damit Sie die Sensordaten nicht nur in Textform sehen, können Sie die Sensoren auf OpenSense-Dashboard auch auf "
+					+ "bestimmten Sensormessgrößen, Ortsabhängig und unkompliziert suchen können.";
+		} else if (en) {
+			return "Welcome to the OpenSense Dashboard, where you can view the data from Global Sensors."
+					+ "With tens of thousands of sensors, OpenSense Dashboard provides a platform where you can search for specific sensor readings,"
+					+ " location-dependent, and uncomplicated."
+					+ "If some sensors are of particular importance to you and you do not want to search for them again and again,"
+					+ " we also offer you the possibility to create your own lists in which you can then insert the sensors."
+					+ "So that you do not only see the sensor data in text form, you can also view the sensors on a map provided by Google Maps,"
+					+ " or simply view the corresponding data in a diagram.";
+		} else {
+			return "Bienvenido a OpenSense Dashboard, donde puede ver los datos de sensores distribuidos globalmente."
+					+ "Con decenas de miles de sensores, OpenSense Dashboard proporciona una plataforma donde puede buscar sensores"
+					+ " con medidas espec\u00EDficas,"
+					+ " dependientes de la ubicaci\u00F3n y sin complicaciones."
+					+ " Si algunos sensores son de particular importancia para usted y no desea buscarlos una y otra vez, tambi\u00E9n le ofrecemos la posibilidad"
+					+ " de crear sus propias listas en las que puede insertar los sensores ."
+					+ " Para no solo ver los datos de los sensores en forma de texto, tambi\u00E9n puede ver los sensores en un mapa proporcionado por Google Maps,"
+					+ " o simplemente ver los datos correspondientes en un diagrama.";
+		}
+	}
+	
+	public static String welcomeInfoText1() {
+		if (de) {
+			return  "Falls ihnen dabei einige Sensoren besonder wichtig sind und Sie nicht jedes Mal erneut nach ihnen suchen wollen, "
+					+ "bieten wir ihnen zusätzlich die Möglichkeit eigene Listen zu erstellen in die Sie dann die Sensoren einfügen können.";
+		} else if (en) {
+			return "Welcome to the OpenSense Dashboard, where you can view the data from Global Sensors."
+					+ "With tens of thousands of sensors, OpenSense Dashboard provides a platform where you can search for specific sensor readings,"
+					+ " location-dependent, and uncomplicated."
+					+ "If some sensors are of particular importance to you and you do not want to search for them again and again,"
+					+ " we also offer you the possibility to create your own lists in which you can then insert the sensors."
+					+ "So that you do not only see the sensor data in text form, you can also view the sensors on a map provided by Google Maps,"
+					+ " or simply view the corresponding data in a diagram.";
+		} else {
+			return "Bienvenido a OpenSense Dashboard, donde puede ver los datos de sensores distribuidos globalmente."
+					+ "Con decenas de miles de sensores, OpenSense Dashboard proporciona una plataforma donde puede buscar sensores"
+					+ " con medidas espec\u00EDficas,"
+					+ " dependientes de la ubicaci\u00F3n y sin complicaciones."
+					+ " Si algunos sensores son de particular importancia para usted y no desea buscarlos una y otra vez, tambi\u00E9n le ofrecemos la posibilidad"
+					+ " de crear sus propias listas en las que puede insertar los sensores ."
+					+ " Para no solo ver los datos de los sensores en forma de texto, tambi\u00E9n puede ver los sensores en un mapa proporcionado por Google Maps,"
+					+ " o simplemente ver los datos correspondientes en un diagrama.";
+		}
+	}
+	
+	public static String welcomeInfoText2() {
+		if (de) {
+			return  "Damit Sie die Sensordaten nicht nur in Textform sehen, können Sie die Sensoren auf OpenSense-Dashboard auch auf "
 					+ "einer von Google Maps bereitgestellten Karte einsehen, oder aber die dazugehörigen Daten einfach in einem Diagramm einsehen.";
 		} else if (en) {
 			return "Welcome to the OpenSense Dashboard, where you can view the data from Global Sensors."
@@ -1261,7 +1305,8 @@ public class Languages {
 					+ " o simplemente ver los datos correspondientes en un diagrama.";
 		}
 	}
-
+	
+	
 	public static String searchInfoText() {
 		if (de) {
 			return "Auf dieser Seite können Sie Sensoren suchen und ihre Informationen einsehen."
