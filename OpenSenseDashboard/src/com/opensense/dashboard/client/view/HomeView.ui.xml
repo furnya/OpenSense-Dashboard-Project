@@ -40,6 +40,7 @@
 		border-color: hsla(0, 0%, 0%, 0.5);
 		border-radius: 5px;
 		position: relative;
+	    overflow: auto;
 	}
 	
 	.grid-item>div>div {
@@ -54,7 +55,7 @@
 	}
 	
 	.grid-item-welcome {
-		height: 90vh;
+		height: 78vh;
 		width: 40%;
 		position: relative;
 		display:block;
@@ -134,19 +135,18 @@
 		margin-top: 2px;
 	}
 	
-	.cookiebtn{
-		background:gray;
-		position: absolute;
-		bottom: 45px;
-    	left: 15px;
+	.tour-util-container{
+		position: absolute !important;
+	    bottom: 5%;
+	    left: 15%;
+	    border: unset !important;
+	    background: unset !important;
+	}	
+	.relative{
+		position: relative !important;
+		overflow: visible !important;
+		margin-bottom: 10px;
 	}
-	
-	.checkboxpos{
-		position: absolute;
-		bottom: 15px;
-    	left: 25px;
-	}
-	
 	</ui:style>
 
 	<bh:Div ui:field="grid"
@@ -172,10 +172,13 @@
 			<bh:Div addStyleNames="{style.welcometext-style}">
 				<bh:Span ui:field="welcomeText2"></bh:Span>
 			</bh:Div>
-			<bh:Div>
-				<m:MaterialCheckBox ui:field="alwaysShowCookiesCheckBox" text="{lang.alwaysShowTour}" type="FILLED" addStyleNames="{style.checkbox} {style.checkboxpos} white-checkbox" value="true"/>
-				<m:MaterialButton ui:field="resetCookiesButton" addStyleNames="{style.cookiebtn} d-btn" text="{lang.resetTourCookies}"/>
+		</bh:Div>
+		
+		<bh:Div addStyleNames="{style.tour-util-container}">
+			<bh:Div addStyleNames="{style.relative}">
+				<m:MaterialButton ui:field="resetCookiesButton" addStyleNames="d-btn" text="{lang.resetTourCookies}"/>
 			</bh:Div>
+			<m:MaterialCheckBox ui:field="alwaysShowCookiesCheckBox" text="{lang.alwaysShowTour}" type="FILLED" addStyleNames="{style.checkbox} white-checkbox" value="true"/>
 		</bh:Div>
 
 		<bh:Div ui:field="searchCard"
