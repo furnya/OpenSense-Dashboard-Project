@@ -258,8 +258,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		double lastValue = Math.round(si.getValuePreview().getMaxValue().getNumberValue()*100);
 		firstValue = firstValue/100;
 		lastValue = lastValue/100;
-		sensorData.add("" + firstValue+ si.getUnit().getDisplayName());
-		sensorData.add("" + lastValue+ si.getUnit().getDisplayName());
+		sensorData.add("" + firstValue+ si.getUnit().getDisplayName() +" "+ si.getValuePreview().getMinValue().getTimestamp());
+		sensorData.add("" + lastValue+ si.getUnit().getDisplayName() +" "+ si.getValuePreview().getMaxValue().getTimestamp());
 		infoWindow.setData(sensorData);
 		iwOptions.setContent(infoWindow);
 		iwOptions.setDisableAutoPan(true);
