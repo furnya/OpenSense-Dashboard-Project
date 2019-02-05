@@ -36,16 +36,16 @@ public class Pager extends Composite{
 
 	@UiField
 	MaterialButton forwardsStepByStepButton;
-	
+
 	@UiField
 	MaterialTooltip backwardsTooltip;
-	
+
 	@UiField
 	MaterialTooltip backwardsStepTooltip;
-	
+
 	@UiField
 	MaterialTooltip forwardTooltip;
-	
+
 	@UiField
 	MaterialTooltip forwardStepTooltip;
 
@@ -151,6 +151,9 @@ public class Pager extends Composite{
 	}
 
 	public void update(int showObjectsSize, boolean fireEvent) {
+		if(this.page > (int) Math.ceil(showObjectsSize / (double) this.maxObjectsOnPage)) {
+			this.page = 0;
+		}
 		this.pageNumber.setText(Languages.setPageNumber(this.page, this.maxObjectsOnPage, showObjectsSize));
 		this.setForwardsEnabled((this.page + 1) < ((int) Math.ceil(showObjectsSize / (double) this.maxObjectsOnPage)));
 		this.setBackwardsEnabled(this.page > 0);
