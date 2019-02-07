@@ -15,6 +15,11 @@ import com.opensense.dashboard.client.model.Size;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialTooltip;
 
+/**
+ * Handles the pagination in the search and list container
+ * @author carlr
+ *
+ */
 public class Pager extends Composite{
 
 	private static PagerUiBinder uiBinder = GWT.create(PagerUiBinder.class);

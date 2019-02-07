@@ -30,6 +30,11 @@ import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.UserList;
 
+/**
+ * SearchPage functionlity
+ * @author carlr
+ *
+ */
 public class SearchPresenter extends DataPanelPagePresenter implements IPresenter, SearchView.Presenter{
 
 	private static final Logger LOGGER = Logger.getLogger(SearchPresenter.class.getName());
@@ -104,9 +109,6 @@ public class SearchPresenter extends DataPanelPagePresenter implements IPresente
 				break;
 			case MIN_ACCURACY:
 				this.view.setMinAccuracy(entry.getValue());
-				break;
-			case PLACE:
-				//TODO: remove or add
 				break;
 			default:
 				break;

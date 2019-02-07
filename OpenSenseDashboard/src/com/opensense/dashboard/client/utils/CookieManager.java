@@ -8,6 +8,11 @@ import java.util.logging.Logger;
 import com.google.gwt.user.client.Cookies;
 import com.opensense.dashboard.client.AppController;
 
+/**
+ * Supposed to handle all cookies
+ * @author carlr
+ *
+ */
 public class CookieManager {
 
 	@SuppressWarnings("unused")

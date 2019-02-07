@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.gwtbootstrap3.client.ui.html.Div;
 import org.pepstock.charba.client.AbstractChart;
@@ -96,15 +98,17 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 
 	@UiField
 	MaterialLabel noDataLabel;
-	
+
 	@UiField
 	Div chartOrLabelContainer;
-	
+
 	@UiField
 	Div visPanel;
-	
+
 	@UiField
 	Div dataContainer;
+
+	private static final Logger LOGGER = Logger.getLogger(VisualisationsViewImpl.class.getName());
 
 	private static VisualisationsViewUiBinder uiBinder = GWT.create(VisualisationsViewUiBinder.class);
 
@@ -149,7 +153,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		this.presenter.setListManager(this.listManager);
 		this.addResizeHandler();
 	}
-	
+
 	private void addResizeHandler() {
 		Window.addResizeHandler(event -> {
 			this.chartOrLabelContainer.setWidth("100%");
@@ -246,7 +250,7 @@ public class VisualisationsViewImpl extends DataPanelPageView implements Visuali
 		try {
 			Defaults.getPlugins().register(new ChartBackgroundColor());
 		} catch (InvalidPluginIdException e) {
-			GWT.log(e.toString());
+			LOGGER.log(Level.WARNING, "Failure", e);
 		}
 		this.xAxis = new CartesianTimeAxis(this.chart, CartesianAxisType.x);
 		this.xAxis.setDistribution(ScaleDistribution.linear);

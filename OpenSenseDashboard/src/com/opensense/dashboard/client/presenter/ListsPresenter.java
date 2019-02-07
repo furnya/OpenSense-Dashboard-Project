@@ -26,6 +26,11 @@ import com.opensense.dashboard.shared.CreateSensorRequest;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 
+/**
+ * Dispalys the ListsPage
+ * @author carlr
+ *
+ */
 public class ListsPresenter extends DataPanelPagePresenter implements IPresenter, ListsView.Presenter{
 
 	private final ListsView view;
@@ -157,7 +162,7 @@ public class ListsPresenter extends DataPanelPagePresenter implements IPresenter
 					LOGGER.log(Level.WARNING, "Failure requesting the measurands.");
 				}, false));
 	}
-	
+
 	private void requestMySensors(final AddValuesModal modal) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.MYSENSORS, false);
 		GeneralService.Util.getInstance().getDataFromRequest(requestBuilder.getRequest(),

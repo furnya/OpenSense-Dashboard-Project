@@ -10,17 +10,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.pepstock.charba.client.data.DataPoint;
-import org.pepstock.charba.client.data.Dataset;
 import org.pepstock.charba.client.data.LineDataset;
 import org.pepstock.charba.client.enums.Fill;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
-import com.opensense.dashboard.client.event.OpenDataPanelPageEvent;
 import com.opensense.dashboard.client.event.StartTourEvent;
-import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.services.GeneralService;
 import com.opensense.dashboard.client.utils.ChartBounds;
@@ -37,51 +33,51 @@ import com.opensense.dashboard.shared.DateRange;
 import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
-import com.opensense.dashboard.shared.Sensor;
-import com.opensense.dashboard.shared.Unit;
 import com.opensense.dashboard.shared.Value;
-import com.opensense.dashboard.shared.ValuePreview;
 
-
+/**
+ * Functionality of the VisPage
+ *
+ */
 public class VisualisationsPresenter extends DataPanelPagePresenter implements IPresenter, VisualisationsView.Presenter{
 
 	private final VisualisationsView view;
-	
+
 	private static final Logger LOGGER = Logger.getLogger(SearchPresenter.class.getName());
-	
+
 	private static final int MAX_POINTS = 100;
-	
+
 	private List<Integer> sensorIds = new LinkedList<>();
 	private Map<Integer, LineDataset> datasetMap = new HashMap<>();
 	private Map<Integer, Integer> requestMap = new HashMap<>();
-	
+
 	private Date maxTimestamp = null;
 	private Date minTimestamp = null;
-	
+
 	private static final DateRange DEFAULT_RANGE = DateRange.PAST_WEEK;
 	private DateRange dateRange = DEFAULT_RANGE;
 
 	private Double minValue = Double.POSITIVE_INFINITY;
 	private Double maxValue = Double.NEGATIVE_INFINITY;
-	
+
 	private ListManager listManager;
 	private MinMaxValueHandler minMaxHandler = new MinMaxValueHandler();
-	
+
 	public VisualisationsPresenter(HandlerManager eventBus, AppController appController, VisualisationsView view) {
 		super(view, eventBus, appController);
 		this.view = view;
 		this.view.setPresenter(this);
 		this.setListManager(this.view.getListManager());
 	}
-	
+
 	public VisualisationsView getView() {
-		return view;
+		return this.view;
 	}
-	
+
 	@Override
 	public void go(HasWidgets container) {
 		container.clear();
-		container.add(view.asWidget());
+		container.add(this.view.asWidget());
 		this.eventBus.fireEvent(new StartTourEvent(Tours.VIS_PAGE, false));
 	}
 
@@ -89,20 +85,18 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	public void onPageReturn() {
 		this.view.getListManager().setUserLoggedInAndUpdate(!this.appController.isGuest());
 	}
-	
+
 	@Override
 	public void onPageLeave() {
-		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public void handleParamters(Map<ParamType, String> parameters) {
-		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public void handleIds(List<Integer> ids) {
-		view.getListManager().updateSelectedSensorsList(ids);
+		this.view.getListManager().updateSelectedSensorsList(ids);
 	}
 
 	public void onUserLoggedIn() {
@@ -117,34 +111,36 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	public void waitUntilViewInit(final Runnable runnable) {
 		this.view.initView(runnable);
 	}
-	
+
+	@Override
 	public void onDateRangeButtonClicked(DateRange dr, Date minT, Date maxT) {
 		this.setAllSensorCardsGrey(this.sensorIds);
-		minMaxHandler.reset();
+		this.minMaxHandler.reset();
 		this.resetMinMax();
 		this.resetDatasets();
 		this.setDateRange(dr);
-		view.highlightDateRange(dr);
+		this.view.highlightDateRange(dr);
 		this.valueRequestForSensorList(this.sensorIds, dr, minT, maxT);
 	}
-	
+
 	public void resetMinMax() {
 		this.minTimestamp = null;
 		this.maxTimestamp = null;
 		this.minValue = Double.POSITIVE_INFINITY;
 		this.maxValue = Double.NEGATIVE_INFINITY;
 	}
-	
+
 	public void resetDatasets() {
 		this.resetMinMax();
 		this.datasetMap = new HashMap<>();
-		view.setChartDatasets(new LineDataset[0]);
+		this.view.setChartDatasets(new LineDataset[0]);
 	}
-	
+
+	@Override
 	public void onSelectedSensorsChange(List<Integer> newIds) {
-		if(newIds==null || newIds.isEmpty()) {
+		if((newIds==null) || newIds.isEmpty()) {
 			this.sensorIds.forEach(this::removeDataset);
-			this.view.updateDatasets(new ArrayList<>(datasetMap.values()));
+			this.view.updateDatasets(new ArrayList<>(this.datasetMap.values()));
 			this.setSensorIdsCopy(newIds);
 			this.view.showNoSensorsSelected();
 			return;
@@ -153,49 +149,49 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 			this.setSensorIdsCopy(newIds);
 			return;
 		}
-		List<Integer> idsToRemove = getListDifference(this.sensorIds, newIds);
-		List<Integer> idsToAdd = getListDifference(newIds, this.sensorIds);
+		List<Integer> idsToRemove = this.getListDifference(this.sensorIds, newIds);
+		List<Integer> idsToAdd = this.getListDifference(newIds, this.sensorIds);
 		idsToRemove.forEach(this::removeDataset);
-		this.view.updateDatasets(new ArrayList<>(datasetMap.values()));
+		this.view.updateDatasets(new ArrayList<>(this.datasetMap.values()));
 		this.setAllSensorCardsGrey(idsToAdd);
 		this.setSensorIdsCopy(newIds);
 		if(!idsToRemove.isEmpty()) {
-			view.showChart(this.getDatasetMap(),this.getChartBounds());
+			this.view.showChart(this.getDatasetMap(),this.getChartBounds());
 		}
-		if(this.getDateRange()==DateRange.CUSTOM && (view.getStartingDate()==null || view.getEndingDate()==null)) {
+		if((this.getDateRange()==DateRange.CUSTOM) && ((this.view.getStartingDate()==null) || (this.view.getEndingDate()==null))) {
 			return;
 		}
-		this.valueRequestForSensorList(idsToAdd, this.getDateRange(), view.getStartingDate(), view.getEndingDate());
+		this.valueRequestForSensorList(idsToAdd, this.getDateRange(), this.view.getStartingDate(), this.view.getEndingDate());
 	}
-	
+
 	public void setAllSensorCardsGrey(List<Integer> ids) {
 		ids.forEach(id -> this.setCardColor(id, "#a0a0a0"));
 	}
-	
+
 	public void setCardColor(int sensorId, String color) {
 		this.getListManager().setSelectedSensorItemsColor(sensorId, color);
 	}
-	
+
 	public void removeDataset(Integer sensorId) {
 		if(!this.datasetMap.containsKey(sensorId)) {
 			return;
 		}
 		ColorManager.getInstance().removeFromUsedColors(sensorId);
-		if(minMaxHandler.removeValues(sensorId)) {
-			recalculateMinMax();
+		if(this.minMaxHandler.removeValues(sensorId)) {
+			this.recalculateMinMax();
 		}
 		this.datasetMap.remove(sensorId);
 	}
-	
+
 	public void recalculateMinMax() {
-		this.minValue = minMaxHandler.getMin().getNumberValue();
-		this.maxValue = minMaxHandler.getMax().getNumberValue();
-		this.minTimestamp = minMaxHandler.getEarliest().getTimestamp();
-		this.maxTimestamp = minMaxHandler.getLatest().getTimestamp();
-		view.setChartAxisY(minValue, maxValue);
-		view.setChartAxisX(minTimestamp, maxTimestamp);		
+		this.minValue = this.minMaxHandler.getMin().getNumberValue();
+		this.maxValue = this.minMaxHandler.getMax().getNumberValue();
+		this.minTimestamp = this.minMaxHandler.getEarliest().getTimestamp();
+		this.maxTimestamp = this.minMaxHandler.getLatest().getTimestamp();
+		this.view.setChartAxisY(this.minValue, this.maxValue);
+		this.view.setChartAxisX(this.minTimestamp, this.maxTimestamp);
 	}
-	
+
 	/**
 	 * @param sensors the sensors to set
 	 */
@@ -209,7 +205,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	public void setSensorIdsCopy(List<Integer> ids) {
 		this.sensorIds = new ArrayList<>(ids);
 	}
-	
+
 	public List<Integer> getListDifference(List<Integer> a, List<Integer> b){
 		List<Integer> diff = new LinkedList<>();
 		for(Integer i : a) {
@@ -219,7 +215,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		}
 		return diff;
 	}
-	
+
 	public List<Integer> getListIntersection(List<Integer> a, List<Integer> b){
 		List<Integer> diff = new LinkedList<>();
 		for(Integer i : a) {
@@ -229,7 +225,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		}
 		return diff;
 	}
-	
+
 	public boolean updateNeeded(List<Integer> ids) {
 		if(((ids==null) || ids.isEmpty())) {
 			return !this.sensorIds.isEmpty();
@@ -246,7 +242,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		}
 		return false;
 	}
-	
+
 	public void addSensorValues(Integer sensorId, List<Value> values) {
 		if((values == null) || values.isEmpty()) {
 			return;
@@ -254,23 +250,23 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		this.removeDataset(sensorId);
 		ValueHandler valueHandler = new ValueHandler(values);
 
-		minMaxHandler.addValueForId(sensorId, valueHandler.getEarliest());
-		minMaxHandler.addValueForId(sensorId, valueHandler.getLatest());
-		this.minTimestamp = minMaxHandler.getEarliest().getTimestamp();
-		this.maxTimestamp = minMaxHandler.getLatest().getTimestamp();
+		this.minMaxHandler.addValueForId(sensorId, valueHandler.getEarliest());
+		this.minMaxHandler.addValueForId(sensorId, valueHandler.getLatest());
+		this.minTimestamp = this.minMaxHandler.getEarliest().getTimestamp();
+		this.maxTimestamp = this.minMaxHandler.getLatest().getTimestamp();
 
 		LineDataset dataset = this.createCrunchedDataset(values);
 		DataPoint minDP = ValueHandler.getMinOfDataset(dataset);
-		minMaxHandler.addValueForId(sensorId, new Value(minDP.getT(),minDP.getY()));
+		this.minMaxHandler.addValueForId(sensorId, new Value(minDP.getT(),minDP.getY()));
 		DataPoint maxDP = ValueHandler.getMaxOfDataset(dataset);
-		minMaxHandler.addValueForId(sensorId, new Value(maxDP.getT(),maxDP.getY()));
-		this.minValue = minMaxHandler.getMin().getNumberValue();
-		this.maxValue = minMaxHandler.getMax().getNumberValue();
+		this.minMaxHandler.addValueForId(sensorId, new Value(maxDP.getT(),maxDP.getY()));
+		this.minValue = this.minMaxHandler.getMin().getNumberValue();
+		this.maxValue = this.minMaxHandler.getMax().getNumberValue();
 		this.datasetMap.put(sensorId, dataset);
 		this.setLineDatasetStyle(dataset, sensorId);
-		view.updateDatasets(new ArrayList<>(datasetMap.values()));
+		this.view.updateDatasets(new ArrayList<>(this.datasetMap.values()));
 	}
-	
+
 	public Integer datasetsContainId(Integer id) {
 		for(Integer sensorId : this.datasetMap.keySet()) {
 			if(sensorId==id) {
@@ -279,7 +275,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		}
 		return null;
 	}
-	
+
 	public void setLineDatasetStyle(LineDataset dataset, int sensorId) {
 		String color = ColorManager.getInstance().getNewColor(sensorId);
 		dataset.setBorderColor(color);
@@ -289,9 +285,9 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		dataset.setFill(Fill.nofill);
 		dataset.setLabel(""+sensorId);
 	}
-	
+
 	public LineDataset createCrunchedDataset(List<Value> values) {
-		LineDataset dataset = view.getChart().newDataset();
+		LineDataset dataset = this.view.getChart().newDataset();
 		ArrayList<DataPoint> pointsList = new ArrayList<>();
 		int step = (values.size()<MAX_POINTS? MAX_POINTS : values.size())/MAX_POINTS;
 		for(int i=0;i<values.size();i+=step) {
@@ -317,44 +313,48 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 		dataset.setDataPoints(points);
 		return dataset;
 	}
-	
+
 	public void valueRequestForSensorList(List<Integer> sensorIds, DateRange dateRange, Date minDate, Date maxDate) {
-		sensorIds.forEach(sensorId -> buildValueRequestAndSend(sensorId, dateRange, minDate, maxDate));
+		sensorIds.forEach(sensorId -> this.buildValueRequestAndSend(sensorId, dateRange, minDate, maxDate));
 	}
-	
+
+	@SuppressWarnings("deprecation")
 	public void buildValueRequestAndSend(Integer id, DateRange dateRange, Date minDate, Date maxDate) {
 		final RequestBuilder requestBuilder = new RequestBuilder(ResultType.VALUE_AGGREGATED, true);
 		requestBuilder.setIds(new LinkedList<Integer>());
 		requestBuilder.addId(id);
 		requestBuilder.setDateRange(dateRange);
-		if(minDate != null && dateRange==DateRange.CUSTOM) requestBuilder.addParameter(ParamType.MIN_TIMESTAMP, minDate.toGMTString().replace(" ", "%20"));
-		if(maxDate != null && dateRange==DateRange.CUSTOM) requestBuilder.addParameter(ParamType.MAX_TIMESTAMP, maxDate.toGMTString().replace(" ", "%20"));
-		requestBuilder.getRequest().getParameters().forEach(param -> GWT.log("RequestParam: " + param.getKey() + " " + param.getValue()));
-		sendRequest(requestBuilder.getRequest());
+		if((minDate != null) && (dateRange==DateRange.CUSTOM)) {
+			requestBuilder.addParameter(ParamType.MIN_TIMESTAMP, minDate.toGMTString().replace(" ", "%20"));
+		}
+		if((maxDate != null) && (dateRange==DateRange.CUSTOM)) {
+			requestBuilder.addParameter(ParamType.MAX_TIMESTAMP, maxDate.toGMTString().replace(" ", "%20"));
+		}
+		this.sendRequest(requestBuilder.getRequest());
 	}
-	
+
 	private void sendRequest(final Request request) {
-		requestMap.put(request.getIds().get(0),request.hashCode());
+		this.requestMap.put(request.getIds().get(0),request.hashCode());
 		GeneralService.Util.getInstance().getDataFromRequest(request, new DefaultAsyncCallback<Response>(result -> {
-			if(result != null && result.getResultType() != null && request.getRequestType().equals(result.getResultType()) && result.getValues() != null && result.getSensors() != null) {
-				if(requestMap.get(request.getIds().get(0))!=request.hashCode() || !this.sensorIds.contains(request.getIds().get(0))) {
+			if((result != null) && (result.getResultType() != null) && request.getRequestType().equals(result.getResultType()) && (result.getValues() != null) && (result.getSensors() != null)) {
+				if((this.requestMap.get(request.getIds().get(0))!=request.hashCode()) || !this.sensorIds.contains(request.getIds().get(0))) {
 					return;
 				}
-				requestMap.remove(request.getIds().get(0));
+				this.requestMap.remove(request.getIds().get(0));
 				UnitMapper.getInstance().putUnit(result.getSensors().get(0).getSensorId(), result.getSensors().get(0).getUnit());
 				this.addSensorValues(result.getSensors().get(0).getSensorId(), result.getValues());
-				view.showChart(this.getDatasetMap(),this.getChartBounds());
+				this.view.showChart(this.getDatasetMap(),this.getChartBounds());
 			}else {
 				LOGGER.log(Level.WARNING, "Result is null or did not match the expected ResultType.");
 			}
 		},caught -> {
 			LOGGER.log(Level.WARNING, "Failure requesting the values.");
-			view.hideLoadingIndicator();
+			this.view.hideLoadingIndicator();
 		}, false));
 	}
-	
+
 	private ChartBounds getChartBounds() {
-		return new ChartBounds(minValue, maxValue, minTimestamp, maxTimestamp);
+		return new ChartBounds(this.minValue, this.maxValue, this.minTimestamp, this.maxTimestamp);
 	}
 
 	public void updateFavoriteList() {
@@ -371,13 +371,15 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	/**
 	 * @param listManager the listManager to set
 	 */
+	@Override
 	public void setListManager(ListManager listManager) {
 		this.listManager = listManager;
 	}
-	
+
 	/**
 	 * @return the dateRange
 	 */
+	@Override
 	public DateRange getDateRange() {
 		return this.dateRange;
 	}
@@ -388,7 +390,7 @@ public class VisualisationsPresenter extends DataPanelPagePresenter implements I
 	public void setDateRange(DateRange dateRange) {
 		this.dateRange = dateRange;
 	}
-	
+
 	/**
 	 * @return the defaultRange
 	 */

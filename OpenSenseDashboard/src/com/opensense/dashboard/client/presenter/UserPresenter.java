@@ -19,6 +19,11 @@ import com.opensense.dashboard.client.view.UserView;
 import com.opensense.dashboard.shared.ActionResult;
 import com.opensense.dashboard.shared.ActionResultType;
 
+/**
+ * Contains the UserPage functionality and handling. Communicates mainly with the authService to separate our serverCalls
+ * @author carlr
+ *
+ */
 public class UserPresenter extends DataPanelPagePresenter implements IPresenter, UserView.Presenter{
 
 	private final UserView view;
@@ -53,12 +58,10 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 
 	@Override
 	public void handleParamters(Map<ParamType, String> parameters) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void handleIds(List<Integer> ids) {
-		// TODO Auto-generated method stub
 	}
 
 
@@ -105,7 +108,7 @@ public class UserPresenter extends DataPanelPagePresenter implements IPresenter,
 				this.appController.onUserLoggedIn(true);
 			}else{
 				this.view.reEnableButtons();
-				if(result!=null && result.getErrorMessage()!=null && !result.getErrorMessage().isEmpty()) {
+				if((result!=null) && (result.getErrorMessage()!=null) && !result.getErrorMessage().isEmpty()) {
 					AppController.showError(result.getErrorMessage());
 				}else {
 					AppController.showError(Languages.invalidParameters());

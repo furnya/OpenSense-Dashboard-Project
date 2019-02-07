@@ -58,7 +58,7 @@ public class GeneralServlet extends RemoteServiceServlet implements GeneralServi
 				response.setMinimalSensors(ClientRequestHandler.getInstance().getMinimalSensorList(searchRequest.getParameters(), searchRequest.getIds()));
 				break;
 			case USER_LIST:
-				response.setUserLists(ClientRequestHandler.getInstance().getUserLists());//TODO implement with request to opensense.network or to database
+				response.setUserLists(ClientRequestHandler.getInstance().getUserLists());
 				break;
 			case MYSENSORS:
 				response.setMySensors(ClientRequestHandler.getInstance().getMySensorIds(SessionUser.getInstance().getToken()));

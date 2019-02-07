@@ -6,6 +6,11 @@ import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.model.DataPanelPage;
 import com.opensense.dashboard.client.view.NavigationPanelView;
 
+/**
+ * Contains all navigation items and their funcionality
+ * @author carlr
+ *
+ */
 public class NavigationPanelPresenter implements IPresenter, NavigationPanelView.Presenter{
 
 	private final NavigationPanelView view;

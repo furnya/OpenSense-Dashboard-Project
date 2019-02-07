@@ -14,6 +14,11 @@ import com.opensense.dashboard.client.model.ParamType;
 import com.opensense.dashboard.client.view.DataPanelPageView;
 import com.opensense.dashboard.client.view.DataPanelView;
 
+/**
+ * Controls the navigation and knows which datapanelPage is active
+ * @author carlr
+ *
+ */
 public class DataPanelPresenter implements IPresenter, DataPanelView.Presenter{
 
 	private final HandlerManager eventBus;

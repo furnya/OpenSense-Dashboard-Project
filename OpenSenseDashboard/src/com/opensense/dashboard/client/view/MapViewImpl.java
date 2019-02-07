@@ -67,7 +67,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private MapWidget mapWidget;
 
 	private final LatLng defaultCenter = LatLng.newInstance(52.521918, 13.413215);
-	
+
 	private List<Integer> requestedLists = new ArrayList<>();
 
 	// ########################################################################
@@ -85,13 +85,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	private Button recenterBtn = new Button();
 
 	private MarkerClusterer cluster;
-	// This should be a HashMap
-	// ########################################################################
-	/*
-	 * variables for InfoWindow
-	 */
-	// ########################################################################
-	// last opened infoWindow
+
 	private InfoWindow lastOpened;
 	private Map<Marker, InfoWindow> infoWindows = new HashMap<>();
 	private Map<Integer, MarkerInfoWindow> iwsFromMarkers = new HashMap<>();
@@ -105,15 +99,12 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.presenter = presenter;
 	}
 
-	// Important do not delete
 	@Override
 	public void initView(Runnable runnable) {
-		// init UI Elements if needed
 		this.initMap();
 		this.initMapHandler();
 		this.initMapButtons();
-		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(),
-				this.sensorContainer);
+		ListManagerOptions listManagerOptions = ListManagerOptions.getInstance(this.presenter.getEventBus(), this.sensorContainer);
 		listManagerOptions.setEditingActive(false);
 		listManagerOptions.setPagerSize(com.opensense.dashboard.client.model.Size.SMALL);
 		listManagerOptions.setSpinnerSize(com.opensense.dashboard.client.model.Size.SMALL);
@@ -125,15 +116,14 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.waitUntilViewInit(runnable);
 		this.listManager.addSelectedSensorsChangeHandler(event -> {
-			requestedLists.clear();
-			requestedLists.addAll(event.getSelectedIds());
+			this.requestedLists.clear();
+			this.requestedLists.addAll(event.getSelectedIds());
 			if (!event.getSelectedIds().isEmpty()) {
 				this.presenter.buildSensorRequestFromIdsAndShowMarkers(event.getSelectedIds());
 			} else {
 				this.resetMarkerAndCluster();
 			}
 		});
-
 	}
 
 	private void initMap() {
@@ -225,22 +215,16 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 
 	}
 
-	// this function will add a basic InfoWindow to the Markers on the Map
-	// Sensor Data:
-	/*
-	 * license: boolean ? true/false -> if true shows licenseId: Int - false-> ---
-	 * id: int accuracy: int altitudeAboveGround: int sensorModel: String
-	 * attributionText: String
-	 *
-	 *
-	 */
+	/**
+	 * This function will add a basic InfoWindow to the Markers on the Map
+	 **/
 	protected void drawInfoWindow(Marker marker, Sensor si) {
 		if ((marker == null) || (si.getSensorId() < 0)) {
 			return;
 		}
 		InfoWindowOptions iwOptions = InfoWindowOptions.newInstance();
 		MarkerInfoWindow infoWindow = new MarkerInfoWindow();
-		
+
 		infoWindow.setHeader(si.getSensorModel() + " " + si.getSensorId());
 		infoWindow.setInfoWindowRating(si.getAccuracy());
 		ArrayList<String> sensorData = new ArrayList<>();
@@ -276,8 +260,8 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 		List<Integer> currentSensorIdList = new ArrayList<>();
 		currentSensorIdList.add(si.getSensorId());
 		infoWindow.getFavImage().addDomHandler(event -> {
-			 this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(currentSensorIdList));
-	}, ClickEvent.getType());
+			this.presenter.getEventBus().fireEvent(new AddSensorsToFavoriteListEvent(currentSensorIdList));
+		}, ClickEvent.getType());
 	}
 
 	private void setMarkers(Sensor sensor) {
@@ -366,8 +350,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 				return;
 			}
 			sensorList.forEach(item -> {
-				GWT.log(item.getLocation().getLat() + " " + item.getLocation().getLon() + " SensorID: "
-						+ item.getSensorId());
 				this.setMarkers(item);
 				this.sensIds.add(item.getSensorId());
 			});
@@ -409,9 +391,7 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			this.cluster.addMarkers(this.mList);
 			this.cluster.repaint();
 		}
-		if (sensorList.isEmpty()) {
-			GWT.log("ERROR: Sensorlist is empty");
-		} else {
+		if (!sensorList.isEmpty()) {
 			this.recenterMap();
 		}
 
@@ -425,7 +405,6 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 			.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.MAP, false, new ArrayList<>()));
 			this.cluster.clearMarkers();
 			this.sensIds.clear();
-			GWT.log("clearing All clusters & markers");
 		}
 	}
 
@@ -444,17 +423,10 @@ public class MapViewImpl extends DataPanelPageView implements MapView {
 	}
 
 	public void goToVisuPage() {
-		if (this.mList.isEmpty()) {
-			GWT.log("User tried to visualize a empty Markerlist");
-		}
-		this.presenter.getEventBus()
-		.fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, this.sensIds));
+		this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.VISUALISATIONS, true, this.sensIds));
 	}
 
 	public void goToSearchPage() {
-		if (this.mList.isEmpty()) {
-			GWT.log("User tried to go to Search Page while sending a empty Markerlist");
-		}
 		this.presenter.getEventBus().fireEvent(new OpenDataPanelPageEvent(DataPanelPage.SEARCH, true, this.sensIds));
 	}
 

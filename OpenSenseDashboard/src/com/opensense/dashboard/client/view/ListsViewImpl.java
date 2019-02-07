@@ -34,7 +34,7 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 
 	@UiField
 	MaterialButton createSensor;
-	
+
 	@UiField
 	MaterialButton addValuesButton;
 
@@ -51,7 +51,7 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	public void onCreateSensorClicked(ClickEvent e) {
 		this.presenter.requestDataAndShowCreateSensorModal();
 	}
-	
+
 	@UiHandler("addValuesButton")
 	public void onAddValuesButtonClicked(ClickEvent e) {
 		this.presenter.requestMySensorsAndShowAddValuesModal();
@@ -69,7 +69,6 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 		this.listManager = ListManager.getInstance(listManagerOptions);
 		this.listManager.setUserLoggedIn(isUserLoggedIn);
 		this.listManager.waitUntilViewInit(runnable);
-		this.listManager.addSelectedSensorsChangeHandler(event -> event.getSelectedIds().forEach(id -> GWT.log(id+"")));
 	}
 
 	@Override
@@ -86,7 +85,7 @@ public class ListsViewImpl extends DataPanelPageView implements ListsView {
 	public void setCreateSensorButtonEnabled(boolean enabled) {
 		this.createSensor.setEnabled(enabled);
 	}
-	
+
 	@Override
 	public void setAddValuesButtonEnabled(boolean enabled) {
 		this.addValuesButton.setEnabled(enabled);

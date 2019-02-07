@@ -3,6 +3,11 @@ package com.opensense.dashboard.client.utils;
 import com.opensense.dashboard.client.gui.GUIImageBundle;
 import com.opensense.dashboard.shared.MeasurandType;
 
+/**
+ * Returns the icon to the {@link MeasurandType}
+ * @author carlr
+ *
+ */
 public class MeasurandIconHelper {
 
 	private MeasurandIconHelper() {

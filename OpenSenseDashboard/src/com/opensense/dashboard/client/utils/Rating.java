@@ -13,6 +13,11 @@ import com.opensense.dashboard.client.model.Size;
 
 import gwt.material.design.client.ui.MaterialTooltip;
 
+/**
+ * Used to display the accuracy as star rating
+ * @author carlr
+ *
+ */
 public class Rating extends Composite{
 
 	@UiTemplate("Rating.ui.xml")

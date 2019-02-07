@@ -57,7 +57,9 @@ public class FileUpload extends HttpServlet {
 			out.close();
 
 		} catch (Exception e) {
-			System.out.println("File Uploading Failed!" + e.getMessage());
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
+			out.write(ServerLanguages.unexpectedErrorLog());
+			out.close();
 		}
 
 	}

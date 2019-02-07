@@ -28,6 +28,10 @@ import com.opensense.dashboard.client.view.UserViewImpl;
 import com.opensense.dashboard.client.view.VisualisationsView;
 import com.opensense.dashboard.client.view.VisualisationsViewImpl;
 
+/**
+ * Contains all pages, their icons, views and presenter
+ * @author carlr
+ */
 public enum DataPanelPage {
 	HOME {
 		@Override public String displayName() {return Languages.home();}
@@ -78,17 +82,17 @@ public enum DataPanelPage {
 		@Override public String displayName() {return Languages.user();}
 		@Override public Class<? extends IDataPanelPageView> getViewClass() {return UserView.class;}
 		@Override public Class<? extends IDataPanelPagePresenter> getPresenterClass() {return UserPresenter.class;}
-		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new UserPresenter(eventBus, appController, (UserView) view);} 
+		@Override public DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController,IDataPanelPageView view) {return new UserPresenter(eventBus, appController, (UserView) view);}
 		@Override public DataPanelPageView createViewInstance() {return new UserViewImpl();}
 		@Override public boolean logoutButton() {return true;}
 		@Override public SafeUri iconImagePath() {return GUIImageBundle.INSTANCE.userIconSvg().getSafeUri();}
 	};
-	
+
 	/**
- * 		@return the display name of the DataPanelPage
+	 * 		@return the display name of the DataPanelPage
 	 */
 	public abstract String displayName();
-		
+
 	/**
 	 *  @return the ViewClass of the DataPanelPage
 	 */
@@ -98,28 +102,28 @@ public enum DataPanelPage {
 	 * @return the type of the presenter that is used to present the represented DataPanelPage
 	 */
 	public abstract Class<? extends IDataPanelPagePresenter> getPresenterClass();
-	
-	
+
+
 	/**
 	 * Creates a new Presenter for the DataPanelPage
-	 * @param EventBus 
-	 * @param View 
+	 * @param EventBus
+	 * @param View
 	 * @return Presenter of the DataPanelPage
 	 */
 	public abstract DataPanelPagePresenter createPresenterInstance(HandlerManager eventBus, AppController appController, IDataPanelPageView view);
-	
+
 	/**
 	 * creates a new Instance of the according view
 	 * @return DataPanelPageView
 	 */
 	public abstract DataPanelPageView createViewInstance();
-	
+
 	/**
 	 * If the page button is in the navigation at the bottom this should be true
 	 * @return
 	 */
 	public abstract boolean logoutButton();
-	
+
 	/**
 	 * @return the icon imagePath
 	 */

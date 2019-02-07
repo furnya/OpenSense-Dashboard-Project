@@ -46,6 +46,12 @@ import com.opensense.dashboard.shared.Parameter;
 
 import gwt.material.design.client.ui.MaterialToast;
 
+/**
+ * This is like the main presenter which controls and knows everything
+ * From this class the app get started and events get handled
+ * @author carlr
+ *
+ */
 public class AppController implements IPresenter, ValueChangeHandler<String> {
 
 	private static final Logger LOGGER = Logger.getLogger(AppController.class.getName());

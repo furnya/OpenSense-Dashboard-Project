@@ -27,6 +27,12 @@ import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 import com.opensense.dashboard.shared.UserList;
 
+/**
+ * Controls the list container and their view
+ * Important functionality to get,update,delete lists and sensors
+ * @author carlr
+ *
+ */
 public class ListManagerPresenter implements IPresenter, ListManagerView.Presenter{
 
 	private ListManagerView view;

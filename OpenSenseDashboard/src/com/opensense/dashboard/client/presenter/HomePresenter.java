@@ -3,7 +3,6 @@ package com.opensense.dashboard.client.presenter;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
@@ -13,6 +12,11 @@ import com.opensense.dashboard.client.utils.DefaultAsyncCallback;
 import com.opensense.dashboard.client.utils.Languages;
 import com.opensense.dashboard.client.view.HomeView;
 
+/**
+ * The HomePage
+ * @author carlr
+ *
+ */
 public class HomePresenter extends DataPanelPagePresenter implements HomeView.Presenter {
 
 	private final HomeView view;
@@ -70,9 +74,7 @@ public class HomePresenter extends DataPanelPagePresenter implements HomeView.Pr
 	}
 
 	public void onUserLoggedIn() {
-		GWT.log("hier");
-		GeneralService.Util.getInstance()
-		.getUserName(new DefaultAsyncCallback<String>(result ->{  this.view.setUserInfo(result);}));
+		GeneralService.Util.getInstance().getUserName(new DefaultAsyncCallback<String>(this.view::setUserInfo));
 	}
 
 	public void onUserLoggedOut() {

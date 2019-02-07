@@ -34,7 +34,9 @@ public class AuthenticationServlet extends RemoteServiceServlet implements Authe
 
 	private static final Logger LOGGER = Logger.getLogger(AuthenticationServlet.class.getName());
 
+	//works like salt
 	private static final byte[] key = new byte[] { -110, 121, -65, 22, -60, 61, -22, -60, 21, -122, 41, -89, -89, -68, -8, 41, -119, -51, -12, -36, 19, -8, -17, 47 };
+
 	/**
 	 * Returns boolean true if a user logged in, false the user is guest
 	 */

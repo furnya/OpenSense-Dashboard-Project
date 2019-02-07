@@ -23,6 +23,11 @@ import com.opensense.dashboard.shared.Request;
 import com.opensense.dashboard.shared.Response;
 import com.opensense.dashboard.shared.ResultType;
 
+/**
+ * Displays the MapPage
+ * @author carlr
+ *
+ */
 public class MapPresenter extends DataPanelPagePresenter implements IPresenter, MapView.Presenter {
 
 	private static final Logger LOGGER = Logger.getLogger(MapPresenter.class.getName());

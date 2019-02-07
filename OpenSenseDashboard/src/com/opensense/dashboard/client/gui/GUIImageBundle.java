@@ -8,6 +8,9 @@ import com.google.gwt.resources.client.ImageResource;
 
 public interface GUIImageBundle extends ClientBundle {
 
+	/**
+	 * Used to import and convert PNGs and SVGs
+	 */
 	public static final GUIImageBundle INSTANCE =  GWT.create(GUIImageBundle.class);
 
 	//DataPanelPages

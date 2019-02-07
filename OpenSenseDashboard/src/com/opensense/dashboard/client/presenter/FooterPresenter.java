@@ -5,6 +5,11 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.opensense.dashboard.client.AppController;
 import com.opensense.dashboard.client.view.FooterView;
 
+/**
+ * Displays the footer functionality which is at the moment only the language switch
+ * @author carlr
+ *
+ */
 public class FooterPresenter implements IPresenter, FooterView.Presenter{
 
 	private final FooterView view;
