@@ -156,7 +156,7 @@ public class Pager extends Composite{
 	}
 
 	public void update(int showObjectsSize, boolean fireEvent) {
-		if(this.page > (int) Math.ceil(showObjectsSize / (double) this.maxObjectsOnPage)) {
+		if((this.page + 1) > (int) Math.ceil(showObjectsSize / (double) this.maxObjectsOnPage)) {
 			this.page = 0;
 		}
 		this.pageNumber.setText(Languages.setPageNumber(this.page, this.maxObjectsOnPage, showObjectsSize));
